@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="captureAreaSelectionViewBackground_enable">#44FFFFFF</color>
+    <color name="captureAreaSelectionViewBackground_disabled">#00FFFFFF</color>
+    <color name="captureAreaSelectionViewPaint_drawingLinePaint">#664527A0</color>
+    <color name="captureAreaSelectionViewPaint_boxPaint">#FF006064</color>
+
+    <color name="captureAreaSelectionViewProgressBackground">#77000000</color>
+</resources>
