@@ -50,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
 
         ScreenCaptureService.start(this);
 
-        baseApi = new TessBaseAPI();
-        baseApi.init(Environment.getExternalStorageDirectory().getPath() + "/tesseract/", "jpn", TessBaseAPI.OEM_TESSERACT_ONLY);
-        baseApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_AUTO_OSD);
+//        baseApi = new TessBaseAPI();
+//        baseApi.init(Environment.getExternalStorageDirectory().getPath() + "/tesseract/", "jpn", TessBaseAPI.OEM_TESSERACT_ONLY);
+//        baseApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_AUTO_OSD);
     }
 
     private void fromRes(){

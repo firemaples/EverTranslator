@@ -17,8 +17,7 @@ import android.view.WindowManager;
  *
  */
 public class FloatingNotification {
-    Context ctxt;
-    public static int ID_NOTIFICATION = 2018;
+    Context context;
     private WindowManager windowManager;
     private View floatingView;
     private WindowManager.LayoutParams params;
@@ -30,7 +29,7 @@ public class FloatingNotification {
     private boolean isShowing = false;
     private boolean isMoving = false;
 
-    public FloatingNotification(Context ctxt, View floatingView) {
+    public FloatingNotification(Context context, View floatingView) {
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -38,24 +37,24 @@ public class FloatingNotification {
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
-        params.gravity = Gravity.TOP | Gravity.RIGHT;
+        params.gravity = Gravity.TOP | Gravity.LEFT;
         params.x = 0;
         params.y = 100;
 
-        createFloatingView(ctxt, floatingView, params);
+        createFloatingView(context, floatingView, params);
     }
 
-    public FloatingNotification(Context ctxt, View floatingView,
+    public FloatingNotification(Context context, View floatingView,
                                 WindowManager.LayoutParams params) {
-        createFloatingView(ctxt, floatingView, params);
+        createFloatingView(context, floatingView, params);
     }
 
-    private void createFloatingView(Context ctxt, View floatingView,
+    private void createFloatingView(Context context, View floatingView,
                                     WindowManager.LayoutParams params) {
-        this.ctxt = ctxt;
+        this.context = context;
         this.floatingView = floatingView;
         this.params = params;
-        windowManager = (WindowManager) ctxt
+        windowManager = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
 
         iniTouchEvent();
@@ -184,10 +183,10 @@ public class FloatingNotification {
     public void updateFloatingView() {
         windowManager.updateViewLayout(floatingView, params);
     }
-}
 
-interface OnFloatingNotificationTapListener {
-    void onClick(View floatingView);
-    void onLongClick(View floatingView);
-    void onDoubleClick(View floatingView);
+    public interface OnFloatingNotificationTapListener {
+        void onClick(View floatingView);
+        void onLongClick(View floatingView);
+        void onDoubleClick(View floatingView);
+    }
 }

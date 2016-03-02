@@ -11,32 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-
-    <at.markushi.ui.CircleButton
-        android:id="@+id/bt_captureViewPageTranslate"
-        android:layout_width="64dip"
-        android:layout_height="64dip"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="100dp"
-        android:minHeight="64dp"
-        android:minWidth="64dp"
-        android:src="@drawable/ic_translate_white_24dp"
-        app:cb_color="@color/md_deep_purple_900"
-        app:cb_pressedRingWidth="8dip" />
-
-    <at.markushi.ui.CircleButton
-        android:id="@+id/bt_captureViewPageClearAll"
-        android:layout_width="64dip"
-        android:layout_height="64dip"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="160dp"
-        android:minHeight="64dp"
-        android:minWidth="64dp"
-        android:src="@drawable/ic_format_clear_white_24dp"
-        app:cb_color="@color/md_deep_orange_500"
-        app:cb_pressedRingWidth="8dip" />
+    <include layout="@layout/content_capture_page_buttons" />
 
     <RelativeLayout
         android:id="@+id/view_progress"

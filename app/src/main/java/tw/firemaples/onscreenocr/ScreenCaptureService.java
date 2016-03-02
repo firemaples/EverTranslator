@@ -7,7 +7,7 @@ import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import tw.firemaples.onscreenocr.utils.Tools;
+import tw.firemaples.onscreenocr.utils.Tool;
 
 public class ScreenCaptureService extends Service {
     private FloatingNotification floatingNotification;
@@ -18,7 +18,7 @@ public class ScreenCaptureService extends Service {
     }
 
     public static void start(Context context) {
-        if (!Tools.isServiceRunning(context, ScreenCaptureService.class)) {
+        if (!Tool.isServiceRunning(context, ScreenCaptureService.class)) {
             context.startService(new Intent(context, ScreenCaptureService.class));
         }
     }
@@ -52,7 +52,7 @@ public class ScreenCaptureService extends Service {
         floatingNotification.hide();
     }
 
-    private OnFloatingNotificationTapListener onFloatingNotificationTapListener = new OnFloatingNotificationTapListener() {
+    private FloatingNotification.OnFloatingNotificationTapListener onFloatingNotificationTapListener = new FloatingNotification.OnFloatingNotificationTapListener() {
         @Override
         public void onClick(View floatingView) {
             captureViewHandler.showView();
@@ -70,10 +70,25 @@ public class ScreenCaptureService extends Service {
         }
     };
 
-    private OnCaptureViewHandlerCallback onCaptureViewHandlerCallback = new OnCaptureViewHandlerCallback() {
+    private CaptureViewHandler.OnCaptureViewHandlerCallback onCaptureViewHandlerCallback = new CaptureViewHandler.OnCaptureViewHandlerCallback() {
+        boolean tempIsShow = false;
+
         @Override
         public void onCaptureViewHandlerCloseClick() {
             floatingNotification.show();
+        }
+
+        @Override
+        public void onCaptureScreenStart() {
+            tempIsShow = floatingNotification.isShowing();
+            if (tempIsShow)
+                floatingNotification.hide();
+        }
+
+        @Override
+        public void onCaptureScreenEnd() {
+            if(tempIsShow)
+                floatingNotification.show();
         }
     };
 }

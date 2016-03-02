@@ -1,15 +1,23 @@
 package tw.firemaples.onscreenocr;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.googlecode.tesseract.android.TessBaseAPI;
+
+import java.util.Arrays;
 import java.util.List;
+
+import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
  * Created by Firemaples on 2016/3/1.
@@ -23,12 +31,16 @@ public class CaptureViewHandler {
 
     private View rootView;
     private CaptureAreaSelectionView captureAreaSelectionView;
-    private View bt_captureViewPageClose, bt_captureViewPageClearAll, bt_captureViewPageTranslate, view_progress;
+    private View bt_captureViewPageClose, bt_captureViewPageClearAll, bt_captureViewPageTranslate, bt_captureViewPageSettings,
+            view_progress;
     private TextView tv_progressMsg;
 
     private boolean isShown = false;
     private boolean isProgressing = false;
     private OnCaptureViewHandlerCallback callback;
+
+    private TessBaseAPI baseAPI;
+    private ProgressDialog progressDialog;
 
     public static CaptureViewHandler getInstance(Context context) {
         if (captureViewHandler == null) captureViewHandler = new CaptureViewHandler(context);
@@ -58,12 +70,14 @@ public class CaptureViewHandler {
         bt_captureViewPageClose = rootView.findViewById(R.id.bt_captureViewPageClose);
         bt_captureViewPageClearAll = rootView.findViewById(R.id.bt_captureViewPageClearAll);
         bt_captureViewPageTranslate = rootView.findViewById(R.id.bt_captureViewPageTranslate);
+        bt_captureViewPageSettings = rootView.findViewById(R.id.bt_captureViewPageSettings);
         view_progress = rootView.findViewById(R.id.view_progress);
         tv_progressMsg = (TextView) rootView.findViewById(R.id.tv_progressMsg);
 
         bt_captureViewPageClose.setOnClickListener(onClickListener);
         bt_captureViewPageClearAll.setOnClickListener(onClickListener);
         bt_captureViewPageTranslate.setOnClickListener(onClickListener);
+        bt_captureViewPageSettings.setOnClickListener(onClickListener);
         captureAreaSelectionView = (CaptureAreaSelectionView) rootView.findViewById(R.id.captureAreaSelectionView);
     }
 
@@ -95,16 +109,64 @@ public class CaptureViewHandler {
         }
     }
 
+    public void initOrcEngine() {
+        setProgressMode(true, "Waiting for initialize...");
+        if (baseAPI == null) {
+            baseAPI = new TessBaseAPI();
+        }
+
+        String recognitionLang = PreferenceManager.getDefaultSharedPreferences(context).getString(SettingsActivity.KEY_RECOGNITION_LANGUAGE, "eng");
+
+        int langIndex = Arrays.asList(context.getResources().getStringArray(R.array.iso6393)).indexOf(recognitionLang);
+        String langName = context.getResources().getStringArray(R.array.languagenames)[langIndex];
+
+        new OrcInitAsyncTask(context, baseAPI, recognitionLang, langName, this).setCallback(new OrcInitAsyncTask.OnOrcInitAsyncTaskCallback() {
+            @Override
+            public void onOrcInitialized() {
+                startOrc();
+            }
+        }).execute();
+    }
+
+    public void startOrc() {
+        List<Rect> boxList = captureAreaSelectionView.getBoxList();
+        new TextRecognizeAsyncTask(context, baseAPI, this, boxList).setCallback(new TextRecognizeAsyncTask.OnTextRecognizeAsyncTaskCallback() {
+            boolean tempIsShown = false;
+
+            @Override
+            public void onTextRecognizeFinished() {
+                Tool.ShowMsg(context, "TextRecognizeFinished!");
+            }
+
+            @Override
+            public void onCaptureScreenStart() {
+                if (callback != null)
+                    callback.onCaptureScreenStart();
+                tempIsShown = isShown;
+                if (tempIsShown)
+                    hideView();
+            }
+
+            @Override
+            public void onCaptureScreenEnd() {
+                if (callback != null)
+                    callback.onCaptureScreenEnd();
+                if (tempIsShown)
+                    showView();
+            }
+        }).execute();
+    }
+
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.bt_captureViewPageClose) {
-                if (isProgressing) {
-                    setProgressMode(false, null);
-
-                    return;
-                }
+//                if (isProgressing) {
+//                    setProgressMode(false, null);
+//
+//                    return;
+//                }
                 hideView();
                 if (callback != null)
                     callback.onCaptureViewHandlerCloseClick();
@@ -114,17 +176,28 @@ public class CaptureViewHandler {
 //                captureAreaSelectionView.setVisibility(View.GONE);
 //                captureAreaSelectionView.disable();
 
-                List<Rect> boxList = captureAreaSelectionView.getBoxList();
+                if (captureAreaSelectionView.getBoxList().size() == 0) {
+                    Tool.LogError("Please draw area before recognize");
+                    Tool.ShowErrorMsg(context, "Please draw area before recognize");
+                } else {
+                    initOrcEngine();
+                }
 
 //                bt_captureViewPageTranslate.setEnabled(false);
 //                bt_captureViewPageClearAll.setEnabled(false);
-
-                setProgressMode(true, null);
+            } else if (id == R.id.bt_captureViewPageSettings) {
+                context.startActivity(SettingsActivity.getIntent(context)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                hideView();
             }
         }
     };
-}
 
-interface OnCaptureViewHandlerCallback {
-    void onCaptureViewHandlerCloseClick();
+    public interface OnCaptureViewHandlerCallback {
+        void onCaptureViewHandlerCloseClick();
+
+        void onCaptureScreenStart();
+
+        void onCaptureScreenEnd();
+    }
 }
