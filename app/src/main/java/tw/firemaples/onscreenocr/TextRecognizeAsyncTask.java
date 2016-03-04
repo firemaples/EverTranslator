@@ -51,8 +51,10 @@ public class TextRecognizeAsyncTask extends AsyncTask<Void, String, Boolean> {
     @Override
     protected Boolean doInBackground(Void... params) {
         baseAPI.setImage(ReadFile.readBitmap(screenshot));
-        //baseAPI.setRectangle(boxList.get(0));
-        String result = baseAPI.getUTF8Text();
+        for (Rect rect : boxList) {
+            baseAPI.setRectangle(rect);
+            String result = baseAPI.getUTF8Text();
+        }
 
         return null;
     }
