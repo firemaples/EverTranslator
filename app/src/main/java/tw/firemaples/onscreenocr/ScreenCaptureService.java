@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 public class ScreenCaptureService extends Service {
@@ -42,6 +43,8 @@ public class ScreenCaptureService extends Service {
 
         captureViewHandler = CaptureViewHandler.getInstance(ScreenCaptureService.this);
         captureViewHandler.setCallback(onCaptureViewHandlerCallback);
+
+        ScreenshotHandler.getInstance(this);
 
         return startCommand;
     }
@@ -87,7 +90,7 @@ public class ScreenCaptureService extends Service {
 
         @Override
         public void onCaptureScreenEnd() {
-            if(tempIsShow)
+            if (tempIsShow)
                 floatingNotification.show();
         }
     };

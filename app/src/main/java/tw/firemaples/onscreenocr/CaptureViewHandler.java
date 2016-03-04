@@ -1,10 +1,11 @@
 package tw.firemaples.onscreenocr;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,15 +18,19 @@ import com.googlecode.tesseract.android.TessBaseAPI;
 import java.util.Arrays;
 import java.util.List;
 
+import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
  * Created by Firemaples on 2016/3/1.
  */
-public class CaptureViewHandler {
+public class CaptureViewHandler implements ScreenshotHandler.OnScreenshotHandlerCallback, OrcInitAsyncTask.OnOrcInitAsyncTaskCallback, TextRecognizeAsyncTask.OnTextRecognizeAsyncTaskCallback {
     private static CaptureViewHandler captureViewHandler;
 
     private Context context;
+    private Handler handler = new Handler();
+    private OnCaptureViewHandlerCallback callback;
+
     private WindowManager windowManager;
     private WindowManager.LayoutParams params;
 
@@ -37,10 +42,10 @@ public class CaptureViewHandler {
 
     private boolean isShown = false;
     private boolean isProgressing = false;
-    private OnCaptureViewHandlerCallback callback;
 
     private TessBaseAPI baseAPI;
-    private ProgressDialog progressDialog;
+
+    private Bitmap currentScreenshot;
 
     public static CaptureViewHandler getInstance(Context context) {
         if (captureViewHandler == null) captureViewHandler = new CaptureViewHandler(context);
@@ -104,13 +109,43 @@ public class CaptureViewHandler {
         if (progress) {
             view_progress.setVisibility(View.VISIBLE);
             tv_progressMsg.setText(message == null ? context.getString(R.string.progressProcessingDefaultMessage) : message);
+            if (message != null) Tool.LogInfo("setProgressMode: " + message);
         } else {
             view_progress.setVisibility(View.GONE);
         }
     }
 
+    private void takeScreenShot(final ScreenshotHandler screenshotHandler) {
+        setProgressMode(true, "Taken a screenshot...");
+        screenshotHandler.setCallback(this);
+
+        if (callback != null)
+            callback.onCaptureScreenStart();
+
+        hideView();
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                screenshotHandler.takeScreenshot();
+            }
+        }, 100);
+    }
+
+    @Override
+    public void onScreenshotFinished(Bitmap bitmap) {
+        setProgressMode(true, "A screenshot has been taken.");
+        this.currentScreenshot = bitmap;
+        if (callback != null)
+            callback.onCaptureScreenEnd();
+        showView();
+//        ImageView imageView = (ImageView) rootView.findViewById(R.id.iv_screenshotPreview);
+//        imageView.setImageBitmap(bitmap);
+        initOrcEngine();
+    }
+
     public void initOrcEngine() {
-        setProgressMode(true, "Waiting for initialize...");
+        setProgressMode(true, "Waiting for Orc engine initialize...");
         if (baseAPI == null) {
             baseAPI = new TessBaseAPI();
         }
@@ -120,41 +155,26 @@ public class CaptureViewHandler {
         int langIndex = Arrays.asList(context.getResources().getStringArray(R.array.iso6393)).indexOf(recognitionLang);
         String langName = context.getResources().getStringArray(R.array.languagenames)[langIndex];
 
-        new OrcInitAsyncTask(context, baseAPI, recognitionLang, langName, this).setCallback(new OrcInitAsyncTask.OnOrcInitAsyncTaskCallback() {
-            @Override
-            public void onOrcInitialized() {
-                startOrc();
-            }
-        }).execute();
+        new OrcInitAsyncTask(context, baseAPI, recognitionLang, langName, this).setCallback(this).execute();
     }
 
-    public void startOrc() {
+    @Override
+    public void onOrcInitialized() {
+        setProgressMode(true, "Orc engine initialized.");
+        startTextRecognize();
+    }
+
+    public void startTextRecognize() {
+        setProgressMode(true, "Start text recognition...");
         List<Rect> boxList = captureAreaSelectionView.getBoxList();
-        new TextRecognizeAsyncTask(context, baseAPI, this, boxList).setCallback(new TextRecognizeAsyncTask.OnTextRecognizeAsyncTaskCallback() {
-            boolean tempIsShown = false;
+        new TextRecognizeAsyncTask(context, baseAPI, this, currentScreenshot, boxList).setCallback(this).execute();
+    }
 
-            @Override
-            public void onTextRecognizeFinished() {
-                Tool.ShowMsg(context, "TextRecognizeFinished!");
-            }
-
-            @Override
-            public void onCaptureScreenStart() {
-                if (callback != null)
-                    callback.onCaptureScreenStart();
-                tempIsShown = isShown;
-                if (tempIsShown)
-                    hideView();
-            }
-
-            @Override
-            public void onCaptureScreenEnd() {
-                if (callback != null)
-                    callback.onCaptureScreenEnd();
-                if (tempIsShown)
-                    showView();
-            }
-        }).execute();
+    @Override
+    public void onTextRecognizeFinished() {
+        setProgressMode(true, "Start text recognition...");
+        setProgressMode(false, "Start text recognition...");
+        Tool.ShowMsg(context, "TextRecognizeFinished!");
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -180,7 +200,12 @@ public class CaptureViewHandler {
                     Tool.LogError("Please draw area before recognize");
                     Tool.ShowErrorMsg(context, "Please draw area before recognize");
                 } else {
-                    initOrcEngine();
+                    ScreenshotHandler screenshotHandler = ScreenshotHandler.getInstance(context);
+                    if (screenshotHandler.isGetUserPermission()) {
+                        takeScreenShot(screenshotHandler);
+                    } else {
+                        screenshotHandler.getUserPermission();
+                    }
                 }
 
 //                bt_captureViewPageTranslate.setEnabled(false);

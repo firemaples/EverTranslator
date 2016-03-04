@@ -3,6 +3,7 @@
     package="tw.firemaples.onscreenocr">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +13,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +29,12 @@
 
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".screenshot.ScreenshotPermissionActivity" />
+
+        <!--android:excludeFromRecents="true"-->
+        <!--android:noHistory="true"-->
+        <!--android:theme="@style/AppTheme.Transparent"-->
     </application>
 
 </manifest>

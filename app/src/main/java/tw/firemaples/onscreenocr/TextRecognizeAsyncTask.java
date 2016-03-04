@@ -1,9 +1,11 @@
 package tw.firemaples.onscreenocr;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 
+import com.googlecode.leptonica.android.ReadFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.util.List;
@@ -18,14 +20,16 @@ public class TextRecognizeAsyncTask extends AsyncTask<Void, String, Boolean> {
     private final Context context;
     private final TessBaseAPI baseAPI;
     private final CaptureViewHandler captureViewHandler;
+    private Bitmap screenshot;
     private final List<Rect> boxList;
 
     private OnTextRecognizeAsyncTaskCallback callback;
 
-    public TextRecognizeAsyncTask(Context context, TessBaseAPI baseAPI, CaptureViewHandler captureViewHandler, List<Rect> boxList) {
+    public TextRecognizeAsyncTask(Context context, TessBaseAPI baseAPI, CaptureViewHandler captureViewHandler, Bitmap screenshot, List<Rect> boxList) {
         this.context = context;
         this.baseAPI = baseAPI;
         this.captureViewHandler = captureViewHandler;
+        this.screenshot = screenshot;
         this.boxList = boxList;
     }
 
@@ -42,16 +46,14 @@ public class TextRecognizeAsyncTask extends AsyncTask<Void, String, Boolean> {
         if (callback == null) {
             throw new UnsupportedOperationException("Callback is not implemented");
         }
-        callback.onCaptureScreenStart();
-//        View v1 = ((Service)context).getWindow().getDecorView().getRootView();
-//        v1.setDrawingCacheEnabled(true);
-//        Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-//        v1.setDrawingCacheEnabled(false);
-        callback.onCaptureScreenEnd();
     }
 
     @Override
     protected Boolean doInBackground(Void... params) {
+        baseAPI.setImage(ReadFile.readBitmap(screenshot));
+        //baseAPI.setRectangle(boxList.get(0));
+        String result = baseAPI.getUTF8Text();
+
         return null;
     }
 
@@ -70,9 +72,5 @@ public class TextRecognizeAsyncTask extends AsyncTask<Void, String, Boolean> {
 
     public interface OnTextRecognizeAsyncTaskCallback {
         void onTextRecognizeFinished();
-
-        void onCaptureScreenStart();
-
-        void onCaptureScreenEnd();
     }
 }

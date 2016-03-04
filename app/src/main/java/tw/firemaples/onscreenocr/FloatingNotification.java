@@ -5,16 +5,19 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Handler;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
+import tw.firemaples.onscreenocr.utils.Tool;
+
 /**
  * android.permission.SYSTEM_ALERT_WINDOW
  *
  * @author Firemaples
- *
  */
 public class FloatingNotification {
     Context context;
@@ -40,6 +43,12 @@ public class FloatingNotification {
         params.gravity = Gravity.TOP | Gravity.LEFT;
         params.x = 0;
         params.y = 100;
+
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        params.x = metrics.widthPixels;
 
         createFloatingView(context, floatingView, params);
     }
@@ -73,7 +82,7 @@ public class FloatingNotification {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-
+                        Tool.LogInfo("Action Down");
                         // Get current time in nano seconds.
                         long pressTime = System.currentTimeMillis();
 
@@ -93,6 +102,7 @@ public class FloatingNotification {
                         initialTouchY = event.getRawY();
                         break;
                     case MotionEvent.ACTION_UP:
+                        Tool.LogInfo("Action Up");
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -101,12 +111,17 @@ public class FloatingNotification {
                         }, 300);
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        isMoving = true;
+                        Tool.LogInfo("Action Move");
                         paramsF.x = initialX
                                 + (int) (event.getRawX() - initialTouchX);
                         paramsF.y = initialY
                                 + (int) (event.getRawY() - initialTouchY);
                         windowManager.updateViewLayout(floatingView, paramsF);
+
+                        Tool.LogInfo("x:" + (initialX - paramsF.x) + ", y:" + (initialY - paramsF.y));
+                        if (!isMoving && Math.abs(initialX - paramsF.x) > 5 && Math.abs(initialY - paramsF.y) > 5) {
+                            isMoving = true;
+                        }
                         break;
                 }
                 return false;
@@ -186,7 +201,9 @@ public class FloatingNotification {
 
     public interface OnFloatingNotificationTapListener {
         void onClick(View floatingView);
+
         void onLongClick(View floatingView);
+
         void onDoubleClick(View floatingView);
     }
 }

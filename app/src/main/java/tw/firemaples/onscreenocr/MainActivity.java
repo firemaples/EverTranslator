@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -49,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ScreenCaptureService.start(this);
+        finish();
 
 //        baseApi = new TessBaseAPI();
 //        baseApi.init(Environment.getExternalStorageDirectory().getPath() + "/tesseract/", "jpn", TessBaseAPI.OEM_TESSERACT_ONLY);
