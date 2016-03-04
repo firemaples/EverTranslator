@@ -4,15 +4,21 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 
+import jp.co.recruit_lifestyle.android.floatingview.FloatingViewListener;
+import jp.co.recruit_lifestyle.android.floatingview.FloatingViewManager;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.Tool;
 
-public class ScreenCaptureService extends Service {
-    private FloatingNotification floatingNotification;
+public class ScreenCaptureService extends Service implements FloatingViewListener {
     private View floatingView;
+    //    private FloatingNotification floatingNotification;
+    private FloatingViewManager mFloatingViewManager;
     private CaptureViewHandler captureViewHandler;
 
     public ScreenCaptureService() {
@@ -37,9 +43,24 @@ public class ScreenCaptureService extends Service {
 
         LayoutInflater inflater = LayoutInflater.from(this);
         floatingView = inflater.inflate(R.layout.widget_floating_button, null, false);
-        floatingNotification = new FloatingNotification(this, floatingView);
-        floatingNotification.setOnFloatingNotificationTapListener(onFloatingNotificationTapListener);
-        floatingNotification.show();
+        floatingView.setOnClickListener(onFloatingViewClickListener);
+
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+
+        mFloatingViewManager = new FloatingViewManager(this, this);
+        mFloatingViewManager.setFixedTrashIconImage(R.drawable.ic_trash_fixed);
+        mFloatingViewManager.setActionTrashIconImage(R.drawable.ic_trash_action);
+        final FloatingViewManager.Options options = new FloatingViewManager.Options();
+        options.shape = FloatingViewManager.SHAPE_CIRCLE;
+        options.overMargin = (int) (16 * metrics.density);
+        mFloatingViewManager.addViewToWindow(floatingView, options);
+
+//        floatingNotification = new FloatingNotification(this, floatingView);
+//        floatingNotification.setOnFloatingNotificationTapListener(onFloatingNotificationTapListener);
+//        floatingNotification.show();
 
         captureViewHandler = CaptureViewHandler.getInstance(ScreenCaptureService.this);
         captureViewHandler.setCallback(onCaptureViewHandlerCallback);
@@ -52,14 +73,22 @@ public class ScreenCaptureService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        floatingNotification.hide();
+//        floatingNotification.hide();
     }
+
+    private View.OnClickListener onFloatingViewClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            captureViewHandler.showView();
+            floatingView.setVisibility(View.GONE);
+        }
+    };
 
     private FloatingNotification.OnFloatingNotificationTapListener onFloatingNotificationTapListener = new FloatingNotification.OnFloatingNotificationTapListener() {
         @Override
         public void onClick(View floatingView) {
             captureViewHandler.showView();
-            floatingNotification.hide();
+//            floatingNotification.hide();
         }
 
         @Override
@@ -78,20 +107,30 @@ public class ScreenCaptureService extends Service {
 
         @Override
         public void onCaptureViewHandlerCloseClick() {
-            floatingNotification.show();
+            floatingView.setVisibility(View.VISIBLE);
+//            floatingNotification.show();
         }
 
         @Override
         public void onCaptureScreenStart() {
-            tempIsShow = floatingNotification.isShowing();
-            if (tempIsShow)
-                floatingNotification.hide();
+//            tempIsShow = floatingNotification.isShowing();
+//            if (tempIsShow)
+//                floatingNotification.hide();
+
+            floatingView.setVisibility(View.GONE);
         }
 
         @Override
         public void onCaptureScreenEnd() {
-            if (tempIsShow)
-                floatingNotification.show();
+//            if (tempIsShow)
+//                floatingNotification.show();
+
+            floatingView.setVisibility(View.VISIBLE);
         }
     };
+
+    @Override
+    public void onFinishFloatingView() {
+        stopSelf();
+    }
 }

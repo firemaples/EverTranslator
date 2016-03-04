@@ -28,4 +28,5 @@ dependencies {
     compile 'com.rmtheis:tess-two:5.4.0'
     compile 'com.github.markushi:circlebutton:1.1'
     compile 'com.github.johnpersano:supertoasts:1.3.4@aar'
+    compile 'com.github.recruit-lifestyle:FloatingView:1.7'
 }
