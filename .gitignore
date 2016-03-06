@@ -36,3 +36,6 @@ build/
 
 #NDK
 obj/
+
+#Custom
+KeyId.java

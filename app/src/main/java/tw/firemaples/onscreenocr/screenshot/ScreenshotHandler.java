@@ -42,6 +42,11 @@ public class ScreenshotHandler {
         this.callback = callback;
     }
 
+    public void release() {
+        mediaProjection.stop();
+        screenshotHandler = null;
+    }
+
     public boolean isGetUserPermission() {
         return isGetUserPermission;
     }

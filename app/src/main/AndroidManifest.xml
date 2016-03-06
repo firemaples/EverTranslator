@@ -24,7 +24,7 @@
         </activity>
 
         <service
-            android:name=".ScreenCaptureService"
+            android:name=".OnScreenTranslateService"
             android:enabled="true"
             android:exported="false" />
 

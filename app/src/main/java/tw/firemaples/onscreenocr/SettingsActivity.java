@@ -22,6 +22,8 @@ import android.view.MenuItem;
 
 import java.util.List;
 
+import tw.firemaples.onscreenocr.captureview.fullscreen.FullScreenCaptureView;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
@@ -146,7 +148,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (isHeaderPage) {
-            CaptureViewHandler.getInstance(this).showView();
+            FullScreenCaptureView.getCurrentInstance().showView();
         }
     }
 

@@ -5,7 +5,7 @@
     android:layout_height="64dip"
     android:minHeight="64dp"
     android:minWidth="64dp"
-    android:src="@drawable/ic_selection_white_24dp"
+    android:src="@drawable/selection"
     app:cb_color="@color/md_deep_purple_900"
     app:cb_pressedRingWidth="8dip">
 

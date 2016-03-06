@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ScreenCaptureService.start(this);
+        OnScreenTranslateService.start(this);
         finish();
 
 //        baseApi = new TessBaseAPI();
@@ -97,6 +97,22 @@ public class MainActivity extends AppCompatActivity {
             iterator.getUTF8Text(TessBaseAPI.PageIteratorLevel.RIL_WORD);
         } while (iterator.next(TessBaseAPI.PageIteratorLevel.RIL_SYMBOL));
         iterator.delete();
+
+        //            int[] ints = baseAPI.wordConfidences();
+//            Pixa words = baseAPI.getWords();
+//            ResultIterator iterator = baseAPI.getResultIterator();
+//            int level = TessBaseAPI.PageIteratorLevel.RIL_SYMBOL;
+//            iterator.begin();
+//            do {
+//                String chr = iterator.getUTF8Text(level);
+//                Tool.LogInfo("**Char: " + chr);
+//                List<Pair<String, Double>> choicesAndConfidence = iterator.getChoicesAndConfidence(level);
+////                for (Pair<String, Double> choices :
+////                        choicesAndConfidence) {
+////                    Tool.LogInfo("      - " + choices.first + " : " + choices.second);
+////                }
+//            } while (iterator.next(level));
+//            iterator.delete();
 
         tv.setText(result);
 

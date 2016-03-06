@@ -9,7 +9,7 @@
 
     <header
         android:fragment="tw.firemaples.onscreenocr.SettingsActivity$TextRecNTransPreferenceFragment"
-        android:icon="@drawable/ic_translate_black_24dp"
+        android:icon="@drawable/translate_black"
         android:title="@string/pref_header_text_recognition_translation" />
 
     <!--<header-->

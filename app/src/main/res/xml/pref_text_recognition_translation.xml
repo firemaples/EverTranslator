@@ -25,8 +25,8 @@
         <ListPreference
             android:defaultValue="zh-TW"
             android:dependency="preference_switch_translate"
-            android:entries="@array/translationtargetlanguagenames_google"
-            android:entryValues="@array/translationtargetiso6391_google"
+            android:entries="@array/translationtargetlanguagenames_microsoft"
+            android:entryValues="@array/translationtargetiso6391_microsoft"
             android:key="preference_list_translation_to"
             android:title="@string/pref_title_translation_to" />
     </PreferenceCategory>
