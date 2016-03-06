@@ -37,7 +37,8 @@
         android:minWidth="64dp"
         android:src="@drawable/minus"
         app:cb_color="@color/md_red_900"
-        app:cb_pressedRingWidth="8dip" />
+        app:cb_pressedRingWidth="8dip"
+        android:layout_marginRight="-16dp" />
 
     <ImageView
         android:id="@+id/iv_screenshotPreview"
