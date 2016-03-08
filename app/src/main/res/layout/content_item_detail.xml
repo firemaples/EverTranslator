@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/view_item_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:showIn="@layout/view_full_screen_capture_page"
+        tools:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="100dp"
+            android:background="@color/md_white_1000"
+            android:minWidth="360dp"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:theme="@style/Theme.AppCompat.Light">
+
+            <ImageView
+                android:id="@+id/iv_oriImageCrop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tv_orc_recognition_text" />
+
+                <Button
+                    android:id="@+id/bt_oriTextVocal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bt_oriTextVocal" />
+
+                <Button
+                    android:id="@+id/bt_oriTextDict"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bt_oriTextDict" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_orcText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/bt_translate_again"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bt_translate_again" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tv_translated_text" />
+
+                <Button
+                    android:id="@+id/bt_transTextVocal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bt_oriTextVocal" />
+
+                <Button
+                    android:id="@+id/bt_transTextDict"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bt_oriTextDict" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_translatedText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <at.markushi.ui.CircleButton
+            android:id="@+id/bt_closeItemDetail"
+            android:layout_width="64dip"
+            android:layout_height="64dip"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="-16dp"
+            android:layout_marginTop="100dp"
+            android:minHeight="64dp"
+            android:minWidth="64dp"
+            android:src="@drawable/close"
+            app:cb_color="@color/md_red_900"
+            app:cb_pressedRingWidth="8dip" />
+
+    </RelativeLayout>
+</merge>

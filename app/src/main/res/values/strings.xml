@@ -68,4 +68,9 @@
     <string name="pref_title_installed_recognition_languages">Installed recognition languages</string>
     <string name="pref_title_translation_to">Translation to</string>
     <string name="pref_title_orc_engine">OCR engine</string>
+    <string name="tv_orc_recognition_text">Orc recognition text:</string>
+    <string name="bt_translate_again">Translate again</string>
+    <string name="tv_translated_text">Translated Text</string>
+    <string name="bt_oriTextVocal">vocal</string>
+    <string name="bt_oriTextDict">Dict</string>
 </resources>

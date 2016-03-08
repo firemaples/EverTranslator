@@ -65,8 +65,8 @@ public class OnScreenTranslateService extends Service implements FloatingViewLis
         FloatingViewManager.Options floatingViewManagerOptions = new FloatingViewManager.Options();
         floatingViewManagerOptions.shape = FloatingViewManager.SHAPE_CIRCLE;
         floatingViewManagerOptions.overMargin = (int) (16 * metrics.density);
-        floatingViewManagerOptions.floatingViewX = metrics.widthPixels;
-        floatingViewManagerOptions.floatingViewY = metrics.heightPixels - 100;
+//        floatingViewManagerOptions.floatingViewX = metrics.widthPixels;
+//        floatingViewManagerOptions.floatingViewY = metrics.heightPixels - 100;
 
         mFloatingViewManager.addViewToWindow(floatingView, floatingViewManagerOptions);
 

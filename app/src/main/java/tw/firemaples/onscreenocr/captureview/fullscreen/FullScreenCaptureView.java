@@ -44,6 +44,7 @@ public class FullScreenCaptureView extends CaptureView {
     private View rootView;
     private FullScreenCaptureAreaSelectionView fullScreenCaptureAreaSelectionView;
     private FullScreenOrcResultsView fullScreenOrcResultsView;
+    private FullScreenOrcResultItemDetail fullScreenOrcResultItemDetail;
     private View bt_captureViewPageMinimize, bt_captureViewPageClearAll, bt_captureViewPageTranslate, bt_captureViewPageSettings, bt_captureViewPageReselect;
     private View view_progress;
     private TextView tv_progressMsg;
@@ -116,6 +117,13 @@ public class FullScreenCaptureView extends CaptureView {
         }
     };
 
+    private FullScreenOrcResultsView.OnFullScreenOrcResultItemClickListener onFullScreenOrcResultItemClickListener = new FullScreenOrcResultsView.OnFullScreenOrcResultItemClickListener() {
+        @Override
+        public void onFullScreenOrcResultItemClicked(OrcResult orcResult) {
+            FullScreenCaptureView.this.onFullScreenOrcResultItemClicked(orcResult);
+        }
+    };
+
     public static FullScreenCaptureView getNewInstance(Context context, OnScreenTranslateService onScreenTranslateService) {
         if (fullScreenCaptureView == null)
             fullScreenCaptureView = new FullScreenCaptureView(context, onScreenTranslateService);
@@ -162,6 +170,10 @@ public class FullScreenCaptureView extends CaptureView {
         bt_captureViewPageReselect.setOnClickListener(onClickListener);
         fullScreenCaptureAreaSelectionView = (FullScreenCaptureAreaSelectionView) rootView.findViewById(R.id.fullScreenCaptureAreaSelectionView);
         fullScreenOrcResultsView = (FullScreenOrcResultsView) rootView.findViewById(R.id.fullScreenOrcResultsView);
+        fullScreenOrcResultsView.setOnFullScreenOrcResultItemClickListener(onFullScreenOrcResultItemClickListener);
+
+        fullScreenOrcResultItemDetail = new FullScreenOrcResultItemDetail(this, rootView.findViewById(R.id.view_item_detail));
+        fullScreenOrcResultItemDetail.hide();
 
         onModeChange(MODE_SELECTION);
         setProgressMode(false, null);
@@ -283,5 +295,10 @@ public class FullScreenCaptureView extends CaptureView {
         Tool.ShowMsg(context, "TextRecognizeFinished!");
         onModeChange(MODE_RESULT);
         fullScreenOrcResultsView.setOrcResults(translatedResult);
+    }
+
+    private void onFullScreenOrcResultItemClicked(OrcResult orcResult) {
+        fullScreenOrcResultItemDetail.setOrcResult(orcResult);
+        fullScreenOrcResultItemDetail.show();
     }
 }

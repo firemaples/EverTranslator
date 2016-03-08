@@ -81,7 +81,7 @@ public class ScreenshotHandler {
         // Get size of screen
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
-        DisplayMetrics metrics = new DisplayMetrics();
+        final DisplayMetrics metrics = new DisplayMetrics();
         display.getMetrics(metrics);
         final int mWidth = metrics.widthPixels;
         final int mHeight = metrics.heightPixels;
@@ -89,7 +89,7 @@ public class ScreenshotHandler {
 
         //Create a imageReader for catch result
 //        final ImageReader mImageReader = ImageReader.newInstance(mWidth, mHeight, ImageFormat.RGB_565, 2);
-        final ImageReader mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
+        ImageReader mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
 
         //Take a screenshot
         int flags = DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR;
@@ -100,22 +100,23 @@ public class ScreenshotHandler {
         mImageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
             @Override
             public void onImageAvailable(ImageReader reader) {
-                mImageReader.setOnImageAvailableListener(null, handler);
+                reader.setOnImageAvailableListener(null, handler);
                 Image image = reader.acquireLatestImage();
                 final Image.Plane[] planes = image.getPlanes();
                 final ByteBuffer buffer = planes[0].getBuffer();
-                int offset = 0;
+//                int offset = 0;
                 int pixelStride = planes[0].getPixelStride();
                 int rowStride = planes[0].getRowStride();
-                int rowPadding = rowStride - pixelStride * mWidth;
+                int rowPadding = rowStride - pixelStride * metrics.widthPixels;
                 // create bitmap
 //                Bitmap bmp = Bitmap.createBitmap(mWidth + rowPadding / pixelStride, mHeight, Bitmap.Config.RGB_565);
-                Bitmap bmp = Bitmap.createBitmap(mWidth + rowPadding / pixelStride, mHeight, Bitmap.Config.ARGB_8888);
+                Bitmap bmp = Bitmap.createBitmap(metrics.widthPixels + rowPadding / pixelStride, metrics.heightPixels, Bitmap.Config.ARGB_8888);
                 bmp.copyPixelsFromBuffer(buffer);
                 image.close();
 
                 if (callback != null)
                     callback.onScreenshotFinished(bmp);
+                reader.close();
             }
         }, handler);
     }

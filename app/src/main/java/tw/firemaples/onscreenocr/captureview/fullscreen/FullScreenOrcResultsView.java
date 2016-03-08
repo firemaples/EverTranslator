@@ -11,6 +11,7 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -31,6 +32,8 @@ public class FullScreenOrcResultsView extends ImageView {
 
     private int textBackgroundPadding = 5;
     private DisplayMetrics metrics;
+
+    private OnFullScreenOrcResultItemClickListener onFullScreenOrcResultItemClickListener;
 
     public FullScreenOrcResultsView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -56,9 +59,31 @@ public class FullScreenOrcResultsView extends ImageView {
         display.getMetrics(metrics);
     }
 
+    public void setOnFullScreenOrcResultItemClickListener(OnFullScreenOrcResultItemClickListener onFullScreenOrcResultItemClickListener) {
+        this.onFullScreenOrcResultItemClickListener = onFullScreenOrcResultItemClickListener;
+    }
+
     public void setOrcResults(List<OrcResult> orcResults) {
         this.orcResults = orcResults;
+        countResultSize();
         invalidate();
+    }
+
+    public void countResultSize() {
+        for (OrcResult orcResult : orcResults) {
+            if (orcResult.getSubRect() != null) {
+                Rect subRect = orcResult.getSubRect();
+
+                int textWidth = Math.max(subRect.width(), (int) textPaint.measureText(orcResult.getTranslatedText()));
+                textWidth = Math.min(textWidth, metrics.widthPixels - subRect.left - 16);
+                int textHeight = Math.max(subRect.height(), (int) textPaint.getTextSize());
+
+                Rect touchRect = new Rect(subRect.left, subRect.top, subRect.left + textWidth, subRect.top + textHeight);
+                orcResult.setTouchRect(touchRect);
+                orcResult.setTextWidth(textWidth);
+                orcResult.setTextHeight(textHeight);
+            }
+        }
     }
 
     @Override
@@ -66,19 +91,13 @@ public class FullScreenOrcResultsView extends ImageView {
         super.onDraw(canvas);
         if (!isInEditMode()) {
             for (OrcResult orcResult : orcResults) {
-                if (orcResult.getSubRect() != null) {
-                    Rect subRect = orcResult.getSubRect();
+                if (orcResult.getTouchRect() != null) {
+                    canvas.drawRect(orcResult.getTouchRect(), boxPaint);
 
-                    int textWidth = Math.max(subRect.width(), (int) textPaint.measureText(orcResult.getTranslatedText()));
-                    textWidth = Math.min(textWidth, metrics.widthPixels - subRect.left - 16);
-                    int textHeight = Math.max(subRect.height(), (int) textPaint.getTextSize());
-
-                    canvas.drawRect(new Rect(subRect.left, subRect.top, subRect.left + textWidth, subRect.top + textHeight), boxPaint);
-
-                    StaticLayout sl = new StaticLayout(orcResult.getTranslatedText(), textPaint, textWidth, Layout.Alignment.ALIGN_NORMAL, 1, 1, false);
+                    StaticLayout sl = new StaticLayout(orcResult.getTranslatedText(), textPaint, orcResult.getTextWidth(), Layout.Alignment.ALIGN_NORMAL, 1, 1, false);
 
                     canvas.save();
-                    canvas.translate(subRect.left, subRect.top);
+                    canvas.translate(orcResult.getSubRect().left, orcResult.getSubRect().top);
                     sl.draw(canvas);
                     canvas.restore();
 
@@ -86,5 +105,28 @@ public class FullScreenOrcResultsView extends ImageView {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+            for (OrcResult orcResult : orcResults) {
+                if (orcResult.getTouchRect().contains((int) event.getX(), (int) event.getY())) {
+                    if (onFullScreenOrcResultItemClickListener != null) {
+                        onFullScreenOrcResultItemClickListener.onFullScreenOrcResultItemClicked(orcResult);
+                    }
+                    return true;
+                }
+            }
+
+            return false;
+        } else {
+            return super.onTouchEvent(event);
+        }
+    }
+
+    public interface OnFullScreenOrcResultItemClickListener {
+        void onFullScreenOrcResultItemClicked(OrcResult orcResult);
     }
 }

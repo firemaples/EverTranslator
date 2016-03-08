@@ -17,6 +17,8 @@ public class OrcResult {
     private ArrayList<Rect> boxRects;
     private Rect rect;
     private Rect subRect;
+    private Rect touchRect;
+    private int textWidth, textHeight;
 
     public void setRect(Rect rect) {
         this.rect = rect;
@@ -64,5 +66,29 @@ public class OrcResult {
 
     public String getTranslatedText() {
         return translatedText;
+    }
+
+    public void setTouchRect(Rect touchRect) {
+        this.touchRect = touchRect;
+    }
+
+    public Rect getTouchRect() {
+        return touchRect;
+    }
+
+    public int getTextWidth() {
+        return textWidth;
+    }
+
+    public void setTextWidth(int textWidth) {
+        this.textWidth = textWidth;
+    }
+
+    public int getTextHeight() {
+        return textHeight;
+    }
+
+    public void setTextHeight(int textHeight) {
+        this.textHeight = textHeight;
     }
 }
