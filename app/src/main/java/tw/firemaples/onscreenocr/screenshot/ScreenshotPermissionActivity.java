@@ -2,7 +2,6 @@ package tw.firemaples.onscreenocr.screenshot;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -34,10 +33,7 @@ public class ScreenshotPermissionActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PERMISSION_CODE) {
             if (resultCode == RESULT_OK) {
-                MediaProjectionManager projectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-                MediaProjection mProjection = projectionManager.getMediaProjection(resultCode, data);
-
-                screenshotHandler.setMediaProjection(mProjection);
+                screenshotHandler.setMediaProjectionIntent(data);
             } else {
                 Tool.ShowErrorMsg(this, "Please submit Screenshot Permission for using this service!");
             }

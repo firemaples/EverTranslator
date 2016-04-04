@@ -1,5 +1,6 @@
 package tw.firemaples.onscreenocr.screenshot;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,6 +9,7 @@ import android.hardware.display.DisplayManager;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.projection.MediaProjection;
+import android.media.projection.MediaProjectionManager;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -24,7 +26,7 @@ public class ScreenshotHandler {
     private Context context;
     private static ScreenshotHandler screenshotHandler;
     private boolean isGetUserPermission;
-    private MediaProjection mediaProjection;
+    private Intent mediaProjectionIntent;
     private OnScreenshotHandlerCallback callback;
 
     private ScreenshotHandler(Context context) {
@@ -43,7 +45,6 @@ public class ScreenshotHandler {
     }
 
     public void release() {
-        mediaProjection.stop();
         screenshotHandler = null;
     }
 
@@ -62,17 +63,18 @@ public class ScreenshotHandler {
             getUserPermission();
             return null;
         } else {
-            return mediaProjection;
+            MediaProjectionManager projectionManager = (MediaProjectionManager) context.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+            return projectionManager.getMediaProjection(Activity.RESULT_OK, (Intent) mediaProjectionIntent.clone());
         }
     }
 
-    public void setMediaProjection(MediaProjection mediaProjection) {
-        this.mediaProjection = mediaProjection;
+    public void setMediaProjectionIntent(Intent mediaProjectionIntent) {
+        this.mediaProjectionIntent = (Intent) mediaProjectionIntent.clone();
         isGetUserPermission = true;
     }
 
     public void takeScreenshot() {
-        MediaProjection mProjection = getMediaProjection();
+        final MediaProjection mProjection = getMediaProjection();
         if (mProjection == null) {
             Tool.LogError("MediaProjection is null");
             return;
@@ -114,9 +116,11 @@ public class ScreenshotHandler {
                 bmp.copyPixelsFromBuffer(buffer);
                 image.close();
 
+                reader.close();
+                mProjection.stop();
+
                 if (callback != null)
                     callback.onScreenshotFinished(bmp);
-                reader.close();
             }
         }, handler);
     }

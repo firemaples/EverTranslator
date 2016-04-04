@@ -1,6 +1,8 @@
 package tw.firemaples.onscreenocr.captureview.fullscreen;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
@@ -44,7 +46,6 @@ public class FullScreenCaptureView extends CaptureView {
     private View rootView;
     private FullScreenCaptureAreaSelectionView fullScreenCaptureAreaSelectionView;
     private FullScreenOrcResultsView fullScreenOrcResultsView;
-    private FullScreenOrcResultItemDetail fullScreenOrcResultItemDetail;
     private View bt_captureViewPageMinimize, bt_captureViewPageClearAll, bt_captureViewPageTranslate, bt_captureViewPageSettings, bt_captureViewPageReselect;
     private View view_progress;
     private TextView tv_progressMsg;
@@ -84,7 +85,19 @@ public class FullScreenCaptureView extends CaptureView {
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 hideView();
             } else if (id == R.id.bt_captureViewPageReselect) {
-                onModeChange(MODE_SELECTION);
+                AlertDialog.Builder ab = new AlertDialog.Builder(context);
+                ab.setTitle(R.string.alert_title_reselectAgain);
+                ab.setMessage(R.string.alert_msg_reselect_again);
+                ab.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        onModeChange(MODE_SELECTION);
+                    }
+                });
+                ab.setNegativeButton(R.string.cancel, null);
+                AlertDialog ad = ab.create();
+                ad.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                ad.show();
             }
         }
     };
@@ -171,9 +184,6 @@ public class FullScreenCaptureView extends CaptureView {
         fullScreenCaptureAreaSelectionView = (FullScreenCaptureAreaSelectionView) rootView.findViewById(R.id.fullScreenCaptureAreaSelectionView);
         fullScreenOrcResultsView = (FullScreenOrcResultsView) rootView.findViewById(R.id.fullScreenOrcResultsView);
         fullScreenOrcResultsView.setOnFullScreenOrcResultItemClickListener(onFullScreenOrcResultItemClickListener);
-
-        fullScreenOrcResultItemDetail = new FullScreenOrcResultItemDetail(this, rootView.findViewById(R.id.view_item_detail));
-        fullScreenOrcResultItemDetail.hide();
 
         onModeChange(MODE_SELECTION);
         setProgressMode(false, null);
@@ -298,7 +308,6 @@ public class FullScreenCaptureView extends CaptureView {
     }
 
     private void onFullScreenOrcResultItemClicked(OrcResult orcResult) {
-        fullScreenOrcResultItemDetail.setOrcResult(orcResult);
-        fullScreenOrcResultItemDetail.show();
+        new OrcResultItemDetailDialog(context, orcResult).show();
     }
 }

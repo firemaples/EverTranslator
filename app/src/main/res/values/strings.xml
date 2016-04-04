@@ -73,4 +73,8 @@
     <string name="tv_translated_text">Translated Text</string>
     <string name="bt_oriTextVocal">vocal</string>
     <string name="bt_oriTextDict">Dict</string>
+    <string name="alert_title_reselectAgain">Reselect again</string>
+    <string name="alert_msg_reselect_again">Do you want to reselect translation area again?</string>
+    <string name="confirm">confirm</string>
+    <string name="cancel">cancel</string>
 </resources>
