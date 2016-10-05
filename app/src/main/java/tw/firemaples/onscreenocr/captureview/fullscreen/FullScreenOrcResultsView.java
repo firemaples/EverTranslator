@@ -112,7 +112,7 @@ public class FullScreenOrcResultsView extends ImageView {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
             for (OrcResult orcResult : orcResults) {
-                if (orcResult.getTouchRect().contains((int) event.getX(), (int) event.getY())) {
+                if (orcResult.getTouchRect() != null && orcResult.getTouchRect().contains((int) event.getX(), (int) event.getY())) {
                     if (onFullScreenOrcResultItemClickListener != null) {
                         onFullScreenOrcResultItemClickListener.onFullScreenOrcResultItemClicked(orcResult);
                     }

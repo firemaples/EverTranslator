@@ -83,16 +83,23 @@ public class OrcRecognizeAsyncTask extends AsyncTask<Void, String, List<OrcResul
     @Override
     protected void onProgressUpdate(String... values) {
         super.onProgressUpdate(values);
-        Tool.LogInfo(values[0]);
         CaptureView.setProgressMode(true, values[0]);
     }
 
     @Override
     protected void onPostExecute(List<OrcResult> results) {
         super.onPostExecute(results);
+        Tool.logInfo("Orc result size:" + results.size());
+        if (results.size() > 0) {
+            Tool.logInfo("First orc result:" + results.get(0).getText());
+        } else {
+            Tool.logInfo("No orc result found");
+            Tool.showErrorMsg("No orc result found");
+        }
         CaptureView.setProgressMode(false, null);
-        if (callback != null)
+        if (callback != null) {
             callback.onTextRecognizeFinished(results);
+        }
     }
 
     public interface OnTextRecognizeAsyncTaskCallback {

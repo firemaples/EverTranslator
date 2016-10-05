@@ -13,9 +13,15 @@ import tw.firemaples.onscreenocr.R;
  * Created by Louis on 2016/3/1.
  */
 public class Tool {
+    private static Context context;
+
     private static String LOG_TAG = "OnScreenOcr";
 
     private static String[] iso6393Array, microsoftLangArray;
+
+    public static void init(Context context) {
+        Tool.context = context;
+    }
 
     public static boolean isServiceRunning(Context context, Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -27,27 +33,37 @@ public class Tool {
         return false;
     }
 
-    public static void LogError(String msg) {
+    public static void logError(String msg) {
         Log.e(LOG_TAG, msg);
     }
 
-    public static void LogInfo(String msg) {
+    public static void logInfo(String msg) {
         Log.i(LOG_TAG, msg);
     }
 
-    public static void ShowMsg(Context context, String msg) {
+    public static void showMsg(String msg) {
+        if (context == null) {
+            return;
+        }
         SuperToast.create(context, msg, SuperToast.Duration.LONG,
                 Style.getStyle(Style.GREEN, SuperToast.Animations.FADE)).show();
     }
 
-    public static void ShowErrorMsg(Context context, String msg) {
+    public static void showErrorMsg(String msg) {
+        if (context == null) {
+            return;
+        }
         SuperToast.create(context, msg, SuperToast.Duration.LONG,
                 Style.getStyle(Style.RED, SuperToast.Animations.FADE)).show();
     }
 
-    public static String getMicrosoftLang(Context context, String iso6393Lang) {
-        if (iso6393Array == null)
+    public static String getMicrosoftLang(String iso6393Lang) {
+        if (context == null) {
+            return null;
+        }
+        if (iso6393Array == null) {
             iso6393Array = context.getResources().getStringArray(R.array.iso6393);
+        }
         int index = -1;
         for (int i = 0, size = iso6393Array.length; i < size; i++) {
             if (iso6393Array[i].equals(iso6393Lang)) {
@@ -55,19 +71,21 @@ public class Tool {
                 break;
             }
         }
-        if (microsoftLangArray == null)
+        if (microsoftLangArray == null) {
             microsoftLangArray = context.getResources().getStringArray(R.array.translationtargetiso6391_microsoft);
-        if (index <= 0 || index >= microsoftLangArray.length) return "en";
+        }
+        if (index <= 0 || index >= microsoftLangArray.length) {
+            return "en";
+        }
         return microsoftLangArray[index];
     }
 
     /**
      * Map an ISO 639-3 language code to an ISO 639-1 language code.
-     *
+     * <p>
      * There is one entry here for each language recognized by the OCR engine.
      *
-     * @param languageCode
-     *            ISO 639-3 language code
+     * @param languageCode ISO 639-3 language code
      * @return ISO 639-1 language code
      */
     public static String mapGoogleLanguageCode(String languageCode) {
@@ -188,11 +206,10 @@ public class Tool {
 
     /**
      * Map an ISO 639-3 language code to an ISO 639-1 language code.
-     *
+     * <p>
      * There is one entry here for each language recognized by the OCR engine.
      *
-     * @param languageCode
-     *            ISO 639-3 language code
+     * @param languageCode ISO 639-3 language code
      * @return ISO 639-1 language code
      */
     public static String mapMicrosoftLanguageCode(String languageCode) {

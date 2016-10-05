@@ -1,30 +1,29 @@
 package tw.firemaples.onscreenocr;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Rect;
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.media.projection.MediaProjectionManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
-import com.googlecode.leptonica.android.ReadFile;
-import com.googlecode.tesseract.android.ResultIterator;
-import com.googlecode.tesseract.android.TessBaseAPI;
-
-import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
+import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
+import tw.firemaples.onscreenocr.utils.Callback;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TessBaseAPI baseApi;
+    private final int REQUEST_CODE_CHECK_DRAW_OVERLAY_PERM = 1001;
+    private final int REQUEST_CODE_REQUEST_MEDIA_PROJECTION_RESULT = 1002;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,97 +33,126 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+        //noinspection ConstantConditions
+        findViewById(R.id.bt_serviceToggle).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                takeScreenshot();
-                fromRes();
+                if (OnScreenTranslateService.isRunning(MainActivity.this)) {
+                    stopService();
+                } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        checkDrawOverlayPermission();
+                    } else {
+                        requestMediaProjection();
+                    }
+                }
             }
         });
 
+        //noinspection ConstantConditions
+        findViewById(R.id.bt_setting).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SettingsActivity.start(MainActivity.this, null);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_CHECK_DRAW_OVERLAY_PERM) {
+            onCheckDrawOverlayPermissionResult();
+        } else if (requestCode == REQUEST_CODE_REQUEST_MEDIA_PROJECTION_RESULT) {
+            onRequestMediaProjectionResult(resultCode, data);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public void checkDrawOverlayPermission() {
+        if (!Settings.canDrawOverlays(MainActivity.this)) {
+            AlertDialog.Builder ab = new AlertDialog.Builder(this);
+            ab.setTitle("Need permission");
+            ab.setMessage("This app needs [DrawOverlay] Permission for running!");
+            ab.setPositiveButton("Setting", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            Uri.parse("package:" + getPackageName()));
+                    startActivityForResult(intent, REQUEST_CODE_CHECK_DRAW_OVERLAY_PERM);
+                }
+            });
+            ab.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    MainActivity.this.finish();
+                }
+            });
+            ab.show();
+        } else {
+            requestMediaProjection();
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private void onCheckDrawOverlayPermissionResult() {
+        if (Settings.canDrawOverlays(this)) {
+            requestMediaProjection();
+        } else {
+            showErrorDialog("This app needs [DrawOverlay] Permission for running!", new Callback<Void>() {
+                @Override
+                public boolean onCallback(Void result) {
+                    requestMediaProjection();
+                    return false;
+                }
+            });
+        }
+    }
+
+    private void requestMediaProjection() {
+        MediaProjectionManager projectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        startActivityForResult(projectionManager.createScreenCaptureIntent(), REQUEST_CODE_REQUEST_MEDIA_PROJECTION_RESULT);
+    }
+
+    private void onRequestMediaProjectionResult(int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            ScreenshotHandler.getInstance(this).setMediaProjectionIntent(data);
+            startService();
+        } else {
+            showErrorDialog("Please submit Screenshot Permission for using this service!", new Callback<Void>() {
+                @Override
+                public boolean onCallback(Void result) {
+                    requestMediaProjection();
+                    return false;
+                }
+            });
+        }
+    }
+
+    private void showErrorDialog(String msg, final Callback<Void> onRetryCallback) {
+        AlertDialog.Builder ab = new AlertDialog.Builder(this);
+        ab.setTitle("Error");
+        ab.setMessage(msg);
+        ab.setPositiveButton("Request Again", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onRetryCallback.onCallback(null);
+            }
+        });
+        ab.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MainActivity.this.finish();
+            }
+        });
+        ab.show();
+    }
+
+    private void startService() {
         OnScreenTranslateService.start(this);
         finish();
-
-//        baseApi = new TessBaseAPI();
-//        baseApi.init(Environment.getExternalStorageDirectory().getPath() + "/tesseract/", "jpn", TessBaseAPI.OEM_TESSERACT_ONLY);
-//        baseApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_AUTO_OSD);
     }
 
-    private void fromRes(){
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.qq);
-        decode(bitmap);
+    private void stopService() {
+        OnScreenTranslateService.stop();
     }
-
-    private void takeScreenshot() {
-        ImageView iv = (ImageView) findViewById(R.id.imageView);
-        TextView tv = (TextView) findViewById(R.id.textView);
-        iv.setImageDrawable(null);
-        tv.setText(null);
-
-        // create bitmap screen capture
-        View v1 = getWindow().getDecorView().getRootView();
-        v1.setDrawingCacheEnabled(true);
-        Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-        v1.setDrawingCacheEnabled(false);
-
-        iv.setImageBitmap(bitmap);
-
-        decode(bitmap);
-    }
-
-    private void decode(Bitmap bitmap){
-        ImageView iv = (ImageView) findViewById(R.id.imageView);
-        TextView tv = (TextView) findViewById(R.id.textView);
-
-        iv.setImageBitmap(bitmap);
-
-        baseApi.setImage(ReadFile.readBitmap(bitmap));
-        String result = baseApi.getUTF8Text();
-        ResultIterator iterator = baseApi.getResultIterator();
-        int[] lastBoundingBox;
-        ArrayList<Rect> charBoxes = new ArrayList<>();
-        iterator.begin();
-        do {
-            lastBoundingBox = iterator.getBoundingBox(TessBaseAPI.PageIteratorLevel.RIL_SYMBOL);
-            Rect lastRectBox = new Rect(lastBoundingBox[0], lastBoundingBox[1],
-                    lastBoundingBox[2], lastBoundingBox[3]);
-            charBoxes.add(lastRectBox);
-            iterator.getUTF8Text(TessBaseAPI.PageIteratorLevel.RIL_WORD);
-        } while (iterator.next(TessBaseAPI.PageIteratorLevel.RIL_SYMBOL));
-        iterator.delete();
-
-        //            int[] ints = baseAPI.wordConfidences();
-//            Pixa words = baseAPI.getWords();
-//            ResultIterator iterator = baseAPI.getResultIterator();
-//            int level = TessBaseAPI.PageIteratorLevel.RIL_SYMBOL;
-//            iterator.begin();
-//            do {
-//                String chr = iterator.getUTF8Text(level);
-//                Tool.LogInfo("**Char: " + chr);
-//                List<Pair<String, Double>> choicesAndConfidence = iterator.getChoicesAndConfidence(level);
-////                for (Pair<String, Double> choices :
-////                        choicesAndConfidence) {
-////                    Tool.LogInfo("      - " + choices.first + " : " + choices.second);
-////                }
-//            } while (iterator.next(level));
-//            iterator.delete();
-
-        tv.setText(result);
-
-        log(result);
-    }
-
-    private void log(String str) {
-        Log.i("myLog", str);
-    }
-
 }

@@ -13,16 +13,15 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
+import android.util.SparseArray;
 import android.view.MenuItem;
 
 import java.util.List;
-
-import tw.firemaples.onscreenocr.captureview.fullscreen.FullScreenCaptureView;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -36,6 +35,7 @@ import tw.firemaples.onscreenocr.captureview.fullscreen.FullScreenCaptureView;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
+    private static final String EXTRA_CALLBACK = "EXTRA_CALLBACK";
 
     /**
      * Key for Text recognition & translation
@@ -46,9 +46,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public static String KEY_TRANSLATION_TO = "preference_list_translation_to";
 
     boolean isHeaderPage = false;
+    private static SparseArray<SettingPageCallback> callbackMap = new SparseArray<>();
+    int callbackIdentity;
+    private SettingPageCallback callback;
 
-    public static Intent getIntent(Context context) {
-        return new Intent(context, SettingsActivity.class);
+    public static void start(Context context, SettingPageCallback settingPageCallback) {
+        int callbackIdentity = System.identityHashCode(settingPageCallback);
+        Intent intent = new Intent(context, SettingsActivity.class)
+                .putExtra(EXTRA_CALLBACK, callbackIdentity)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        callbackMap.put(callbackIdentity, settingPageCallback);
+        context.startActivity(intent);
     }
 
     /**
@@ -137,6 +145,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+        callbackIdentity = getIntent().getIntExtra(EXTRA_CALLBACK, -1);
+        if (callbackIdentity >= 0) {
+            callback = callbackMap.get(callbackIdentity);
+        }
     }
 
     @Override
@@ -148,7 +160,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (isHeaderPage) {
-            FullScreenCaptureView.getCurrentInstance().showView();
+            onPageFinished();
+        }
+    }
+
+    private void onPageFinished() {
+        if (callback != null) {
+            callback.onSettingPageFinished();
+            callbackMap.remove(callbackIdentity);
         }
     }
 
@@ -293,5 +312,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             }
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    public interface SettingPageCallback {
+        void onSettingPageFinished();
     }
 }

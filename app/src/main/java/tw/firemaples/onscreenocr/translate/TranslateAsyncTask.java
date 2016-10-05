@@ -81,7 +81,7 @@ public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
     @Override
     protected void onProgressUpdate(String... values) {
         super.onProgressUpdate(values);
-        Tool.LogInfo(values[0]);
+        Tool.logInfo(values[0]);
         captureView.setProgressMode(true, values[0]);
     }
 

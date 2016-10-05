@@ -67,14 +67,14 @@ public class OrcInitAsyncTask extends AsyncTask<Void, String, Boolean> {
     @Override
     protected Boolean doInBackground(Void... params) {
         if (!tessDataDir.exists() && !tessDataDir.mkdirs()) {
-            Tool.LogError("Make dir failed: " + tessDataDir.getPath());
+            Tool.logError("Make dir failed: " + tessDataDir.getPath());
             return false;
         }
 
         File tessDataFile = new File(tessDataDir, recognitionLang + ".traineddata");
         if (!tessDataFile.exists()) {
             if (!downloadTrainedata(recognitionLang, tessDataFile)) {
-                Tool.LogError("Download TraneData Failed");
+                Tool.logError("Download TraneData Failed");
                 return false;
             }
         }
@@ -88,7 +88,7 @@ public class OrcInitAsyncTask extends AsyncTask<Void, String, Boolean> {
     @Override
     protected void onProgressUpdate(String... values) {
         super.onProgressUpdate(values);
-        Tool.LogInfo(values[0]);
+        Tool.logInfo(values[0]);
         captureView.setProgressMode(true, values[0]);
     }
 
@@ -119,9 +119,9 @@ public class OrcInitAsyncTask extends AsyncTask<Void, String, Boolean> {
             // expect HTTP 200 OK, so we don't mistakenly save error report
             // instead of the file
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                Tool.LogError("Server returned HTTP " + connection.getResponseCode()
+                Tool.logError("Server returned HTTP " + connection.getResponseCode()
                         + " " + connection.getResponseMessage());
-                Tool.ShowErrorMsg(context, "Server returned HTTP " + connection.getResponseCode()
+                Tool.showErrorMsg("Server returned HTTP " + connection.getResponseCode()
                         + " " + connection.getResponseMessage());
                 return false;
             }
@@ -154,8 +154,8 @@ public class OrcInitAsyncTask extends AsyncTask<Void, String, Boolean> {
                 output.write(data, 0, count);
             }
         } catch (Exception e) {
-            Tool.LogError(e.toString());
-            Tool.ShowErrorMsg(context, e.toString());
+            Tool.logError(e.toString());
+            Tool.showErrorMsg(e.toString());
             return false;
         } finally {
             try {

@@ -1,5 +1,6 @@
 package tw.firemaples.onscreenocr;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -17,9 +18,12 @@ import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 public class OnScreenTranslateService extends Service implements FloatingViewListener {
-
+    @SuppressLint("StaticFieldLeak")
+    private static OnScreenTranslateService _instance;
 
     private FloatingViewManager mFloatingViewManager;
+    private View floatingView;
+    private FloatingViewManager.Options floatingViewManagerOptions;
 
     private CaptureView captureView;
     private ScreenshotHandler screenshotHandler;
@@ -34,9 +38,19 @@ public class OnScreenTranslateService extends Service implements FloatingViewLis
     public OnScreenTranslateService() {
     }
 
+    public static boolean isRunning(Context context) {
+        return Tool.isServiceRunning(context, OnScreenTranslateService.class);
+    }
+
     public static void start(Context context) {
-        if (!Tool.isServiceRunning(context, OnScreenTranslateService.class)) {
+        if (!isRunning(context)) {
             context.startService(new Intent(context, OnScreenTranslateService.class));
+        }
+    }
+
+    public static void stop() {
+        if (_instance != null) {
+            _instance.stopSelf();
         }
     }
 
@@ -48,9 +62,11 @@ public class OnScreenTranslateService extends Service implements FloatingViewLis
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        _instance = this;
         int startCommand = super.onStartCommand(intent, flags, startId);
+        Tool.init(this);
 
-        View floatingView = View.inflate(this, R.layout.widget_floating_button, null);
+        floatingView = View.inflate(this, R.layout.widget_floating_button, null);
         floatingView.setOnClickListener(onFloatingViewClickListener);
 
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
@@ -62,12 +78,11 @@ public class OnScreenTranslateService extends Service implements FloatingViewLis
         mFloatingViewManager.setFixedTrashIconImage(R.drawable.close_circle_outline);
 //        mFloatingViewManager.setActionTrashIconImage(R.drawable.ic_trash_action);
 
-        FloatingViewManager.Options floatingViewManagerOptions = new FloatingViewManager.Options();
+        floatingViewManagerOptions = new FloatingViewManager.Options();
         floatingViewManagerOptions.shape = FloatingViewManager.SHAPE_CIRCLE;
         floatingViewManagerOptions.overMargin = (int) (16 * metrics.density);
 //        floatingViewManagerOptions.floatingViewX = metrics.widthPixels;
 //        floatingViewManagerOptions.floatingViewY = metrics.heightPixels - 100;
-
         mFloatingViewManager.addViewToWindow(floatingView, floatingViewManagerOptions);
 
         showFloatingView();
@@ -87,6 +102,7 @@ public class OnScreenTranslateService extends Service implements FloatingViewLis
             screenshotHandler.release();
             screenshotHandler = null;
         }
+        _instance = null;
     }
 
     private void onFloatingViewClick() {
@@ -104,6 +120,6 @@ public class OnScreenTranslateService extends Service implements FloatingViewLis
 
     @Override
     public void onFinishFloatingView() {
-        stopSelf();
+        stop();
     }
 }

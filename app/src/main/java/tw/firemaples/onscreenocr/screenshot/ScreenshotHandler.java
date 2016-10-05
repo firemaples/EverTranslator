@@ -23,8 +23,9 @@ import tw.firemaples.onscreenocr.utils.Tool;
  * Created by firem_000 on 2016/3/4.
  */
 public class ScreenshotHandler {
+    private static ScreenshotHandler _instance;
+
     private Context context;
-    private static ScreenshotHandler screenshotHandler;
     private boolean isGetUserPermission;
     private Intent mediaProjectionIntent;
     private OnScreenshotHandlerCallback callback;
@@ -32,12 +33,12 @@ public class ScreenshotHandler {
     private ScreenshotHandler(Context context) {
         this.context = context;
 
-        getUserPermission();
+//        getUserPermission();
     }
 
     public static ScreenshotHandler getInstance(Context context) {
-        if (screenshotHandler == null) screenshotHandler = new ScreenshotHandler(context);
-        return screenshotHandler;
+        if (_instance == null) _instance = new ScreenshotHandler(context);
+        return _instance;
     }
 
     public void setCallback(OnScreenshotHandlerCallback callback) {
@@ -45,7 +46,7 @@ public class ScreenshotHandler {
     }
 
     public void release() {
-        screenshotHandler = null;
+        _instance = null;
     }
 
     public boolean isGetUserPermission() {
@@ -54,7 +55,7 @@ public class ScreenshotHandler {
 
     public void getUserPermission() {
         if (isGetUserPermission) return;
-        Tool.ShowMsg(context, "Please submit Screenshot Permission for using this service!");
+        Tool.showMsg("Please submit Screenshot Permission for using this service!");
         context.startActivity(ScreenshotPermissionActivity.getIntent(context, this).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
@@ -76,7 +77,7 @@ public class ScreenshotHandler {
     public void takeScreenshot() {
         final MediaProjection mProjection = getMediaProjection();
         if (mProjection == null) {
-            Tool.LogError("MediaProjection is null");
+            Tool.logError("MediaProjection is null");
             return;
         }
         // http://binwaheed.blogspot.tw/2015/03/how-to-correctly-take-screenshot-using.html

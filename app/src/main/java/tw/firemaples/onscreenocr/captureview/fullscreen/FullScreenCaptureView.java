@@ -3,7 +3,6 @@ package tw.firemaples.onscreenocr.captureview.fullscreen;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
@@ -20,12 +19,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import tw.firemaples.onscreenocr.OnScreenTranslateService;
-import tw.firemaples.onscreenocr.captureview.CaptureView;
-import tw.firemaples.onscreenocr.orc.OrcInitAsyncTask;
-import tw.firemaples.onscreenocr.orc.OrcResult;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.SettingsActivity;
+import tw.firemaples.onscreenocr.captureview.CaptureView;
+import tw.firemaples.onscreenocr.orc.OrcInitAsyncTask;
 import tw.firemaples.onscreenocr.orc.OrcRecognizeAsyncTask;
+import tw.firemaples.onscreenocr.orc.OrcResult;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.translate.TranslateAsyncTask;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -70,8 +69,8 @@ public class FullScreenCaptureView extends CaptureView {
                 fullScreenCaptureAreaSelectionView.setVisibility(View.VISIBLE);
             } else if (id == R.id.bt_captureViewPageTranslate) {
                 if (fullScreenCaptureAreaSelectionView.getBoxList().size() == 0) {
-                    Tool.LogError("Please draw area before recognize");
-                    Tool.ShowErrorMsg(context, "Please draw area before recognize");
+                    Tool.logError("Please draw area before recognize");
+                    Tool.showErrorMsg("Please draw area before recognize");
                 } else {
                     ScreenshotHandler screenshotHandler = ScreenshotHandler.getInstance(context);
                     if (screenshotHandler.isGetUserPermission()) {
@@ -81,8 +80,12 @@ public class FullScreenCaptureView extends CaptureView {
                     }
                 }
             } else if (id == R.id.bt_captureViewPageSettings) {
-                context.startActivity(SettingsActivity.getIntent(context)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                SettingsActivity.start(context, new SettingsActivity.SettingPageCallback() {
+                    @Override
+                    public void onSettingPageFinished() {
+                        showView();
+                    }
+                });
                 hideView();
             } else if (id == R.id.bt_captureViewPageReselect) {
                 AlertDialog.Builder ab = new AlertDialog.Builder(context);
@@ -138,8 +141,9 @@ public class FullScreenCaptureView extends CaptureView {
     };
 
     public static FullScreenCaptureView getNewInstance(Context context, OnScreenTranslateService onScreenTranslateService) {
-        if (fullScreenCaptureView == null)
+        if (fullScreenCaptureView == null) {
             fullScreenCaptureView = new FullScreenCaptureView(context, onScreenTranslateService);
+        }
         return fullScreenCaptureView;
     }
 
@@ -211,7 +215,9 @@ public class FullScreenCaptureView extends CaptureView {
         if (progress) {
             view_progress.setVisibility(View.VISIBLE);
             tv_progressMsg.setText(message == null ? context.getString(R.string.progressProcessingDefaultMessage) : message);
-            if (message != null) Tool.LogInfo("setProgressMode: " + message);
+            if (message != null) {
+                Tool.logInfo("setProgressMode: " + message);
+            }
         } else {
             view_progress.setVisibility(View.GONE);
         }
@@ -302,7 +308,7 @@ public class FullScreenCaptureView extends CaptureView {
 
     public void onTranslateFinished(List<OrcResult> translatedResult) {
         setProgressMode(false, null);
-        Tool.ShowMsg(context, "TextRecognizeFinished!");
+        Tool.showMsg("TextRecognizeFinished!");
         onModeChange(MODE_RESULT);
         fullScreenOrcResultsView.setOrcResults(translatedResult);
     }
