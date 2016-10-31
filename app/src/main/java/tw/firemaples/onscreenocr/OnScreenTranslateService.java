@@ -89,7 +89,7 @@ public class OnScreenTranslateService extends Service implements FloatingViewLis
 
         captureView = FullScreenCaptureView.getNewInstance(OnScreenTranslateService.this, this);
 
-        screenshotHandler = ScreenshotHandler.getInstance(this);
+        screenshotHandler = ScreenshotHandler.init(this);
 
         return startCommand;
     }

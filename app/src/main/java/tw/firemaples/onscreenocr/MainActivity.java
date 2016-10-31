@@ -40,11 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 if (OnScreenTranslateService.isRunning(MainActivity.this)) {
                     stopService();
                 } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        checkDrawOverlayPermission();
-                    } else {
-                        requestMediaProjection();
-                    }
+                    startApp();
                 }
             }
         });
@@ -56,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
                 SettingsActivity.start(MainActivity.this, null);
             }
         });
+
+        startApp();
     }
 
     @Override
@@ -115,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void onRequestMediaProjectionResult(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            ScreenshotHandler.getInstance(this).setMediaProjectionIntent(data);
+            ScreenshotHandler.init(this).setMediaProjectionIntent(data);
             startService();
         } else {
             showErrorDialog("Please submit Screenshot Permission for using this service!", new Callback<Void>() {
@@ -147,12 +145,22 @@ public class MainActivity extends AppCompatActivity {
         ab.show();
     }
 
+    private void startApp() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkDrawOverlayPermission();
+        } else {
+            requestMediaProjection();
+        }
+    }
+
     private void startService() {
-        OnScreenTranslateService.start(this);
+//        OnScreenTranslateService.start(this);
+        ScreenTranslatorService.start(this);
         finish();
     }
 
     private void stopService() {
-        OnScreenTranslateService.stop();
+//        OnScreenTranslateService.stop();
+        ScreenTranslatorService.stop();
     }
 }

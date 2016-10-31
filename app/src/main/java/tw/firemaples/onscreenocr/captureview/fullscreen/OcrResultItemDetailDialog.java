@@ -8,12 +8,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.orc.OrcResult;
+import tw.firemaples.onscreenocr.ocr.OcrResult;
 
 /**
  * Created by firem_000 on 2016/3/8.
  */
-public class OrcResultItemDetailDialog {
+public class OcrResultItemDetailDialog {
     private AlertDialog ad;
     private Context context;
     private View rootView;
@@ -21,7 +21,7 @@ public class OrcResultItemDetailDialog {
     private EditText et_orcText, et_translatedText;
     private View bt_oriTextVocal, bt_oriTextDict, bt_transTextVocal, bt_transTextDict;
 
-    private OrcResult orcResult;
+    private OcrResult ocrResult;
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -30,12 +30,12 @@ public class OrcResultItemDetailDialog {
         }
     };
 
-    public OrcResultItemDetailDialog(Context context, OrcResult orcResult) {
+    public OcrResultItemDetailDialog(Context context, OcrResult ocrResult) {
         this.context = context;
         AlertDialog.Builder ab = new AlertDialog.Builder(context,android.R.style.Theme_Material_Light_Dialog_Alert);
         rootView = View.inflate(context, R.layout.dialog_item_detail, null);
         initView();
-        setOrcResult(orcResult);
+        setOcrResult(ocrResult);
         ab.setView(rootView);
         ab.setPositiveButton(R.string.confirm,null);
         ab.setNegativeButton(R.string.cancel,null);
@@ -59,11 +59,11 @@ public class OrcResultItemDetailDialog {
         bt_transTextDict.setOnClickListener(onClickListener);
     }
 
-    public OrcResultItemDetailDialog setOrcResult(OrcResult orcResult) {
-        this.orcResult = orcResult;
+    public OcrResultItemDetailDialog setOcrResult(OcrResult ocrResult) {
+        this.ocrResult = ocrResult;
 
-        et_orcText.setText(orcResult.getText());
-        et_translatedText.setText(orcResult.getTranslatedText());
+        et_orcText.setText(ocrResult.getText());
+        et_translatedText.setText(ocrResult.getTranslatedText());
         return this;
     }
 

@@ -29,10 +29,14 @@ public class FullScreenCaptureAreaSelectionView extends ImageView {
     private List<Rect> boxList = new ArrayList<>();
     private Paint boxPaint;
 
+    private OnAreaSelectionViewCallback callback;
+
     private OnTouchListener onTouchListener = new OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            if (!enable) return false;
+            if (!enable) {
+                return false;
+            }
             Point point = new Point((int) event.getX(), (int) event.getY());
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -42,6 +46,9 @@ public class FullScreenCaptureAreaSelectionView extends ImageView {
                     addBox(drawingStartPoint, point);
                     drawingStartPoint = drawingEndPoint = null;
                     invalidate();
+                    if (callback != null) {
+                        callback.onAreaSelected(FullScreenCaptureAreaSelectionView.this);
+                    }
                     break;
                 case MotionEvent.ACTION_MOVE:
                     drawingEndPoint = point;
@@ -79,7 +86,11 @@ public class FullScreenCaptureAreaSelectionView extends ImageView {
 //        enable();
     }
 
-//    public void enable() {
+    public void setCallback(OnAreaSelectionViewCallback callback) {
+        this.callback = callback;
+    }
+
+    //    public void enable() {
 //        enable = true;
 //        this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.captureAreaSelectionViewBackground_enable));
 //    }
@@ -119,5 +130,9 @@ public class FullScreenCaptureAreaSelectionView extends ImageView {
 
             canvas.restore();
         }
+    }
+
+    public interface OnAreaSelectionViewCallback {
+        void onAreaSelected(FullScreenCaptureAreaSelectionView areaSelectionView);
     }
 }

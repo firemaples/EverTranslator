@@ -17,14 +17,14 @@ import android.widget.ImageView;
 
 import java.util.List;
 
-import tw.firemaples.onscreenocr.orc.OrcResult;
+import tw.firemaples.onscreenocr.ocr.OcrResult;
 
 /**
  * Created by firem_000 on 2016/3/6.
  */
 public class FullScreenOrcResultsView extends ImageView {
 
-    private List<OrcResult> orcResults;
+    private List<OcrResult> ocrResults;
 
     private Paint boxPaint;
 
@@ -63,25 +63,25 @@ public class FullScreenOrcResultsView extends ImageView {
         this.onFullScreenOrcResultItemClickListener = onFullScreenOrcResultItemClickListener;
     }
 
-    public void setOrcResults(List<OrcResult> orcResults) {
-        this.orcResults = orcResults;
+    public void setOcrResults(List<OcrResult> ocrResults) {
+        this.ocrResults = ocrResults;
         countResultSize();
         invalidate();
     }
 
     public void countResultSize() {
-        for (OrcResult orcResult : orcResults) {
-            if (orcResult.getSubRect() != null) {
-                Rect subRect = orcResult.getSubRect();
+        for (OcrResult ocrResult : ocrResults) {
+            if (ocrResult.getSubRect() != null) {
+                Rect subRect = ocrResult.getSubRect();
 
-                int textWidth = Math.max(subRect.width(), (int) textPaint.measureText(orcResult.getTranslatedText()));
+                int textWidth = Math.max(subRect.width(), (int) textPaint.measureText(ocrResult.getTranslatedText()));
                 textWidth = Math.min(textWidth, metrics.widthPixels - subRect.left - 16);
                 int textHeight = Math.max(subRect.height(), (int) textPaint.getTextSize());
 
                 Rect touchRect = new Rect(subRect.left, subRect.top, subRect.left + textWidth, subRect.top + textHeight);
-                orcResult.setTouchRect(touchRect);
-                orcResult.setTextWidth(textWidth);
-                orcResult.setTextHeight(textHeight);
+                ocrResult.setTouchRect(touchRect);
+                ocrResult.setTextWidth(textWidth);
+                ocrResult.setTextHeight(textHeight);
             }
         }
     }
@@ -90,18 +90,18 @@ public class FullScreenOrcResultsView extends ImageView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (!isInEditMode()) {
-            for (OrcResult orcResult : orcResults) {
-                if (orcResult.getTouchRect() != null) {
-                    canvas.drawRect(orcResult.getTouchRect(), boxPaint);
+            for (OcrResult ocrResult : ocrResults) {
+                if (ocrResult.getTouchRect() != null) {
+                    canvas.drawRect(ocrResult.getTouchRect(), boxPaint);
 
-                    StaticLayout sl = new StaticLayout(orcResult.getTranslatedText(), textPaint, orcResult.getTextWidth(), Layout.Alignment.ALIGN_NORMAL, 1, 1, false);
+                    StaticLayout sl = new StaticLayout(ocrResult.getTranslatedText(), textPaint, ocrResult.getTextWidth(), Layout.Alignment.ALIGN_NORMAL, 1, 1, false);
 
                     canvas.save();
-                    canvas.translate(orcResult.getSubRect().left, orcResult.getSubRect().top);
+                    canvas.translate(ocrResult.getSubRect().left, ocrResult.getSubRect().top);
                     sl.draw(canvas);
                     canvas.restore();
 
-//                    canvas.drawText(orcResult.getTranslatedText(), subRect.left, subRect.bottom, textPaint);
+//                    canvas.drawText(ocrResult.getTranslatedText(), subRect.left, subRect.bottom, textPaint);
                 }
             }
         }
@@ -111,10 +111,10 @@ public class FullScreenOrcResultsView extends ImageView {
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
-            for (OrcResult orcResult : orcResults) {
-                if (orcResult.getTouchRect() != null && orcResult.getTouchRect().contains((int) event.getX(), (int) event.getY())) {
+            for (OcrResult ocrResult : ocrResults) {
+                if (ocrResult.getTouchRect() != null && ocrResult.getTouchRect().contains((int) event.getX(), (int) event.getY())) {
                     if (onFullScreenOrcResultItemClickListener != null) {
-                        onFullScreenOrcResultItemClickListener.onFullScreenOrcResultItemClicked(orcResult);
+                        onFullScreenOrcResultItemClickListener.onFullScreenOrcResultItemClicked(ocrResult);
                     }
                     return true;
                 }
@@ -127,6 +127,6 @@ public class FullScreenOrcResultsView extends ImageView {
     }
 
     public interface OnFullScreenOrcResultItemClickListener {
-        void onFullScreenOrcResultItemClicked(OrcResult orcResult);
+        void onFullScreenOrcResultItemClicked(OcrResult ocrResult);
     }
 }

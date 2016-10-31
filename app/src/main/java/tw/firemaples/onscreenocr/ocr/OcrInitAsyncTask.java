@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.orc;
+package tw.firemaples.onscreenocr.ocr;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -19,19 +19,18 @@ import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.SettingsActivity;
-import tw.firemaples.onscreenocr.captureview.CaptureView;
+import tw.firemaples.onscreenocr.utils.OcrUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
  * Created by firemaples on 2016/3/2.
  */
-public class OrcInitAsyncTask extends AsyncTask<Void, String, Boolean> {
+public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
 
     private final Context context;
     private final TessBaseAPI baseAPI;
     private final String recognitionLang;
     private final String recognitionLangName;
-    private final CaptureView captureView;
 
     private final File tessRootDir;
     private final File tessDataDir;
@@ -41,20 +40,17 @@ public class OrcInitAsyncTask extends AsyncTask<Void, String, Boolean> {
     private int pageSegmentationMode = TessBaseAPI.PageSegMode.PSM_AUTO_OSD;
     private OnOrcInitAsyncTaskCallback callback;
 
-    public OrcInitAsyncTask(Context context, TessBaseAPI baseAPI, String recognitionLang, String recognitionLangName, CaptureView captureView) {
+    public OcrInitAsyncTask(Context context, OnOrcInitAsyncTaskCallback callback) {
         this.context = context;
-        this.baseAPI = baseAPI;
-        this.recognitionLang = recognitionLang;
-        this.recognitionLangName = recognitionLangName;
-        this.captureView = captureView;
+        this.callback = callback;
+
+        OcrUtils ocrUtils = OcrUtils.getInstance();
+        this.baseAPI = ocrUtils.getBaseAPI();
+        this.recognitionLang = ocrUtils.getOcrLang();
+        this.recognitionLangName = ocrUtils.getOcrLangDisplayName();
 
         this.tessRootDir = new File(context.getFilesDir() + File.separator + "tesseract");
         this.tessDataDir = new File(tessRootDir.getPath() + File.separator + "tessdata");
-    }
-
-    public OrcInitAsyncTask setCallback(OnOrcInitAsyncTaskCallback callback) {
-        this.callback = callback;
-        return this;
     }
 
     @Override
@@ -89,16 +85,21 @@ public class OrcInitAsyncTask extends AsyncTask<Void, String, Boolean> {
     protected void onProgressUpdate(String... values) {
         super.onProgressUpdate(values);
         Tool.logInfo(values[0]);
-        captureView.setProgressMode(true, values[0]);
+        if (callback != null) {
+            callback.showMessage(values[0]);
+        }
     }
 
     @Override
     protected void onPostExecute(Boolean result) {
         super.onPostExecute(result);
-        captureView.setProgressMode(false, null);
+        if (callback != null) {
+            callback.hideMessage();
+        }
         if (result) {
-            if (callback != null)
+            if (callback != null) {
                 callback.onOrcInitialized();
+            }
         }
     }
 
@@ -150,7 +151,9 @@ public class OrcInitAsyncTask extends AsyncTask<Void, String, Boolean> {
                 total += count;
                 // publishing the progress....
                 if (fileLength > 0 && loopTimes++ % 25 == 0) // only if total length is known
+                {
                     publishProgress(String.format(Locale.getDefault(), "Downloading data for Language %s (%.2fMB/%.2fMB)(%d%%)", recognitionLangName, (float) total / 1024 / 1024, fileLengthMB, (int) (total * 100 / fileLength)));
+                }
                 output.write(data, 0, count);
             }
         } catch (Exception e) {
@@ -159,15 +162,18 @@ public class OrcInitAsyncTask extends AsyncTask<Void, String, Boolean> {
             return false;
         } finally {
             try {
-                if (output != null)
+                if (output != null) {
                     output.close();
-                if (input != null)
+                }
+                if (input != null) {
                     input.close();
+                }
             } catch (IOException ignored) {
             }
 
-            if (connection != null)
+            if (connection != null) {
                 connection.disconnect();
+            }
         }
         return true;
     }
@@ -211,5 +217,9 @@ public class OrcInitAsyncTask extends AsyncTask<Void, String, Boolean> {
 
     public interface OnOrcInitAsyncTaskCallback {
         void onOrcInitialized();
+
+        void showMessage(String message);
+
+        void hideMessage();
     }
 }

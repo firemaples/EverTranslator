@@ -36,8 +36,12 @@ public class ScreenshotHandler {
 //        getUserPermission();
     }
 
-    public static ScreenshotHandler getInstance(Context context) {
-        if (_instance == null) _instance = new ScreenshotHandler(context);
+    public static ScreenshotHandler init(Context context) {
+        _instance = new ScreenshotHandler(context);
+        return _instance;
+    }
+
+    public static ScreenshotHandler getInstance() {
         return _instance;
     }
 
@@ -54,7 +58,9 @@ public class ScreenshotHandler {
     }
 
     public void getUserPermission() {
-        if (isGetUserPermission) return;
+        if (isGetUserPermission) {
+            return;
+        }
         Tool.showMsg("Please submit Screenshot Permission for using this service!");
         context.startActivity(ScreenshotPermissionActivity.getIntent(context, this).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
@@ -120,8 +126,9 @@ public class ScreenshotHandler {
                 reader.close();
                 mProjection.stop();
 
-                if (callback != null)
+                if (callback != null) {
                     callback.onScreenshotFinished(bmp);
+                }
             }
         }, handler);
     }

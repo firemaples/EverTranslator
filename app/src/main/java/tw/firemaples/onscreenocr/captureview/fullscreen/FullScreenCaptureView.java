@@ -22,9 +22,9 @@ import tw.firemaples.onscreenocr.OnScreenTranslateService;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.SettingsActivity;
 import tw.firemaples.onscreenocr.captureview.CaptureView;
-import tw.firemaples.onscreenocr.orc.OrcInitAsyncTask;
-import tw.firemaples.onscreenocr.orc.OrcRecognizeAsyncTask;
-import tw.firemaples.onscreenocr.orc.OrcResult;
+import tw.firemaples.onscreenocr.ocr.OcrInitAsyncTask;
+import tw.firemaples.onscreenocr.ocr.OcrRecognizeAsyncTask;
+import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.translate.TranslateAsyncTask;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -72,7 +72,7 @@ public class FullScreenCaptureView extends CaptureView {
                     Tool.logError("Please draw area before recognize");
                     Tool.showErrorMsg("Please draw area before recognize");
                 } else {
-                    ScreenshotHandler screenshotHandler = ScreenshotHandler.getInstance(context);
+                    ScreenshotHandler screenshotHandler = ScreenshotHandler.getInstance();
                     if (screenshotHandler.isGetUserPermission()) {
                         takeScreenShot(screenshotHandler);
                     } else {
@@ -112,31 +112,51 @@ public class FullScreenCaptureView extends CaptureView {
         }
     };
 
-    private OrcInitAsyncTask.OnOrcInitAsyncTaskCallback onOrcInitAsyncTaskCallback = new OrcInitAsyncTask.OnOrcInitAsyncTaskCallback() {
+    private OcrInitAsyncTask.OnOrcInitAsyncTaskCallback onOrcInitAsyncTaskCallback = new OcrInitAsyncTask.OnOrcInitAsyncTaskCallback() {
         @Override
         public void onOrcInitialized() {
             FullScreenCaptureView.this.onOrcInitialized();
         }
+
+        @Override
+        public void showMessage(String message) {
+            setProgressMode(true, message);
+        }
+
+        @Override
+        public void hideMessage() {
+            setProgressMode(false, null);
+        }
     };
 
-    private OrcRecognizeAsyncTask.OnTextRecognizeAsyncTaskCallback onTextRecognizeAsyncTaskCallback = new OrcRecognizeAsyncTask.OnTextRecognizeAsyncTaskCallback() {
+    private OcrRecognizeAsyncTask.OnTextRecognizeAsyncTaskCallback onTextRecognizeAsyncTaskCallback = new OcrRecognizeAsyncTask.OnTextRecognizeAsyncTaskCallback() {
         @Override
-        public void onTextRecognizeFinished(List<OrcResult> results) {
+        public void onTextRecognizeFinished(List<OcrResult> results) {
             FullScreenCaptureView.this.onTextRecognizeFinished(results);
+        }
+
+        @Override
+        public void showMessage(String message) {
+            setProgressMode(true, message);
+        }
+
+        @Override
+        public void hideMessage() {
+            setProgressMode(false, null);
         }
     };
 
     private TranslateAsyncTask.OnTranslateAsyncTaskCallback onTranslateAsyncTaskCallback = new TranslateAsyncTask.OnTranslateAsyncTaskCallback() {
         @Override
-        public void onTranslateFinished(List<OrcResult> translatedResult) {
+        public void onTranslateFinished(List<OcrResult> translatedResult) {
             FullScreenCaptureView.this.onTranslateFinished(translatedResult);
         }
     };
 
     private FullScreenOrcResultsView.OnFullScreenOrcResultItemClickListener onFullScreenOrcResultItemClickListener = new FullScreenOrcResultsView.OnFullScreenOrcResultItemClickListener() {
         @Override
-        public void onFullScreenOrcResultItemClicked(OrcResult orcResult) {
-            FullScreenCaptureView.this.onFullScreenOrcResultItemClicked(orcResult);
+        public void onFullScreenOrcResultItemClicked(OcrResult ocrResult) {
+            FullScreenCaptureView.this.onFullScreenOrcResultItemClicked(ocrResult);
         }
     };
 
@@ -284,7 +304,7 @@ public class FullScreenCaptureView extends CaptureView {
         int langIndex = Arrays.asList(context.getResources().getStringArray(R.array.iso6393)).indexOf(recognitionLang);
         String langName = context.getResources().getStringArray(R.array.languagenames)[langIndex];
 
-        new OrcInitAsyncTask(context, baseAPI, recognitionLang, langName, this).setCallback(onOrcInitAsyncTaskCallback).execute();
+        new OcrInitAsyncTask(context, onOrcInitAsyncTaskCallback).execute();
     }
 
     public void onOrcInitialized() {
@@ -295,25 +315,25 @@ public class FullScreenCaptureView extends CaptureView {
     public void startTextRecognize() {
         setProgressMode(true, "Start text recognition...");
         List<Rect> boxList = fullScreenCaptureAreaSelectionView.getBoxList();
-        new OrcRecognizeAsyncTask(context, baseAPI, this, currentScreenshot, boxList).setCallback(onTextRecognizeAsyncTaskCallback).execute();
+        new OcrRecognizeAsyncTask(context, currentScreenshot, boxList, onTextRecognizeAsyncTaskCallback).execute();
     }
 
-    public void onTextRecognizeFinished(List<OrcResult> results) {
+    public void onTextRecognizeFinished(List<OcrResult> results) {
         startTranslate(results);
     }
 
-    public void startTranslate(List<OrcResult> results) {
+    public void startTranslate(List<OcrResult> results) {
         new TranslateAsyncTask(context, this, results).setCallback(onTranslateAsyncTaskCallback).execute();
     }
 
-    public void onTranslateFinished(List<OrcResult> translatedResult) {
+    public void onTranslateFinished(List<OcrResult> translatedResult) {
         setProgressMode(false, null);
         Tool.showMsg("TextRecognizeFinished!");
         onModeChange(MODE_RESULT);
-        fullScreenOrcResultsView.setOrcResults(translatedResult);
+        fullScreenOrcResultsView.setOcrResults(translatedResult);
     }
 
-    private void onFullScreenOrcResultItemClicked(OrcResult orcResult) {
-        new OrcResultItemDetailDialog(context, orcResult).show();
+    private void onFullScreenOrcResultItemClicked(OcrResult ocrResult) {
+        new OcrResultItemDetailDialog(context, ocrResult).show();
     }
 }

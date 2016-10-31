@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.orc;
+package tw.firemaples.onscreenocr.ocr;
 
 import android.graphics.Rect;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by firem_000 on 2016/3/6.
  */
-public class OrcResult {
+public class OcrResult {
 
     private String text;
     private String translatedText;

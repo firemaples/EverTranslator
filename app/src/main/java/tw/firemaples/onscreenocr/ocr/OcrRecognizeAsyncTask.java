@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.orc;
+package tw.firemaples.onscreenocr.ocr;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,17 +11,16 @@ import com.googlecode.tesseract.android.TessBaseAPI;
 import java.util.ArrayList;
 import java.util.List;
 
-import tw.firemaples.onscreenocr.captureview.CaptureView;
+import tw.firemaples.onscreenocr.utils.OcrUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
  * Created by firem_000 on 2016/3/2.
  */
-public class OrcRecognizeAsyncTask extends AsyncTask<Void, String, List<OrcResult>> {
+public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResult>> {
 
     private final Context context;
     private final TessBaseAPI baseAPI;
-    private final tw.firemaples.onscreenocr.captureview.CaptureView CaptureView;
     private Bitmap screenshot;
     private final List<Rect> boxList;
 
@@ -29,17 +28,13 @@ public class OrcRecognizeAsyncTask extends AsyncTask<Void, String, List<OrcResul
 
     private OnTextRecognizeAsyncTaskCallback callback;
 
-    public OrcRecognizeAsyncTask(Context context, TessBaseAPI baseAPI, CaptureView CaptureView, Bitmap screenshot, List<Rect> boxList) {
+    public OcrRecognizeAsyncTask(Context context, Bitmap screenshot, List<Rect> boxList, OnTextRecognizeAsyncTaskCallback callback) {
         this.context = context;
-        this.baseAPI = baseAPI;
-        this.CaptureView = CaptureView;
         this.screenshot = screenshot;
         this.boxList = boxList;
-    }
-
-    public OrcRecognizeAsyncTask setCallback(OnTextRecognizeAsyncTaskCallback callback) {
         this.callback = callback;
-        return this;
+
+        this.baseAPI = OcrUtils.getInstance().getBaseAPI();
     }
 
     @Override
@@ -53,41 +48,43 @@ public class OrcRecognizeAsyncTask extends AsyncTask<Void, String, List<OrcResul
     }
 
     @Override
-    protected List<OrcResult> doInBackground(Void... params) {
+    protected List<OcrResult> doInBackground(Void... params) {
         baseAPI.setImage(ReadFile.readBitmap(screenshot));
-        List<OrcResult> orcResultList = new ArrayList<>();
+        List<OcrResult> ocrResultList = new ArrayList<>();
         for (Rect rect : boxList) {
             baseAPI.setRectangle(rect);
-            OrcResult orcResult = new OrcResult();
-            orcResult.setRect(rect);
-            orcResult.setText(baseAPI.getUTF8Text());
-            orcResult.setBoxRects(baseAPI.getRegions().getBoxRects());
-            orcResult.setResultIterator(baseAPI.getResultIterator());
+            OcrResult ocrResult = new OcrResult();
+            ocrResult.setRect(rect);
+            ocrResult.setText(baseAPI.getUTF8Text());
+            ocrResult.setBoxRects(baseAPI.getRegions().getBoxRects());
+            ocrResult.setResultIterator(baseAPI.getResultIterator());
 
-            if (orcResult.getBoxRects().size() > 0) {
-                Rect boxRect = orcResult.getBoxRects().get(0);
+            if (ocrResult.getBoxRects().size() > 0) {
+                Rect boxRect = ocrResult.getBoxRects().get(0);
 
                 Rect subRect = new Rect(rect.left + boxRect.left - textMargin,
                         rect.top + boxRect.top - textMargin,
                         rect.left + boxRect.right + textMargin,
                         rect.top + boxRect.bottom + textMargin);
-                orcResult.setSubRect(subRect);
+                ocrResult.setSubRect(subRect);
             }
 
-            orcResultList.add(orcResult);
+            ocrResultList.add(ocrResult);
         }
 
-        return orcResultList;
+        return ocrResultList;
     }
 
     @Override
     protected void onProgressUpdate(String... values) {
         super.onProgressUpdate(values);
-        CaptureView.setProgressMode(true, values[0]);
+        if (callback != null) {
+            callback.showMessage(values[0]);
+        }
     }
 
     @Override
-    protected void onPostExecute(List<OrcResult> results) {
+    protected void onPostExecute(List<OcrResult> results) {
         super.onPostExecute(results);
         Tool.logInfo("Orc result size:" + results.size());
         if (results.size() > 0) {
@@ -96,13 +93,17 @@ public class OrcRecognizeAsyncTask extends AsyncTask<Void, String, List<OrcResul
             Tool.logInfo("No orc result found");
             Tool.showErrorMsg("No orc result found");
         }
-        CaptureView.setProgressMode(false, null);
         if (callback != null) {
+            callback.hideMessage();
             callback.onTextRecognizeFinished(results);
         }
     }
 
     public interface OnTextRecognizeAsyncTaskCallback {
-        void onTextRecognizeFinished(List<OrcResult> results);
+        void onTextRecognizeFinished(List<OcrResult> results);
+
+        void showMessage(String message);
+
+        void hideMessage();
     }
 }

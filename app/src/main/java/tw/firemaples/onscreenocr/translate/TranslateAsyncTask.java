@@ -12,7 +12,7 @@ import java.util.List;
 
 import tw.firemaples.onscreenocr.SettingsActivity;
 import tw.firemaples.onscreenocr.captureview.CaptureView;
-import tw.firemaples.onscreenocr.orc.OrcResult;
+import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.KeyId;
 import tw.firemaples.onscreenocr.utils.Tool;
 
@@ -23,17 +23,17 @@ public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
 
     private final Context context;
     private final CaptureView captureView;
-    private final List<OrcResult> orcResults;
+    private final List<OcrResult> ocrResults;
 
     private OnTranslateAsyncTaskCallback callback;
 
     private boolean translate;
     private Language translateFromLang, translateToLang;
 
-    public TranslateAsyncTask(Context context, CaptureView captureView, List<OrcResult> orcResults) {
+    public TranslateAsyncTask(Context context, CaptureView captureView, List<OcrResult> ocrResults) {
         this.context = context;
         this.captureView = captureView;
-        this.orcResults = orcResults;
+        this.ocrResults = ocrResults;
     }
 
     public TranslateAsyncTask setCallback(OnTranslateAsyncTaskCallback callback) {
@@ -62,17 +62,17 @@ public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
         Translate.setClientId(KeyId.MICROSOFT_TRANSLATE_CLIENT_ID);
         Translate.setClientSecret(KeyId.MICROSOFT_TRANSLATE_CLIENT_SECRET);
 
-        for (OrcResult orcResult : orcResults) {
+        for (OcrResult ocrResult : ocrResults) {
             if (translate) {
                 try {
-                    String translatedText = Translate.execute(orcResult.getText(), translateFromLang, translateToLang);
-                    orcResult.setTranslatedText(translatedText);
+                    String translatedText = Translate.execute(ocrResult.getText(), translateFromLang, translateToLang);
+                    ocrResult.setTranslatedText(translatedText);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    orcResult.setTranslatedText("ERROR");
+                    ocrResult.setTranslatedText("ERROR");
                 }
             } else {
-                orcResult.setTranslatedText(orcResult.getText());
+                ocrResult.setTranslatedText(ocrResult.getText());
             }
         }
         return null;
@@ -90,10 +90,10 @@ public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
         super.onPostExecute(result);
         captureView.setProgressMode(false, null);
         if (callback != null)
-            callback.onTranslateFinished(orcResults);
+            callback.onTranslateFinished(ocrResults);
     }
 
     public interface OnTranslateAsyncTaskCallback {
-        void onTranslateFinished(List<OrcResult> translatedResult);
+        void onTranslateFinished(List<OcrResult> translatedResult);
     }
 }
