@@ -52,6 +52,9 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
         baseAPI.setImage(ReadFile.readBitmap(screenshot));
         List<OcrResult> ocrResultList = new ArrayList<>();
         for (Rect rect : boxList) {
+            Bitmap cropped = Bitmap.createBitmap(screenshot, rect.left, rect.top, rect.width(), rect.height());
+            cropped.getHeight();
+
             baseAPI.setRectangle(rect);
             OcrResult ocrResult = new OcrResult();
             ocrResult.setRect(rect);

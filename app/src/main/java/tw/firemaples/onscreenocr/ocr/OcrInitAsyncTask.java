@@ -146,6 +146,7 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
                 // allow canceling with back button
                 if (isCancelled()) {
                     input.close();
+                    destFile.deleteOnExit();
                     return false;
                 }
                 total += count;

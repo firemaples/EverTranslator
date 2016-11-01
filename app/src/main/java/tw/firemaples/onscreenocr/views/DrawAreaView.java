@@ -24,9 +24,15 @@ public class DrawAreaView extends FloatingView {
         return R.layout.view_draw_area;
     }
 
+    @Override
+    protected boolean fullScreenMode() {
+        return true;
+    }
+
     protected void setViews(View rootView) {
         view_areaSelectionView =
                 (FullScreenCaptureAreaSelectionView) rootView.findViewById(R.id.view_areaSelectionView);
+        view_areaSelectionView.setMaxRectCount(1);
     }
 
     @Override

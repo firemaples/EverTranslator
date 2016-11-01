@@ -151,6 +151,16 @@ public class FullScreenCaptureView extends CaptureView {
         public void onTranslateFinished(List<OcrResult> translatedResult) {
             FullScreenCaptureView.this.onTranslateFinished(translatedResult);
         }
+
+        @Override
+        public void showMessage(String message) {
+            setProgressMode(true, message);
+        }
+
+        @Override
+        public void hideMessage() {
+            setProgressMode(false, null);
+        }
     };
 
     private FullScreenOrcResultsView.OnFullScreenOrcResultItemClickListener onFullScreenOrcResultItemClickListener = new FullScreenOrcResultsView.OnFullScreenOrcResultItemClickListener() {
@@ -323,7 +333,7 @@ public class FullScreenCaptureView extends CaptureView {
     }
 
     public void startTranslate(List<OcrResult> results) {
-        new TranslateAsyncTask(context, this, results).setCallback(onTranslateAsyncTaskCallback).execute();
+        new TranslateAsyncTask(context, results, onTranslateAsyncTaskCallback).execute();
     }
 
     public void onTranslateFinished(List<OcrResult> translatedResult) {

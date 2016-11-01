@@ -11,7 +11,6 @@ import com.memetix.mst.translate.Translate;
 import java.util.List;
 
 import tw.firemaples.onscreenocr.SettingsActivity;
-import tw.firemaples.onscreenocr.captureview.CaptureView;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.KeyId;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -22,7 +21,6 @@ import tw.firemaples.onscreenocr.utils.Tool;
 public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
 
     private final Context context;
-    private final CaptureView captureView;
     private final List<OcrResult> ocrResults;
 
     private OnTranslateAsyncTaskCallback callback;
@@ -30,15 +28,10 @@ public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
     private boolean translate;
     private Language translateFromLang, translateToLang;
 
-    public TranslateAsyncTask(Context context, CaptureView captureView, List<OcrResult> ocrResults) {
+    public TranslateAsyncTask(Context context, List<OcrResult> ocrResults, OnTranslateAsyncTaskCallback callback) {
         this.context = context;
-        this.captureView = captureView;
         this.ocrResults = ocrResults;
-    }
-
-    public TranslateAsyncTask setCallback(OnTranslateAsyncTaskCallback callback) {
         this.callback = callback;
-        return this;
     }
 
     @Override
@@ -82,18 +75,25 @@ public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
     protected void onProgressUpdate(String... values) {
         super.onProgressUpdate(values);
         Tool.logInfo(values[0]);
-        captureView.setProgressMode(true, values[0]);
+        if (callback != null) {
+            callback.showMessage(values[0]);
+        }
     }
 
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-        captureView.setProgressMode(false, null);
-        if (callback != null)
+        if (callback != null) {
+            callback.hideMessage();
             callback.onTranslateFinished(ocrResults);
+        }
     }
 
     public interface OnTranslateAsyncTaskCallback {
         void onTranslateFinished(List<OcrResult> translatedResult);
+
+        void showMessage(String message);
+
+        void hideMessage();
     }
 }

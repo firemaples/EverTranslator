@@ -30,6 +30,9 @@ public abstract class FloatingView {
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
+        if (fullScreenMode()) {
+            floatingLayoutParams.flags = floatingLayoutParams.flags | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        }
         floatingLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
     }
 
@@ -37,6 +40,10 @@ public abstract class FloatingView {
 
     protected int layoutSize() {
         return WindowManager.LayoutParams.WRAP_CONTENT;
+    }
+
+    protected boolean fullScreenMode() {
+        return false;
     }
 
     public Context getContext() {

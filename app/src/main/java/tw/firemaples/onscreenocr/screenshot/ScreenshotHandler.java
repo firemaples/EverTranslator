@@ -36,12 +36,15 @@ public class ScreenshotHandler {
 //        getUserPermission();
     }
 
+    private ScreenshotHandler(){}
+
     public static ScreenshotHandler init(Context context) {
         _instance = new ScreenshotHandler(context);
         return _instance;
     }
 
     public static ScreenshotHandler getInstance() {
+        if(_instance == null) _instance = new ScreenshotHandler();
         return _instance;
     }
 

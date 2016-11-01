@@ -29,6 +29,8 @@ public class FullScreenCaptureAreaSelectionView extends ImageView {
     private List<Rect> boxList = new ArrayList<>();
     private Paint boxPaint;
 
+    private int maxRectCount = 0;
+
     private OnAreaSelectionViewCallback callback;
 
     private OnTouchListener onTouchListener = new OnTouchListener() {
@@ -40,19 +42,30 @@ public class FullScreenCaptureAreaSelectionView extends ImageView {
             Point point = new Point((int) event.getX(), (int) event.getY());
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    if (maxRectCount > 0 && maxRectCount == boxList.size()) {
+                        if (maxRectCount == 1) {
+                            boxList.clear();
+                        } else {
+                            return false;
+                        }
+                    }
                     drawingStartPoint = point;
                     break;
                 case MotionEvent.ACTION_UP:
-                    addBox(drawingStartPoint, point);
-                    drawingStartPoint = drawingEndPoint = null;
-                    invalidate();
-                    if (callback != null) {
-                        callback.onAreaSelected(FullScreenCaptureAreaSelectionView.this);
+                    if (drawingEndPoint != null) {
+                        addBox(drawingStartPoint, point);
+                        drawingStartPoint = drawingEndPoint = null;
+                        invalidate();
+                        if (callback != null) {
+                            callback.onAreaSelected(FullScreenCaptureAreaSelectionView.this);
+                        }
                     }
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    drawingEndPoint = point;
-                    invalidate();
+                    if (drawingStartPoint != null) {
+                        drawingEndPoint = point;
+                        invalidate();
+                    }
                     break;
             }
 
@@ -88,6 +101,10 @@ public class FullScreenCaptureAreaSelectionView extends ImageView {
 
     public void setCallback(OnAreaSelectionViewCallback callback) {
         this.callback = callback;
+    }
+
+    public void setMaxRectCount(int maxRectCount) {
+        this.maxRectCount = maxRectCount;
     }
 
     //    public void enable() {

@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import tw.firemaples.onscreenocr.ocr.OcrResult;
@@ -24,7 +25,7 @@ import tw.firemaples.onscreenocr.ocr.OcrResult;
  */
 public class FullScreenOrcResultsView extends ImageView {
 
-    private List<OcrResult> ocrResults;
+    private List<OcrResult> ocrResults = new ArrayList<>();
 
     private Paint boxPaint;
 
@@ -64,8 +65,13 @@ public class FullScreenOrcResultsView extends ImageView {
     }
 
     public void setOcrResults(List<OcrResult> ocrResults) {
-        this.ocrResults = ocrResults;
+        this.ocrResults.addAll(ocrResults);
         countResultSize();
+        invalidate();
+    }
+
+    public void clear() {
+        ocrResults.clear();
         invalidate();
     }
 
