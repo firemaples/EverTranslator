@@ -35,7 +35,7 @@ public class ScreenshotPermissionActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 screenshotHandler.setMediaProjectionIntent(data);
             } else {
-                Tool.showErrorMsg("Please submit Screenshot Permission for using this service!");
+                Tool.getInstance().showErrorMsg("Please submit Screenshot Permission for using this service!");
             }
 
             finish();

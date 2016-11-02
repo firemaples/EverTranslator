@@ -21,7 +21,7 @@ import tw.firemaples.onscreenocr.ocr.OcrRecognizeAsyncTask;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.translate.TranslateAsyncTask;
-import tw.firemaples.onscreenocr.utils.OcrUtils;
+import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
@@ -41,7 +41,7 @@ public class FloatingBar extends FloatingView {
     private Bitmap currentScreenshot;
 
     //Orc
-    private OcrUtils ocrUtils;
+    private OcrNTranslateUtils ocrNTranslateUtils;
     private OcrResultView ocrResultView;
     private OcrInitAsyncTask ocrInitAsyncTask;
     private OcrRecognizeAsyncTask ocrRecognizeAsyncTask;
@@ -51,7 +51,7 @@ public class FloatingBar extends FloatingView {
 
     public FloatingBar(Context context) {
         super(context);
-        ocrUtils = OcrUtils.getInstance();
+        ocrNTranslateUtils = OcrNTranslateUtils.getInstance();
         setViews(getRootView());
     }
 
@@ -79,8 +79,8 @@ public class FloatingBar extends FloatingView {
         progressView = new ProgressView(getContext());
         progressView.setCallback(onProgressViewCallback);
 
-        sp_langFrom.setSelection(ocrUtils.getOcrLangIndex());
-        sp_langTo.setSelection(ocrUtils.getTranslateToIndex());
+        sp_langFrom.setSelection(ocrNTranslateUtils.getOcrLangIndex());
+        sp_langTo.setSelection(ocrNTranslateUtils.getTranslateToIndex());
         sp_langFrom.setOnItemSelectedListener(onItemSelectedListener);
         sp_langTo.setOnItemSelectedListener(onItemSelectedListener);
     }
@@ -90,11 +90,11 @@ public class FloatingBar extends FloatingView {
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             int parentId = parent.getId();
             if (parentId == R.id.sp_langFrom) {
-                String lang = ocrUtils.getOcrLangList().get(position);
-                ocrUtils.setOcrLang(lang);
+                String lang = ocrNTranslateUtils.getOcrLangList().get(position);
+                ocrNTranslateUtils.setOcrLang(lang);
             } else if (parentId == R.id.sp_langTo) {
-                String lang = ocrUtils.getTranslateLangList().get(position);
-                ocrUtils.setTranslateTo(lang);
+                String lang = ocrNTranslateUtils.getTranslateLangList().get(position);
+                ocrNTranslateUtils.setTranslateTo(lang);
             }
         }
 

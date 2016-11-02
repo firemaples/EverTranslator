@@ -19,7 +19,7 @@ import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.SettingsActivity;
-import tw.firemaples.onscreenocr.utils.OcrUtils;
+import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
@@ -44,10 +44,10 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
         this.context = context;
         this.callback = callback;
 
-        OcrUtils ocrUtils = OcrUtils.getInstance();
-        this.baseAPI = ocrUtils.getBaseAPI();
-        this.recognitionLang = ocrUtils.getOcrLang();
-        this.recognitionLangName = ocrUtils.getOcrLangDisplayName();
+        OcrNTranslateUtils ocrNTranslateUtils = OcrNTranslateUtils.getInstance();
+        this.baseAPI = ocrNTranslateUtils.getBaseAPI();
+        this.recognitionLang = ocrNTranslateUtils.getOcrLang();
+        this.recognitionLangName = ocrNTranslateUtils.getOcrLangDisplayName();
 
         this.tessRootDir = new File(context.getFilesDir() + File.separator + "tesseract");
         this.tessDataDir = new File(tessRootDir.getPath() + File.separator + "tessdata");
@@ -122,7 +122,7 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 Tool.logError("Server returned HTTP " + connection.getResponseCode()
                         + " " + connection.getResponseMessage());
-                Tool.showErrorMsg("Server returned HTTP " + connection.getResponseCode()
+                Tool.getInstance().showErrorMsg("Server returned HTTP " + connection.getResponseCode()
                         + " " + connection.getResponseMessage());
                 return false;
             }
@@ -159,7 +159,7 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
             }
         } catch (Exception e) {
             Tool.logError(e.toString());
-            Tool.showErrorMsg(e.toString());
+            Tool.getInstance().showErrorMsg(e.toString());
             return false;
         } finally {
             try {

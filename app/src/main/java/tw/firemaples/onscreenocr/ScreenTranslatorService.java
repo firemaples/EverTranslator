@@ -8,7 +8,7 @@ import android.os.IBinder;
 import android.view.WindowManager;
 
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
-import tw.firemaples.onscreenocr.utils.OcrUtils;
+import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.views.FloatingBar;
 
@@ -66,7 +66,7 @@ public class ScreenTranslatorService extends Service {
         super.onCreate();
         Tool.init(this);
         screenshotHandler = ScreenshotHandler.getInstance();
-        OcrUtils.init(this);
+        OcrNTranslateUtils.init(this);
 
         floatingBar = new FloatingBar(this);
         floatingBar.attachToWindow();

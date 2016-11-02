@@ -13,6 +13,7 @@ import java.util.List;
 import tw.firemaples.onscreenocr.SettingsActivity;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.KeyId;
+import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
@@ -43,7 +44,7 @@ public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
         translate = preferences.getBoolean(SettingsActivity.KEY_TRANSLATE, true);
 
         String iso6393From = preferences.getString(SettingsActivity.KEY_RECOGNITION_LANGUAGE, "en");
-        String microsoftLangFrom = Tool.mapMicrosoftLanguageCode(iso6393From);
+        String microsoftLangFrom = OcrNTranslateUtils.mapMicrosoftLanguageCode(iso6393From);
         translateFromLang = Language.fromString(microsoftLangFrom);
 
         String microsoftLangTo = preferences.getString(SettingsActivity.KEY_TRANSLATION_TO, "en");

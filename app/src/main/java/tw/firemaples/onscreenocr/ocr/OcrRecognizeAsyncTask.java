@@ -4,6 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.AsyncTask;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.googlecode.leptonica.android.ReadFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
@@ -11,7 +14,7 @@ import com.googlecode.tesseract.android.TessBaseAPI;
 import java.util.ArrayList;
 import java.util.List;
 
-import tw.firemaples.onscreenocr.utils.OcrUtils;
+import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
@@ -34,7 +37,7 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
         this.boxList = boxList;
         this.callback = callback;
 
-        this.baseAPI = OcrUtils.getInstance().getBaseAPI();
+        this.baseAPI = OcrNTranslateUtils.getInstance().getBaseAPI();
     }
 
     @Override
@@ -50,8 +53,22 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
     @Override
     protected List<OcrResult> doInBackground(Void... params) {
         baseAPI.setImage(ReadFile.readBitmap(screenshot));
+
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+
+        float widthScale = (float) screenshot.getWidth() / (float) metrics.widthPixels;
+        float heightScale = (float) screenshot.getHeight() / (float) metrics.heightPixels;
+
         List<OcrResult> ocrResultList = new ArrayList<>();
         for (Rect rect : boxList) {
+            rect.left = (int) (widthScale * (float) rect.left);
+            rect.right = (int) (widthScale * (float) rect.right);
+            rect.top = (int) (heightScale * (float) rect.top);
+            rect.bottom = (int) (heightScale * (float) rect.bottom);
+
             Bitmap cropped = Bitmap.createBitmap(screenshot, rect.left, rect.top, rect.width(), rect.height());
             cropped.getHeight();
 
@@ -94,7 +111,7 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
             Tool.logInfo("First orc result:" + results.get(0).getText());
         } else {
             Tool.logInfo("No orc result found");
-            Tool.showErrorMsg("No orc result found");
+            Tool.getInstance().showErrorMsg("No orc result found");
         }
         if (callback != null) {
             callback.hideMessage();

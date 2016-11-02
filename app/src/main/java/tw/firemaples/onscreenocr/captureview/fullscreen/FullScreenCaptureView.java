@@ -70,7 +70,7 @@ public class FullScreenCaptureView extends CaptureView {
             } else if (id == R.id.bt_captureViewPageTranslate) {
                 if (fullScreenCaptureAreaSelectionView.getBoxList().size() == 0) {
                     Tool.logError("Please draw area before recognize");
-                    Tool.showErrorMsg("Please draw area before recognize");
+                    Tool.getInstance().showErrorMsg("Please draw area before recognize");
                 } else {
                     ScreenshotHandler screenshotHandler = ScreenshotHandler.getInstance();
                     if (screenshotHandler.isGetUserPermission()) {
@@ -338,7 +338,7 @@ public class FullScreenCaptureView extends CaptureView {
 
     public void onTranslateFinished(List<OcrResult> translatedResult) {
         setProgressMode(false, null);
-        Tool.showMsg("TextRecognizeFinished!");
+        Tool.getInstance().showMsg("TextRecognizeFinished!");
         onModeChange(MODE_RESULT);
         fullScreenOrcResultsView.setOcrResults(translatedResult);
     }

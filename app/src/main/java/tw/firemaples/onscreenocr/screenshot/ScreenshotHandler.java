@@ -64,7 +64,7 @@ public class ScreenshotHandler {
         if (isGetUserPermission) {
             return;
         }
-        Tool.showMsg("Please submit Screenshot Permission for using this service!");
+        Tool.getInstance().showMsg("Please submit Screenshot Permission for using this service!");
         context.startActivity(ScreenshotPermissionActivity.getIntent(context, this).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
