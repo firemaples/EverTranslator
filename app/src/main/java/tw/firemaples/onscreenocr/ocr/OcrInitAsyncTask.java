@@ -25,6 +25,7 @@ import tw.firemaples.onscreenocr.utils.Tool;
 /**
  * Created by firemaples on 2016/3/2.
  */
+//TODO cancel feature
 public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
 
     private final Context context;

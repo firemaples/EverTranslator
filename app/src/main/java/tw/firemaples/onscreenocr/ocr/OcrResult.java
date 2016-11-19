@@ -1,10 +1,12 @@
 package tw.firemaples.onscreenocr.ocr;
 
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 
 import com.googlecode.tesseract.android.ResultIterator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by firem_000 on 2016/3/6.
@@ -15,10 +17,20 @@ public class OcrResult {
     private String translatedText;
     private ResultIterator resultIterator;
     private ArrayList<Rect> boxRects;
+    /**
+     * Region of detected text
+     */
     private Rect rect;
+    /**
+     * Region of text area with margins
+     */
     private Rect subRect;
+    /**
+     * Region of result text area
+     */
     private Rect touchRect;
     private int textWidth, textHeight;
+    private DebugInfo debugInfo;
 
     public void setRect(Rect rect) {
         this.rect = rect;
@@ -90,5 +102,34 @@ public class OcrResult {
 
     public void setTextHeight(int textHeight) {
         this.textHeight = textHeight;
+    }
+
+    public void setDebugInfo(DebugInfo debugInfo) {
+        this.debugInfo = debugInfo;
+    }
+
+    public DebugInfo getDebugInfo() {
+        return debugInfo;
+    }
+
+    public static class DebugInfo {
+        private Bitmap croppedBitmap;
+        private List<String> infoList = new ArrayList<>();
+
+        public void setCroppedBitmap(Bitmap croppedBitmap) {
+            this.croppedBitmap = croppedBitmap;
+        }
+
+        public Bitmap getCroppedBitmap() {
+            return croppedBitmap;
+        }
+
+        public void addInfoString(String info) {
+            infoList.add(info);
+        }
+
+        public List<String> getInfoList() {
+            return infoList;
+        }
     }
 }

@@ -36,7 +36,8 @@ public class ScreenshotHandler {
 //        getUserPermission();
     }
 
-    private ScreenshotHandler(){}
+    private ScreenshotHandler() {
+    }
 
     public static ScreenshotHandler init(Context context) {
         _instance = new ScreenshotHandler(context);
@@ -44,7 +45,9 @@ public class ScreenshotHandler {
     }
 
     public static ScreenshotHandler getInstance() {
-        if(_instance == null) _instance = new ScreenshotHandler();
+        if (_instance == null) {
+            _instance = new ScreenshotHandler();
+        }
         return _instance;
     }
 
@@ -129,8 +132,10 @@ public class ScreenshotHandler {
                 reader.close();
                 mProjection.stop();
 
+                Bitmap realSizeBmp = Bitmap.createBitmap(bmp, (int) ((float)rowPadding / (float) pixelStride / 2f), 0, metrics.widthPixels, metrics.heightPixels);
+
                 if (callback != null) {
-                    callback.onScreenshotFinished(bmp);
+                    callback.onScreenshotFinished(realSizeBmp);
                 }
             }
         }, handler);

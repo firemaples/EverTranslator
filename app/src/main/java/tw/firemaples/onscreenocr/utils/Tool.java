@@ -68,4 +68,12 @@ public class Tool {
     private SharedPreferences getSharedPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
+
+    public boolean isDebugMode() {
+        return getSharedPreferences().getBoolean(KEY_DEBUG_MODE, false);
+    }
+
+    public void setDebugMode(boolean debugMode) {
+        getSharedPreferences().edit().putBoolean(KEY_DEBUG_MODE, debugMode).apply();
+    }
 }

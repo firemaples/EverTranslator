@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.views;
+package tw.firemaples.onscreenocr.floatingviews;
 
 import android.content.Context;
 import android.view.View;
@@ -36,7 +36,7 @@ public class DrawAreaView extends FloatingView {
     }
 
     @Override
-    protected int layoutSize() {
+    protected int getLayoutSize() {
         return WindowManager.LayoutParams.MATCH_PARENT;
     }
 

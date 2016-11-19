@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.views;
+package tw.firemaples.onscreenocr.floatingviews;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -25,21 +25,25 @@ public abstract class FloatingView {
         rootView = LayoutInflater.from(context).inflate(getLayoutId(), null);
         windowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
         floatingLayoutParams = new WindowManager.LayoutParams(
-                layoutSize(),
-                layoutSize(),
+                getLayoutSize(),
+                getLayoutSize(),
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
         if (fullScreenMode()) {
             floatingLayoutParams.flags = floatingLayoutParams.flags | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         }
-        floatingLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
+        floatingLayoutParams.gravity = getLayoutGravity();
     }
 
     protected abstract int getLayoutId();
 
-    protected int layoutSize() {
+    protected int getLayoutSize() {
         return WindowManager.LayoutParams.WRAP_CONTENT;
+    }
+
+    protected int getLayoutGravity() {
+        return Gravity.TOP | Gravity.LEFT;
     }
 
     protected boolean fullScreenMode() {

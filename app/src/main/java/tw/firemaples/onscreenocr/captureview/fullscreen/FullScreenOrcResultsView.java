@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tw.firemaples.onscreenocr.ocr.OcrResult;
+import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
  * Created by firem_000 on 2016/3/6.
@@ -96,8 +97,12 @@ public class FullScreenOrcResultsView extends ImageView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (!isInEditMode()) {
+            boolean debugMode = Tool.getInstance().isDebugMode();
             for (OcrResult ocrResult : ocrResults) {
-                if (ocrResult.getTouchRect() != null) {
+
+                if (debugMode) {
+                    canvas.drawBitmap(ocrResult.getDebugInfo().getCroppedBitmap(), ocrResult.getRect().left, ocrResult.getRect().top, null);
+                } else if (ocrResult.getTouchRect() != null) {
                     canvas.drawRect(ocrResult.getTouchRect(), boxPaint);
 
                     StaticLayout sl = new StaticLayout(ocrResult.getTranslatedText(), textPaint, ocrResult.getTextWidth(), Layout.Alignment.ALIGN_NORMAL, 1, 1, false);

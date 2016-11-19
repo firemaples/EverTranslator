@@ -10,7 +10,7 @@ import android.view.WindowManager;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
-import tw.firemaples.onscreenocr.views.FloatingBar;
+import tw.firemaples.onscreenocr.floatingviews.FloatingBar;
 
 /**
  * Created by louis1chen on 21/10/2016.

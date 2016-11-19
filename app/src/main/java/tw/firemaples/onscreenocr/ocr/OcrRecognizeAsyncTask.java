@@ -13,6 +13,7 @@ import com.googlecode.tesseract.android.TessBaseAPI;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -58,19 +59,16 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
         Display display = wm.getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
         display.getMetrics(metrics);
-
-        float widthScale = (float) screenshot.getWidth() / (float) metrics.widthPixels;
-        float heightScale = (float) screenshot.getHeight() / (float) metrics.heightPixels;
+//
+//        float widthScale = (float) screenshot.getWidth() / (float) metrics.widthPixels;
+//        float heightScale = (float) screenshot.getHeight() / (float) metrics.heightPixels;
 
         List<OcrResult> ocrResultList = new ArrayList<>();
         for (Rect rect : boxList) {
-            rect.left = (int) (widthScale * (float) rect.left);
-            rect.right = (int) (widthScale * (float) rect.right);
-            rect.top = (int) (heightScale * (float) rect.top);
-            rect.bottom = (int) (heightScale * (float) rect.bottom);
-
-            Bitmap cropped = Bitmap.createBitmap(screenshot, rect.left, rect.top, rect.width(), rect.height());
-            cropped.getHeight();
+//            rect.left = (int) (widthScale * (float) rect.left);
+//            rect.right = (int) (widthScale * (float) rect.right);
+//            rect.top = (int) (heightScale * (float) rect.top);
+//            rect.bottom = (int) (heightScale * (float) rect.bottom);
 
             baseAPI.setRectangle(rect);
             OcrResult ocrResult = new OcrResult();
@@ -87,6 +85,17 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
                         rect.left + boxRect.right + textMargin,
                         rect.top + boxRect.bottom + textMargin);
                 ocrResult.setSubRect(subRect);
+            }
+
+            if (Tool.getInstance().isDebugMode()) {
+                OcrResult.DebugInfo debugInfo = new OcrResult.DebugInfo();
+                Bitmap cropped = Bitmap.createBitmap(screenshot, rect.left, rect.top, rect.width(), rect.height());
+                debugInfo.setCroppedBitmap(cropped);
+                debugInfo.addInfoString(String.format(Locale.getDefault(), "Screen size:%dx%d", metrics.widthPixels, metrics.heightPixels));
+                debugInfo.addInfoString(String.format(Locale.getDefault(), "Screenshot size:%dx%d", screenshot.getWidth(), screenshot.getHeight()));
+                debugInfo.addInfoString(String.format(Locale.getDefault(), "Cropped position:%s", rect.toString()));
+                debugInfo.addInfoString(String.format(Locale.getDefault(), "Ocr result:%s", ocrResult.getText()));
+                ocrResult.setDebugInfo(debugInfo);
             }
 
             ocrResultList.add(ocrResult);

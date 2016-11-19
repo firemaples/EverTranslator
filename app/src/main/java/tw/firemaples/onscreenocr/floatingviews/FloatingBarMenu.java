@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.views;
+package tw.firemaples.onscreenocr.floatingviews;
 
 import android.content.Context;
 import android.view.MenuItem;
@@ -12,12 +12,10 @@ import tw.firemaples.onscreenocr.R;
  */
 
 public class FloatingBarMenu {
-    private Context context;
     private PopupMenu popupMenu;
     private OnFloatingBarMenuCallback callback;
 
     public FloatingBarMenu(Context context, View anchor, OnFloatingBarMenuCallback callback) {
-        this.context = context;
         this.callback = callback;
 
         popupMenu = new PopupMenu(context, anchor);
@@ -38,6 +36,10 @@ public class FloatingBarMenu {
                 if (callback != null) {
                     callback.onCloseItemClick();
                 }
+            } else if (itemId == R.id.menu_setting) {
+                if (callback != null) {
+                    callback.onSettingItemClick();
+                }
             }
             return false;
         }
@@ -45,5 +47,7 @@ public class FloatingBarMenu {
 
     public interface OnFloatingBarMenuCallback {
         void onCloseItemClick();
+
+        void onSettingItemClick();
     }
 }

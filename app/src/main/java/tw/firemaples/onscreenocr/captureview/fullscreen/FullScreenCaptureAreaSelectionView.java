@@ -128,7 +128,15 @@ public class FullScreenCaptureAreaSelectionView extends ImageView {
     }
 
     private void addBox(Point startPoint, Point endPoint) {
-        boxList.add(new Rect(startPoint.x, startPoint.y, endPoint.x, endPoint.y));
+        int x1 = startPoint.x, x2 = endPoint.x, y1 = startPoint.y, y2 = endPoint.y;
+        int left, top, right, bottom;
+
+        left = Math.min(x1, x2);
+        right = Math.max(x1, x2);
+        top = Math.min(y1, y2);
+        bottom = Math.max(y1, y2);
+
+        boxList.add(new Rect(left, top, right, bottom));
     }
 
     @Override

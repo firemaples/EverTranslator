@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.views;
+package tw.firemaples.onscreenocr.floatingviews;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -60,7 +60,7 @@ public class FloatingBar extends FloatingView {
         return R.layout.view_floating_bar;
     }
 
-    protected void setViews(View rootView) {
+    private void setViews(View rootView) {
         view_menu = rootView.findViewById(R.id.view_menu);
         bt_selectArea = rootView.findViewById(R.id.bt_selectArea);
         bt_translation = rootView.findViewById(R.id.bt_translation);
@@ -115,7 +115,7 @@ public class FloatingBar extends FloatingView {
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         private int initX, initY;
         private float initTouchX, initTouchY;
-        public boolean hasMoved = false;
+        private boolean hasMoved = false;
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -195,6 +195,11 @@ public class FloatingBar extends FloatingView {
 
             ScreenTranslatorService.stop();
         }
+
+        @Override
+        public void onSettingItemClick() {
+            new SettingView(getContext()).attachToWindow();
+        }
     };
 
     private void resetAll() {
@@ -268,7 +273,7 @@ public class FloatingBar extends FloatingView {
         }
     };
 
-    public void initOrcEngine() {
+    private void initOrcEngine() {
         if (progressView != null) {
             progressView.showMessage("Waiting for Orc engine initialize...");
         }
@@ -299,7 +304,7 @@ public class FloatingBar extends FloatingView {
                 }
             };
 
-    public void startTextRecognize() {
+    private void startTextRecognize() {
         if (progressView != null) {
             progressView.showMessage("Start text recognition...");
         }
@@ -328,7 +333,7 @@ public class FloatingBar extends FloatingView {
         }
     };
 
-    public void startTranslate(List<OcrResult> results) {
+    private void startTranslate(List<OcrResult> results) {
         translateAsyncTask = new TranslateAsyncTask(getContext(), results, onTranslateAsyncTaskCallback);
         translateAsyncTask.execute();
     }
