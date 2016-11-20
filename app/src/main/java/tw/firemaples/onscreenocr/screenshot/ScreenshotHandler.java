@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.hardware.display.DisplayManager;
 import android.media.Image;
 import android.media.ImageReader;
@@ -134,19 +136,36 @@ public class ScreenshotHandler {
 //                Bitmap bmp = Bitmap.createBitmap(mWidth + rowPadding / pixelStride, mHeight, Bitmap.Config.RGB_565);
                 Bitmap bmp = Bitmap.createBitmap(metrics.widthPixels + rowPadding / pixelStride, metrics.heightPixels, Bitmap.Config.ARGB_8888);
                 bmp.copyPixelsFromBuffer(buffer);
-                image.close();
 
+                image.close();
                 reader.close();
                 mProjection.stop();
 
-//                bmp = Bitmap.createBitmap(bmp, (int) ((float)rowPadding / (float) pixelStride / 2f), 0, metrics.widthPixels, metrics.heightPixels);
+                Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+                Point screenSize = new Point();
+                display.getRealSize(screenSize);
+                Bitmap realSizeBitmap;
+
+                if (screenSize.x == bmp.getWidth() && screenSize.y == bmp.getHeight()) {
+                    realSizeBitmap = bmp;
+                } else {
+                    //Crop and resize the bitmap to real screen size
+                    float scale = (float) screenSize.y / (float) bmp.getHeight();
+                    int scaledWidth = (int) ((float) screenSize.x / scale);
+                    int blackPadding = (int) ((float) rowPadding / (float) pixelStride / 2f);
+                    Matrix scaleMatrix = new Matrix();
+                    scaleMatrix.postScale(scale, scale);
+                    //TODO produce more reliable bmp
+                    realSizeBitmap = Bitmap.createBitmap(bmp, blackPadding, 0, scaledWidth, bmp.getHeight(), scaleMatrix, false);
+                    bmp.recycle();
+                }
 
                 if (Tool.getInstance().isDebugMode()) {
-                    saveBmpToFile(bmp);
+                    saveBmpToFile(realSizeBitmap);
                 }
 
                 if (callback != null) {
-                    callback.onScreenshotFinished(bmp);
+                    callback.onScreenshotFinished(realSizeBitmap);
                 }
             }
         }, handler);
