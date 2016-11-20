@@ -10,12 +10,19 @@ import android.media.Image;
 import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import tw.firemaples.onscreenocr.utils.Tool;
 
@@ -132,13 +139,42 @@ public class ScreenshotHandler {
                 reader.close();
                 mProjection.stop();
 
-                Bitmap realSizeBmp = Bitmap.createBitmap(bmp, (int) ((float)rowPadding / (float) pixelStride / 2f), 0, metrics.widthPixels, metrics.heightPixels);
+//                bmp = Bitmap.createBitmap(bmp, (int) ((float)rowPadding / (float) pixelStride / 2f), 0, metrics.widthPixels, metrics.heightPixels);
+
+                if (Tool.getInstance().isDebugMode()) {
+                    saveBmpToFile(bmp);
+                }
 
                 if (callback != null) {
-                    callback.onScreenshotFinished(realSizeBmp);
+                    callback.onScreenshotFinished(bmp);
                 }
             }
         }, handler);
+    }
+
+    private void saveBmpToFile(Bitmap bitmap) {
+        String fileName = String.format(Locale.getDefault(), "debug_screenshot_%s.jpg",
+                new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.getDefault())
+                        .format(new Date(System.currentTimeMillis())));
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName);
+        Tool.logInfo("Saving debug screenshot to " + file.getAbsolutePath());
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(file.getAbsolutePath());
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (Exception e) {
+            Tool.logError("Save debug screenshot failed");
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public interface OnScreenshotHandlerCallback {
