@@ -18,7 +18,6 @@ import tw.firemaples.onscreenocr.utils.Tool;
 /**
  * Created by firemaples on 2016/3/2.
  */
-//TODO cancel feature
 public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
 
     private final Context context;
