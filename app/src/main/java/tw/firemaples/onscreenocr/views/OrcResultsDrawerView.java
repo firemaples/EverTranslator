@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.captureview.fullscreen;
+package tw.firemaples.onscreenocr.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -24,7 +24,7 @@ import tw.firemaples.onscreenocr.utils.Tool;
 /**
  * Created by firem_000 on 2016/3/6.
  */
-public class FullScreenOrcResultsView extends ImageView {
+public class OrcResultsDrawerView extends ImageView {
 
     private List<OcrResult> ocrResults = new ArrayList<>();
 
@@ -37,7 +37,7 @@ public class FullScreenOrcResultsView extends ImageView {
 
     private OnFullScreenOrcResultItemClickListener onFullScreenOrcResultItemClickListener;
 
-    public FullScreenOrcResultsView(Context context, AttributeSet attrs) {
+    public OrcResultsDrawerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         if (!isInEditMode()) {
             init();

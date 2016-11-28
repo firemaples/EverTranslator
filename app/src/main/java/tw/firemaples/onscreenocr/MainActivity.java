@@ -17,7 +17,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -39,26 +38,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        //noinspection ConstantConditions
-        findViewById(R.id.bt_serviceToggle).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (OnScreenTranslateService.isRunning(MainActivity.this)) {
-                    stopService();
-                } else {
-                    startApp();
-                }
-            }
-        });
-
-        //noinspection ConstantConditions
-        findViewById(R.id.bt_setting).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SettingsActivity.start(MainActivity.this, null);
-            }
-        });
 
         startApp();
     }
@@ -221,13 +200,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startService() {
-//        OnScreenTranslateService.start(this);
         ScreenTranslatorService.start(this);
         finish();
     }
 
     private void stopService() {
-//        OnScreenTranslateService.stop();
         ScreenTranslatorService.stop();
     }
 }

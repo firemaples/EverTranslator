@@ -27,11 +27,6 @@
         </activity>
 
         <service
-            android:name=".OnScreenTranslateService"
-            android:enabled="true"
-            android:exported="false"/>
-
-        <service
             android:name=".ScreenTranslatorService"
             android:enabled="true"
             android:exported="false"/>

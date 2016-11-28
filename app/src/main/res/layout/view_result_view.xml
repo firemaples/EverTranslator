@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <tw.firemaples.onscreenocr.captureview.fullscreen.FullScreenOrcResultsView
+    <tw.firemaples.onscreenocr.views.OrcResultsDrawerView
         android:id="@+id/view_ocrResultView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

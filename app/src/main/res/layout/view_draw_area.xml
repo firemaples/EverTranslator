@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tw.firemaples.onscreenocr.captureview.fullscreen.FullScreenCaptureAreaSelectionView
+<tw.firemaples.onscreenocr.views.AreaSelectionView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/view_areaSelectionView"
     android:layout_width="match_parent"

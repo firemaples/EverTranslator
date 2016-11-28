@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.captureview.fullscreen;
+package tw.firemaples.onscreenocr.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -19,7 +19,7 @@ import tw.firemaples.onscreenocr.R;
 /**
  * Created by Firemaples on 2016/3/1.
  */
-public class FullScreenCaptureAreaSelectionView extends ImageView {
+public class AreaSelectionView extends ImageView {
 
     private boolean enable = true;
 
@@ -57,7 +57,7 @@ public class FullScreenCaptureAreaSelectionView extends ImageView {
                         drawingStartPoint = drawingEndPoint = null;
                         invalidate();
                         if (callback != null) {
-                            callback.onAreaSelected(FullScreenCaptureAreaSelectionView.this);
+                            callback.onAreaSelected(AreaSelectionView.this);
                         }
                     }
                     break;
@@ -73,7 +73,7 @@ public class FullScreenCaptureAreaSelectionView extends ImageView {
         }
     };
 
-    public FullScreenCaptureAreaSelectionView(Context context, AttributeSet attrs) {
+    public AreaSelectionView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         if (!isInEditMode()) {
@@ -158,6 +158,6 @@ public class FullScreenCaptureAreaSelectionView extends ImageView {
     }
 
     public interface OnAreaSelectionViewCallback {
-        void onAreaSelected(FullScreenCaptureAreaSelectionView areaSelectionView);
+        void onAreaSelected(AreaSelectionView areaSelectionView);
     }
 }

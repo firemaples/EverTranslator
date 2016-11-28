@@ -7,13 +7,13 @@
     android:orientation="vertical"
     android:background="@color/captureAreaSelectionViewBackground_enable">
 
-    <tw.firemaples.onscreenocr.captureview.fullscreen.FullScreenOrcResultsView
+    <tw.firemaples.onscreenocr.views.OrcResultsDrawerView
         android:id="@+id/fullScreenOrcResultsView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
 
-    <tw.firemaples.onscreenocr.captureview.fullscreen.FullScreenCaptureAreaSelectionView
+    <tw.firemaples.onscreenocr.views.AreaSelectionView
         android:id="@+id/fullScreenCaptureAreaSelectionView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

@@ -15,7 +15,7 @@ import java.util.List;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ScreenTranslatorService;
-import tw.firemaples.onscreenocr.captureview.fullscreen.FullScreenCaptureAreaSelectionView;
+import tw.firemaples.onscreenocr.views.AreaSelectionView;
 import tw.firemaples.onscreenocr.ocr.OcrDownloadAsyncTask;
 import tw.firemaples.onscreenocr.ocr.OcrInitAsyncTask;
 import tw.firemaples.onscreenocr.ocr.OcrRecognizeAsyncTask;
@@ -303,9 +303,9 @@ public class FloatingBar extends FloatingView {
         syncBtnState(BtnState.Normal);
     }
 
-    private FullScreenCaptureAreaSelectionView.OnAreaSelectionViewCallback onAreaSelectionViewCallback = new FullScreenCaptureAreaSelectionView.OnAreaSelectionViewCallback() {
+    private AreaSelectionView.OnAreaSelectionViewCallback onAreaSelectionViewCallback = new AreaSelectionView.OnAreaSelectionViewCallback() {
         @Override
-        public void onAreaSelected(FullScreenCaptureAreaSelectionView areaSelectionView) {
+        public void onAreaSelected(AreaSelectionView areaSelectionView) {
             syncBtnState(BtnState.AreaSelected);
         }
     };

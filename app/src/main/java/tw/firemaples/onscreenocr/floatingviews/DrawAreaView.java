@@ -5,14 +5,14 @@ import android.view.View;
 import android.view.WindowManager;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.captureview.fullscreen.FullScreenCaptureAreaSelectionView;
+import tw.firemaples.onscreenocr.views.AreaSelectionView;
 
 /**
  * Created by louis1chen on 21/10/2016.
  */
 
 public class DrawAreaView extends FloatingView {
-    private FullScreenCaptureAreaSelectionView view_areaSelectionView;
+    private AreaSelectionView view_areaSelectionView;
 
     public DrawAreaView(Context context) {
         super(context);
@@ -31,7 +31,7 @@ public class DrawAreaView extends FloatingView {
 
     protected void setViews(View rootView) {
         view_areaSelectionView =
-                (FullScreenCaptureAreaSelectionView) rootView.findViewById(R.id.view_areaSelectionView);
+                (AreaSelectionView) rootView.findViewById(R.id.view_areaSelectionView);
         view_areaSelectionView.setMaxRectCount(1);
     }
 
@@ -40,7 +40,7 @@ public class DrawAreaView extends FloatingView {
         return WindowManager.LayoutParams.MATCH_PARENT;
     }
 
-    public FullScreenCaptureAreaSelectionView getAreaSelectionView() {
+    public AreaSelectionView getAreaSelectionView() {
         return view_areaSelectionView;
     }
 }

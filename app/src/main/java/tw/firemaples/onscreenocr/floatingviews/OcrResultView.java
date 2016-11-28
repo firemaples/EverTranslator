@@ -9,7 +9,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.captureview.fullscreen.FullScreenOrcResultsView;
+import tw.firemaples.onscreenocr.views.OrcResultsDrawerView;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.Tool;
 
@@ -18,7 +18,7 @@ import tw.firemaples.onscreenocr.utils.Tool;
  */
 
 public class OcrResultView extends FloatingView {
-    private FullScreenOrcResultsView view_ocrResultView;
+    private OrcResultsDrawerView view_ocrResultView;
 
     public OcrResultView(Context context) {
         super(context);
@@ -41,7 +41,7 @@ public class OcrResultView extends FloatingView {
     }
 
     private void setViews(View rootView) {
-        view_ocrResultView = (FullScreenOrcResultsView) rootView.findViewById(R.id.view_ocrResultView);
+        view_ocrResultView = (OrcResultsDrawerView) rootView.findViewById(R.id.view_ocrResultView);
     }
 
     public void setOcrResults(List<OcrResult> results) {
