@@ -16,6 +16,7 @@ import java.util.List;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ScreenTranslatorService;
 import tw.firemaples.onscreenocr.captureview.fullscreen.FullScreenCaptureAreaSelectionView;
+import tw.firemaples.onscreenocr.ocr.OcrDownloadAsyncTask;
 import tw.firemaples.onscreenocr.ocr.OcrInitAsyncTask;
 import tw.firemaples.onscreenocr.ocr.OcrRecognizeAsyncTask;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
@@ -35,6 +36,7 @@ public class FloatingBar extends FloatingView {
     private BtnState btnState = BtnState.Normal;
     private AsyncTask<Void, String, Boolean> lastAsyncTask;
 
+    private DialogView dialogView;
     private DrawAreaView drawAreaView;
     private ProgressView progressView;
     private List<Rect> currentBoxList = new ArrayList<>();
@@ -43,6 +45,7 @@ public class FloatingBar extends FloatingView {
     //Orc
     private OcrNTranslateUtils ocrNTranslateUtils;
     private OcrResultView ocrResultView;
+    private OcrDownloadAsyncTask ocrDownloadAsyncTask;
     private OcrInitAsyncTask ocrInitAsyncTask;
     private OcrRecognizeAsyncTask ocrRecognizeAsyncTask;
 
@@ -83,6 +86,8 @@ public class FloatingBar extends FloatingView {
         sp_langTo.setSelection(ocrNTranslateUtils.getTranslateToIndex());
         sp_langFrom.setOnItemSelectedListener(onItemSelectedListener);
         sp_langTo.setOnItemSelectedListener(onItemSelectedListener);
+
+        dialogView = new DialogView(getContext());
     }
 
     private AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
@@ -92,6 +97,11 @@ public class FloatingBar extends FloatingView {
             if (parentId == R.id.sp_langFrom) {
                 String lang = ocrNTranslateUtils.getOcrLangList().get(position);
                 ocrNTranslateUtils.setOcrLang(lang);
+
+                if (!OcrDownloadAsyncTask.checkOcrFiles(lang)) {
+                    showDownloadOcrFileDialog();
+                }
+
             } else if (parentId == R.id.sp_langTo) {
                 String lang = ocrNTranslateUtils.getTranslateLangList().get(position);
                 ocrNTranslateUtils.setTranslateTo(lang);
@@ -101,6 +111,58 @@ public class FloatingBar extends FloatingView {
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
 
+        }
+    };
+
+    private void showDownloadOcrFileDialog() {
+        dialogView.reset();
+        dialogView.setTitle("Ocr file not found");
+        dialogView.setContentMsg("The ocr file of selected language is not downloaded, do you want to download now?");
+        dialogView.setType(DialogView.Type.CONFIRM_CANCEL);
+        dialogView.setCallback(new DialogView.OnDialogViewCallback() {
+            @Override
+            public void OnConfirmClick(DialogView dialogView) {
+                super.OnConfirmClick(dialogView);
+                ocrDownloadAsyncTask = new OcrDownloadAsyncTask(getContext(), onOrcDownloadAsyncTaskCallback);
+                ocrDownloadAsyncTask.execute();
+            }
+        });
+        dialogView.attachToWindow();
+    }
+
+    private OcrDownloadAsyncTask.OnOrcDownloadAsyncTaskCallback onOrcDownloadAsyncTaskCallback = new OcrDownloadAsyncTask.OnOrcDownloadAsyncTaskCallback() {
+        @Override
+        public void onDownloadStart() {
+            dialogView.reset();
+            dialogView.setType(DialogView.Type.CANCEL_ONLY);
+            dialogView.setTitle("File downloader");
+            dialogView.setContentMsg("Ocr file downloading");
+            dialogView.attachToWindow();
+            dialogView.setCallback(new DialogView.OnDialogViewCallback() {
+                @Override
+                public void onCancelClicked(DialogView dialogView) {
+                    if (ocrDownloadAsyncTask != null) {
+                        ocrDownloadAsyncTask.cancel(true);
+                    }
+                    super.onCancelClicked(dialogView);
+                }
+            });
+        }
+
+        @Override
+        public void onDownloadFinished() {
+            dialogView.detachFromWindow();
+        }
+
+        @Override
+        public void downloadProgressing(long currentDownloaded, long totalSize, String msg) {
+            dialogView.setContentMsg(msg);
+        }
+
+        @Override
+        public void onError(String errorMessage) {
+            dialogView.setTitle("ERROR!");
+            dialogView.setContentMsg(errorMessage);
         }
     };
 
@@ -172,13 +234,17 @@ public class FloatingBar extends FloatingView {
                 syncBtnState(BtnState.AreaSelecting);
                 drawAreaView.getAreaSelectionView().setCallback(onAreaSelectionViewCallback);
             } else if (id == R.id.bt_translation) {
-                currentBoxList.addAll(drawAreaView.getAreaSelectionView().getBoxList());
-                drawAreaView.getAreaSelectionView().clear();
-                drawAreaView.detachFromWindow();
-                drawAreaView = null;
+                if (OcrDownloadAsyncTask.checkOcrFiles(OcrNTranslateUtils.getInstance().getOcrLang())) {
+                    currentBoxList.addAll(drawAreaView.getAreaSelectionView().getBoxList());
+                    drawAreaView.getAreaSelectionView().clear();
+                    drawAreaView.detachFromWindow();
+                    drawAreaView = null;
 
-                if (takeScreenshot()) {
-                    syncBtnState(BtnState.Translating);
+                    if (takeScreenshot()) {
+                        syncBtnState(BtnState.Translating);
+                    }
+                } else {
+                    showDownloadOcrFileDialog();
                 }
             } else if (id == R.id.bt_clear) {
                 resetAll();

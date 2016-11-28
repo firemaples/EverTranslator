@@ -1,57 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/md_grey_400"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="3dp">
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:theme="@style/Base.Theme.AppCompat.Light">
 
-    <Spinner
-        android:id="@+id/sp_langFrom"
-        android:layout_width="200dp"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:entries="@array/languagenames"/>
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="6dp">
 
-    <Spinner
-        android:id="@+id/sp_langTo"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:entries="@array/translationtargetlanguagenames_microsoft"
-        android:layout_below="@+id/sp_langFrom"/>
+        <Spinner
+            android:id="@+id/sp_langFrom"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:entries="@array/languagenames"/>
 
-    <ImageView
-        android:id="@+id/view_menu"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:padding="6dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/ic_menu_white_24dp"
-        android:layout_alignTop="@+id/bt_selectArea"
-        android:layout_alignRight="@+id/sp_langTo"/>
+        <Spinner
+            android:id="@+id/sp_langTo"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sp_langFrom"
+            android:layout_marginTop="6dp"
+            android:entries="@array/translationtargetlanguagenames_microsoft"/>
 
-    <ImageButton
-        android:id="@+id/bt_selectArea"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/selection"
-        android:layout_below="@id/sp_langTo"/>
+        <ImageView
+            android:id="@+id/view_menu"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignRight="@+id/sp_langTo"
+            android:layout_alignTop="@+id/bt_selectArea"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="6dp"
+            android:src="@drawable/ic_menu_black_24dp"/>
 
-    <ImageButton
-        android:id="@+id/bt_translation"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/translate"
-        android:layout_toRightOf="@+id/bt_selectArea"
-        android:layout_alignTop="@+id/bt_selectArea"/>
+        <ImageButton
+            android:id="@+id/bt_selectArea"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_below="@id/sp_langTo"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_floating_bar_btn"
+            android:src="@drawable/selection"/>
 
-    <ImageButton
-        android:id="@+id/bt_clear"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/format_clear"
-        android:layout_alignTop="@+id/bt_selectArea"
-        android:layout_toRightOf="@+id/bt_translation"/>
-</RelativeLayout>
+        <ImageButton
+            android:id="@+id/bt_translation"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignTop="@+id/bt_selectArea"
+            android:layout_marginLeft="4dp"
+            android:layout_toRightOf="@+id/bt_selectArea"
+            android:background="@drawable/bg_floating_bar_btn"
+            android:src="@drawable/translate"/>
+
+        <ImageButton
+            android:id="@+id/bt_clear"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignTop="@+id/bt_selectArea"
+            android:layout_marginLeft="4dp"
+            android:layout_toRightOf="@+id/bt_translation"
+            android:background="@drawable/bg_floating_bar_btn"
+            android:src="@drawable/format_clear"/>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

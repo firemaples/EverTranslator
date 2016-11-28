@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import com.googlecode.tesseract.android.TessBaseAPI;
 import com.memetix.mst.language.Language;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -58,6 +59,10 @@ public class OcrNTranslateUtils {
     }
 
     /* Ocr */
+    public File getTessDataDir() {
+        return new File(context.getFilesDir() + File.separator + "tesseract" + File.separator + "tessdata");
+    }
+
     public List<String> getOcrLangList() {
         return Arrays.asList(context.getResources().getStringArray(R.array.iso6393));
     }
