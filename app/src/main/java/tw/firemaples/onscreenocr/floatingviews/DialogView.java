@@ -63,6 +63,8 @@ public class DialogView extends FloatingView {
 
     public void reset() {
         callback = new OnDialogViewCallback();
+        bt_dialogOk.setText(android.R.string.ok);
+        bt_dialogCancel.setText(android.R.string.cancel);
     }
 
     public void setCallback(OnDialogViewCallback callback) {

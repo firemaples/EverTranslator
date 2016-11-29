@@ -117,8 +117,9 @@ public class FloatingBar extends FloatingView {
     private void showDownloadOcrFileDialog() {
         dialogView.reset();
         dialogView.setTitle("Ocr file not found");
-        dialogView.setContentMsg("The ocr file of selected language is not downloaded, do you want to download now?");
+        dialogView.setContentMsg("The ocr file of selected language has not been downloaded, do you want to download now?");
         dialogView.setType(DialogView.Type.CONFIRM_CANCEL);
+        dialogView.getOkBtn().setText("Download");
         dialogView.setCallback(new DialogView.OnDialogViewCallback() {
             @Override
             public void OnConfirmClick(DialogView dialogView) {
