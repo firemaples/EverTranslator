@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_originText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Origin Text"/>
+
+    <TextView
+        android:id="@+id/tv_translatedText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Translated Text"/>
+</LinearLayout>

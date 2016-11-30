@@ -10,4 +10,6 @@
     <color name="captureAreaSelectionViewPaint_boxPaint">#FF006064</color>
 
     <color name="captureAreaSelectionViewProgressBackground">#77000000</color>
+
+    <color name="ocrResultCover_color">#8800FF00</color>
 </resources>

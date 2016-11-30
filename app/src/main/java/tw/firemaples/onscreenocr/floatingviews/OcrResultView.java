@@ -3,22 +3,25 @@ package tw.firemaples.onscreenocr.floatingviews;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.views.OrcResultsDrawerView;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.views.OcrResultWrapper;
 
 /**
  * Created by louis1chen on 01/11/2016.
  */
 
 public class OcrResultView extends FloatingView {
-    private OrcResultsDrawerView view_ocrResultView;
+    //    private OrcResultsDrawerView view_ocrResultView;
+    private OcrResultWrapper view_ocrResultWrapper;
 
     public OcrResultView(Context context) {
         super(context);
@@ -41,11 +44,15 @@ public class OcrResultView extends FloatingView {
     }
 
     private void setViews(View rootView) {
-        view_ocrResultView = (OrcResultsDrawerView) rootView.findViewById(R.id.view_ocrResultView);
+//        view_ocrResultView = (OrcResultsDrawerView) rootView.findViewById(R.id.view_ocrResultView);
+        view_ocrResultWrapper = new OcrResultWrapper(getContext());
+        ((ViewGroup) rootView).addView(view_ocrResultWrapper, 0, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//        view_ocrResultWrapper = (OcrResultWrapper) rootView.findViewById(R.id.view_ocrResultWrapper);
     }
 
     public void setOcrResults(List<OcrResult> results) {
-        view_ocrResultView.setOcrResults(results);
+//        view_ocrResultView.setOcrResults(results);
+        view_ocrResultWrapper.setOcrResults(results);
 
         if (Tool.getInstance().isDebugMode() && results.size() > 0) {
             setDebugInfo(results.get(0));
@@ -61,6 +68,7 @@ public class OcrResultView extends FloatingView {
     }
 
     public void clear() {
-        view_ocrResultView.clear();
+        view_ocrResultWrapper.clear();
+//        view_ocrResultView.clear();
     }
 }

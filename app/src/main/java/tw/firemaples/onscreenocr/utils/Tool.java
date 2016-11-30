@@ -76,4 +76,8 @@ public class Tool {
     public void setDebugMode(boolean debugMode) {
         getSharedPreferences().edit().putBoolean(KEY_DEBUG_MODE, debugMode).apply();
     }
+
+    public static String replaceAllLineBreaks(String str, String replaceWith) {
+        return str.replace("\r\n", replaceWith).replace("\r", replaceWith).replace("\n", replaceWith);
+    }
 }

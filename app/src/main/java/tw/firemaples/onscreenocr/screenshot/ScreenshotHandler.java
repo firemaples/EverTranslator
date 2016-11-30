@@ -33,11 +33,15 @@ import tw.firemaples.onscreenocr.utils.Tool;
  */
 public class ScreenshotHandler {
     private static ScreenshotHandler _instance;
+    private final static int TIMEOUT = 3000;
+
+    public final static int ERROR_CODE_TIMEOUT = 1;
 
     private Context context;
     private boolean isGetUserPermission;
     private Intent mediaProjectionIntent;
     private OnScreenshotHandlerCallback callback;
+    private Runnable timeoutRunnable;
 
     private ScreenshotHandler(Context context) {
         this.context = context;
@@ -121,11 +125,23 @@ public class ScreenshotHandler {
 
         //convert result into image
         final Handler handler = new Handler();
+        Tool.logInfo("add setOnImageAvailableListener");
+        timeoutRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (callback != null) {
+                    callback.onScreenshotFailed(ERROR_CODE_TIMEOUT);
+                }
+            }
+        };
+        handler.postDelayed(timeoutRunnable, TIMEOUT);
         mImageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
             @Override
             public void onImageAvailable(ImageReader reader) {
                 reader.setOnImageAvailableListener(null, handler);
+                Tool.logInfo("onImageAvailable");
                 Image image = reader.acquireLatestImage();
+                Tool.logInfo("screenshot image info: width:" + image.getWidth() + " height:" + image.getHeight());
                 final Image.Plane[] planes = image.getPlanes();
                 final ByteBuffer buffer = planes[0].getBuffer();
 //                int offset = 0;
@@ -164,6 +180,10 @@ public class ScreenshotHandler {
                     saveBmpToFile(realSizeBitmap);
                 }
 
+                if (timeoutRunnable != null) {
+                    handler.removeCallbacks(timeoutRunnable);
+                    timeoutRunnable = null;
+                }
                 if (callback != null) {
                     callback.onScreenshotFinished(realSizeBitmap);
                 }
@@ -198,5 +218,7 @@ public class ScreenshotHandler {
 
     public interface OnScreenshotHandlerCallback {
         void onScreenshotFinished(Bitmap bitmap);
+
+        void onScreenshotFailed(int errorCode);
     }
 }

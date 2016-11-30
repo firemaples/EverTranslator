@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.floatingviews;
+package tw.firemaples.onscreenocr.views;
 
 import android.content.Context;
 import android.view.MenuItem;

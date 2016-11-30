@@ -128,6 +128,10 @@ public class AreaSelectionView extends ImageView {
     }
 
     private void addBox(Point startPoint, Point endPoint) {
+        boxList.add(getNewBox(startPoint, endPoint));
+    }
+
+    private Rect getNewBox(Point startPoint, Point endPoint) {
         int x1 = startPoint.x, x2 = endPoint.x, y1 = startPoint.y, y2 = endPoint.y;
         int left, top, right, bottom;
 
@@ -136,7 +140,7 @@ public class AreaSelectionView extends ImageView {
         top = Math.min(y1, y2);
         bottom = Math.max(y1, y2);
 
-        boxList.add(new Rect(left, top, right, bottom));
+        return new Rect(left, top, right, bottom);
     }
 
     @Override
@@ -146,7 +150,8 @@ public class AreaSelectionView extends ImageView {
             canvas.save();
 
             if (drawingStartPoint != null && drawingEndPoint != null) {
-                canvas.drawLine(drawingStartPoint.x, drawingStartPoint.y, drawingEndPoint.x, drawingEndPoint.y, drawingLinePaint);
+//                canvas.drawLine(drawingStartPoint.x, drawingStartPoint.y, drawingEndPoint.x, drawingEndPoint.y, drawingLinePaint);
+                canvas.drawRect(getNewBox(drawingStartPoint, drawingEndPoint), drawingLinePaint);
             }
 
             for (Rect box : boxList) {

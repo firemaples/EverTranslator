@@ -24,6 +24,7 @@ import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.translate.TranslateAsyncTask;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.views.FloatingBarMenu;
 
 /**
  * Created by louis1chen on 21/10/2016.
@@ -337,6 +338,25 @@ public class FloatingBar extends FloatingView {
             currentScreenshot = bitmap;
             FloatingBar.this.attachToWindow();
             initOrcEngine();
+        }
+
+        @Override
+        public void onScreenshotFailed(int errorCode) {
+            FloatingBar.this.attachToWindow();
+            dialogView.reset();
+            dialogView.setType(DialogView.Type.CONFIRM_ONLY);
+            dialogView.setTitle("Error");
+            String msg;
+            switch (errorCode) {
+                case ScreenshotHandler.ERROR_CODE_TIMEOUT:
+                    msg = "Screenshot timeout, please try again later.";
+                    break;
+                default:
+                    msg = "Screenshot failed with unknown error, error code:" + errorCode;
+                    break;
+            }
+            dialogView.setContentMsg(msg);
+            dialogView.attachToWindow();
         }
     };
 
