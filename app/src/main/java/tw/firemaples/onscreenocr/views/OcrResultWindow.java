@@ -30,13 +30,21 @@ public class OcrResultWindow {
     private FrameLayout.LayoutParams layoutParams;
     private DisplayMetrics metrics;
 
-    public OcrResultWindow(Context context, ViewGroup parent) {
+    private OnOcrResultWindowCallback callback;
+
+    private OcrResult ocrResult;
+
+    public OcrResultWindow(Context context, ViewGroup parent, OnOcrResultWindowCallback callback) {
         this.context = context;
         this.parent = parent;
+        this.callback = callback;
+
         rootView = View.inflate(context, R.layout.view_ocr_result_window, null);
 
         tv_originText = (TextView) rootView.findViewById(R.id.tv_originText);
         tv_translatedText = (TextView) rootView.findViewById(R.id.tv_translatedText);
+        rootView.findViewById(R.id.bt_openInBrowser_ocrText).setOnClickListener(onClickListener);
+        rootView.findViewById(R.id.bt_openInBrowser_translatedText).setOnClickListener(onClickListener);
 
         layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(MARGIN, MARGIN, MARGIN, MARGIN);
@@ -96,4 +104,20 @@ public class OcrResultWindow {
             adjustViewPosition();
         }
     };
+
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int id = v.getId();
+            if (id == R.id.bt_openInBrowser_ocrText) {
+                callback.onOpenBrowserBtnClick(ocrResult.getText(), false);
+            } else if (id == R.id.bt_openInBrowser_translatedText) {
+                callback.onOpenBrowserBtnClick(ocrResult.getTranslatedText(), true);
+            }
+        }
+    };
+
+    public interface OnOcrResultWindowCallback {
+        void onOpenBrowserBtnClick(String text, boolean translated);
+    }
 }

@@ -22,13 +22,13 @@ public class OcrResultWrapper extends FrameLayout {
 
     private OcrResultWindow ocrResultWindow;
 
-    public OcrResultWrapper(Context context) {
+    public OcrResultWrapper(Context context, OcrResultWindow.OnOcrResultWindowCallback callback) {
         super(context);
-        initViews();
+        initViews(callback);
     }
 
-    private void initViews() {
-        ocrResultWindow = new OcrResultWindow(getContext(), this);
+    private void initViews(OcrResultWindow.OnOcrResultWindowCallback callback) {
+        ocrResultWindow = new OcrResultWindow(getContext(), this, callback);
     }
 
     public void setOcrResults(List<OcrResult> ocrResults) {

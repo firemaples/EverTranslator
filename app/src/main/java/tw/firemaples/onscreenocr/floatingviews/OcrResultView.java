@@ -13,6 +13,7 @@ import java.util.List;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.views.OcrResultWindow;
 import tw.firemaples.onscreenocr.views.OcrResultWrapper;
 
 /**
@@ -20,7 +21,6 @@ import tw.firemaples.onscreenocr.views.OcrResultWrapper;
  */
 
 public class OcrResultView extends FloatingView {
-    //    private OrcResultsDrawerView view_ocrResultView;
     private OcrResultWrapper view_ocrResultWrapper;
 
     public OcrResultView(Context context) {
@@ -44,14 +44,12 @@ public class OcrResultView extends FloatingView {
     }
 
     private void setViews(View rootView) {
-//        view_ocrResultView = (OrcResultsDrawerView) rootView.findViewById(R.id.view_ocrResultView);
-        view_ocrResultWrapper = new OcrResultWrapper(getContext());
+        view_ocrResultWrapper = new OcrResultWrapper(getContext(), onOcrResultWindowCallback);
         ((ViewGroup) rootView).addView(view_ocrResultWrapper, 0, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//        view_ocrResultWrapper = (OcrResultWrapper) rootView.findViewById(R.id.view_ocrResultWrapper);
+
     }
 
     public void setOcrResults(List<OcrResult> results) {
-//        view_ocrResultView.setOcrResults(results);
         view_ocrResultWrapper.setOcrResults(results);
 
         if (Tool.getInstance().isDebugMode() && results.size() > 0) {
@@ -69,6 +67,12 @@ public class OcrResultView extends FloatingView {
 
     public void clear() {
         view_ocrResultWrapper.clear();
-//        view_ocrResultView.clear();
     }
+
+    private OcrResultWindow.OnOcrResultWindowCallback onOcrResultWindowCallback = new OcrResultWindow.OnOcrResultWindowCallback() {
+        @Override
+        public void onOpenBrowserBtnClick(String text, boolean translated) {
+
+        }
+    };
 }

@@ -36,7 +36,7 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="6dp"
-            android:src="@drawable/ic_menu_black_24dp"/>
+            android:src="@drawable/menu"/>
 
         <ImageButton
             android:id="@+id/bt_selectArea"
