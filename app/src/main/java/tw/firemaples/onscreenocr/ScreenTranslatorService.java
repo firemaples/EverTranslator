@@ -1,22 +1,26 @@
 package tw.firemaples.onscreenocr;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.view.WindowManager;
 
+import tw.firemaples.onscreenocr.floatingviews.FloatingBar;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
-import tw.firemaples.onscreenocr.floatingviews.FloatingBar;
 
 /**
  * Created by louis1chen on 21/10/2016.
  */
 
 public class ScreenTranslatorService extends Service {
+    private final int ONGOING_NOTIFICATION_ID = 12345;
 
     @SuppressLint("StaticFieldLeak")
     private static ScreenTranslatorService _instance;
@@ -58,12 +62,13 @@ public class ScreenTranslatorService extends Service {
         _instance = this;
         int startCommand = super.onStartCommand(intent, flags, startId);
 
-        return startCommand;
+        return START_STICKY;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        startForeground();
         Tool.init(this);
         screenshotHandler = ScreenshotHandler.getInstance();
         OcrNTranslateUtils.init(this);
@@ -75,6 +80,8 @@ public class ScreenTranslatorService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        stopForeground();
+
         floatingBar.detachFromWindow();
 
         if (screenshotHandler != null) {
@@ -82,5 +89,22 @@ public class ScreenTranslatorService extends Service {
             screenshotHandler = null;
         }
         _instance = null;
+    }
+
+    private void startForeground() {
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setSmallIcon(R.mipmap.icon);
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.icon));
+        builder.setTicker(getString(R.string.app_name));
+        builder.setContentTitle(getString(R.string.app_name));
+//        builder.setContentText(getString(R.string.app_name));
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        builder.setContentIntent(pendingIntent);
+        startForeground(ONGOING_NOTIFICATION_ID, builder.build());
+    }
+
+    private void stopForeground() {
+        stopForeground(true);
     }
 }
