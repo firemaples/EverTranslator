@@ -26,10 +26,17 @@
                 android:textStyle="bold"/>
 
             <ImageView
+                android:id="@+id/bt_copy_ocrText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:src="@drawable/content_copy"/>
+
+            <ImageView
                 android:id="@+id/bt_openInBrowser_ocrText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="8dp"
                 android:src="@drawable/ic_earth_black_24dp"/>
         </LinearLayout>
 
@@ -53,10 +60,17 @@
                 android:textStyle="bold"/>
 
             <ImageView
+                android:id="@+id/bt_copy_translatedText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:src="@drawable/content_copy"/>
+
+            <ImageView
                 android:id="@+id/bt_openInBrowser_translatedText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="8dp"
                 android:src="@drawable/ic_earth_black_24dp"/>
         </LinearLayout>
 

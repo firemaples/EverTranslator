@@ -53,15 +53,17 @@ public class Tool {
         if (context == null) {
             return;
         }
-        SuperToast.create(context, msg, SuperToast.Duration.LONG,
-                Style.getStyle(Style.GREEN, SuperToast.Animations.FADE)).show();
+        SuperToast.cancelAllSuperToasts();
+        SuperToast.create(context, msg, SuperToast.Duration.SHORT,
+                Style.getStyle(Style.BLACK, SuperToast.Animations.FADE)).show();
     }
 
     public void showErrorMsg(String msg) {
         if (context == null) {
             return;
         }
-        SuperToast.create(context, msg, SuperToast.Duration.LONG,
+        SuperToast.cancelAllSuperToasts();
+        SuperToast.create(context, msg, SuperToast.Duration.SHORT,
                 Style.getStyle(Style.RED, SuperToast.Animations.FADE)).show();
     }
 

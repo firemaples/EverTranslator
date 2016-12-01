@@ -1,5 +1,7 @@
 package tw.firemaples.onscreenocr.views;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -45,6 +47,8 @@ public class OcrResultWindow {
         tv_translatedText = (TextView) rootView.findViewById(R.id.tv_translatedText);
         rootView.findViewById(R.id.bt_openInBrowser_ocrText).setOnClickListener(onClickListener);
         rootView.findViewById(R.id.bt_openInBrowser_translatedText).setOnClickListener(onClickListener);
+        rootView.findViewById(R.id.bt_copy_ocrText).setOnClickListener(onClickListener);
+        rootView.findViewById(R.id.bt_copy_translatedText).setOnClickListener(onClickListener);
 
         layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(MARGIN, MARGIN, MARGIN, MARGIN);
@@ -118,9 +122,21 @@ public class OcrResultWindow {
                 if (ocrResult != null) {
                     callback.onOpenBrowserBtnClick(ocrResult.getTranslatedText(), true);
                 }
+            } else if (id == R.id.bt_copy_ocrText) {
+                copyToClipboard("Ocr text", ocrResult.getText());
+            } else if (id == R.id.bt_copy_translatedText) {
+                copyToClipboard("Translated text", ocrResult.getTranslatedText());
             }
         }
     };
+
+    private void copyToClipboard(String label, String text) {
+        ClipboardManager clipboard = (ClipboardManager)
+                context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clipData = ClipData.newPlainText(label, text);
+        clipboard.setPrimaryClip(clipData);
+        Tool.getInstance().showMsg("Text ["+text+"] has been copied.");
+    }
 
     public interface OnOcrResultWindowCallback {
         void onOpenBrowserBtnClick(String text, boolean translated);
