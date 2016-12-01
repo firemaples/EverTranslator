@@ -22,9 +22,11 @@ import tw.firemaples.onscreenocr.views.OcrResultWrapper;
 
 public class OcrResultView extends FloatingView {
     private OcrResultWrapper view_ocrResultWrapper;
+    private OcrResultWindow.OnOcrResultWindowCallback onOcrResultWindowCallback;
 
-    public OcrResultView(Context context) {
+    public OcrResultView(Context context, OcrResultWindow.OnOcrResultWindowCallback onOcrResultWindowCallback) {
         super(context);
+        this.onOcrResultWindowCallback = onOcrResultWindowCallback;
         setViews(getRootView());
     }
 
@@ -46,7 +48,6 @@ public class OcrResultView extends FloatingView {
     private void setViews(View rootView) {
         view_ocrResultWrapper = new OcrResultWrapper(getContext(), onOcrResultWindowCallback);
         ((ViewGroup) rootView).addView(view_ocrResultWrapper, 0, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
     }
 
     public void setOcrResults(List<OcrResult> results) {
@@ -68,11 +69,4 @@ public class OcrResultView extends FloatingView {
     public void clear() {
         view_ocrResultWrapper.clear();
     }
-
-    private OcrResultWindow.OnOcrResultWindowCallback onOcrResultWindowCallback = new OcrResultWindow.OnOcrResultWindowCallback() {
-        @Override
-        public void onOpenBrowserBtnClick(String text, boolean translated) {
-
-        }
-    };
 }

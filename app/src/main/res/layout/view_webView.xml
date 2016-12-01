@@ -4,7 +4,7 @@
     android:layout_width="300dp"
     android:layout_height="300dp"
     android:layout_centerInParent="true"
-    android:background="@color/md_blue_600"
+    android:background="@color/md_blue_900"
     android:orientation="vertical">
 
     <LinearLayout
@@ -14,11 +14,13 @@
         android:orientation="horizontal">
 
         <ImageButton
+            android:id="@+id/bt_openBrowser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/open_in_browser"/>
 
         <ImageButton
+            android:id="@+id/bt_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/close_black"

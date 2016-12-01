@@ -25,6 +25,7 @@ import tw.firemaples.onscreenocr.translate.TranslateAsyncTask;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.views.FloatingBarMenu;
+import tw.firemaples.onscreenocr.views.OcrResultWindow;
 
 /**
  * Created by louis1chen on 21/10/2016.
@@ -52,6 +53,8 @@ public class FloatingBar extends FloatingView {
 
     //Translation
     private TranslateAsyncTask translateAsyncTask;
+
+    private WebViewFV webViewFV;
 
     public FloatingBar(Context context) {
         super(context);
@@ -89,6 +92,8 @@ public class FloatingBar extends FloatingView {
         sp_langTo.setOnItemSelectedListener(onItemSelectedListener);
 
         dialogView = new DialogView(getContext());
+
+        webViewFV = new WebViewFV(getContext(), onWebViewFVCallback);
     }
 
     private AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
@@ -429,7 +434,7 @@ public class FloatingBar extends FloatingView {
             new TranslateAsyncTask.OnTranslateAsyncTaskCallback() {
                 @Override
                 public void onTranslateFinished(List<OcrResult> translatedResult) {
-                    ocrResultView = new OcrResultView(getContext());
+                    ocrResultView = new OcrResultView(getContext(), onOcrResultWindowCallback);
                     ocrResultView.attachToWindow();
                     ocrResultView.setOcrResults(translatedResult);
                     FloatingBar.this.detachFromWindow();
@@ -450,6 +455,24 @@ public class FloatingBar extends FloatingView {
                     }
                 }
             };
+
+    private OcrResultWindow.OnOcrResultWindowCallback onOcrResultWindowCallback = new OcrResultWindow.OnOcrResultWindowCallback() {
+        @Override
+        public void onOpenBrowserBtnClick(String text, boolean translated) {
+            webViewFV.setContent(text);
+            webViewFV.attachToWindow();
+        }
+    };
+
+    private WebViewFV.OnWebViewFVCallback onWebViewFVCallback = new WebViewFV.OnWebViewFVCallback() {
+        @Override
+        public void onOpenBrowserClicked() {
+            webViewFV.detachFromWindow();
+            ocrResultView.clear();
+            ocrResultView.detachFromWindow();
+            syncBtnState(BtnState.Normal);
+        }
+    };
 
     private void syncBtnState(BtnState btnState) {
         this.btnState = btnState;

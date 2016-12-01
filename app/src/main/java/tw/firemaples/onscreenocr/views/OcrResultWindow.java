@@ -56,6 +56,7 @@ public class OcrResultWindow {
     }
 
     public void setOcrResult(OcrResult ocrResult) {
+        this.ocrResult = ocrResult;
         tv_originText.setText(Tool.replaceAllLineBreaks(ocrResult.getText(), " "));
         tv_translatedText.setText(ocrResult.getTranslatedText());
     }
@@ -110,9 +111,13 @@ public class OcrResultWindow {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.bt_openInBrowser_ocrText) {
-                callback.onOpenBrowserBtnClick(ocrResult.getText(), false);
+                if (ocrResult != null) {
+                    callback.onOpenBrowserBtnClick(ocrResult.getText(), false);
+                }
             } else if (id == R.id.bt_openInBrowser_translatedText) {
-                callback.onOpenBrowserBtnClick(ocrResult.getTranslatedText(), true);
+                if (ocrResult != null) {
+                    callback.onOpenBrowserBtnClick(ocrResult.getTranslatedText(), true);
+                }
             }
         }
     };
