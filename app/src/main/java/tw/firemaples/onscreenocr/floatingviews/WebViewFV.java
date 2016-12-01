@@ -76,6 +76,9 @@ public class WebViewFV extends FloatingView {
 
     public void setContent(String text) {
         String lang = Locale.getDefault().getLanguage();
+        if (lang.equals(Locale.CHINESE.getLanguage())) {
+            lang += "-" + Locale.getDefault().getCountry();
+        }
         setContent(text, lang);
     }
 
@@ -89,7 +92,7 @@ public class WebViewFV extends FloatingView {
         return WebViewService.Type.Google;
     }
 
-    public interface OnWebViewFVCallback{
+    public interface OnWebViewFVCallback {
         void onOpenBrowserClicked();
     }
 }
