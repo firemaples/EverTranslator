@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.hardware.display.DisplayManager;
@@ -112,20 +111,22 @@ public class ScreenshotHandler {
         Display display = wm.getDefaultDisplay();
         final DisplayMetrics metrics = new DisplayMetrics();
         display.getMetrics(metrics);
-        final int mWidth = metrics.widthPixels;
-        final int mHeight = metrics.heightPixels;
+        Point size = new Point();
+        display.getRealSize(size);
+        final int mWidth = size.x;
+        final int mHeight = size.y;
         int mDensity = metrics.densityDpi;
 
         //Create a imageReader for catch result
-//        final ImageReader mImageReader = ImageReader.newInstance(mWidth, mHeight, ImageFormat.RGB_565, 2);
         final ImageReader mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
 
+        final Handler handler = new Handler();
+
         //Take a screenshot
-        int flags = DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR;
-        mProjection.createVirtualDisplay("screen-mirror", mWidth, mHeight, mDensity, flags, mImageReader.getSurface(), null, null);
+        int flags = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
+        mProjection.createVirtualDisplay("screen-mirror", mWidth, mHeight, mDensity, flags, mImageReader.getSurface(), null, handler);
 
         //convert result into image
-        final Handler handler = new Handler();
         Tool.logInfo("add setOnImageAvailableListener");
         timeoutRunnable = new Runnable() {
             @Override
@@ -162,24 +163,8 @@ public class ScreenshotHandler {
                 reader.close();
                 mProjection.stop();
 
-                Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-                Point screenSize = new Point();
-                display.getRealSize(screenSize);
-                Bitmap realSizeBitmap;
-
-                if (screenSize.x == bmp.getWidth() && screenSize.y == bmp.getHeight()) {
-                    realSizeBitmap = bmp;
-                } else {
-                    //Crop and resize the bitmap to real screen size
-                    float scale = (float) screenSize.y / (float) bmp.getHeight();
-                    int scaledWidth = (int) ((float) screenSize.x / scale);
-                    int blackPadding = (int) ((float) rowPadding / (float) pixelStride / 2f);
-                    Matrix scaleMatrix = new Matrix();
-                    scaleMatrix.postScale(scale, scale);
-                    //TODO produce more reliable size bmp
-                    realSizeBitmap = Bitmap.createBitmap(bmp, blackPadding, 0, scaledWidth, bmp.getHeight(), scaleMatrix, false);
-                    bmp.recycle();
-                }
+                Bitmap realSizeBitmap = Bitmap.createBitmap(bmp, 0, 0, metrics.widthPixels, bmp.getHeight());
+                bmp.recycle();
 
                 if (Tool.getInstance().isDebugMode()) {
                     saveBmpToFile(realSizeBitmap);
