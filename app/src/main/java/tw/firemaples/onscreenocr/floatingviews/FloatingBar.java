@@ -360,6 +360,8 @@ public class FloatingBar extends FloatingView {
         @Override
         public void onScreenshotFailed(int errorCode) {
             FloatingBar.this.attachToWindow();
+            resetAll();
+
             dialogView.reset();
             dialogView.setType(DialogView.Type.CONFIRM_ONLY);
             dialogView.setTitle("Error");

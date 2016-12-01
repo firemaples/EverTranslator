@@ -34,7 +34,7 @@ import tw.firemaples.onscreenocr.utils.Tool;
  */
 public class ScreenshotHandler {
     private static ScreenshotHandler _instance;
-    private final static int TIMEOUT = 3000;
+    private final static int TIMEOUT = 5000;
 
     public final static int ERROR_CODE_TIMEOUT = 1;
 
@@ -118,7 +118,7 @@ public class ScreenshotHandler {
 
         //Create a imageReader for catch result
 //        final ImageReader mImageReader = ImageReader.newInstance(mWidth, mHeight, ImageFormat.RGB_565, 2);
-        ImageReader mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
+        final ImageReader mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
 
         //Take a screenshot
         int flags = DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR;
@@ -130,6 +130,10 @@ public class ScreenshotHandler {
         timeoutRunnable = new Runnable() {
             @Override
             public void run() {
+                mImageReader.setOnImageAvailableListener(null, handler);
+                mImageReader.close();
+                mProjection.stop();
+
                 if (callback != null) {
                     callback.onScreenshotFailed(ERROR_CODE_TIMEOUT);
                 }
@@ -151,7 +155,7 @@ public class ScreenshotHandler {
                 int rowPadding = rowStride - pixelStride * metrics.widthPixels;
                 // create bitmap
 //                Bitmap bmp = Bitmap.createBitmap(mWidth + rowPadding / pixelStride, mHeight, Bitmap.Config.RGB_565);
-                Bitmap bmp = Bitmap.createBitmap(metrics.widthPixels + rowPadding / pixelStride, metrics.heightPixels, Bitmap.Config.ARGB_8888);
+                Bitmap bmp = Bitmap.createBitmap(metrics.widthPixels + (int) ((float) rowPadding / (float) pixelStride), metrics.heightPixels, Bitmap.Config.ARGB_8888);
                 bmp.copyPixelsFromBuffer(buffer);
 
                 image.close();
@@ -172,7 +176,7 @@ public class ScreenshotHandler {
                     int blackPadding = (int) ((float) rowPadding / (float) pixelStride / 2f);
                     Matrix scaleMatrix = new Matrix();
                     scaleMatrix.postScale(scale, scale);
-                    //TODO produce more reliable bmp
+                    //TODO produce more reliable size bmp
                     realSizeBitmap = Bitmap.createBitmap(bmp, blackPadding, 0, scaledWidth, bmp.getHeight(), scaleMatrix, false);
                     bmp.recycle();
                 }
