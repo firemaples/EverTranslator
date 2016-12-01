@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
-import android.view.WindowManager;
 
 import tw.firemaples.onscreenocr.floatingviews.FloatingBar;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
@@ -27,10 +26,8 @@ public class ScreenTranslatorService extends Service {
 
     private ScreenshotHandler screenshotHandler;
 
-    private WindowManager mWindowManager;
     private FloatingBar floatingBar;
-    private WindowManager.LayoutParams floatingBarLayoutParams;
-    private boolean mIsFloatingViewAttached = false;
+    private boolean dismissNotify = true;
 
     public ScreenTranslatorService() {
     }
@@ -39,14 +36,17 @@ public class ScreenTranslatorService extends Service {
         return Tool.isServiceRunning(context, ScreenTranslatorService.class);
     }
 
-    public static void start(Context context) {
+    public static void start(Context context, boolean fromNotify) {
         if (!isRunning(context)) {
             context.startService(new Intent(context, ScreenTranslatorService.class));
+        } else if (fromNotify && _instance != null) {
+            _instance.floatingBar.attachToWindow();
         }
     }
 
-    public static void stop() {
+    public static void stop(boolean dismissNotify) {
         if (_instance != null) {
+            _instance.dismissNotify = dismissNotify;
             _instance.stopSelf();
         }
     }
@@ -97,14 +97,17 @@ public class ScreenTranslatorService extends Service {
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.icon));
         builder.setTicker(getString(R.string.app_name));
         builder.setContentTitle(getString(R.string.app_name));
-//        builder.setContentText(getString(R.string.app_name));
+        builder.setContentText("Click to show floating bar");
         Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        notificationIntent.putExtra(MainActivity.INTENT_START_FROM_NOTIFY, true);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
+        builder.setAutoCancel(false);
         startForeground(ONGOING_NOTIFICATION_ID, builder.build());
     }
 
     private void stopForeground() {
-        stopForeground(true);
+        stopForeground(dismissNotify);
     }
 }

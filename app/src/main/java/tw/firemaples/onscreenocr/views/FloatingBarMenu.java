@@ -40,6 +40,10 @@ public class FloatingBarMenu {
                 if (callback != null) {
                     callback.onSettingItemClick();
                 }
+            }else if(itemId == R.id.menu_hide){
+                if(callback != null){
+                    callback.onHideItemClick();
+                }
             }
             return false;
         }
@@ -49,5 +53,7 @@ public class FloatingBarMenu {
         void onCloseItemClick();
 
         void onSettingItemClick();
+
+        void onHideItemClick();
     }
 }

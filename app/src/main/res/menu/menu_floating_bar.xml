@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Setting"
-          android:id="@+id/menu_setting"/>
-    <item android:title="Close"
-          android:id="@+id/menu_close"/>
+    <item
+        android:id="@+id/menu_setting"
+        android:title="Setting"/>
+    <item
+        android:id="@+id/menu_hide"
+        android:title="Hide"/>
+    <item
+        android:id="@+id/menu_close"
+        android:title="Close"/>
 </menu>

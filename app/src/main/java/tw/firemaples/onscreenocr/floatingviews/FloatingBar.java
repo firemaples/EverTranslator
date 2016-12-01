@@ -266,12 +266,19 @@ public class FloatingBar extends FloatingView {
 
             progressView = null;
 
-            ScreenTranslatorService.stop();
+            ScreenTranslatorService.stop(true);
         }
 
         @Override
         public void onSettingItemClick() {
             new SettingView(getContext()).attachToWindow();
+        }
+
+        @Override
+        public void onHideItemClick() {
+            resetAll();
+
+            FloatingBar.this.detachFromWindow();
         }
     };
 
@@ -292,7 +299,7 @@ public class FloatingBar extends FloatingView {
         if (drawAreaView != null) {
             drawAreaView.getAreaSelectionView().clear();
             drawAreaView.detachFromWindow();
-            drawAreaView = null;
+//            drawAreaView = null;
         }
 
         if (progressView != null) {
@@ -302,7 +309,12 @@ public class FloatingBar extends FloatingView {
         if (ocrResultView != null) {
             ocrResultView.clear();
             ocrResultView.detachFromWindow();
-            ocrResultView = null;
+//            ocrResultView = null;
+        }
+
+        if (webViewFV != null) {
+            webViewFV.detachFromWindow();
+//            webViewFV = null;
         }
 
         currentBoxList.clear();

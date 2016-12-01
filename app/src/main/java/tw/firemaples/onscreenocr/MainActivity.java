@@ -25,6 +25,7 @@ import tw.firemaples.onscreenocr.utils.Callback;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String INTENT_START_FROM_NOTIFY = "INTENT_START_FROM_NOTIFY";
 
     private final int REQUEST_CODE_CHECK_DRAW_OVERLAY_PERM = 101;
     private final int REQUEST_CODE_REQUEST_EXTERNAL_STORAGE_READ_WRITE = 102;
@@ -199,11 +200,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startService() {
-        ScreenTranslatorService.start(this);
+        boolean fromNotify = false;
+        if (getIntent() != null && getIntent().hasExtra(INTENT_START_FROM_NOTIFY)) {
+            fromNotify = getIntent().getBooleanExtra(INTENT_START_FROM_NOTIFY, false);
+        }
+        ScreenTranslatorService.start(this, fromNotify);
         finish();
     }
 
     private void stopService() {
-        ScreenTranslatorService.stop();
+        ScreenTranslatorService.stop(true);
     }
 }
