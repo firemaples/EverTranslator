@@ -54,7 +54,7 @@ public class Tool {
             return;
         }
         SuperToast.cancelAllSuperToasts();
-        SuperToast.create(context, msg, SuperToast.Duration.SHORT,
+        SuperToast.create(context, msg, SuperToast.Duration.VERY_SHORT,
                 Style.getStyle(Style.BLACK, SuperToast.Animations.FADE)).show();
     }
 
@@ -63,7 +63,7 @@ public class Tool {
             return;
         }
         SuperToast.cancelAllSuperToasts();
-        SuperToast.create(context, msg, SuperToast.Duration.SHORT,
+        SuperToast.create(context, msg, SuperToast.Duration.VERY_SHORT,
                 Style.getStyle(Style.RED, SuperToast.Animations.FADE)).show();
     }
 
