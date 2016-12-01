@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import tw.firemaples.onscreenocr.MainActivity;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
@@ -81,7 +82,7 @@ public class ScreenshotHandler {
             return;
         }
         Tool.getInstance().showMsg("Please submit Screenshot Permission for using this service!");
-        context.startActivity(ScreenshotPermissionActivity.getIntent(context, this).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        context.startActivity(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     private MediaProjection getMediaProjection() {
