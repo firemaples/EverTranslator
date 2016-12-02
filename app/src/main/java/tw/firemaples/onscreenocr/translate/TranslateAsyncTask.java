@@ -10,7 +10,6 @@ import com.memetix.mst.translate.Translate;
 
 import java.util.List;
 
-import tw.firemaples.onscreenocr.SettingsActivity;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.KeyId;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
@@ -41,13 +40,13 @@ public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
         onProgressUpdate("Starting Translation...");
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        translate = preferences.getBoolean(SettingsActivity.KEY_TRANSLATE, true);
+        translate = preferences.getBoolean(OcrNTranslateUtils.KEY_TRANSLATE, true);
 
-        String iso6393From = preferences.getString(SettingsActivity.KEY_RECOGNITION_LANGUAGE, "en");
+        String iso6393From = preferences.getString(OcrNTranslateUtils.KEY_RECOGNITION_LANGUAGE, "en");
         String microsoftLangFrom = OcrNTranslateUtils.mapMicrosoftLanguageCode(iso6393From);
         translateFromLang = Language.fromString(microsoftLangFrom);
 
-        String microsoftLangTo = preferences.getString(SettingsActivity.KEY_TRANSLATION_TO, "en");
+        String microsoftLangTo = preferences.getString(OcrNTranslateUtils.KEY_TRANSLATION_TO, "en");
         translateToLang = Language.fromString(microsoftLangTo);
     }
 

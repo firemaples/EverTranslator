@@ -31,10 +31,6 @@
             android:enabled="true"
             android:exported="false"/>
 
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"/>
-
         <!--android:excludeFromRecents="true"-->
         <!--android:noHistory="true"-->
         <!--android:theme="@style/AppTheme.Transparent"-->

@@ -49,12 +49,6 @@ public class OcrResultWrapper extends FrameLayout {
                 for (Rect rect : ocrResult.getBoxRects()) {
                     ImageView ocrResultCover = new ImageView(getContext());
 
-//                    if (Tool.getInstance().isDebugMode() || ocrResult.getSubRect() == null) {
-//                        rect = ocrResult.getRect();
-//                    } else {
-//                        rect = ocrResult.getSubRect();
-//                    }
-
                     LayoutParams layoutParams = new LayoutParams(rect.width(), rect.height());
                     layoutParams.setMargins(parentRect.left + rect.left, parentRect.top + rect.top, 0, 0);
                     ocrResultCover.setLayoutParams(layoutParams);

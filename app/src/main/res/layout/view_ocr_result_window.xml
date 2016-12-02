@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:src="@drawable/ic_earth_black_24dp"/>
+                android:src="@drawable/earth"/>
         </LinearLayout>
 
         <TextView
@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:src="@drawable/ic_earth_black_24dp"/>
+                android:src="@drawable/earth"/>
         </LinearLayout>
 
         <TextView

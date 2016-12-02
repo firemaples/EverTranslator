@@ -28,7 +28,7 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
     private Bitmap screenshot;
     private final List<Rect> boxList;
 
-    private final int textMargin = 10;
+    private static final int textMargin = 10;
 
     private OnTextRecognizeAsyncTaskCallback callback;
 
@@ -59,17 +59,9 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
         Display display = wm.getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
         display.getMetrics(metrics);
-//
-//        float widthScale = (float) screenshot.getWidth() / (float) metrics.widthPixels;
-//        float heightScale = (float) screenshot.getHeight() / (float) metrics.heightPixels;
 
         List<OcrResult> ocrResultList = new ArrayList<>();
         for (Rect rect : boxList) {
-//            rect.left = (int) (widthScale * (float) rect.left);
-//            rect.right = (int) (widthScale * (float) rect.right);
-//            rect.top = (int) (heightScale * (float) rect.top);
-//            rect.bottom = (int) (heightScale * (float) rect.bottom);
-
             baseAPI.setRectangle(rect);
             OcrResult ocrResult = new OcrResult();
             ocrResult.setRect(rect);

@@ -130,7 +130,7 @@ public class FloatingBar extends FloatingView {
             @Override
             public void OnConfirmClick(DialogView dialogView) {
                 super.OnConfirmClick(dialogView);
-                ocrDownloadAsyncTask = new OcrDownloadAsyncTask(getContext(), onOcrDownloadAsyncTaskCallback);
+                ocrDownloadAsyncTask = new OcrDownloadAsyncTask(onOcrDownloadAsyncTaskCallback);
                 ocrDownloadAsyncTask.execute();
             }
         });

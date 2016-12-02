@@ -11,7 +11,6 @@ import java.io.File;
 import java.util.Arrays;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.SettingsActivity;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
 
@@ -23,12 +22,8 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
     private final Context context;
     private final TessBaseAPI baseAPI;
     private final String recognitionLang;
-    private final String recognitionLangName;
 
     private final File tessRootDir;
-    private final File tessDataDir;
-
-    private static final String URL_TRAINE_DATA_DOWNLOAD_TEMPLATES = "https://github.com/tesseract-ocr/tessdata/raw/master/%s.traineddata";
 
     private int pageSegmentationMode = TessBaseAPI.PageSegMode.PSM_AUTO_OSD;
     private OnOcrInitAsyncTaskCallback callback;
@@ -40,10 +35,8 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
         OcrNTranslateUtils ocrNTranslateUtils = OcrNTranslateUtils.getInstance();
         this.baseAPI = ocrNTranslateUtils.getBaseAPI();
         this.recognitionLang = ocrNTranslateUtils.getOcrLang();
-        this.recognitionLangName = ocrNTranslateUtils.getOcrLangDisplayName();
 
         this.tessRootDir = new File(context.getFilesDir() + File.separator + "tesseract");
-        this.tessDataDir = new File(tessRootDir.getPath() + File.separator + "tessdata");
     }
 
     @Override
@@ -87,7 +80,7 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         // Retrieve from preferences, and set in this Activity, the page segmentation mode preference
         String[] pageSegmentationModes = context.getResources().getStringArray(R.array.pagesegmentationmodes);
-        String pageSegmentationModeName = preferences.getString(SettingsActivity.KEY_PAGE_SEGMENTATION_MODE, pageSegmentationModes[0]);
+        String pageSegmentationModeName = preferences.getString(OcrNTranslateUtils.KEY_PAGE_SEGMENTATION_MODE, pageSegmentationModes[0]);
         int searchIndex = Arrays.asList(pageSegmentationModes).indexOf(pageSegmentationModeName);
         switch (searchIndex) {
             case 0:

@@ -1,6 +1,5 @@
 package tw.firemaples.onscreenocr.ocr;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import java.io.File;
@@ -19,8 +18,6 @@ import tw.firemaples.onscreenocr.utils.Tool;
  * Created by firemaples on 2016/3/2.
  */
 public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
-
-    private final Context context;
     private final String recognitionLang;
     private final String recognitionLangName;
 
@@ -30,8 +27,7 @@ public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
 
     private OnOcrDownloadAsyncTaskCallback callback;
 
-    public OcrDownloadAsyncTask(Context context, OnOcrDownloadAsyncTaskCallback callback) {
-        this.context = context;
+    public OcrDownloadAsyncTask(OnOcrDownloadAsyncTaskCallback callback) {
         this.callback = callback;
 
         OcrNTranslateUtils ocrNTranslateUtils = OcrNTranslateUtils.getInstance();

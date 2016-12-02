@@ -155,7 +155,6 @@ public class ScreenshotHandler {
                 int rowStride = planes[0].getRowStride();
                 int rowPadding = rowStride - pixelStride * metrics.widthPixels;
                 // create bitmap
-//                Bitmap bmp = Bitmap.createBitmap(mWidth + rowPadding / pixelStride, mHeight, Bitmap.Config.RGB_565);
                 Bitmap bmp = Bitmap.createBitmap(metrics.widthPixels + (int) ((float) rowPadding / (float) pixelStride), metrics.heightPixels, Bitmap.Config.ARGB_8888);
                 bmp.copyPixelsFromBuffer(buffer);
 

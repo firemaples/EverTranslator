@@ -19,7 +19,7 @@ import tw.firemaples.onscreenocr.utils.Tool;
  */
 
 public class ScreenTranslatorService extends Service {
-    private final int ONGOING_NOTIFICATION_ID = 12345;
+    private static final int ONGOING_NOTIFICATION_ID = 12345;
 
     @SuppressLint("StaticFieldLeak")
     private static ScreenTranslatorService _instance;
@@ -60,7 +60,7 @@ public class ScreenTranslatorService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         _instance = this;
-        int startCommand = super.onStartCommand(intent, flags, startId);
+        super.onStartCommand(intent, flags, startId);
 
         return START_STICKY;
     }
