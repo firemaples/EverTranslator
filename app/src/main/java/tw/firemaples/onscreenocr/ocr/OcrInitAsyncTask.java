@@ -31,9 +31,9 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
     private static final String URL_TRAINE_DATA_DOWNLOAD_TEMPLATES = "https://github.com/tesseract-ocr/tessdata/raw/master/%s.traineddata";
 
     private int pageSegmentationMode = TessBaseAPI.PageSegMode.PSM_AUTO_OSD;
-    private OnOrcInitAsyncTaskCallback callback;
+    private OnOcrInitAsyncTaskCallback callback;
 
-    public OcrInitAsyncTask(Context context, OnOrcInitAsyncTaskCallback callback) {
+    public OcrInitAsyncTask(Context context, OnOcrInitAsyncTaskCallback callback) {
         this.context = context;
         this.callback = callback;
 
@@ -49,7 +49,7 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        onProgressUpdate("Orc engine initializing...");
+        onProgressUpdate("OCR engine initializing...");
         getPreferences();
     }
 
@@ -78,7 +78,7 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
         }
         if (result) {
             if (callback != null) {
-                callback.onOrcInitialized();
+                callback.onOcrInitialized();
             }
         }
     }
@@ -120,8 +120,8 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
         }
     }
 
-    public interface OnOrcInitAsyncTaskCallback {
-        void onOrcInitialized();
+    public interface OnOcrInitAsyncTaskCallback {
+        void onOcrInitialized();
 
         void showMessage(String message);
 

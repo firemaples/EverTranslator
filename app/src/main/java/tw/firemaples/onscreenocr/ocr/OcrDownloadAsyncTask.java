@@ -28,9 +28,9 @@ public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
 
     private static final String URL_TRAINE_DATA_DOWNLOAD_TEMPLATES = "https://github.com/tesseract-ocr/tessdata/raw/master/%s.traineddata";
 
-    private OnOrcDownloadAsyncTaskCallback callback;
+    private OnOcrDownloadAsyncTaskCallback callback;
 
-    public OcrDownloadAsyncTask(Context context, OnOrcDownloadAsyncTaskCallback callback) {
+    public OcrDownloadAsyncTask(Context context, OnOcrDownloadAsyncTaskCallback callback) {
         this.context = context;
         this.callback = callback;
 
@@ -50,7 +50,7 @@ public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
 
         File tessDataFile = new File(tessDataDir, recognitionLang + ".traineddata");
         if (!tessDataFile.exists()) {
-            Tool.logInfo("checkOcrFiles(): target ocr file not found");
+            Tool.logInfo("checkOcrFiles(): target OCR file not found");
             return false;
         }
 
@@ -66,7 +66,7 @@ public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
     @Override
     protected Boolean doInBackground(Void... params) {
         if (checkOcrFiles(recognitionLang)) {
-            Tool.logInfo("Ocr file found");
+            Tool.logInfo("OCR file found");
             return true;
         }
 
@@ -87,8 +87,8 @@ public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
 
         File tessDataFile = new File(tessDataDir, recognitionLang + ".traineddata");
         if (!downloadTrainedata(recognitionLang, tessDataTempFile, tessDataFile)) {
-            Tool.logError("Download ocr file failed");
-            callback.onError("Download ocr file failed");
+            Tool.logError("Download OCR file failed");
+            callback.onError("Download OCR file failed");
             return false;
         }
 
@@ -206,7 +206,7 @@ public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
         return true;
     }
 
-    public interface OnOrcDownloadAsyncTaskCallback {
+    public interface OnOcrDownloadAsyncTaskCallback {
         void onDownloadStart();
 
         void onDownloadFinished();

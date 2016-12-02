@@ -123,7 +123,7 @@ public class OcrResultWindow {
                     callback.onOpenBrowserBtnClick(ocrResult.getTranslatedText(), true);
                 }
             } else if (id == R.id.bt_copy_ocrText) {
-                copyToClipboard("Ocr text", ocrResult.getText());
+                copyToClipboard("OCR text", ocrResult.getText());
             } else if (id == R.id.bt_copy_translatedText) {
                 copyToClipboard("Translated text", ocrResult.getTranslatedText());
             }

@@ -58,7 +58,7 @@ public class OcrNTranslateUtils {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    /* Ocr */
+    /* OCR */
     public File getTessDataDir() {
         return new File(context.getFilesDir() + File.separator + "tesseract" + File.separator + "tessdata");
     }

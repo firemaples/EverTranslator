@@ -44,7 +44,7 @@ public class FloatingBar extends FloatingView {
     private List<Rect> currentBoxList = new ArrayList<>();
     private Bitmap currentScreenshot;
 
-    //Orc
+    //OCR
     private OcrNTranslateUtils ocrNTranslateUtils;
     private OcrResultView ocrResultView;
     private OcrDownloadAsyncTask ocrDownloadAsyncTask;
@@ -122,28 +122,28 @@ public class FloatingBar extends FloatingView {
 
     private void showDownloadOcrFileDialog() {
         dialogView.reset();
-        dialogView.setTitle("Ocr file not found");
-        dialogView.setContentMsg("The ocr file of selected language has not been downloaded, do you want to download now?");
+        dialogView.setTitle("OCR file not found");
+        dialogView.setContentMsg("The OCR file of selected language has not been downloaded, do you want to download now?");
         dialogView.setType(DialogView.Type.CONFIRM_CANCEL);
         dialogView.getOkBtn().setText("Download");
         dialogView.setCallback(new DialogView.OnDialogViewCallback() {
             @Override
             public void OnConfirmClick(DialogView dialogView) {
                 super.OnConfirmClick(dialogView);
-                ocrDownloadAsyncTask = new OcrDownloadAsyncTask(getContext(), onOrcDownloadAsyncTaskCallback);
+                ocrDownloadAsyncTask = new OcrDownloadAsyncTask(getContext(), onOcrDownloadAsyncTaskCallback);
                 ocrDownloadAsyncTask.execute();
             }
         });
         dialogView.attachToWindow();
     }
 
-    private OcrDownloadAsyncTask.OnOrcDownloadAsyncTaskCallback onOrcDownloadAsyncTaskCallback = new OcrDownloadAsyncTask.OnOrcDownloadAsyncTaskCallback() {
+    private OcrDownloadAsyncTask.OnOcrDownloadAsyncTaskCallback onOcrDownloadAsyncTaskCallback = new OcrDownloadAsyncTask.OnOcrDownloadAsyncTaskCallback() {
         @Override
         public void onDownloadStart() {
             dialogView.reset();
             dialogView.setType(DialogView.Type.CANCEL_ONLY);
             dialogView.setTitle("File downloader");
-            dialogView.setContentMsg("Ocr file downloading");
+            dialogView.setContentMsg("OCR file downloading");
             dialogView.attachToWindow();
             dialogView.setCallback(new DialogView.OnDialogViewCallback() {
                 @Override
@@ -354,7 +354,7 @@ public class FloatingBar extends FloatingView {
         public void onScreenshotFinished(Bitmap bitmap) {
             currentScreenshot = bitmap;
             FloatingBar.this.attachToWindow();
-            initOrcEngine();
+            initOcrEngine();
         }
 
         @Override
@@ -379,19 +379,19 @@ public class FloatingBar extends FloatingView {
         }
     };
 
-    private void initOrcEngine() {
+    private void initOcrEngine() {
         if (progressView != null) {
-            progressView.showMessage("Waiting for Orc engine initialize...");
+            progressView.showMessage("Waiting for OCR engine initialize...");
         }
 
-        lastAsyncTask = new OcrInitAsyncTask(getContext(), onOrcInitAsyncTaskCallback).execute();
+        lastAsyncTask = new OcrInitAsyncTask(getContext(), onOcrInitAsyncTaskCallback).execute();
     }
 
-    private OcrInitAsyncTask.OnOrcInitAsyncTaskCallback onOrcInitAsyncTaskCallback =
-            new OcrInitAsyncTask.OnOrcInitAsyncTaskCallback() {
+    private OcrInitAsyncTask.OnOcrInitAsyncTaskCallback onOcrInitAsyncTaskCallback =
+            new OcrInitAsyncTask.OnOcrInitAsyncTaskCallback() {
                 @Override
-                public void onOrcInitialized() {
-                    showMessage("Orc engine initialized.");
+                public void onOcrInitialized() {
+                    showMessage("OCR engine initialized.");
                     startTextRecognize();
                 }
 

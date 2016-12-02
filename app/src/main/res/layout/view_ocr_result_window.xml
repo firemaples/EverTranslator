@@ -21,7 +21,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ocr text:"
+                android:text="OCR text:"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textStyle="bold"/>
 

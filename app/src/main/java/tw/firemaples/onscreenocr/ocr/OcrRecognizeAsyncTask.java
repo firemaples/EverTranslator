@@ -44,7 +44,7 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        onProgressUpdate("Orc recognizing...");
+        onProgressUpdate("OCR recognizing...");
 
         if (callback == null) {
             throw new UnsupportedOperationException("Callback is not implemented");
@@ -94,7 +94,7 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
                 debugInfo.addInfoString(String.format(Locale.getDefault(), "Screen size:%dx%d", metrics.widthPixels, metrics.heightPixels));
                 debugInfo.addInfoString(String.format(Locale.getDefault(), "Screenshot size:%dx%d", screenshot.getWidth(), screenshot.getHeight()));
                 debugInfo.addInfoString(String.format(Locale.getDefault(), "Cropped position:%s", rect.toString()));
-                debugInfo.addInfoString(String.format(Locale.getDefault(), "Ocr result:%s", ocrResult.getText()));
+                debugInfo.addInfoString(String.format(Locale.getDefault(), "OCR result:%s", ocrResult.getText()));
                 ocrResult.setDebugInfo(debugInfo);
             }
 
@@ -115,12 +115,12 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
     @Override
     protected void onPostExecute(List<OcrResult> results) {
         super.onPostExecute(results);
-        Tool.logInfo("Orc result size:" + results.size());
+        Tool.logInfo("OCR result size:" + results.size());
         if (results.size() > 0) {
-            Tool.logInfo("First orc result:" + results.get(0).getText());
+            Tool.logInfo("First OCR result:" + results.get(0).getText());
         } else {
-            Tool.logInfo("No orc result found");
-            Tool.getInstance().showErrorMsg("No orc result found");
+            Tool.logInfo("No OCR result found");
+            Tool.getInstance().showErrorMsg("No OCR result found");
         }
         if (callback != null) {
             callback.hideMessage();

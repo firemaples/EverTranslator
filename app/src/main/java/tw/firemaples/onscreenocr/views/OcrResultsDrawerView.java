@@ -24,7 +24,7 @@ import tw.firemaples.onscreenocr.utils.Tool;
 /**
  * Created by firem_000 on 2016/3/6.
  */
-public class OrcResultsDrawerView extends ImageView {
+public class OcrResultsDrawerView extends ImageView {
 
     private List<OcrResult> ocrResults = new ArrayList<>();
 
@@ -35,9 +35,9 @@ public class OrcResultsDrawerView extends ImageView {
     private int textBackgroundPadding = 5;
     private DisplayMetrics metrics;
 
-    private OnFullScreenOrcResultItemClickListener onFullScreenOrcResultItemClickListener;
+    private OnFullScreenOcrResultItemClickListener onFullScreenOcrResultItemClickListener;
 
-    public OrcResultsDrawerView(Context context, AttributeSet attrs) {
+    public OcrResultsDrawerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         if (!isInEditMode()) {
             init();
@@ -61,8 +61,8 @@ public class OrcResultsDrawerView extends ImageView {
         display.getMetrics(metrics);
     }
 
-    public void setOnFullScreenOrcResultItemClickListener(OnFullScreenOrcResultItemClickListener onFullScreenOrcResultItemClickListener) {
-        this.onFullScreenOrcResultItemClickListener = onFullScreenOrcResultItemClickListener;
+    public void setOnFullScreenOcrResultItemClickListener(OnFullScreenOcrResultItemClickListener onFullScreenOcrResultItemClickListener) {
+        this.onFullScreenOcrResultItemClickListener = onFullScreenOcrResultItemClickListener;
     }
 
     public void setOcrResults(List<OcrResult> ocrResults) {
@@ -124,8 +124,8 @@ public class OrcResultsDrawerView extends ImageView {
 
             for (OcrResult ocrResult : ocrResults) {
                 if (ocrResult.getTouchRect() != null && ocrResult.getTouchRect().contains((int) event.getX(), (int) event.getY())) {
-                    if (onFullScreenOrcResultItemClickListener != null) {
-                        onFullScreenOrcResultItemClickListener.onFullScreenOrcResultItemClicked(ocrResult);
+                    if (onFullScreenOcrResultItemClickListener != null) {
+                        onFullScreenOcrResultItemClickListener.onFullScreenOcrResultItemClicked(ocrResult);
                     }
                     return true;
                 }
@@ -137,7 +137,7 @@ public class OrcResultsDrawerView extends ImageView {
         }
     }
 
-    public interface OnFullScreenOrcResultItemClickListener {
-        void onFullScreenOrcResultItemClicked(OcrResult ocrResult);
+    public interface OnFullScreenOcrResultItemClickListener {
+        void onFullScreenOcrResultItemClicked(OcrResult ocrResult);
     }
 }
