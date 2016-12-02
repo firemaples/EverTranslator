@@ -93,7 +93,7 @@ public class ScreenTranslatorService extends Service {
 
     private void startForeground() {
         Notification.Builder builder = new Notification.Builder(this);
-        builder.setSmallIcon(R.mipmap.icon);
+        builder.setSmallIcon(R.mipmap.notify_icon);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.icon));
         builder.setTicker(getString(R.string.app_name));
         builder.setContentTitle(getString(R.string.app_name));
