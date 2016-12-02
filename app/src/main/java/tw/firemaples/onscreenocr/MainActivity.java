@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(0, 0);
         Fabric.with(this, new Crashlytics());
 //        setContentView(R.layout.activity_main);
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -205,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
             fromNotify = getIntent().getBooleanExtra(INTENT_START_FROM_NOTIFY, false);
         }
         ScreenTranslatorService.start(this, fromNotify);
+        overridePendingTransition(0, 0);
         finish();
     }
 

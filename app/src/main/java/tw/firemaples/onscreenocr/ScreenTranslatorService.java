@@ -99,7 +99,7 @@ public class ScreenTranslatorService extends Service {
         builder.setContentTitle(getString(R.string.app_name));
         builder.setContentText("Click to show floating bar");
         Intent notificationIntent = new Intent(this, MainActivity.class);
-        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_ANIMATION);
         notificationIntent.putExtra(MainActivity.INTENT_START_FROM_NOTIFY, true);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
