@@ -85,6 +85,10 @@ public class OcrNTranslateUtils {
         return getOcrLangDisplayNameList().get(getOcrLangIndex());
     }
 
+    public String getOcrLangDisplayName(String lang) {
+        return getOcrLangDisplayNameList().get(getOcrLangIndex(lang));
+    }
+
     public void setOcrLang(String ocrLang) {
         getSharedPreferences().edit().putString(KEY_RECOGNITION_LANGUAGE, ocrLang).apply();
     }

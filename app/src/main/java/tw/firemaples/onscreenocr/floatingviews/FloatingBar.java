@@ -12,6 +12,7 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ScreenTranslatorService;
@@ -105,7 +106,7 @@ public class FloatingBar extends FloatingView {
                 ocrNTranslateUtils.setOcrLang(lang);
 
                 if (!OcrDownloadAsyncTask.checkOcrFiles(lang)) {
-                    showDownloadOcrFileDialog();
+                    showDownloadOcrFileDialog(OcrNTranslateUtils.getInstance().getOcrLangDisplayName(lang));
                 }
 
             } else if (parentId == R.id.sp_langTo) {
@@ -120,10 +121,10 @@ public class FloatingBar extends FloatingView {
         }
     };
 
-    private void showDownloadOcrFileDialog() {
+    private void showDownloadOcrFileDialog(String langName) {
         dialogView.reset();
         dialogView.setTitle("OCR file not found");
-        dialogView.setContentMsg("The OCR file of selected language has not been downloaded, do you want to download now?");
+        dialogView.setContentMsg(String.format(Locale.getDefault(), "The OCR file of [%s] has not been downloaded, do you want to download it now?", langName));
         dialogView.setType(DialogView.Type.CONFIRM_CANCEL);
         dialogView.getOkBtn().setText("Download");
         dialogView.setCallback(new DialogView.OnDialogViewCallback() {
@@ -251,7 +252,7 @@ public class FloatingBar extends FloatingView {
                         syncBtnState(BtnState.Translating);
                     }
                 } else {
-                    showDownloadOcrFileDialog();
+                    showDownloadOcrFileDialog(OcrNTranslateUtils.getInstance().getOcrLangDisplayName());
                 }
             } else if (id == R.id.bt_clear) {
                 resetAll();
