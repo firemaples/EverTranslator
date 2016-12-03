@@ -7,25 +7,43 @@
     android:background="@color/md_blue_900"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:orientation="horizontal">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <ImageButton
-            android:id="@+id/bt_openBrowser"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/view_rightBtns"
+            android:paddingLeft="24dp"
+            android:text="@string/title_browser"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FFF"/>
+
+        <LinearLayout
+            android:id="@+id/view_rightBtns"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/open_in_browser"/>
+            android:layout_alignParentRight="true"
+            android:layout_gravity="right"
+            android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/bt_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/close_black"
-            />
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/bt_openBrowser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/open_in_browser"/>
+
+            <ImageButton
+                android:id="@+id/bt_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/close_black"
+                />
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <WebView
         android:id="@+id/wv_webView"
