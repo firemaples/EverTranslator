@@ -10,6 +10,7 @@ import com.memetix.mst.translate.Translate;
 
 import java.util.List;
 
+import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.KeyId;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
@@ -37,15 +38,17 @@ public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        onProgressUpdate("Starting Translation...");
+        onProgressUpdate(context.getString(R.string.progress_translating));
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         translate = preferences.getBoolean(OcrNTranslateUtils.KEY_TRANSLATE, true);
 
+        //TODO using util
         String iso6393From = preferences.getString(OcrNTranslateUtils.KEY_RECOGNITION_LANGUAGE, "en");
         String microsoftLangFrom = OcrNTranslateUtils.mapMicrosoftLanguageCode(iso6393From);
         translateFromLang = Language.fromString(microsoftLangFrom);
 
+        //TODO using util
         String microsoftLangTo = preferences.getString(OcrNTranslateUtils.KEY_TRANSLATION_TO, "en");
         translateToLang = Language.fromString(microsoftLangTo);
     }
@@ -62,7 +65,7 @@ public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
                     ocrResult.setTranslatedText(translatedText);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    ocrResult.setTranslatedText("ERROR");
+                    ocrResult.setTranslatedText(context.getString(R.string.error));
                 }
             } else {
                 ocrResult.setTranslatedText(ocrResult.getText());

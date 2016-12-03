@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.MainActivity;
+import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
@@ -45,8 +46,6 @@ public class ScreenshotHandler {
 
     private ScreenshotHandler(Context context) {
         this.context = context;
-
-//        getUserPermission();
     }
 
     private ScreenshotHandler() {
@@ -80,7 +79,7 @@ public class ScreenshotHandler {
         if (isGetUserPermission) {
             return;
         }
-        Tool.getInstance().showMsg("Please submit Screenshot Permission for using this service!");
+        Tool.getInstance().showMsg(context.getString(R.string.error_noMediaProjectionFound));
         context.startActivity(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
@@ -186,6 +185,7 @@ public class ScreenshotHandler {
                         .format(new Date(System.currentTimeMillis())));
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName);
         Tool.logInfo("Saving debug screenshot to " + file.getAbsolutePath());
+        Tool.getInstance().showMsg("Saving debug screenshot to " + file.getAbsolutePath());
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(file.getAbsolutePath());
@@ -193,6 +193,7 @@ public class ScreenshotHandler {
             // PNG is a lossless format, the compression factor (100) is ignored
         } catch (Exception e) {
             Tool.logError("Save debug screenshot failed");
+            Tool.getInstance().showErrorMsg("Save debug screenshot failed");
             e.printStackTrace();
         } finally {
             try {

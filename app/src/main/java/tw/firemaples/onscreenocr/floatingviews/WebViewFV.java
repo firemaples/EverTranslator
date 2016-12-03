@@ -42,7 +42,6 @@ public class WebViewFV extends FloatingView {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initViews(View rootView) {
-
         rootView.findViewById(R.id.bt_openBrowser).setOnClickListener(onClickListener);
         rootView.findViewById(R.id.bt_close).setOnClickListener(onClickListener);
 

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
 
@@ -44,7 +45,7 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        onProgressUpdate("OCR recognizing...");
+        onProgressUpdate(context.getString(R.string.progress_textRecognizing));
 
         if (callback == null) {
             throw new UnsupportedOperationException("Callback is not implemented");
@@ -112,7 +113,7 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
             Tool.logInfo("First OCR result:" + results.get(0).getText());
         } else {
             Tool.logInfo("No OCR result found");
-            Tool.getInstance().showErrorMsg("No OCR result found");
+            Tool.getInstance().showErrorMsg(context.getString(R.string.error_noOCRResultFound));
         }
         if (callback != null) {
             callback.hideMessage();

@@ -42,7 +42,7 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        onProgressUpdate("OCR engine initializing...");
+        onProgressUpdate(context.getString(R.string.progress_ocrInitializing));
         getPreferences();
     }
 

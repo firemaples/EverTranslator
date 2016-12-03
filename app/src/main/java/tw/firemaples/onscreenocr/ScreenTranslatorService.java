@@ -105,7 +105,7 @@ public class ScreenTranslatorService extends Service {
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.icon));
         builder.setTicker(getString(R.string.app_name));
         builder.setContentTitle(getString(R.string.app_name));
-        builder.setContentText("Click to show floating bar");
+        builder.setContentText(getString(R.string.notification_contentText));
         Intent notificationIntent = new Intent(this, MainActivity.class);
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_ANIMATION);
         notificationIntent.putExtra(MainActivity.INTENT_START_FROM_NOTIFY, true);

@@ -123,10 +123,10 @@ public class FloatingBar extends FloatingView {
 
     private void showDownloadOcrFileDialog(String langName) {
         dialogView.reset();
-        dialogView.setTitle("OCR file not found");
-        dialogView.setContentMsg(String.format(Locale.getDefault(), "The OCR file of [%s] has not been downloaded, do you want to download it now?", langName));
+        dialogView.setTitle(getContext().getString(R.string.dialog_title_ocrFileNotFound));
+        dialogView.setContentMsg(String.format(Locale.getDefault(), getContext().getString(R.string.dialog_content_ocrFileNotFound), langName));
         dialogView.setType(DialogView.Type.CONFIRM_CANCEL);
-        dialogView.getOkBtn().setText("Download");
+        dialogView.getOkBtn().setText(R.string.btn_download);
         dialogView.setCallback(new DialogView.OnDialogViewCallback() {
             @Override
             public void OnConfirmClick(DialogView dialogView) {
@@ -143,8 +143,8 @@ public class FloatingBar extends FloatingView {
         public void onDownloadStart() {
             dialogView.reset();
             dialogView.setType(DialogView.Type.CANCEL_ONLY);
-            dialogView.setTitle("File downloader");
-            dialogView.setContentMsg("OCR file downloading");
+            dialogView.setTitle(getContext().getString(R.string.dialog_title_ocrFileDownloading));
+            dialogView.setContentMsg(getContext().getString(R.string.dialog_content_ocrFileDownloading));
             dialogView.attachToWindow();
             dialogView.setCallback(new DialogView.OnDialogViewCallback() {
                 @Override
@@ -169,7 +169,7 @@ public class FloatingBar extends FloatingView {
 
         @Override
         public void onError(String errorMessage) {
-            dialogView.setTitle("ERROR!");
+            dialogView.setTitle(getContext().getString(R.string.dialog_title_error));
             dialogView.setContentMsg(errorMessage);
         }
     };
@@ -365,14 +365,14 @@ public class FloatingBar extends FloatingView {
 
             dialogView.reset();
             dialogView.setType(DialogView.Type.CONFIRM_ONLY);
-            dialogView.setTitle("Error");
+            dialogView.setTitle(getContext().getString(R.string.dialog_title_error));
             String msg;
             switch (errorCode) {
                 case ScreenshotHandler.ERROR_CODE_TIMEOUT:
-                    msg = "Screenshot timeout, please try again later.";
+                    msg = getContext().getString(R.string.dialog_content_screenshotTimeout);
                     break;
                 default:
-                    msg = "Screenshot failed with unknown error, error code:" + errorCode;
+                    msg = String.format(Locale.getDefault(), getContext().getString(R.string.dialog_content_screenshotWithUnknownError), errorCode);
                     break;
             }
             dialogView.setContentMsg(msg);
@@ -382,7 +382,7 @@ public class FloatingBar extends FloatingView {
 
     private void initOcrEngine() {
         if (progressView != null) {
-            progressView.showMessage("Waiting for OCR engine initialize...");
+            progressView.showMessage(getContext().getString(R.string.progress_ocrInitialize));
         }
 
         lastAsyncTask = new OcrInitAsyncTask(getContext(), onOcrInitAsyncTaskCallback).execute();
@@ -392,7 +392,7 @@ public class FloatingBar extends FloatingView {
             new OcrInitAsyncTask.OnOcrInitAsyncTaskCallback() {
                 @Override
                 public void onOcrInitialized() {
-                    showMessage("OCR engine initialized.");
+                    showMessage(getContext().getString(R.string.progerss_ocrInitialized));
                     startTextRecognize();
                 }
 
@@ -413,7 +413,7 @@ public class FloatingBar extends FloatingView {
 
     private void startTextRecognize() {
         if (progressView != null) {
-            progressView.showMessage("Start text recognition...");
+            progressView.showMessage(getContext().getString(R.string.progress_textRecognition));
         }
         ocrRecognizeAsyncTask = new OcrRecognizeAsyncTask(getContext(), currentScreenshot, currentBoxList, onTextRecognizeAsyncTaskCallback);
         ocrRecognizeAsyncTask.execute();

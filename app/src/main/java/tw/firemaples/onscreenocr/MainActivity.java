@@ -61,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
         if (!Settings.canDrawOverlays(MainActivity.this)) {
             Tool.logInfo("Requesting draw overlay permission");
             AlertDialog.Builder ab = new AlertDialog.Builder(this);
-            ab.setTitle("Need permission");
-            ab.setMessage("This app needs [DrawOverlay] Permission for running!");
-            ab.setPositiveButton("Setting", new DialogInterface.OnClickListener() {
+            ab.setTitle(getString(R.string.dialog_title_needPermission));
+            ab.setMessage(getString(R.string.dialog_content_needPermission_drawOverlay));
+            ab.setPositiveButton(getString(R.string.btn_setting), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(intent, REQUEST_CODE_CHECK_DRAW_OVERLAY_PERM);
                 }
             });
-            ab.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            ab.setNegativeButton(getString(R.string.btn_close), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     MainActivity.this.finish();
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             checkExternalStorageReadWritePermission();
         } else {
             Tool.logInfo("Not get draw overlay permission, show error dialog");
-            showErrorDialog("This app needs [DrawOverlay] Permission for running!", new Callback<Void>() {
+            showErrorDialog(getString(R.string.dialog_content_needPermission_drawOverlay), new Callback<Void>() {
                 @Override
                 public boolean onCallback(Void result) {
                     Tool.logInfo("Retry to get draw overlay permission");
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             requestMediaProjection();
         } else {
             Tool.logInfo("Not get read/write external storage permission");
-            showErrorDialog("This app needs [Read/Write External Storage] Permission for running!", new Callback<Void>() {
+            showErrorDialog(getString(R.string.dialog_content_needPermission_rwExternalStorage), new Callback<Void>() {
                 @Override
                 public boolean onCallback(Void result) {
                     Tool.logInfo("Retry to get read/write external storage permission");
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
             startService();
         } else {
             Tool.logInfo("Not get media projection");
-            showErrorDialog("Please submit Screenshot Permission for using this service!", new Callback<Void>() {
+            showErrorDialog(getString(R.string.dialog_content_needPermission_mediaProjection), new Callback<Void>() {
                 @Override
                 public boolean onCallback(Void result) {
                     Tool.logInfo("Retry to get media projection");
@@ -172,15 +172,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void showErrorDialog(String msg, final Callback<Void> onRetryCallback) {
         AlertDialog.Builder ab = new AlertDialog.Builder(this);
-        ab.setTitle("Error");
+        ab.setTitle(R.string.dialog_title_error);
         ab.setMessage(msg);
-        ab.setPositiveButton("Request Again", new DialogInterface.OnClickListener() {
+        ab.setPositiveButton(getString(R.string.btn_requestAgain), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 onRetryCallback.onCallback(null);
             }
         });
-        ab.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+        ab.setNegativeButton(R.string.btn_close, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 MainActivity.this.finish();

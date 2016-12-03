@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Locale;
 
+import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
 
@@ -67,16 +68,24 @@ public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
         }
 
         if (!tessDataDir.exists() && !tessDataDir.mkdirs()) {
-            Tool.logError("Make dir failed: " + tessDataDir.getPath());
-            callback.onError("Make dir failed");
+            Tool.logError("Making folder failed: " + tessDataDir.getAbsolutePath());
+            callback.onError(
+                    String.format(
+                            Locale.getDefault(),
+                            Tool.getContext().getString(R.string.error_makingFolderFailed),
+                            tessDataDir.getAbsolutePath()));
             return false;
         }
 
         File tessDataTempFile = new File(tessDataDir, recognitionLang + ".tmp");
         if (tessDataTempFile.exists()) {
             if (!tessDataTempFile.delete()) {
-                Tool.logError("Delete temp file failed");
-                callback.onError("Delete temp file failed");
+                Tool.logError("Delete temp file failed: " + tessDataTempFile.getAbsolutePath());
+                callback.onError(
+                        String.format(
+                                Locale.getDefault(),
+                                Tool.getContext().getString(R.string.error_deleteTempFileFailed),
+                                tessDataTempFile.getAbsolutePath()));
                 return false;
             }
         }
@@ -84,7 +93,11 @@ public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
         File tessDataFile = new File(tessDataDir, recognitionLang + ".traineddata");
         if (!downloadTrainedata(recognitionLang, tessDataTempFile, tessDataFile)) {
             Tool.logError("Download OCR file failed");
-            callback.onError("Download OCR file failed");
+            callback.onError(
+                    String.format(
+                            Locale.getDefault(),
+                            Tool.getContext().getString(R.string.error_downloadOCRFileFailed),
+                            Tool.getContext().getString(R.string.error_unknownError)));
             return false;
         }
 
@@ -98,7 +111,7 @@ public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
         long totalFileLength = values[1];
 
         String msg = String.format(Locale.getDefault(),
-                "Downloading data for Language %s (%.2fMB/%.2fMB)(%d%%)",
+                Tool.getContext().getString(R.string.dialog_content_progressingDownloadOCRFile),
                 recognitionLangName,
                 (float) currentFileLength / 1024f / 1024f,
                 (float) totalFileLength / 1024f / 1024f,
@@ -140,9 +153,8 @@ public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 Tool.logError("Server returned HTTP " + connection.getResponseCode()
                         + " " + connection.getResponseMessage());
-                Tool.getInstance().showErrorMsg("Server returned HTTP " + connection.getResponseCode()
+                throw new Exception("Server returned HTTP " + connection.getResponseCode()
                         + " " + connection.getResponseMessage());
-                return false;
             }
 
             // this will be useful to display download percentage
@@ -177,8 +189,7 @@ public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
 
             if (!tmpFile.renameTo(destFile)) {
                 Tool.logError("Move file failed");
-                callback.onError("Move file failed");
-                return false;
+                throw new Exception("Move file failed: from:" + tmpFile.getAbsolutePath() + " to:" + destFile.getAbsolutePath());
             }
         } catch (Exception e) {
             Tool.logError(e.toString());

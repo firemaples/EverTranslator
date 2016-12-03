@@ -11,6 +11,8 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -135,7 +137,7 @@ public class OcrResultWindow {
                 context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = ClipData.newPlainText(label, text);
         clipboard.setPrimaryClip(clipData);
-        Tool.getInstance().showMsg("Text ["+text+"] has been copied.");
+        Tool.getInstance().showMsg(String.format(Locale.getDefault(), context.getString(R.string.msg_textHasBeenCopied), text));
     }
 
     public interface OnOcrResultWindowCallback {
