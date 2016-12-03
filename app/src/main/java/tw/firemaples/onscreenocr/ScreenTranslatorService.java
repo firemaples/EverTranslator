@@ -32,6 +32,13 @@ public class ScreenTranslatorService extends Service {
     public ScreenTranslatorService() {
     }
 
+    public static Context getContext() {
+        if (_instance != null) {
+            return _instance;
+        }
+        return null;
+    }
+
     public static boolean isRunning(Context context) {
         return Tool.isServiceRunning(context, ScreenTranslatorService.class);
     }
@@ -59,7 +66,6 @@ public class ScreenTranslatorService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        _instance = this;
         super.onStartCommand(intent, flags, startId);
 
         return START_STICKY;
@@ -68,10 +74,12 @@ public class ScreenTranslatorService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        _instance = this;
+
         startForeground();
-        Tool.init(this);
+        Tool.init();
         screenshotHandler = ScreenshotHandler.getInstance();
-        OcrNTranslateUtils.init(this);
+        OcrNTranslateUtils.init();
 
         floatingBar = new FloatingBar(this);
         floatingBar.attachToWindow();

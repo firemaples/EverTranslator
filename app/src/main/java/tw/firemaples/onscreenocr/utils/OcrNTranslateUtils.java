@@ -1,6 +1,5 @@
 package tw.firemaples.onscreenocr.utils;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -17,6 +16,7 @@ import tw.firemaples.onscreenocr.R;
  * Created by louis1chen on 31/10/2016.
  */
 
+@SuppressWarnings("FieldCanBeLocal")
 public class OcrNTranslateUtils {
     private static OcrNTranslateUtils _instance;
     private static String DEFAULT_OCR_LANG = "eng";
@@ -29,17 +29,15 @@ public class OcrNTranslateUtils {
     public static String KEY_TRANSLATE = "preference_switch_translate";
     public static String KEY_TRANSLATION_TO = "preference_list_translation_to";
 
-    private Context context;
     private TessBaseAPI baseAPI;
 
     private static String[] iso6393Array, microsoftLangArray;
 
-    private OcrNTranslateUtils(Context context) {
-        this.context = context;
+    private OcrNTranslateUtils() {
     }
 
-    public static OcrNTranslateUtils init(Context context) {
-        _instance = new OcrNTranslateUtils(context);
+    public static OcrNTranslateUtils init() {
+        _instance = new OcrNTranslateUtils();
         return _instance;
     }
 
@@ -55,20 +53,20 @@ public class OcrNTranslateUtils {
     }
 
     private SharedPreferences getSharedPreferences() {
-        return PreferenceManager.getDefaultSharedPreferences(context);
+        return PreferenceManager.getDefaultSharedPreferences(Tool.getContext());
     }
 
     /* OCR */
     public File getTessDataDir() {
-        return new File(context.getFilesDir() + File.separator + "tesseract" + File.separator + "tessdata");
+        return new File(Tool.getContext().getFilesDir() + File.separator + "tesseract" + File.separator + "tessdata");
     }
 
     public List<String> getOcrLangList() {
-        return Arrays.asList(context.getResources().getStringArray(R.array.iso6393));
+        return Arrays.asList(Tool.getContext().getResources().getStringArray(R.array.iso6393));
     }
 
     public List<String> getOcrLangDisplayNameList() {
-        return Arrays.asList(context.getResources().getStringArray(R.array.languagenames));
+        return Arrays.asList(Tool.getContext().getResources().getStringArray(R.array.languagenames));
     }
 
     public String getOcrLang() {
@@ -94,12 +92,12 @@ public class OcrNTranslateUtils {
     /* Translate */
     public List<String> getTranslateLangList() {
         return Arrays.asList(
-                context.getResources().getStringArray(R.array.translationtargetiso6391_microsoft));
+                Tool.getContext().getResources().getStringArray(R.array.translationtargetiso6391_microsoft));
     }
 
     public List<String> getTranslateLangDisplayNameList() {
         return Arrays.asList(
-                context.getResources().getStringArray(R.array.translationtargetlanguagenames_microsoft));
+                Tool.getContext().getResources().getStringArray(R.array.translationtargetlanguagenames_microsoft));
     }
 
     public String getTranslateFromLang() {
@@ -128,11 +126,11 @@ public class OcrNTranslateUtils {
     }
 
     public String getMicrosoftLang(String iso6393Lang) {
-        if (context == null) {
+        if (Tool.getContext() == null) {
             return null;
         }
         if (iso6393Array == null) {
-            iso6393Array = context.getResources().getStringArray(R.array.iso6393);
+            iso6393Array = Tool.getContext().getResources().getStringArray(R.array.iso6393);
         }
         int index = -1;
         for (int i = 0, size = iso6393Array.length; i < size; i++) {
@@ -142,7 +140,7 @@ public class OcrNTranslateUtils {
             }
         }
         if (microsoftLangArray == null) {
-            microsoftLangArray = context.getResources().getStringArray(R.array.translationtargetiso6391_microsoft);
+            microsoftLangArray = Tool.getContext().getResources().getStringArray(R.array.translationtargetiso6391_microsoft);
         }
         if (index <= 0 || index >= microsoftLangArray.length) {
             return "en";

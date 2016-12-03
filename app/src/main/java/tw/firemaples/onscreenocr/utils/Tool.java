@@ -9,26 +9,30 @@ import android.util.Log;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.Style;
 
+import tw.firemaples.onscreenocr.ScreenTranslatorService;
+
 /**
  * Created by Louis on 2016/3/1.
  */
 public class Tool {
     private static final String KEY_DEBUG_MODE = "KEY_DEBUG_MODE";
     private static Tool _instance;
-    private Context context;
 
     private static String LOG_TAG = "OnScreenOcr";
 
-    public static void init(Context context) {
-        _instance = new Tool(context);
+    public static void init() {
+        _instance = new Tool();
     }
 
     public static Tool getInstance() {
         return _instance;
     }
 
-    private Tool(Context context) {
-        this.context = context;
+    private Tool() {
+    }
+
+    public static Context getContext() {
+        return ScreenTranslatorService.getContext();
     }
 
     public static boolean isServiceRunning(Context context, Class<?> serviceClass) {
@@ -50,25 +54,25 @@ public class Tool {
     }
 
     public void showMsg(String msg) {
-        if (context == null) {
+        if (getContext() == null) {
             return;
         }
         SuperToast.cancelAllSuperToasts();
-        SuperToast.create(context, msg, SuperToast.Duration.VERY_SHORT,
+        SuperToast.create(getContext(), msg, SuperToast.Duration.VERY_SHORT,
                 Style.getStyle(Style.BLACK, SuperToast.Animations.FADE)).show();
     }
 
     public void showErrorMsg(String msg) {
-        if (context == null) {
+        if (getContext() == null) {
             return;
         }
         SuperToast.cancelAllSuperToasts();
-        SuperToast.create(context, msg, SuperToast.Duration.VERY_SHORT,
+        SuperToast.create(getContext(), msg, SuperToast.Duration.VERY_SHORT,
                 Style.getStyle(Style.RED, SuperToast.Animations.FADE)).show();
     }
 
     private SharedPreferences getSharedPreferences() {
-        return PreferenceManager.getDefaultSharedPreferences(context);
+        return PreferenceManager.getDefaultSharedPreferences(getContext());
     }
 
     public boolean isDebugMode() {
