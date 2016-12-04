@@ -32,7 +32,7 @@ public class WebViewFV extends FloatingView {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.view_webview;
+        return R.layout.view_web_view;
     }
 
     @Override
