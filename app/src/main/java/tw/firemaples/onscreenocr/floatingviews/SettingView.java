@@ -15,9 +15,11 @@ import tw.firemaples.onscreenocr.utils.Tool;
 
 public class SettingView extends FloatingView {
     private Tool tool;
+    private OnSettingChangedCallback callback;
 
-    public SettingView(Context context) {
+    public SettingView(Context context, OnSettingChangedCallback callback) {
         super(context);
+        this.callback = callback;
         tool = Tool.getInstance();
         setViews();
     }
@@ -34,11 +36,14 @@ public class SettingView extends FloatingView {
 
     private void setViews() {
         CheckBox cb_debugMode = (CheckBox) getRootView().findViewById(R.id.cb_debugMode);
+        CheckBox cb_enableTranslation = (CheckBox) getRootView().findViewById(R.id.cb_enableTranslation);
         getRootView().findViewById(R.id.bt_close).setOnClickListener(onClickListener);
 
-        cb_debugMode.setChecked(tool.isDebugMode());
-
         cb_debugMode.setOnCheckedChangeListener(onCheckChangeListener);
+        cb_enableTranslation.setOnCheckedChangeListener(onCheckChangeListener);
+
+        cb_debugMode.setChecked(tool.isDebugMode());
+        cb_enableTranslation.setChecked(tool.isEnableTranslation());
     }
 
     private CompoundButton.OnCheckedChangeListener onCheckChangeListener = new CompoundButton.OnCheckedChangeListener() {
@@ -47,6 +52,11 @@ public class SettingView extends FloatingView {
             int id = buttonView.getId();
             if (id == R.id.cb_debugMode) {
                 tool.setDebugMode(isChecked);
+            } else if (id == R.id.cb_enableTranslation) {
+                tool.setEnableTranslation(isChecked);
+                if (callback != null) {
+                    callback.onEnableTranslationChanged(isChecked);
+                }
             }
         }
     };
@@ -60,4 +70,8 @@ public class SettingView extends FloatingView {
             }
         }
     };
+
+    public interface OnSettingChangedCallback {
+        void onEnableTranslationChanged(boolean enableTranslation);
+    }
 }

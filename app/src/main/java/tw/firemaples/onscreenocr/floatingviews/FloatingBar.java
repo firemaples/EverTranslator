@@ -89,6 +89,7 @@ public class FloatingBar extends FloatingView {
 
         sp_langFrom.setSelection(ocrNTranslateUtils.getOcrLangIndex());
         sp_langTo.setSelection(ocrNTranslateUtils.getTranslateToIndex());
+        sp_langTo.setEnabled(Tool.getInstance().isEnableTranslation());
         sp_langFrom.setOnItemSelectedListener(onItemSelectedListener);
         sp_langTo.setOnItemSelectedListener(onItemSelectedListener);
 
@@ -272,7 +273,7 @@ public class FloatingBar extends FloatingView {
 
         @Override
         public void onSettingItemClick() {
-            new SettingView(getContext()).attachToWindow();
+            new SettingView(getContext(), onSettingChangedCallback).attachToWindow();
         }
 
         @Override
@@ -280,6 +281,13 @@ public class FloatingBar extends FloatingView {
             resetAll();
 
             FloatingBar.this.detachFromWindow();
+        }
+    };
+
+    private SettingView.OnSettingChangedCallback onSettingChangedCallback = new SettingView.OnSettingChangedCallback() {
+        @Override
+        public void onEnableTranslationChanged(boolean enableTranslation) {
+            sp_langTo.setEnabled(enableTranslation);
         }
     };
 
@@ -441,8 +449,15 @@ public class FloatingBar extends FloatingView {
     };
 
     private void startTranslate(List<OcrResult> results) {
-        translateAsyncTask = new TranslateAsyncTask(getContext(), results, onTranslateAsyncTaskCallback);
-        translateAsyncTask.execute();
+        if (Tool.getInstance().isEnableTranslation()) {
+            translateAsyncTask = new TranslateAsyncTask(getContext(), results, onTranslateAsyncTaskCallback);
+            translateAsyncTask.execute();
+        } else {
+            for (OcrResult result : results) {
+                result.setTranslatedText("");
+            }
+            onTranslateAsyncTaskCallback.onTranslateFinished(results);
+        }
     }
 
     private TranslateAsyncTask.OnTranslateAsyncTaskCallback onTranslateAsyncTaskCallback =

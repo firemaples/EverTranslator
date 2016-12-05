@@ -47,37 +47,45 @@
             tools:text="Origin Text"/>
 
         <LinearLayout
+            android:id="@+id/view_translatedTextWrapper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="bottom"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/translated_text"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textStyle="bold"/>
+
+                <ImageView
+                    android:id="@+id/bt_copy_translatedText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:src="@drawable/content_copy"/>
+
+                <ImageView
+                    android:id="@+id/bt_openInBrowser_translatedText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:src="@drawable/earth"/>
+            </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_translatedText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/translated_text"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textStyle="bold"/>
-
-            <ImageView
-                android:id="@+id/bt_copy_translatedText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:src="@drawable/content_copy"/>
-
-            <ImageView
-                android:id="@+id/bt_openInBrowser_translatedText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:src="@drawable/earth"/>
+                tools:text="Translated Text"/>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_translatedText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Translated Text"/>
     </LinearLayout>
 </android.support.v7.widget.CardView>

@@ -112,4 +112,5 @@
     <string name="dialog_title_setting">Setting</string>
     <string name="debug_mode">Debug Mode</string>
     <string name="title_browser">Translation</string>
+    <string name="enable_translation">Enable translation (Need internet)</string>
 </resources>

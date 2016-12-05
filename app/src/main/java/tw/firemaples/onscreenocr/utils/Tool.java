@@ -16,6 +16,7 @@ import tw.firemaples.onscreenocr.ScreenTranslatorService;
  */
 public class Tool {
     private static final String KEY_DEBUG_MODE = "KEY_DEBUG_MODE";
+    private static final String KEY_ENABLE_TRANSLATION = "KEY_ENABLE_TRANSLATION";
     private static Tool _instance;
 
     private static String LOG_TAG = "OnScreenOcr";
@@ -81,6 +82,14 @@ public class Tool {
 
     public void setDebugMode(boolean debugMode) {
         getSharedPreferences().edit().putBoolean(KEY_DEBUG_MODE, debugMode).apply();
+    }
+
+    public boolean isEnableTranslation() {
+        return getSharedPreferences().getBoolean(KEY_ENABLE_TRANSLATION, true);
+    }
+
+    public void setEnableTranslation(boolean enableTranslation) {
+        getSharedPreferences().edit().putBoolean(KEY_ENABLE_TRANSLATION, enableTranslation).apply();
     }
 
     public static String replaceAllLineBreaks(String str, String replaceWith) {

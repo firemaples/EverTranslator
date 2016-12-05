@@ -30,6 +30,7 @@ public class OcrResultWindow {
     private View anchorView;
 
     private View rootView;
+    private View view_translatedTextWrapper;
     private TextView tv_originText, tv_translatedText;
     private FrameLayout.LayoutParams layoutParams;
     private DisplayMetrics metrics;
@@ -45,12 +46,15 @@ public class OcrResultWindow {
 
         rootView = View.inflate(context, R.layout.view_ocr_result_window, null);
 
+        view_translatedTextWrapper = rootView.findViewById(R.id.view_translatedTextWrapper);
         tv_originText = (TextView) rootView.findViewById(R.id.tv_originText);
         tv_translatedText = (TextView) rootView.findViewById(R.id.tv_translatedText);
         rootView.findViewById(R.id.bt_openInBrowser_ocrText).setOnClickListener(onClickListener);
         rootView.findViewById(R.id.bt_openInBrowser_translatedText).setOnClickListener(onClickListener);
         rootView.findViewById(R.id.bt_copy_ocrText).setOnClickListener(onClickListener);
         rootView.findViewById(R.id.bt_copy_translatedText).setOnClickListener(onClickListener);
+
+        view_translatedTextWrapper.setVisibility(Tool.getInstance().isEnableTranslation() ? View.VISIBLE : View.GONE);
 
         layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(MARGIN, MARGIN, MARGIN, MARGIN);
