@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">螢幕翻譯</string>
+
+    <!-- Strings for dialog -->
+    <string name="dialog_title_error">錯誤</string>
+    <string name="dialog_title_ocrFileNotFound">未找到文字辨識檔案</string>
+    <string name="dialog_content_ocrFileNotFound">[%s] 語言的文字辨識檔案尚未下載，您要現在下載嗎？</string>
+    <string name="dialog_title_ocrFileDownloading">檔案下載</string>
+    <string name="dialog_content_ocrFileDownloading">文字辨識檔案下載中</string>
+    <string name="dialog_content_progressingDownloadOCRFile" formatted="false">正在下載 [%s] 文字辨識檔案 (%.2fMB/%.2fMB)(%d%%)</string>
+    <string name="dialog_title_needPermission">權限需求</string>
+    <string name="dialog_content_needPermission_drawOverlay">請允許 [允許在其他應用程式上繪製內容] 功能來使用本程式</string>
+    <string name="dialog_content_needPermission_rwExternalStorage">請允許 [讀寫外部儲存空間] 功能來使用本程式</string>
+    <string name="dialog_content_needPermission_mediaProjection">請允許 [螢幕擷取] 功能來使用本程式</string>
+    <string name="dialog_title_setting">設定</string>
+
+    <!-- Strings for error message -->
+    <string name="error">錯誤</string>
+    <string name="error_makingFolderFailed">建立資料夾失敗： %s</string>
+    <string name="error_deleteTempFileFailed">刪除暫存檔案失敗： %s</string>
+    <string name="error_downloadOCRFileFailed">下載文字辨識檔案失敗： %s</string>
+    <string name="error_noOCRResultFound">文字辨識程式未辨識出任何內容</string>
+    <string name="error_noMediaProjectionFound">請允許 [螢幕錄影] 功能來使用本程式</string>
+    <string name="dialog_content_screenshotTimeout">取得螢幕截圖超時，請稍候重試！</string>
+    <string name="dialog_content_screenshotWithUnknownError">取得螢幕截圖失敗，錯誤代號： %d</string>
+
+    <!-- Strings for progress state -->
+    <string name="progress_ocrInitialize">文字辨識引擎初始化中，請稍候...</string>
+    <string name="progress_ocrInitialized">文字辨識引擎初始化完成</string>
+    <string name="progress_textRecognition">開始進行文字辨識...</string>
+    <string name="progress_ocrInitializing">文字辨識引擎初始化中</string>
+    <string name="progress_textRecognizing">文字辨識中...</string>
+    <string name="progress_translating">開始進行翻譯...</string>
+
+    <!-- Strings for UI -->
+    <string name="msg_textHasBeenCopied">文字 [%s] 已被複製到剪貼簿</string>
+    <string name="btn_download">下載</string>
+    <string name="btn_setting">設定</string>
+    <string name="btn_close">關閉</string>
+    <string name="btn_requestAgain">再次請求</string>
+    <string name="ocr_text">原始內容</string>
+    <string name="notification_contentText">點擊開啟浮動視窗</string>
+    <string name="translated_text">翻譯結果</string>
+    <string name="debug_mode">除錯模式</string>
+    <string name="title_browser">翻譯</string>
+    <string name="enable_translation">開啟翻譯功能 (需要使用網路)</string>
+    <string name="menu_close">關閉程式</string>
+    <string name="menu_hide">隱藏</string>
+    <string name="menu_setting">設定</string>
+</resources>

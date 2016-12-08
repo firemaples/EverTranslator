@@ -1,116 +1,51 @@
 <resources>
-    <string name="app_name">OnScreenOCR</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="progressProcessingDefaultMessage">Loading...</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="app_name">On Screen Translator</string>
 
-    <!-- Strings related to Settings -->
-
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
-    <string name="pref_header_text_recognition_translation">Text recognition &amp; translation</string>
-    <string name="pref_category_title_text_recognition">Text recognition</string>
-    <string name="pref_category_title_translation">Translation</string>
-    <string name="pref_title_text_recognition_language">Text recognition language</string>
-    <string name="pref_title_installed_recognition_languages">Installed recognition languages</string>
-    <string name="pref_title_translation_to">Translation to</string>
-    <string name="pref_title_ocr_engine">OCR engine</string>
-    <string name="tv_ocr_recognition_text">OCR recognition text:</string>
-    <string name="bt_translate_again">Translate again</string>
-    <string name="tv_translated_text">Translated Text</string>
-    <string name="bt_oriTextVocal">vocal</string>
-    <string name="bt_oriTextDict">Dict</string>
-    <string name="alert_title_reselectAgain">Reselect again</string>
-    <string name="alert_msg_reselect_again">Do you want to reselect translation area again?</string>
-    <string name="confirm">Confirm</string>
+    <!-- Strings for dialog -->
+    <string name="dialog_title_error">ERROR</string>
     <string name="dialog_title_ocrFileNotFound">OCR file not found</string>
     <string name="dialog_content_ocrFileNotFound">The OCR file of [%s] has not been downloaded, do you want to download it now?</string>
-    <string name="btn_download">Download</string>
-    <string name="dialog_title_ocrFileDownloading">File downloader</string>
+    <string name="dialog_title_ocrFileDownloading">File download</string>
     <string name="dialog_content_ocrFileDownloading">OCR file downloading</string>
-    <string name="dialog_title_error">ERROR</string>
-    <string name="dialog_content_screenshotTimeout">Screenshot timeout, please try again later.</string>
-    <string name="dialog_content_screenshotWithUnknownError">Screenshot failed with unknown error, error code: %d</string>
-    <string name="progress_ocrInitialize">Waiting for OCR engine initialize...</string>
-    <string name="progerss_ocrInitialized">OCR engine initialized.</string>
-    <string name="progress_textRecognition">Start text recognition...</string>
+    <string name="dialog_content_progressingDownloadOCRFile" formatted="false">Downloading OCR file for Language %s (%.2fMB/%.2fMB)(%d%%)</string>
+    <string name="dialog_title_needPermission">Need permission</string>
+    <string name="dialog_content_needPermission_drawOverlay">This app needs [DrawOverlay] permission for running!</string>
+    <string name="dialog_content_needPermission_rwExternalStorage">This app needs [Read/Write External Storage] Permission for running!</string>
+    <string name="dialog_content_needPermission_mediaProjection">Please submit media projection for using this service!</string>
+    <string name="dialog_title_setting">Setting</string>
+
+    <!-- Strings for error message -->
+    <string name="error">ERROR</string>
     <string name="error_makingFolderFailed">Making folder failed: %s</string>
     <string name="error_deleteTempFileFailed">Delete temp file failed: %s</string>
     <string name="error_downloadOCRFileFailed">Download OCR file failed: %s</string>
-    <string name="error_unknownError">Unknown error</string>
-    <string name="dialog_content_progressingDownloadOCRFile" formatted="false">Downloading OCR file for Language %s (%.2fMB/%.2fMB)(%d%%)</string>
-    <string name="progress_ocrInitializing">OCR engine initializing...</string>
-    <string name="progress_textRecognizing">Text recognizing...</string>
+    <string name="error_unknownError" translatable="false">Unknown error</string>
     <string name="error_noOCRResultFound">No OCR result found</string>
     <string name="error_noMediaProjectionFound">Please submit media projection for using this service!</string>
+    <string name="dialog_content_screenshotTimeout">Screenshot timeout, please try again later.</string>
+    <string name="dialog_content_screenshotWithUnknownError">Screenshot failed with unknown error, error code: %d</string>
+
+    <!-- Strings for progress state -->
+    <string name="progress_ocrInitialize">Waiting for OCR engine initialize...</string>
+    <string name="progress_ocrInitialized">OCR engine initialized.</string>
+    <string name="progress_textRecognition">Start text recognition...</string>
+    <string name="progress_ocrInitializing">OCR engine initializing...</string>
+    <string name="progress_textRecognizing">Text recognizing...</string>
     <string name="progress_translating">Starting Translation...</string>
-    <string name="error">ERROR</string>
+
+    <!-- Strings for UI -->
     <string name="msg_textHasBeenCopied">Text [%s] has been copied.</string>
-    <string name="dialog_title_needPermission">Need permission</string>
-    <string name="dialog_content_needPermission_drawOverlay">This app needs [DrawOverlay] permission for running!</string>
+    <string name="btn_download">Download</string>
     <string name="btn_setting">Setting</string>
     <string name="btn_close">Close</string>
-    <string name="dialog_content_needPermission_rwExternalStorage">This app needs [Read/Write External Storage] Permission for running!</string>
-    <string name="dialog_content_needPermission_mediaProjection">Please submit media projection for using this service!</string>
     <string name="btn_requestAgain">Request Again</string>
-    <string name="notification_contentText">Click to show floating bar</string>
     <string name="ocr_text">OCR text:</string>
+    <string name="notification_contentText">Click to show floating bar</string>
     <string name="translated_text">Translated text</string>
-    <string name="dialog_title_setting">Setting</string>
     <string name="debug_mode">Debug Mode</string>
     <string name="title_browser">Translation</string>
     <string name="enable_translation">Enable translation (Need internet)</string>
+    <string name="menu_setting">Setting</string>
+    <string name="menu_hide">Hide</string>
+    <string name="menu_close">Close app</string>
 </resources>

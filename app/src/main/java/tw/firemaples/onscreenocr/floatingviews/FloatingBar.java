@@ -400,7 +400,7 @@ public class FloatingBar extends FloatingView {
             new OcrInitAsyncTask.OnOcrInitAsyncTaskCallback() {
                 @Override
                 public void onOcrInitialized() {
-                    showMessage(getContext().getString(R.string.progerss_ocrInitialized));
+                    showMessage(getContext().getString(R.string.progress_ocrInitialized));
                     startTextRecognize();
                 }
 
