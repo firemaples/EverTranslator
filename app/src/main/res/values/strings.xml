@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">On Screen Translator</string>
+    <string name="app_name">ScreenTranslator</string>
 
     <!-- Strings for dialog -->
     <string name="dialog_title_error">ERROR</string>
