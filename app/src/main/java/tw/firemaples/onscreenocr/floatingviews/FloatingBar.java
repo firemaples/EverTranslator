@@ -145,7 +145,7 @@ public class FloatingBar extends FloatingView {
             dialogView.reset();
             dialogView.setType(DialogView.Type.CANCEL_ONLY);
             dialogView.setTitle(getContext().getString(R.string.dialog_title_ocrFileDownloading));
-            dialogView.setContentMsg(getContext().getString(R.string.dialog_content_ocrFileDownloading));
+            dialogView.setContentMsg(getContext().getString(R.string.dialog_content_ocrFileDownloadStarting));
             dialogView.attachToWindow();
             dialogView.setCallback(new DialogView.OnDialogViewCallback() {
                 @Override
