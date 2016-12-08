@@ -263,17 +263,13 @@ public class FloatingBar extends FloatingView {
 
     private FloatingBarMenu.OnFloatingBarMenuCallback onFloatingBarMenuCallback = new FloatingBarMenu.OnFloatingBarMenuCallback() {
         @Override
-        public void onCloseItemClick() {
-            resetAll();
-
-            progressView = null;
-
-            ScreenTranslatorService.stop(true);
+        public void onSettingItemClick() {
+            new SettingView(getContext(), onSettingChangedCallback).attachToWindow();
         }
 
         @Override
-        public void onSettingItemClick() {
-            new SettingView(getContext(), onSettingChangedCallback).attachToWindow();
+        public void onThanksItemClick() {
+            new ThanksView(getContext()).attachToWindow();
         }
 
         @Override
@@ -281,6 +277,15 @@ public class FloatingBar extends FloatingView {
             resetAll();
 
             FloatingBar.this.detachFromWindow();
+        }
+
+        @Override
+        public void onCloseItemClick() {
+            resetAll();
+
+            progressView = null;
+
+            ScreenTranslatorService.stop(true);
         }
     };
 

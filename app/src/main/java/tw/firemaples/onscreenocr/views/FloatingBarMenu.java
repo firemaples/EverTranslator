@@ -27,6 +27,7 @@ public class FloatingBarMenu {
         popupMenu.show();
     }
 
+    @SuppressWarnings("FieldCanBeLocal")
     private PopupMenu.OnMenuItemClickListener onMenuItemClickListener = new PopupMenu.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
@@ -40,9 +41,13 @@ public class FloatingBarMenu {
                 if (callback != null) {
                     callback.onSettingItemClick();
                 }
-            }else if(itemId == R.id.menu_hide){
-                if(callback != null){
+            } else if (itemId == R.id.menu_hide) {
+                if (callback != null) {
                     callback.onHideItemClick();
+                }
+            } else if (itemId == R.id.menu_thanks) {
+                if (callback != null) {
+                    callback.onThanksItemClick();
                 }
             }
             return false;
@@ -50,10 +55,12 @@ public class FloatingBarMenu {
     };
 
     public interface OnFloatingBarMenuCallback {
-        void onCloseItemClick();
-
         void onSettingItemClick();
 
+        void onThanksItemClick();
+
         void onHideItemClick();
+
+        void onCloseItemClick();
     }
 }

@@ -2,7 +2,9 @@ package tw.firemaples.onscreenocr.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -94,5 +96,14 @@ public class Tool {
 
     public static String replaceAllLineBreaks(String str, String replaceWith) {
         return str.replace("\r\n", replaceWith).replace("\r", replaceWith).replace("\n", replaceWith);
+    }
+
+    public void openBrowser(String url) {
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            getContext().startActivity(intent);
+        }
     }
 }

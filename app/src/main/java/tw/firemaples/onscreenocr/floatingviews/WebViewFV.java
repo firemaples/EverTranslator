@@ -2,8 +2,6 @@ package tw.firemaples.onscreenocr.floatingviews;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebSettings;
@@ -13,6 +11,7 @@ import android.webkit.WebViewClient;
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
+import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.utils.WebViewService;
 
 /**
@@ -56,22 +55,13 @@ public class WebViewFV extends FloatingView {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.bt_openBrowser) {
-                openBrowser(url);
+                Tool.getInstance().openBrowser(url);
                 callback.onOpenBrowserClicked();
             } else if (id == R.id.bt_close) {
                 detachFromWindow();
             }
         }
     };
-
-    private void openBrowser(String url) {
-        Uri uri = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            getContext().startActivity(intent);
-        }
-    }
 
     public void setContent(String text) {
         String lang = Locale.getDefault().getLanguage();

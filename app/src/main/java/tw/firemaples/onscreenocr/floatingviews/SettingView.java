@@ -1,8 +1,8 @@
 package tw.firemaples.onscreenocr.floatingviews;
 
 import android.content.Context;
-import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
@@ -30,8 +30,8 @@ public class SettingView extends FloatingView {
     }
 
     @Override
-    protected int getLayoutGravity() {
-        return Gravity.CENTER;
+    protected int getLayoutSize() {
+        return WindowManager.LayoutParams.MATCH_PARENT;
     }
 
     private void setViews() {

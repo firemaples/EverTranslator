@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:tools="http://schemas.android.com/tools"
+       tools:showIn="@layout/view_thanks"
+       tools:ignore="HardcodedText">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/thanksPage.itemTitle"
+            android:text="rmtheis/tess-two"/>
+
+        <TextView
+            android:id="@+id/tv_link1"
+            style="@style/thanksPage.itemLink"
+            android:text="https://github.com/rmtheis/tess-two"/>
+
+        <TextView
+            style="@style/thanksPage.itemTitle"
+            android:layout_marginTop="12dp"
+            android:text="JohnPersano/SuperToasts"/>
+
+        <TextView
+            android:id="@+id/tv_link2"
+            style="@style/thanksPage.itemLink"
+            android:text="https://github.com/JohnPersano/SuperToasts"/>
+
+        <TextView
+            style="@style/thanksPage.itemTitle"
+            android:layout_marginTop="12dp"
+            android:text="crashlytics"/>
+
+        <TextView
+            android:id="@+id/tv_link3"
+            style="@style/thanksPage.itemLink"
+            android:text="http://try.crashlytics.com/"/>
+
+        <TextView
+            android:id="@+id/tv_link4"
+            style="@style/thanksPage.itemLink"
+            android:layout_marginTop="12dp"
+            android:text="http://binwaheed.blogspot.tw/2015/03/how-to-correctly-take-screenshot-using.html"/>
+
+    </LinearLayout>
+
+</merge>
