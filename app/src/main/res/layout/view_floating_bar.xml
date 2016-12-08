@@ -35,7 +35,7 @@
             android:layout_alignTop="@+id/bt_selectArea"
             android:clickable="true"
             android:focusable="true"
-            android:padding="6dp"
+            android:padding="2dp"
             android:src="@drawable/menu"/>
 
         <ImageButton
