@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">螢幕翻譯</string>
+    <string name="app_name">隨處翻譯</string>
 
     <!-- Strings for dialog -->
     <string name="dialog_title_error">錯誤</string>
