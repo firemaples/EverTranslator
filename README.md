@@ -16,9 +16,16 @@ Translate any text on screen, even in games!
 
 **If you get any crash, please click the report button instead of close button, thanks! **
 
-#Thanks for
+# Project dependency
+firemaples/microsoft-translator-java-api
+https://github.com/firemaples/microsoft-translator-java-api
+
+# Thanks for
 rmtheis/tess-two
 https://github.com/rmtheis/tess-two
+
+boatmeme/microsoft-translator-java-api
+https://github.com/boatmeme/microsoft-translator-java-api
 
 JohnPersano/SuperToasts
 https://github.com/JohnPersano/SuperToasts
