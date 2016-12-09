@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by firem_000 on 2016/3/6.
+ * Created by firemaples on 2016/3/6.
  */
 public class OcrResult {
 

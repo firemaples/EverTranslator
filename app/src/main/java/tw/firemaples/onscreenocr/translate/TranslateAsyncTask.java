@@ -17,7 +17,7 @@ import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
- * Created by firem_000 on 2016/3/7.
+ * Created by firemaples on 2016/3/7.
  */
 public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
 
@@ -55,8 +55,7 @@ public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        Translate.setClientId(KeyId.MICROSOFT_TRANSLATE_CLIENT_ID);
-        Translate.setClientSecret(KeyId.MICROSOFT_TRANSLATE_CLIENT_SECRET);
+        Translate.setSubscriptionKey(KeyId.MICROSOFT_TRANSLATE_SUBSCRIPTION_KEY);
 
         for (OcrResult ocrResult : ocrResults) {
             if (translate) {

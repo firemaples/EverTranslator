@@ -36,16 +36,17 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+//    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:support-v4:23.2.1'
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
     compile 'com.rmtheis:tess-two:6.1.1'
     compile 'com.github.johnpersano:supertoasts:1.3.4@aar'
-    compile files('libs/microsoft-translator-java-api-0.6.2-jar-with-dependencies.jar')
+//    compile files('libs/microsoft-translator-java-api-0.6.2-jar-with-dependencies.jar')
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
     compile 'com.android.support:cardview-v7:23.0.0'
+    compile project(':microsoft-translator-java-api')
 }

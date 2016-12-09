@@ -30,7 +30,7 @@ import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
- * Created by firem_000 on 2016/3/4.
+ * Created by firemaples on 2016/3/4.
  */
 public class ScreenshotHandler {
     private static ScreenshotHandler _instance;

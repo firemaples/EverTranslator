@@ -20,7 +20,7 @@ import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
- * Created by firem_000 on 2016/3/2.
+ * Created by firemaples on 2016/3/2.
  */
 public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResult>> {
 
