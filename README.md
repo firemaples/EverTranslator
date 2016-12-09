@@ -1,6 +1,7 @@
 
 # AnyTranslator
 Translate any text on screen, even in games!
+
 [![Get it on google play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=tw.firemaples.onscreenocr)
 
 # Feature
