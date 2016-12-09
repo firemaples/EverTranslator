@@ -15,7 +15,7 @@ import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.utils.WebViewService;
 
 /**
- * Created by louis1chen on 01/12/2016.
+ * Created by firemaples on 01/12/2016.
  */
 
 public class WebViewFV extends FloatingView {

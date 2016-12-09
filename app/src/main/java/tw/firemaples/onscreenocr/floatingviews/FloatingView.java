@@ -10,7 +10,7 @@ import android.view.WindowManager;
 import static android.content.Context.WINDOW_SERVICE;
 
 /**
- * Created by louis1chen on 23/10/2016.
+ * Created by firemaples on 23/10/2016.
  */
 
 public abstract class FloatingView {

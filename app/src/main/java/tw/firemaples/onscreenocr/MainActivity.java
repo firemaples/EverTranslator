@@ -2,6 +2,7 @@ package tw.firemaples.onscreenocr;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,6 +31,18 @@ public class MainActivity extends AppCompatActivity {
     private final int REQUEST_CODE_CHECK_DRAW_OVERLAY_PERM = 101;
     private final int REQUEST_CODE_REQUEST_EXTERNAL_STORAGE_READ_WRITE = 102;
     private final int REQUEST_CODE_REQUEST_MEDIA_PROJECTION_RESULT = 103;
+
+    public static Intent getStarterIntent(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        if (!(context instanceof Activity)) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        return intent;
+    }
+
+    public static void start(Context context) {
+        context.startActivity(getStarterIntent(context));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

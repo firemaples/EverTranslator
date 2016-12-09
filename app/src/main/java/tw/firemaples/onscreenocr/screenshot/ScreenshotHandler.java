@@ -56,6 +56,10 @@ public class ScreenshotHandler {
         return _instance;
     }
 
+    public static boolean isInitialized() {
+        return _instance != null && _instance.isGetUserPermission();
+    }
+
     public static ScreenshotHandler getInstance() {
         if (_instance == null) {
             _instance = new ScreenshotHandler();
@@ -72,7 +76,7 @@ public class ScreenshotHandler {
     }
 
     public boolean isGetUserPermission() {
-        return isGetUserPermission;
+        return isGetUserPermission && mediaProjectionIntent != null;
     }
 
     public void getUserPermission() {

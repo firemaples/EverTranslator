@@ -45,7 +45,7 @@
     <string name="debug_mode">除錯模式</string>
     <string name="title_browser">翻譯</string>
     <string name="enable_translation">開啟翻譯功能 (需要使用網路)</string>
-    <string name="menu_close">關閉程式</string>
+    <string name="menu_exit">退出</string>
     <string name="menu_hide">隱藏</string>
     <string name="menu_setting">設定</string>
     <string name="menu_thanks">特別感謝</string>

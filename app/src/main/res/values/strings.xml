@@ -47,6 +47,6 @@
     <string name="enable_translation">Enable translation (Need internet)</string>
     <string name="menu_setting">Setting</string>
     <string name="menu_hide">Hide</string>
-    <string name="menu_close">Close app</string>
+    <string name="menu_exit">Exit</string>
     <string name="menu_thanks">Thanks for</string>
 </resources>

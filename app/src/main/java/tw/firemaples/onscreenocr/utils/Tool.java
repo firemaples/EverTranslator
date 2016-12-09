@@ -14,7 +14,7 @@ import com.github.johnpersano.supertoasts.util.Style;
 import tw.firemaples.onscreenocr.ScreenTranslatorService;
 
 /**
- * Created by Louis on 2016/3/1.
+ * Created by firemaples on 2016/3/1.
  */
 public class Tool {
     private static final String KEY_DEBUG_MODE = "KEY_DEBUG_MODE";

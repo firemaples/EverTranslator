@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import tw.firemaples.onscreenocr.MainActivity;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ScreenTranslatorService;
 import tw.firemaples.onscreenocr.views.AreaSelectionView;
@@ -29,7 +30,7 @@ import tw.firemaples.onscreenocr.views.FloatingBarMenu;
 import tw.firemaples.onscreenocr.views.OcrResultWindow;
 
 /**
- * Created by louis1chen on 21/10/2016.
+ * Created by firemaples on 21/10/2016.
  */
 
 public class FloatingBar extends FloatingView {
@@ -236,12 +237,17 @@ public class FloatingBar extends FloatingView {
             if (id == R.id.view_menu) {
                 new FloatingBarMenu(getContext(), view_menu, onFloatingBarMenuCallback).show();
             } else if (id == R.id.bt_selectArea) {
-                drawAreaView = new DrawAreaView(getContext());
-                drawAreaView.attachToWindow();
-                FloatingBar.this.detachFromWindow();
-                FloatingBar.this.attachToWindow();
-                syncBtnState(BtnState.AreaSelecting);
-                drawAreaView.getAreaSelectionView().setCallback(onAreaSelectionViewCallback);
+                if (ScreenshotHandler.isInitialized()) {
+                    drawAreaView = new DrawAreaView(getContext());
+                    drawAreaView.attachToWindow();
+                    FloatingBar.this.detachFromWindow();
+                    FloatingBar.this.attachToWindow();
+                    syncBtnState(BtnState.AreaSelecting);
+                    drawAreaView.getAreaSelectionView().setCallback(onAreaSelectionViewCallback);
+                } else {
+                    MainActivity.start(getContext());
+                    ScreenTranslatorService.stop(true);
+                }
             } else if (id == R.id.bt_translation) {
                 if (OcrDownloadAsyncTask.checkOcrFiles(OcrNTranslateUtils.getInstance().getOcrLang())) {
                     currentBoxList.addAll(drawAreaView.getAreaSelectionView().getBoxList());

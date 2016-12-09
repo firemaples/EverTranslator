@@ -3,7 +3,7 @@ package tw.firemaples.onscreenocr.utils;
 import android.support.annotation.NonNull;
 
 /**
- * Created by louis1chen on 30/11/2016.
+ * Created by firemaples on 30/11/2016.
  */
 
 public class WebViewService {

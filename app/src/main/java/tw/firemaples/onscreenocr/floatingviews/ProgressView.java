@@ -8,7 +8,7 @@ import android.widget.TextView;
 import tw.firemaples.onscreenocr.R;
 
 /**
- * Created by louis1chen on 31/10/2016.
+ * Created by firemaples on 31/10/2016.
  */
 
 public class ProgressView extends FloatingView {

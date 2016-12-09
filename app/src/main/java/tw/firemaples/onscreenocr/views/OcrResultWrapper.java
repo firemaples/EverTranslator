@@ -14,7 +14,7 @@ import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
- * Created by louis1chen on 29/11/2016.
+ * Created by firemaples on 29/11/2016.
  */
 
 public class OcrResultWrapper extends FrameLayout {

@@ -12,7 +12,7 @@ import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
- * Created by louis1chen on 08/12/2016.
+ * Created by firemaples on 08/12/2016.
  */
 
 public class ThanksView extends FloatingView {

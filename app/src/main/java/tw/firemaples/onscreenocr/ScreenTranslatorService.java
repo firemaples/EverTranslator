@@ -15,7 +15,7 @@ import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
- * Created by louis1chen on 21/10/2016.
+ * Created by firemaples on 21/10/2016.
  */
 
 public class ScreenTranslatorService extends Service {
@@ -30,6 +30,7 @@ public class ScreenTranslatorService extends Service {
     private boolean dismissNotify = true;
 
     public ScreenTranslatorService() {
+        _instance = this;
     }
 
     public static Context getContext() {
@@ -74,7 +75,6 @@ public class ScreenTranslatorService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        _instance = this;
 
         startForeground();
         Tool.init();

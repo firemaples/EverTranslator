@@ -19,7 +19,7 @@ import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.utils.ViewPreparedWaiter;
 
 /**
- * Created by louis1chen on 29/11/2016.
+ * Created by firemaples on 29/11/2016.
  */
 
 public class OcrResultWindow {

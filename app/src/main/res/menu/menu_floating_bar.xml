@@ -12,5 +12,5 @@
         android:title="@string/menu_hide"/>
     <item
         android:id="@+id/menu_close"
-        android:title="@string/menu_close"/>
+        android:title="@string/menu_exit"/>
 </menu>

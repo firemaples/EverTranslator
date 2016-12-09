@@ -9,7 +9,7 @@ import android.widget.TextView;
 import tw.firemaples.onscreenocr.R;
 
 /**
- * Created by louis1chen on 22/11/2016.
+ * Created by firemaples on 22/11/2016.
  */
 
 public class DialogView extends FloatingView {

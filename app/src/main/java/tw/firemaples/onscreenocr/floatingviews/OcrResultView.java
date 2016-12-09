@@ -17,7 +17,7 @@ import tw.firemaples.onscreenocr.views.OcrResultWindow;
 import tw.firemaples.onscreenocr.views.OcrResultWrapper;
 
 /**
- * Created by louis1chen on 01/11/2016.
+ * Created by firemaples on 01/11/2016.
  */
 
 public class OcrResultView extends FloatingView {

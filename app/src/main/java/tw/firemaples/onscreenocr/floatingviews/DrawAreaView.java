@@ -8,7 +8,7 @@ import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.views.AreaSelectionView;
 
 /**
- * Created by louis1chen on 21/10/2016.
+ * Created by firemaples on 21/10/2016.
  */
 
 public class DrawAreaView extends FloatingView {
