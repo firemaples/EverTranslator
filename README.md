@@ -1,10 +1,9 @@
 
 # AnyTranslator
 <img src="OnScreenTranslator/mipmap-hdpi/icon.png"></img>
+[![Get it on google play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=tw.firemaples.onscreenocr)
 
 Translate any text on screen, even in games!
-
-[![Get it on google play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=tw.firemaples.onscreenocr)
 
 <img width="200px" src="OnScreenTranslator/PlayStore/device-2016-12-08-204259.png"></img>
 <img width="200px" src="OnScreenTranslator/PlayStore/device-2016-12-08-205120.png"></img>
