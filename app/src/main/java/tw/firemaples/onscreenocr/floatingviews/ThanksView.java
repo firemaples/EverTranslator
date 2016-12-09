@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
@@ -16,6 +17,7 @@ import tw.firemaples.onscreenocr.utils.Tool;
  */
 
 public class ThanksView extends FloatingView {
+    private int[] linkResArray = new int[]{R.id.tv_link1, R.id.tv_link2, R.id.tv_link3, R.id.tv_link4, R.id.tv_link5};
 
     public ThanksView(Context context) {
         super(context);
@@ -34,11 +36,11 @@ public class ThanksView extends FloatingView {
 
     private void setViews(View rootView) {
         rootView.findViewById(R.id.bt_dialogClose).setOnClickListener(onClickListener);
+        Arrays.sort(linkResArray);
 
-        setupLinkText(R.id.tv_link1);
-        setupLinkText(R.id.tv_link2);
-        setupLinkText(R.id.tv_link3);
-        setupLinkText(R.id.tv_link4);
+        for (int linkRes : linkResArray) {
+            setupLinkText(linkRes);
+        }
     }
 
     private void setupLinkText(int textViewRes) {
@@ -55,7 +57,7 @@ public class ThanksView extends FloatingView {
             int id = v.getId();
             if (id == R.id.bt_dialogClose) {
                 ThanksView.this.detachFromWindow();
-            } else if (id == R.id.tv_link1 || id == R.id.tv_link2 || id == R.id.tv_link3 || id == R.id.tv_link4) {
+            } else if (Arrays.binarySearch(linkResArray, id) >= 0) {
                 String url = (String) v.getTag();
                 Tool.getInstance().openBrowser(url);
                 ThanksView.this.detachFromWindow();
