@@ -275,7 +275,7 @@ public class FloatingBar extends FloatingView {
 
         @Override
         public void onThanksItemClick() {
-            new ThanksView(getContext()).attachToWindow();
+            new AboutView(getContext()).attachToWindow();
         }
 
         @Override

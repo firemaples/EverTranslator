@@ -45,7 +45,7 @@ public class FloatingBarMenu {
                 if (callback != null) {
                     callback.onHideItemClick();
                 }
-            } else if (itemId == R.id.menu_thanks) {
+            } else if (itemId == R.id.menu_about) {
                 if (callback != null) {
                     callback.onThanksItemClick();
                 }

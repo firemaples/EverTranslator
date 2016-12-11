@@ -16,17 +16,17 @@ import tw.firemaples.onscreenocr.utils.Tool;
  * Created by firemaples on 08/12/2016.
  */
 
-public class ThanksView extends FloatingView {
-    private int[] linkResArray = new int[]{R.id.tv_link1, R.id.tv_link2, R.id.tv_link3, R.id.tv_link4, R.id.tv_link5};
+public class AboutView extends FloatingView {
+    private int[] linkResArray = new int[]{R.id.tv_link1, R.id.tv_link2, R.id.tv_link3, R.id.tv_link4, R.id.tv_link5, R.id.tv_link6};
 
-    public ThanksView(Context context) {
+    public AboutView(Context context) {
         super(context);
         setViews(getRootView());
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.view_thanks;
+        return R.layout.view_about;
     }
 
     @Override
@@ -56,11 +56,11 @@ public class ThanksView extends FloatingView {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.bt_dialogClose) {
-                ThanksView.this.detachFromWindow();
+                AboutView.this.detachFromWindow();
             } else if (Arrays.binarySearch(linkResArray, id) >= 0) {
                 String url = (String) v.getTag();
                 Tool.getInstance().openBrowser(url);
-                ThanksView.this.detachFromWindow();
+                AboutView.this.detachFromWindow();
             }
         }
     };

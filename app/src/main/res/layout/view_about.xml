@@ -27,7 +27,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Thanks for"
+                    android:text="@string/title_about"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
                 <ScrollView
@@ -35,7 +35,7 @@
                     android:layout_height="300dp"
                     android:layout_marginTop="20dp">
 
-                    <include layout="@layout/content_thanks"/>
+                    <include layout="@layout/content_about"/>
                 </ScrollView>
 
             </LinearLayout>

@@ -24,11 +24,17 @@
 
     <style name="thanksPage"/>
 
+    <style name="thanksPage.title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Large</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="thanksPage.itemTitle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="thanksPage.itemLink">
