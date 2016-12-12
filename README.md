@@ -5,6 +5,8 @@
 
 Translate any text on screen, even in games!
 
+[![Youtube intro video](https://img.youtube.com/vi/Y0OjF-luuDE/0.jpg)](https://www.youtube.com/watch?v=Y0OjF-luuDE)
+
 <img width="200px" src="OnScreenTranslator/PlayStore/device-2016-12-08-204259.png"></img>
 <img width="200px" src="OnScreenTranslator/PlayStore/device-2016-12-08-205120.png"></img>
 <img width="200px" src="OnScreenTranslator/PlayStore/device-2016-12-08-205741.png"></img>
