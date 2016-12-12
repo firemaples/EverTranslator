@@ -67,7 +67,7 @@ public class OcrResultWindow {
 
     public void setOcrResult(OcrResult ocrResult) {
         this.ocrResult = ocrResult;
-        tv_originText.setText(Tool.replaceAllLineBreaks(ocrResult.getText(), " "));
+        tv_originText.setText(ocrResult.getText());
         tv_translatedText.setText(ocrResult.getTranslatedText());
     }
 

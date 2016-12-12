@@ -66,7 +66,11 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
             baseAPI.setRectangle(rect);
             OcrResult ocrResult = new OcrResult();
             ocrResult.setRect(rect);
-            ocrResult.setText(baseAPI.getUTF8Text());
+            String resultText = baseAPI.getUTF8Text();
+            if (Tool.getInstance().removeLineBreaks()) {
+                resultText = Tool.replaceAllLineBreaks(resultText, " ");
+            }
+            ocrResult.setText(resultText);
             ocrResult.setBoxRects(baseAPI.getRegions().getBoxRects());
             ocrResult.setResultIterator(baseAPI.getResultIterator());
 

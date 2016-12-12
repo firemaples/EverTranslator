@@ -38,15 +38,18 @@ public class SettingView extends FloatingView {
         CheckBox cb_debugMode = (CheckBox) getRootView().findViewById(R.id.cb_debugMode);
         CheckBox cb_enableTranslation = (CheckBox) getRootView().findViewById(R.id.cb_enableTranslation);
         CheckBox cb_startingWithSelectionMode = (CheckBox) getRootView().findViewById(R.id.cb_startingWithSelectionMode);
+        CheckBox cb_removeLineBreaks = (CheckBox) getRootView().findViewById(R.id.cb_removeLineBreaks);
         getRootView().findViewById(R.id.bt_close).setOnClickListener(onClickListener);
 
         cb_debugMode.setOnCheckedChangeListener(onCheckChangeListener);
         cb_enableTranslation.setOnCheckedChangeListener(onCheckChangeListener);
         cb_startingWithSelectionMode.setOnCheckedChangeListener(onCheckChangeListener);
+        cb_removeLineBreaks.setOnCheckedChangeListener(onCheckChangeListener);
 
         cb_debugMode.setChecked(tool.isDebugMode());
         cb_enableTranslation.setChecked(tool.isEnableTranslation());
         cb_startingWithSelectionMode.setChecked(tool.startingWithSelectionMode());
+        cb_removeLineBreaks.setChecked(tool.removeLineBreaks());
     }
 
     private CompoundButton.OnCheckedChangeListener onCheckChangeListener = new CompoundButton.OnCheckedChangeListener() {
@@ -62,6 +65,8 @@ public class SettingView extends FloatingView {
                 }
             } else if (id == R.id.cb_startingWithSelectionMode) {
                 tool.setStartingWithSelectionMode(isChecked);
+            } else if (id == R.id.cb_removeLineBreaks) {
+                tool.setRemoveLineBreaks(isChecked);
             }
         }
     };

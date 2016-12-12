@@ -18,8 +18,18 @@
         android:id="@+id/cb_startingWithSelectionMode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:checked="false"
         android:text="@string/startingWithSelectionMode"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+    <CheckBox
+        android:id="@+id/cb_removeLineBreaks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:checked="false"
+        android:text="@string/removeLineBreaks"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
     <CheckBox

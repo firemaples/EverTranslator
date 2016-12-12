@@ -51,4 +51,5 @@
     <string name="menu_about">關於</string>
     <string name="title_about">關於</string>
     <string name="startingWithSelectionMode">啟動時進入圈選模式</string>
+    <string name="removeLineBreaks">移除換行字元</string>
 </resources>

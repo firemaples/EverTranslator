@@ -51,4 +51,5 @@
     <string name="menu_about">About</string>
     <string name="title_about">About</string>
     <string name="startingWithSelectionMode">Starting with selection mode</string>
+    <string name="removeLineBreaks">Remove line breaks</string>
 </resources>
