@@ -97,6 +97,10 @@ public class FloatingBar extends FloatingView {
         dialogView = new DialogView(getContext());
 
         webViewFV = new WebViewFV(getContext(), onWebViewFVCallback);
+
+        if (Tool.getInstance().startingWithSelectionMode()) {
+            onClickListener.onClick(bt_selectArea);
+        }
     }
 
     private AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {

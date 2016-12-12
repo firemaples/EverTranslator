@@ -50,4 +50,5 @@
     <string name="menu_exit">Exit</string>
     <string name="menu_about">About</string>
     <string name="title_about">About</string>
+    <string name="startingWithSelectionMode">Starting with selection mode</string>
 </resources>

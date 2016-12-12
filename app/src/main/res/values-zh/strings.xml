@@ -50,4 +50,5 @@
     <string name="menu_setting">設定</string>
     <string name="menu_about">關於</string>
     <string name="title_about">關於</string>
+    <string name="startingWithSelectionMode">啟動時進入圈選模式</string>
 </resources>

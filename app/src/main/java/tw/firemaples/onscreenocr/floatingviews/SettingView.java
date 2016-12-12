@@ -37,13 +37,16 @@ public class SettingView extends FloatingView {
     private void setViews() {
         CheckBox cb_debugMode = (CheckBox) getRootView().findViewById(R.id.cb_debugMode);
         CheckBox cb_enableTranslation = (CheckBox) getRootView().findViewById(R.id.cb_enableTranslation);
+        CheckBox cb_startingWithSelectionMode = (CheckBox) getRootView().findViewById(R.id.cb_startingWithSelectionMode);
         getRootView().findViewById(R.id.bt_close).setOnClickListener(onClickListener);
 
         cb_debugMode.setOnCheckedChangeListener(onCheckChangeListener);
         cb_enableTranslation.setOnCheckedChangeListener(onCheckChangeListener);
+        cb_startingWithSelectionMode.setOnCheckedChangeListener(onCheckChangeListener);
 
         cb_debugMode.setChecked(tool.isDebugMode());
         cb_enableTranslation.setChecked(tool.isEnableTranslation());
+        cb_startingWithSelectionMode.setChecked(tool.startingWithSelectionMode());
     }
 
     private CompoundButton.OnCheckedChangeListener onCheckChangeListener = new CompoundButton.OnCheckedChangeListener() {
@@ -57,6 +60,8 @@ public class SettingView extends FloatingView {
                 if (callback != null) {
                     callback.onEnableTranslationChanged(isChecked);
                 }
+            } else if (id == R.id.cb_startingWithSelectionMode) {
+                tool.setStartingWithSelectionMode(isChecked);
             }
         }
     };
