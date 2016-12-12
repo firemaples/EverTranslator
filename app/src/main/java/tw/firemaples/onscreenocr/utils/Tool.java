@@ -96,7 +96,7 @@ public class Tool {
     }
 
     public boolean startingWithSelectionMode() {
-        return getSharedPreferences().getBoolean(KEY_STARTING_WITH_SELECTION_MODE, false);
+        return getSharedPreferences().getBoolean(KEY_STARTING_WITH_SELECTION_MODE, true);
     }
 
     public void setStartingWithSelectionMode(boolean startingWithSelectionMode) {
