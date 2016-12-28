@@ -174,9 +174,14 @@ public class FloatingBar extends FloatingView {
         }
 
         @Override
-        public void onError(String errorMessage) {
-            dialogView.setTitle(getContext().getString(R.string.dialog_title_error));
-            dialogView.setContentMsg(errorMessage);
+        public void onError(final String errorMessage) {
+            getRootView().post(new Runnable() {
+                @Override
+                public void run() {
+                    dialogView.setTitle(getContext().getString(R.string.dialog_title_error));
+                    dialogView.setContentMsg(errorMessage);
+                }
+            });
         }
     };
 
