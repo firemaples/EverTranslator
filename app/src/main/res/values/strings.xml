@@ -52,4 +52,5 @@
     <string name="title_about">About</string>
     <string name="startingWithSelectionMode">Starting with selection mode</string>
     <string name="removeLineBreaks">Remove line breaks</string>
+    <string name="error_mediaProjectionNotFound_need5UpperVersion">, you should run this app on 5.0 or upper version of Android.</string>
 </resources>

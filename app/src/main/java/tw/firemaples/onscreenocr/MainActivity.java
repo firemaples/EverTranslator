@@ -160,8 +160,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void requestMediaProjection() {
         Tool.logInfo("Requesting for media projection");
-        MediaProjectionManager projectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        startActivityForResult(projectionManager.createScreenCaptureIntent(), REQUEST_CODE_REQUEST_MEDIA_PROJECTION_RESULT);
+        try {
+            MediaProjectionManager projectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+            startActivityForResult(projectionManager.createScreenCaptureIntent(), REQUEST_CODE_REQUEST_MEDIA_PROJECTION_RESULT);
+        } catch (NoClassDefFoundError e) {
+            String errorMsg = "[MediaProjection] not found";
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                errorMsg += getString(R.string.error_mediaProjectionNotFound_need5UpperVersion);
+            } else {
+                errorMsg += " with unknown situation";
+            }
+            showErrorDialog(errorMsg, null);
+        }
     }
 
     private void onRequestMediaProjectionResult(int resultCode, Intent data) {
@@ -187,12 +197,14 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder ab = new AlertDialog.Builder(this);
         ab.setTitle(R.string.dialog_title_error);
         ab.setMessage(msg);
-        ab.setPositiveButton(getString(R.string.btn_requestAgain), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                onRetryCallback.onCallback(null);
-            }
-        });
+        if (onRetryCallback != null) {
+            ab.setPositiveButton(getString(R.string.btn_requestAgain), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    onRetryCallback.onCallback(null);
+                }
+            });
+        }
         ab.setNegativeButton(R.string.btn_close, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
