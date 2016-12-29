@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -17,7 +20,6 @@ import java.util.Locale;
 import tw.firemaples.onscreenocr.MainActivity;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ScreenTranslatorService;
-import tw.firemaples.onscreenocr.views.AreaSelectionView;
 import tw.firemaples.onscreenocr.ocr.OcrDownloadAsyncTask;
 import tw.firemaples.onscreenocr.ocr.OcrInitAsyncTask;
 import tw.firemaples.onscreenocr.ocr.OcrRecognizeAsyncTask;
@@ -26,6 +28,7 @@ import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.translate.TranslateAsyncTask;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.views.AreaSelectionView;
 import tw.firemaples.onscreenocr.views.FloatingBarMenu;
 import tw.firemaples.onscreenocr.views.OcrResultWindow;
 
@@ -62,6 +65,18 @@ public class FloatingBar extends FloatingView {
         super(context);
         ocrNTranslateUtils = OcrNTranslateUtils.getInstance();
         setViews(getRootView());
+    }
+
+    @Override
+    public void attachToWindow() {
+        super.attachToWindow();
+        Answers.getInstance().logCustom(new CustomEvent("FloatingBar show"));
+    }
+
+    @Override
+    public void detachFromWindow() {
+        super.detachFromWindow();
+        Answers.getInstance().logCustom(new CustomEvent("FloatingBar hide"));
     }
 
     @Override
@@ -246,7 +261,9 @@ public class FloatingBar extends FloatingView {
             if (id == R.id.view_menu) {
                 new FloatingBarMenu(getContext(), view_menu, onFloatingBarMenuCallback).show();
             } else if (id == R.id.bt_selectArea) {
+                Answers.getInstance().logCustom(new CustomEvent("Btn select area"));
                 if (ScreenshotHandler.isInitialized()) {
+                    Answers.getInstance().logCustom(new CustomEvent("Do btn select area"));
                     drawAreaView = new DrawAreaView(getContext());
                     drawAreaView.attachToWindow();
                     FloatingBar.this.detachFromWindow();
@@ -258,7 +275,9 @@ public class FloatingBar extends FloatingView {
                     ScreenTranslatorService.stop(true);
                 }
             } else if (id == R.id.bt_translation) {
+                Answers.getInstance().logCustom(new CustomEvent("Btn translation"));
                 if (OcrDownloadAsyncTask.checkOcrFiles(OcrNTranslateUtils.getInstance().getOcrLang())) {
+                    Answers.getInstance().logCustom(new CustomEvent("Do btn translation"));
                     currentBoxList.addAll(drawAreaView.getAreaSelectionView().getBoxList());
                     drawAreaView.getAreaSelectionView().clear();
                     drawAreaView.detachFromWindow();
@@ -271,6 +290,7 @@ public class FloatingBar extends FloatingView {
                     showDownloadOcrFileDialog(OcrNTranslateUtils.getInstance().getOcrLangDisplayName());
                 }
             } else if (id == R.id.bt_clear) {
+                Answers.getInstance().logCustom(new CustomEvent("Btn clear"));
                 resetAll();
             }
         }
@@ -368,6 +388,7 @@ public class FloatingBar extends FloatingView {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    Answers.getInstance().logCustom(new CustomEvent("Take screenshot"));
                     screenshotHandler.takeScreenshot();
                 }
             }, 100);
@@ -440,6 +461,7 @@ public class FloatingBar extends FloatingView {
             };
 
     private void startTextRecognize() {
+        Answers.getInstance().logCustom(new CustomEvent("Start OCR"));
         if (progressView != null) {
             progressView.showMessage(getContext().getString(R.string.progress_textRecognition));
         }
@@ -470,6 +492,7 @@ public class FloatingBar extends FloatingView {
 
     private void startTranslate(List<OcrResult> results) {
         if (Tool.getInstance().isEnableTranslation()) {
+            Answers.getInstance().logCustom(new CustomEvent("Start Translation"));
             translateAsyncTask = new TranslateAsyncTask(getContext(), results, onTranslateAsyncTaskCallback);
             translateAsyncTask.execute();
         } else {
@@ -484,6 +507,7 @@ public class FloatingBar extends FloatingView {
             new TranslateAsyncTask.OnTranslateAsyncTaskCallback() {
                 @Override
                 public void onTranslateFinished(List<OcrResult> translatedResult) {
+                    Answers.getInstance().logCustom(new CustomEvent("Translation finished"));
                     ocrResultView = new OcrResultView(getContext(), onOcrResultWindowCallback);
                     ocrResultView.attachToWindow();
                     ocrResultView.setOcrResults(translatedResult);

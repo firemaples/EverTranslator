@@ -11,6 +11,9 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
@@ -121,10 +124,12 @@ public class OcrResultWindow {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.bt_openInBrowser_ocrText) {
+                Answers.getInstance().logCustom(new CustomEvent("Btn open in browser").putCustomAttribute("Type", "OCR text"));
                 if (ocrResult != null) {
                     callback.onOpenBrowserBtnClick(ocrResult.getText(), false);
                 }
             } else if (id == R.id.bt_openInBrowser_translatedText) {
+                Answers.getInstance().logCustom(new CustomEvent("Btn open in browser").putCustomAttribute("Type", "Translated text"));
                 if (ocrResult != null) {
                     callback.onOpenBrowserBtnClick(ocrResult.getTranslatedText(), true);
                 }
@@ -137,6 +142,7 @@ public class OcrResultWindow {
     };
 
     private void copyToClipboard(String label, String text) {
+        Answers.getInstance().logCustom(new CustomEvent("Copy to Clipboard").putCustomAttribute("Type", label));
         ClipboardManager clipboard = (ClipboardManager)
                 context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = ClipData.newPlainText(label, text);
