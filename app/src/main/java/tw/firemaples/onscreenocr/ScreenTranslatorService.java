@@ -69,12 +69,20 @@ public class ScreenTranslatorService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
+        if (_instance == null) {
+            _instance = this;
+        }
+
         return START_STICKY;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (_instance == null) {
+            _instance = this;
+        }
 
         startForeground();
         Tool.init();
