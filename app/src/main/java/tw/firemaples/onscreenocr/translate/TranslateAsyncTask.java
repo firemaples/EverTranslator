@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.memetix.mst.language.Language;
 import com.memetix.mst.translate.Translate;
 
@@ -58,16 +60,18 @@ public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
         Translate.setSubscriptionKey(KeyId.MICROSOFT_TRANSLATE_SUBSCRIPTION_KEY);
 
         for (OcrResult ocrResult : ocrResults) {
-            if (translate) {
+            String ocrText = ocrResult.getText();
+            if (translate && ocrText != null && ocrText.length() > 0) {
                 try {
-                    String translatedText = Translate.execute(ocrResult.getText(), translateFromLang, translateToLang);
+                    Answers.getInstance().logCustom(new CustomEvent("Translate Text").putCustomAttribute("Text length", ocrText.length()));
+                    String translatedText = Translate.execute(ocrText, translateFromLang, translateToLang);
                     ocrResult.setTranslatedText(translatedText);
                 } catch (Exception e) {
                     e.printStackTrace();
                     ocrResult.setTranslatedText(context.getString(R.string.error));
                 }
             } else {
-                ocrResult.setTranslatedText(ocrResult.getText());
+                ocrResult.setTranslatedText(ocrText);
             }
         }
         return null;
