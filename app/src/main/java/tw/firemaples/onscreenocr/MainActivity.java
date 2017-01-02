@@ -50,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(0, 0);
-        Fabric.with(this, new Crashlytics());
+        if (!Fabric.isInitialized()) {
+            Fabric.with(this, new Crashlytics());
+        }
         Answers.getInstance().logCustom(new CustomEvent("App launched"));
 
         startApp();

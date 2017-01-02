@@ -9,6 +9,9 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
 
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
 import tw.firemaples.onscreenocr.floatingviews.FloatingBar;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
@@ -82,6 +85,9 @@ public class ScreenTranslatorService extends Service {
 
         if (_instance == null) {
             _instance = this;
+        }
+        if (!Fabric.isInitialized()) {
+            Fabric.with(this, new Crashlytics());
         }
 
         startForeground();
