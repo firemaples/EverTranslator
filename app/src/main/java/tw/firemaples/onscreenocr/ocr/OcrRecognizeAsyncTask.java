@@ -63,6 +63,9 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
 
         List<OcrResult> ocrResultList = new ArrayList<>();
         for (Rect rect : boxList) {
+            //Try to fix sides of rect
+            fixRect(rect, screenshot.getWidth(), screenshot.getHeight());
+
             baseAPI.setRectangle(rect);
             OcrResult ocrResult = new OcrResult();
             ocrResult.setRect(rect);
@@ -122,6 +125,21 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
         if (callback != null) {
             callback.hideMessage();
             callback.onTextRecognizeFinished(results);
+        }
+    }
+
+    private void fixRect(Rect rect, int bitmapWidth, int bitmapHeight) {
+        if (rect.left < 0) {
+            rect.left = 0;
+        }
+        if (rect.top < 0) {
+            rect.top = 0;
+        }
+        if (rect.right > bitmapWidth) {
+            rect.right = bitmapWidth;
+        }
+        if (rect.bottom > bitmapHeight) {
+            rect.bottom = bitmapHeight;
         }
     }
 
