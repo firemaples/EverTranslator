@@ -53,4 +53,5 @@
     <string name="startingWithSelectionMode">啟動時進入圈選模式</string>
     <string name="removeLineBreaks">移除換行字元</string>
     <string name="error_mediaProjectionNotFound_need5UpperVersion">, 此應用程式需要 5.0 以上的 Android 系統</string>
+    <string name="error_unknownErrorWhenRequestMediaProjection">請求 [螢幕擷取] 功能失敗，您的設備不支援此功能？</string>
 </resources>

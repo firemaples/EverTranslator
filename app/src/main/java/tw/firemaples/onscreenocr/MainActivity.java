@@ -164,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
     private void requestMediaProjection() {
         Tool.logInfo("Requesting for media projection");
         try {
+//            throw new RuntimeException("Unable to start activity ComponentInfo{tw.firemaples.onscreenocr/tw.firemaples.onscreenocr.MainActivity}: android.content.ActivityNotFoundException: Unable to find explicit activity class {com.android.systemui/com.android.systemui.media.MediaProjectionPermissionActivity}; have you declared this activity in your AndroidManifest.xml?");
             MediaProjectionManager projectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
             startActivityForResult(projectionManager.createScreenCaptureIntent(), REQUEST_CODE_REQUEST_MEDIA_PROJECTION_RESULT);
         } catch (NoClassDefFoundError e) {
@@ -173,6 +174,9 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 errorMsg += " with unknown situation";
             }
+            showErrorDialog(errorMsg, null);
+        } catch (Throwable t) {
+            String errorMsg = getString(R.string.error_unknownErrorWhenRequestMediaProjection) + " \r\n\r\n" + t.getLocalizedMessage();
             showErrorDialog(errorMsg, null);
         }
     }
