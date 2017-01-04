@@ -63,6 +63,7 @@ public class FloatingBar extends FloatingView {
 
     public FloatingBar(Context context) {
         super(context);
+        Tool.getInstance().setContext(context);
         ocrNTranslateUtils = OcrNTranslateUtils.getInstance();
         setViews(getRootView());
     }

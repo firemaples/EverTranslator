@@ -11,8 +11,6 @@ import android.util.Log;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.Style;
 
-import tw.firemaples.onscreenocr.ScreenTranslatorService;
-
 /**
  * Created by firemaples on 2016/3/1.
  */
@@ -25,6 +23,8 @@ public class Tool {
 
     private static String LOG_TAG = "OnScreenOcr";
 
+    private Context context;
+
     public static void init() {
         _instance = new Tool();
     }
@@ -36,8 +36,15 @@ public class Tool {
     private Tool() {
     }
 
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
     public static Context getContext() {
-        return ScreenTranslatorService.getContext();
+        if (getInstance() == null) {
+            throw new IllegalStateException("Instance of tool object has not been created");
+        }
+        return getInstance().context;
     }
 
     public static boolean isServiceRunning(Context context, Class<?> serviceClass) {
