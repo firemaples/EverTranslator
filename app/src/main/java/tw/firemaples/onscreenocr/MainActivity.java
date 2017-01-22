@@ -25,6 +25,7 @@ import com.crashlytics.android.answers.CustomEvent;
 import io.fabric.sdk.android.Fabric;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.Callback;
+import tw.firemaples.onscreenocr.utils.PermissionUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 public class MainActivity extends AppCompatActivity {
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.M)
     private void checkDrawOverlayPermission() {
-        if (!Settings.canDrawOverlays(MainActivity.this)) {
+        if (!PermissionUtil.checkDrawOverlayPermission(this)) {
             Tool.logInfo("Requesting draw overlay permission");
             AlertDialog.Builder ab = new AlertDialog.Builder(this);
             ab.setTitle(getString(R.string.dialog_title_needPermission));

@@ -7,6 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 
+import tw.firemaples.onscreenocr.MainActivity;
+import tw.firemaples.onscreenocr.ScreenTranslatorService;
+import tw.firemaples.onscreenocr.utils.PermissionUtil;
+
 import static android.content.Context.WINDOW_SERVICE;
 
 /**
@@ -72,8 +76,13 @@ public abstract class FloatingView {
 
     public void attachToWindow() {
         if (!isAttached) {
-            windowManager.addView(rootView, floatingLayoutParams);
-            isAttached = true;
+            if (PermissionUtil.checkDrawOverlayPermission(context)) {
+                windowManager.addView(rootView, floatingLayoutParams);
+                isAttached = true;
+            } else {
+                MainActivity.start(context);
+                ScreenTranslatorService.stop(true);
+            }
         }
     }
 
