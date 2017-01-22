@@ -3,6 +3,7 @@ package tw.firemaples.onscreenocr;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -87,7 +88,28 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                             Uri.parse("package:" + getPackageName()));
-                    startActivityForResult(intent, REQUEST_CODE_CHECK_DRAW_OVERLAY_PERM);
+                    try {
+                        startActivityForResult(intent, REQUEST_CODE_CHECK_DRAW_OVERLAY_PERM);
+                    } catch (ActivityNotFoundException e) {
+                        e.printStackTrace();
+                        AlertDialog.Builder ab1 = new AlertDialog.Builder(MainActivity.this);
+                        ab1.setTitle(R.string.error);
+                        ab1.setMessage(R.string.error_openManageOverlayPermissionPageFailed);
+                        ab1.setPositiveButton(R.string.btn_openAppsPage, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_SETTINGS);
+                                startActivityForResult(intent, REQUEST_CODE_CHECK_DRAW_OVERLAY_PERM);
+                            }
+                        });
+                        ab1.setNegativeButton(R.string.btn_close, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                MainActivity.this.finish();
+                            }
+                        });
+                        ab1.show();
+                    }
                 }
             });
             ab.setNegativeButton(getString(R.string.btn_close), new DialogInterface.OnClickListener() {
