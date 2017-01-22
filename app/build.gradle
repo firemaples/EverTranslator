@@ -44,7 +44,7 @@ dependencies {
     compile 'com.rmtheis:tess-two:6.1.1'
     compile 'com.github.johnpersano:supertoasts:1.3.4@aar'
 //    compile files('libs/microsoft-translator-java-api-0.6.2-jar-with-dependencies.jar')
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
         transitive = true;
     }
     compile 'com.android.support:cardview-v7:23.0.0'
