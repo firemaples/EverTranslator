@@ -22,6 +22,9 @@ Translate any text on screen, even in games!
 firemaples/microsoft-translator-java-api
 https://github.com/firemaples/microsoft-translator-java-api
 
+# Todo_ list
+Language list - support multi-language
+
 # Thanks for
 rmtheis/tess-two
 https://github.com/rmtheis/tess-two
