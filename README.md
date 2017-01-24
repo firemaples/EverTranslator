@@ -24,6 +24,7 @@ https://github.com/firemaples/microsoft-translator-java-api
 
 # Todo_ list
 Language list - support multi-language
+TTS
 
 # Thanks for
 rmtheis/tess-two
