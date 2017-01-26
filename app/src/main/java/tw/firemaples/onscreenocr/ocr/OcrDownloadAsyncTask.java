@@ -2,6 +2,8 @@ package tw.firemaples.onscreenocr.ocr;
 
 import android.os.AsyncTask;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -193,6 +195,7 @@ public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
             }
         } catch (Exception e) {
             Tool.logError(e.toString());
+            Crashlytics.logException(e);
             callback.onError(e.getLocalizedMessage());
             return false;
         } finally {
