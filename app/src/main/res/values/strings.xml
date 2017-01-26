@@ -23,7 +23,8 @@
     <string name="error_noOCRResultFound">No OCR result found</string>
     <string name="error_noMediaProjectionFound">Please submit media projection for using this service!</string>
     <string name="dialog_content_screenshotTimeout">Screenshot timeout, please try again later.</string>
-    <string name="dialog_content_screenshotWithUnknownError">Screenshot failed with unknown error, error code: %d</string>
+    <string name="dialog_content_screenshotWithUnknownError">Screenshot failed with unknown error, error: %s</string>
+    <string name="dialog_content_screenshotWithImageFormatError">Screenshot format error, your device don\'t support format RGBA_8888. error: %s</string>
 
     <!-- Strings for progress state -->
     <string name="progress_ocrInitialize">Waiting for OCR engine initialize...</string>

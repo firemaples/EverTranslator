@@ -23,7 +23,8 @@
     <string name="error_noOCRResultFound">文字辨識程式未辨識出任何內容</string>
     <string name="error_noMediaProjectionFound">請允許 [螢幕錄影] 功能來使用本程式</string>
     <string name="dialog_content_screenshotTimeout">取得螢幕截圖超時，請稍候重試！</string>
-    <string name="dialog_content_screenshotWithUnknownError">取得螢幕截圖失敗，錯誤代號： %d</string>
+    <string name="dialog_content_screenshotWithUnknownError">取得螢幕截圖失敗，錯誤訊息： %s</string>
+    <string name="dialog_content_screenshotWithImageFormatError">螢幕截圖格式錯誤，您的設備不支援格式 RGBA_8888 輸出。 錯誤訊息： %s</string>
 
     <!-- Strings for progress state -->
     <string name="progress_ocrInitialize">文字辨識引擎初始化中，請稍候...</string>

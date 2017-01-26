@@ -409,7 +409,7 @@ public class FloatingBar extends FloatingView {
         }
 
         @Override
-        public void onScreenshotFailed(int errorCode) {
+        public void onScreenshotFailed(int errorCode, Throwable e) {
             FloatingBar.this.attachToWindow();
             resetAll();
 
@@ -421,8 +421,11 @@ public class FloatingBar extends FloatingView {
                 case ScreenshotHandler.ERROR_CODE_TIMEOUT:
                     msg = getContext().getString(R.string.dialog_content_screenshotTimeout);
                     break;
+                case ScreenshotHandler.ERROR_CODE_IMAGE_FORMAT_ERROR:
+                    msg = String.format(Locale.getDefault(), getContext().getString(R.string.dialog_content_screenshotWithImageFormatError), e.getMessage());
+                    break;
                 default:
-                    msg = String.format(Locale.getDefault(), getContext().getString(R.string.dialog_content_screenshotWithUnknownError), errorCode);
+                    msg = String.format(Locale.getDefault(), getContext().getString(R.string.dialog_content_screenshotWithUnknownError), e.getMessage());
                     break;
             }
             dialogView.setContentMsg(msg);

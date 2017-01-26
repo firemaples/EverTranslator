@@ -17,6 +17,8 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -36,7 +38,9 @@ public class ScreenshotHandler {
     private static ScreenshotHandler _instance;
     private final static int TIMEOUT = 5000;
 
+    public final static int ERROR_CODE_KNOWN_ERROR = 0;
     public final static int ERROR_CODE_TIMEOUT = 1;
+    public final static int ERROR_CODE_IMAGE_FORMAT_ERROR = 2;
 
     private Context context;
     private boolean isGetUserPermission;
@@ -139,7 +143,7 @@ public class ScreenshotHandler {
                 mProjection.stop();
 
                 if (callback != null) {
-                    callback.onScreenshotFailed(ERROR_CODE_TIMEOUT);
+                    callback.onScreenshotFailed(ERROR_CODE_TIMEOUT, null);
                 }
             }
         };
@@ -149,27 +153,45 @@ public class ScreenshotHandler {
             public void onImageAvailable(ImageReader reader) {
                 reader.setOnImageAvailableListener(null, handler);
                 Tool.logInfo("onImageAvailable");
-                Image image = reader.acquireLatestImage();
-                Tool.logInfo("screenshot image info: width:" + image.getWidth() + " height:" + image.getHeight());
-                final Image.Plane[] planes = image.getPlanes();
-                final ByteBuffer buffer = planes[0].getBuffer();
-//                int offset = 0;
-                int pixelStride = planes[0].getPixelStride();
-                int rowStride = planes[0].getRowStride();
-                int rowPadding = rowStride - pixelStride * metrics.widthPixels;
-                // create bitmap
-                Bitmap bmp = Bitmap.createBitmap(metrics.widthPixels + (int) ((float) rowPadding / (float) pixelStride), metrics.heightPixels, Bitmap.Config.ARGB_8888);
-                bmp.copyPixelsFromBuffer(buffer);
+                Image image = null;
+                Bitmap tempBmp = null;
+                Bitmap realSizeBitmap = null;
+                try {
+                    image = reader.acquireLatestImage();
+//                    throw new UnsupportedOperationException("The producer output buffer format 0x5 doesn't match the ImageReader's configured buffer format 0x1.");
+                    Tool.logInfo("screenshot image info: width:" + image.getWidth() + " height:" + image.getHeight());
+                    final Image.Plane[] planes = image.getPlanes();
+                    final ByteBuffer buffer = planes[0].getBuffer();
+                    int pixelStride = planes[0].getPixelStride();
+                    int rowStride = planes[0].getRowStride();
+                    int rowPadding = rowStride - pixelStride * metrics.widthPixels;
+                    // create bitmap
+                    tempBmp = Bitmap.createBitmap(metrics.widthPixels + (int) ((float) rowPadding / (float) pixelStride), metrics.heightPixels, Bitmap.Config.ARGB_8888);
+                    tempBmp.copyPixelsFromBuffer(buffer);
 
-                image.close();
-                reader.close();
-                mProjection.stop();
+                    realSizeBitmap = Bitmap.createBitmap(tempBmp, 0, 0, metrics.widthPixels, tempBmp.getHeight());
 
-                Bitmap realSizeBitmap = Bitmap.createBitmap(bmp, 0, 0, metrics.widthPixels, bmp.getHeight());
-                bmp.recycle();
-
-                if (Tool.getInstance().isDebugMode()) {
-                    saveBmpToFile(realSizeBitmap);
+                    if (Tool.getInstance().isDebugMode()) {
+                        saveBmpToFile(realSizeBitmap);
+                    }
+                } catch (Throwable e) {
+                    if (callback != null) {
+                        if (e instanceof UnsupportedOperationException) {
+                            callback.onScreenshotFailed(ERROR_CODE_IMAGE_FORMAT_ERROR, e);
+                        } else {
+                            callback.onScreenshotFailed(ERROR_CODE_KNOWN_ERROR, e);
+                        }
+                    }
+                    Crashlytics.logException(e);
+                } finally {
+                    if (image != null) {
+                        image.close();
+                    }
+                    reader.close();
+                    mProjection.stop();
+                    if (tempBmp != null) {
+                        tempBmp.recycle();
+                    }
                 }
 
                 if (timeoutRunnable != null) {
@@ -177,7 +199,9 @@ public class ScreenshotHandler {
                     timeoutRunnable = null;
                 }
                 if (callback != null) {
-                    callback.onScreenshotFinished(realSizeBitmap);
+                    if (realSizeBitmap != null) {
+                        callback.onScreenshotFinished(realSizeBitmap);
+                    }
                 }
             }
         }, handler);
@@ -213,6 +237,6 @@ public class ScreenshotHandler {
     public interface OnScreenshotHandlerCallback {
         void onScreenshotFinished(Bitmap bitmap);
 
-        void onScreenshotFailed(int errorCode);
+        void onScreenshotFailed(int errorCode, Throwable e);
     }
 }
