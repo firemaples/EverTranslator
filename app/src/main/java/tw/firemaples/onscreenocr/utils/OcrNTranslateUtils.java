@@ -1,6 +1,9 @@
 package tw.firemaples.onscreenocr.utils;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
@@ -28,6 +31,7 @@ public class OcrNTranslateUtils {
     public static String KEY_PAGE_SEGMENTATION_MODE = "preference_list_page_segmentation_mode";
     public static String KEY_TRANSLATE = "preference_switch_translate";
     public static String KEY_TRANSLATION_TO = "preference_list_translation_to";
+    public static String KEY_TESS_DATA_LOCATION = "preference_tess_data_location";
 
     private TessBaseAPI baseAPI;
 
@@ -58,7 +62,48 @@ public class OcrNTranslateUtils {
 
     /* OCR */
     public File getTessDataDir() {
-        return new File(Tool.getContext().getFilesDir() + File.separator + "tesseract" + File.separator + "tessdata");
+        return getTessDataLocation().getSaveDir();
+    }
+
+    public File getTessDataBaseDir(){
+        return getTessDataDir().getParentFile();
+    }
+
+    public TessDataLocation getTessDataLocation() {
+        String tessDataLocationString = getSharedPreferences().getString(KEY_TESS_DATA_LOCATION, null);
+        TessDataLocation tessDataLocation = null;
+        if (tessDataLocationString != null) {
+            try {
+                tessDataLocation = TessDataLocation.valueOf(tessDataLocationString);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (tessDataLocation != null) {
+            return tessDataLocation;
+        }
+
+        if (!isExternalStorageWritable()) {
+            return TessDataLocation.INTERNAL_STORAGE;
+        }
+
+        if (TessDataLocation.INTERNAL_STORAGE.saveDir.exists()) {
+            return TessDataLocation.INTERNAL_STORAGE;
+        } else {
+            return TessDataLocation.EXTERNAL_STORAGE;
+        }
+    }
+
+    public void setTessDataLocation(TessDataLocation tessDataLocation) {
+        getSharedPreferences().edit().putString(KEY_TESS_DATA_LOCATION, tessDataLocation.name()).apply();
+    }
+
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) && !Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
     }
 
     public List<String> getOcrLangList() {
@@ -397,6 +442,34 @@ public class OcrNTranslateUtils {
             return "vi";
         } else {
             return "";
+        }
+    }
+
+    public enum TessDataLocation {
+        INTERNAL_STORAGE(Tool.getContext().getFilesDir()),
+        EXTERNAL_STORAGE(getRemovableFileDir());
+
+        private File saveDir;
+
+        private TessDataLocation(File baseDir) {
+            this.saveDir = new File(baseDir.getAbsolutePath() + File.separator + "tesseract" + File.separator + "tessdata");
+        }
+
+        public File getSaveDir() {
+            return saveDir;
+        }
+
+        private static File getRemovableFileDir() {
+            Context context = Tool.getContext();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                File[] externalCacheDirs = context.getExternalFilesDirs(null);
+                for (File file : externalCacheDirs) {
+                    if (file != null && Environment.isExternalStorageRemovable(file)) {
+                        return file;
+                    }
+                }
+            }
+            return context.getExternalFilesDir(null);
         }
     }
 }

@@ -33,6 +33,8 @@
     <string name="progress_ocrInitializing">OCR engine initializing...</string>
     <string name="progress_textRecognizing">Text recognizing...</string>
     <string name="progress_translating">Starting Translation...</string>
+    <string name="progress_startMovingOcrEngineFiles">Moving downloaded ocr engine files</string>
+    <string name="progress_movingFile">Moving file: </string>
 
     <!-- Strings for UI -->
     <string name="msg_textHasBeenCopied">Text [%s] has been copied.</string>
@@ -57,4 +59,5 @@
     <string name="error_mediaProjectionNotFound_need5UpperVersion">, you should run this app on 5.0 or upper version of Android.</string>
     <string name="error_unknownErrorWhenRequestMediaProjection">A error occurred when trying to request [MediaProjection] permission, is your device support this feature?</string>
     <string name="error_openManageOverlayPermissionPageFailed">It seems your device not support the intent shortcut of ACTION_MANAGE_OVERLAY_PERMISSION, please enable [Draw over other apps] from [Apps] by yourself</string>
+    <string name="saveOcrEngineToExternalStorage">Save OCR files into external storage</string>
 </resources>

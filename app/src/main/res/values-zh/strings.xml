@@ -33,6 +33,8 @@
     <string name="progress_ocrInitializing">文字辨識引擎初始化中</string>
     <string name="progress_textRecognizing">文字辨識中...</string>
     <string name="progress_translating">開始進行翻譯...</string>
+    <string name="progress_startMovingOcrEngineFiles">移動已下載的檔案中...</string>
+    <string name="progress_movingFile">移動檔案:</string>
 
     <!-- Strings for UI -->
     <string name="msg_textHasBeenCopied">文字 [%s] 已被複製到剪貼簿</string>
@@ -57,4 +59,5 @@
     <string name="error_unknownErrorWhenRequestMediaProjection">請求 [螢幕擷取] 功能失敗，您的設備不支援此功能？</string>
     <string name="btn_openAppsPage">開啟 [應用程式] 設定頁</string>
     <string name="error_openManageOverlayPermissionPageFailed">您的設備似乎不支援快捷跳轉至 [ACTION_MANAGE_OVERLAY_PERMISSION] 設定頁，請您自行手動至 [設定] => [應用程式] => [在其他應用程式上層繪製內容] 開啟隨處翻譯的權限</string>
+    <string name="saveOcrEngineToExternalStorage">將文字辨識檔案儲存至外部記憶卡</string>
 </resources>

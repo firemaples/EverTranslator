@@ -36,7 +36,7 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
         this.baseAPI = ocrNTranslateUtils.getBaseAPI();
         this.recognitionLang = ocrNTranslateUtils.getOcrLang();
 
-        this.tessRootDir = new File(context.getFilesDir() + File.separator + "tesseract");
+        this.tessRootDir = ocrNTranslateUtils.getTessDataBaseDir();
     }
 
     @Override
