@@ -25,8 +25,6 @@ https://github.com/firemaples/microsoft-translator-java-api
 # Todo_ list
 >- Language list - support multi-language
 >- TTS
->- Install to sdcard
->- Ocr engine file location choiceable
 
 # Thanks for
 rmtheis/tess-two
