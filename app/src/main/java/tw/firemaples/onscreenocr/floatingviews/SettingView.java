@@ -7,6 +7,8 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -124,6 +126,9 @@ public class SettingView extends FloatingView {
         protected Void doInBackground(File... params) {
             File fileFrom = params[0];
             File fileTo = params[1];
+            if (!fileTo.exists()) {
+                fileTo.mkdirs();
+            }
             for (File file : fileFrom.listFiles()) {
                 try {
                     Tool.logInfo("Start move ocr file from:" + file.getAbsolutePath() + " to:" + fileTo.getAbsolutePath());
@@ -131,6 +136,7 @@ public class SettingView extends FloatingView {
                     moveFile(file, fileTo);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    Crashlytics.logException(e);
                 }
 
             }
