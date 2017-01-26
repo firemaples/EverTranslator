@@ -8,10 +8,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Locale;
+
+import javax.net.ssl.SSLException;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
@@ -95,11 +99,11 @@ public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
         File tessDataFile = new File(tessDataDir, recognitionLang + ".traineddata");
         if (!downloadTrainedata(recognitionLang, tessDataTempFile, tessDataFile)) {
             Tool.logError("Download OCR file failed");
-            callback.onError(
-                    String.format(
-                            Locale.getDefault(),
-                            Tool.getContext().getString(R.string.error_downloadOCRFileFailed),
-                            Tool.getContext().getString(R.string.error_unknownError)));
+//            callback.onError(
+//                    String.format(
+//                            Locale.getDefault(),
+//                            Tool.getContext().getString(R.string.error_downloadOCRFileFailed),
+//                            Tool.getContext().getString(R.string.error_unknownError)));
             return false;
         }
 
@@ -176,9 +180,7 @@ public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
             while ((count = input.read(data)) != -1) {
                 // allow canceling with back button
                 if (isCancelled()) {
-                    input.close();
-                    tmpFile.deleteOnExit();
-                    return false;
+                    throw new InterruptedIOException();
                 }
                 total += count;
                 // publishing the progress....
@@ -193,10 +195,32 @@ public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
                 Tool.logError("Move file failed");
                 throw new Exception("Move file failed: from:" + tmpFile.getAbsolutePath() + " to:" + destFile.getAbsolutePath());
             }
-        } catch (Exception e) {
-            Tool.logError(e.toString());
-            Crashlytics.logException(e);
-            callback.onError(e.getLocalizedMessage());
+        } catch (Throwable e) {
+            e.printStackTrace();
+
+            String errorMessage;
+            if (e instanceof UnknownHostException || e instanceof SSLException) {
+                errorMessage = Tool.getContext().getString(R.string.error_connectToServerFailed);
+            } else if (e instanceof InterruptedIOException) {
+                errorMessage = Tool.getContext().getString(R.string.canceledByUser);
+            } else {
+                Crashlytics.logException(e);
+                errorMessage = e.getLocalizedMessage();
+            }
+            Tool.logError(errorMessage);
+            callback.onError(String.format(Locale.getDefault(), Tool.getContext().getString(R.string.error_downloadOCRFileFailed), errorMessage));
+
+            try {
+                tmpFile.deleteOnExit();
+                if (output != null) {
+                    output.close();
+                }
+                if (input != null) {
+                    input.close();
+                }
+            } catch (Throwable ignored) {
+                ignored.printStackTrace();
+            }
             return false;
         } finally {
             try {
