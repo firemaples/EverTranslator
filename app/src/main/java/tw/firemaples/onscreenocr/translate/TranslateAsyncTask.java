@@ -63,7 +63,11 @@ public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
             String ocrText = ocrResult.getText();
             if (translate && ocrText != null && ocrText.length() > 0) {
                 try {
-                    Answers.getInstance().logCustom(new CustomEvent("Translate Text").putCustomAttribute("Text length", ocrText.length()));
+                    Answers.getInstance().logCustom(
+                            new CustomEvent("Translate Text")
+                                    .putCustomAttribute("Text length", ocrText.length())
+                                    .putCustomAttribute("Translate from", translateFromLang.name())
+                                    .putCustomAttribute("Translate to", translateToLang.name()));
                     String translatedText = Translate.execute(ocrText, translateFromLang, translateToLang);
                     ocrResult.setTranslatedText(translatedText);
                 } catch (Exception e) {
