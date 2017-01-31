@@ -130,6 +130,8 @@ public class ScreenshotHandler {
     }
 
     private void _takeScreenshot() {
+        Tool.logInfo("Start screenshot");
+        final long screenshotStartTime = System.currentTimeMillis();
         Answers.getInstance().logCustom(new CustomEvent("Take screenshot"));
 
         final MediaProjection mProjection = getMediaProjection();
@@ -167,6 +169,7 @@ public class ScreenshotHandler {
                 mImageReader.close();
                 mProjection.stop();
 
+                Tool.logError("Screenshot timeout");
                 if (callback != null) {
                     callback.onScreenshotFailed(ERROR_CODE_TIMEOUT, null);
                 }
@@ -200,6 +203,8 @@ public class ScreenshotHandler {
                         saveBmpToFile(realSizeBitmap);
                     }
                 } catch (Throwable e) {
+                    Tool.logError("Screenshot failed");
+                    e.printStackTrace();
                     if (callback != null) {
                         if (e instanceof UnsupportedOperationException) {
                             callback.onScreenshotFailed(ERROR_CODE_IMAGE_FORMAT_ERROR, e);
@@ -223,8 +228,11 @@ public class ScreenshotHandler {
                     handler.removeCallbacks(timeoutRunnable);
                     timeoutRunnable = null;
                 }
-                if (callback != null) {
-                    if (realSizeBitmap != null) {
+                if (realSizeBitmap != null) {
+                    long spentTime = System.currentTimeMillis() - screenshotStartTime;
+                    Tool.logInfo("Screenshot finished, spent: " + spentTime + " ms");
+                    Answers.getInstance().logCustom(new CustomEvent("Screenshot").putCustomAttribute("Spent", spentTime));
+                    if (callback != null) {
                         callback.onScreenshotFinished(realSizeBitmap);
                     }
                 }
