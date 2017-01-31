@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.floatingviews;
+package tw.firemaples.onscreenocr.floatingviews.screencrop;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,6 +14,7 @@ import com.crashlytics.android.answers.CustomEvent;
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
+import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.utils.WebViewService;
 

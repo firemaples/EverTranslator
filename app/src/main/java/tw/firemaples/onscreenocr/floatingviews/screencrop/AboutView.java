@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.floatingviews;
+package tw.firemaples.onscreenocr.floatingviews.screencrop;
 
 import android.content.Context;
 import android.text.Html;
@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
+import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**

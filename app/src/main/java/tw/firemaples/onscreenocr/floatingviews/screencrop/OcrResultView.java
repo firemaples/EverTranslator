@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.floatingviews;
+package tw.firemaples.onscreenocr.floatingviews.screencrop;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import tw.firemaples.onscreenocr.R;
+import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.views.OcrResultWindow;

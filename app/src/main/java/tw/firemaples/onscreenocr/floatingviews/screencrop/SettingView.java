@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.floatingviews;
+package tw.firemaples.onscreenocr.floatingviews.screencrop;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 import tw.firemaples.onscreenocr.R;
+import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
 

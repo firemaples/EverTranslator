@@ -1,10 +1,11 @@
-package tw.firemaples.onscreenocr.floatingviews;
+package tw.firemaples.onscreenocr.floatingviews.screencrop;
 
 import android.content.Context;
 import android.view.View;
 import android.view.WindowManager;
 
 import tw.firemaples.onscreenocr.R;
+import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.views.AreaSelectionView;
 
 /**

@@ -12,7 +12,7 @@ import android.os.IBinder;
 import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
-import tw.firemaples.onscreenocr.floatingviews.FloatingBar;
+import tw.firemaples.onscreenocr.floatingviews.screencrop.FloatingBar;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
