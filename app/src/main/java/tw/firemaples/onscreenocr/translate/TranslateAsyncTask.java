@@ -45,14 +45,9 @@ public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
 
         translate = preferences.getBoolean(OcrNTranslateUtils.KEY_TRANSLATE, true);
 
-        //TODO using util
-        String iso6393From = preferences.getString(OcrNTranslateUtils.KEY_RECOGNITION_LANGUAGE, "en");
-        String microsoftLangFrom = OcrNTranslateUtils.mapMicrosoftLanguageCode(iso6393From);
-        translateFromLang = Language.fromString(microsoftLangFrom);
+        translateFromLang = OcrNTranslateUtils.getInstance().getTranslateFromLanguage();
 
-        //TODO using util
-        String microsoftLangTo = preferences.getString(OcrNTranslateUtils.KEY_TRANSLATION_TO, "en");
-        translateToLang = Language.fromString(microsoftLangTo);
+        translateToLang = OcrNTranslateUtils.getInstance().getTranslateToLanguage();
     }
 
     @Override
