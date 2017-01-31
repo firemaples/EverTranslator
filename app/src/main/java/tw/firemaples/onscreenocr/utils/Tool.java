@@ -11,6 +11,8 @@ import android.util.Log;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.Style;
 
+import tw.firemaples.onscreenocr.BuildConfig;
+
 /**
  * Created by firemaples on 2016/3/1.
  */
@@ -58,11 +60,15 @@ public class Tool {
     }
 
     public static void logError(String msg) {
-        Log.e(LOG_TAG, msg);
+        if (BuildConfig.DEBUG) {
+            Log.e(LOG_TAG, msg);
+        }
     }
 
     public static void logInfo(String msg) {
-        Log.i(LOG_TAG, msg);
+        if (BuildConfig.DEBUG) {
+            Log.i(LOG_TAG, msg);
+        }
     }
 
     public void showMsg(String msg) {

@@ -18,6 +18,8 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -106,7 +108,30 @@ public class ScreenshotHandler {
         isGetUserPermission = true;
     }
 
+    public void takeScreenshot(long delay) {
+        if (callback != null) {
+            callback.onScreenshotStart();
+        }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                _takeScreenshot();
+            }
+        }, delay);
+    }
+
     public void takeScreenshot() {
+        if (callback != null) {
+            callback.onScreenshotStart();
+        }
+
+        _takeScreenshot();
+    }
+
+    private void _takeScreenshot() {
+        Answers.getInstance().logCustom(new CustomEvent("Take screenshot"));
+
         final MediaProjection mProjection = getMediaProjection();
         if (mProjection == null) {
             Tool.logError("MediaProjection is null");
@@ -235,6 +260,8 @@ public class ScreenshotHandler {
     }
 
     public interface OnScreenshotHandlerCallback {
+        void onScreenshotStart();
+
         void onScreenshotFinished(Bitmap bitmap);
 
         void onScreenshotFailed(int errorCode, Throwable e);

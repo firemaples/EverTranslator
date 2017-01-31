@@ -69,4 +69,10 @@ public class OcrResultView extends FloatingView {
     public void clear() {
         view_ocrResultWrapper.clear();
     }
+
+    @Override
+    public void detachFromWindow() {
+        clear();
+        super.detachFromWindow();
+    }
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -347,7 +346,6 @@ public class FloatingBar extends FloatingView {
         }
 
         if (drawAreaView != null) {
-            drawAreaView.getAreaSelectionView().clear();
             drawAreaView.detachFromWindow();
 //            drawAreaView = null;
         }
@@ -357,7 +355,6 @@ public class FloatingBar extends FloatingView {
         }
 
         if (ocrResultView != null) {
-            ocrResultView.clear();
             ocrResultView.detachFromWindow();
 //            ocrResultView = null;
         }
@@ -384,15 +381,8 @@ public class FloatingBar extends FloatingView {
         if (screenshotHandler.isGetUserPermission()) {
             screenshotHandler.setCallback(onScreenshotHandlerCallback);
 
-            FloatingBar.this.detachFromWindow();
+            screenshotHandler.takeScreenshot(100);
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Answers.getInstance().logCustom(new CustomEvent("Take screenshot"));
-                    screenshotHandler.takeScreenshot();
-                }
-            }, 100);
             return true;
         } else {
             screenshotHandler.getUserPermission();
@@ -401,6 +391,11 @@ public class FloatingBar extends FloatingView {
     }
 
     private ScreenshotHandler.OnScreenshotHandlerCallback onScreenshotHandlerCallback = new ScreenshotHandler.OnScreenshotHandlerCallback() {
+        @Override
+        public void onScreenshotStart() {
+            FloatingBar.this.detachFromWindow();
+        }
+
         @Override
         public void onScreenshotFinished(Bitmap bitmap) {
             currentScreenshot = bitmap;

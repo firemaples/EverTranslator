@@ -43,4 +43,10 @@ public class DrawAreaView extends FloatingView {
     public AreaSelectionView getAreaSelectionView() {
         return view_areaSelectionView;
     }
+
+    @Override
+    public void detachFromWindow() {
+        view_areaSelectionView.clear();
+        super.detachFromWindow();
+    }
 }
