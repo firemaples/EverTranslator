@@ -33,6 +33,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    //https://gist.github.com/keyboardsurfer/a6a5bcf2b62f9aa41ae2
+    applicationVariants.all { variant ->
+        if (variant.buildType.isDebuggable()) {
+            def flavor = variant.mergedFlavor
+            def name = flavor.getVersionName()
+            def versionName = name + '-debug'
+            flavor.versionName = versionName;
+        }
+    }
 }
 
 dependencies {
