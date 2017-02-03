@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+            android:shape="rectangle">
+    <item>
+        <shape android:shape="rectangle">
+            <stroke
+                android:width="@dimen/quickWindow_borderWidth"
+                android:color="@color/quickWindow_borderColor1"/>
+        </shape>
+    </item>
+    <item
+        android:bottom="@dimen/quickWindow_borderWidth"
+        android:left="@dimen/quickWindow_borderWidth"
+        android:right="@dimen/quickWindow_borderWidth"
+        android:top="@dimen/quickWindow_borderWidth">
+        <shape android:shape="rectangle">
+            <stroke
+                android:width="@dimen/quickWindow_borderWidth"
+                android:color="@color/quickWindow_borderColor2"/>
+        </shape>
+    </item>
+</layer-list>

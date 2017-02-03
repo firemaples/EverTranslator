@@ -44,7 +44,7 @@
     <string name="btn_requestAgain">Request Again</string>
     <string name="btn_openAppsPage">Open [Apps] page</string>
     <string name="ocr_text">OCR text:</string>
-    <string name="notification_contentText">Click to show floating bar</string>
+    <string name="notification_contentText_show">Click to show floating bar</string>
     <string name="translated_text">Translated text</string>
     <string name="debug_mode">Debug Mode</string>
     <string name="title_browser">Translation</string>
@@ -62,4 +62,6 @@
     <string name="error_unknownErrorWhenRequestMediaProjection">A error occurred when trying to request [MediaProjection] permission, is your device support this feature?</string>
     <string name="error_openManageOverlayPermissionPageFailed">It seems your device not support the intent shortcut of ACTION_MANAGE_OVERLAY_PERMISSION, please enable [Draw over other apps] from [Apps] by yourself</string>
     <string name="error_connectToServerFailed">Connect to server failed, please check your network connection.</string>
+    <string name="menu_changeMode">Change Mode</string>
+    <string name="notification_contentText_hide">Click to hide floating bar</string>
 </resources>

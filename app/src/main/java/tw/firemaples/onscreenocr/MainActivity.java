@@ -31,6 +31,7 @@ import tw.firemaples.onscreenocr.utils.Tool;
 
 public class MainActivity extends AppCompatActivity {
     public static final String INTENT_START_FROM_NOTIFY = "INTENT_START_FROM_NOTIFY";
+    public static final String INTENT_SHOW_FLOATING_VIEW = "INTENT_SHOW_FLOATING_VIEW";
 
     private final int REQUEST_CODE_CHECK_DRAW_OVERLAY_PERM = 101;
     private final int REQUEST_CODE_REQUEST_EXTERNAL_STORAGE_READ_WRITE = 102;
@@ -187,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestMediaProjection() {
+        //TODO Not request once if has media projection instance
         Tool.logInfo("Requesting for media projection");
         try {
 //            throw new RuntimeException("Unable to start activity ComponentInfo{tw.firemaples.onscreenocr/tw.firemaples.onscreenocr.MainActivity}: android.content.ActivityNotFoundException: Unable to find explicit activity class {com.android.systemui/com.android.systemui.media.MediaProjectionPermissionActivity}; have you declared this activity in your AndroidManifest.xml?");
@@ -255,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startService() {
+        //TODO pass INTENT_SHOW_FLOATING_VIEW into service and implement hide for notification feature
         boolean fromNotify = false;
         if (getIntent() != null && getIntent().hasExtra(INTENT_START_FROM_NOTIFY)) {
             fromNotify = getIntent().getBooleanExtra(INTENT_START_FROM_NOTIFY, false);

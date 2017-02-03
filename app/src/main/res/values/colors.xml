@@ -11,4 +11,7 @@
     <color name="captureAreaSelectionViewProgressBackground">#77000000</color>
 
     <color name="ocrResultCover_color">#8800FF00</color>
+
+    <color name="quickWindow_borderColor1">#FF4081</color>
+    <color name="quickWindow_borderColor2">#FF006064</color>
 </resources>

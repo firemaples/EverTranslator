@@ -49,12 +49,18 @@ public class FloatingBarMenu {
                 if (callback != null) {
                     callback.onThanksItemClick();
                 }
+            } else if (itemId == R.id.menu_changeMode) {
+                if (callback != null) {
+                    callback.onChangeModeItemClick();
+                }
             }
             return false;
         }
     };
 
     public interface OnFloatingBarMenuCallback {
+        void onChangeModeItemClick();
+
         void onSettingItemClick();
 
         void onThanksItemClick();

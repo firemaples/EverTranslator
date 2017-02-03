@@ -43,7 +43,7 @@
     <string name="btn_close">關閉</string>
     <string name="btn_requestAgain">再次請求</string>
     <string name="ocr_text">原始內容</string>
-    <string name="notification_contentText">點擊開啟浮動視窗</string>
+    <string name="notification_contentText_show">點擊開啟浮動視窗</string>
     <string name="translated_text">翻譯結果</string>
     <string name="debug_mode">除錯模式</string>
     <string name="title_browser">翻譯</string>
