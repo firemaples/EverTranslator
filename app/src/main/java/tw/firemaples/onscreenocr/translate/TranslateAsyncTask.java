@@ -11,6 +11,7 @@ import com.memetix.mst.language.Language;
 import com.memetix.mst.translate.Translate;
 
 import java.util.List;
+import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
@@ -62,7 +63,8 @@ public class TranslateAsyncTask extends AsyncTask<Void, String, Void> {
                             new CustomEvent("Translate Text")
                                     .putCustomAttribute("Text length", ocrText.length())
                                     .putCustomAttribute("Translate from", translateFromLang.name())
-                                    .putCustomAttribute("Translate to", translateToLang.name()));
+                                    .putCustomAttribute("Translate to", translateToLang.name())
+                                    .putCustomAttribute("System language", Locale.getDefault().getLanguage()));
                     String translatedText = Translate.execute(ocrText, translateFromLang, translateToLang);
                     ocrResult.setTranslatedText(translatedText);
                 } catch (Exception e) {

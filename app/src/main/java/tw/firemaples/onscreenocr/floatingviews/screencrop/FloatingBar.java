@@ -72,7 +72,6 @@ public class FloatingBar extends FloatingView {
     @Override
     public void attachToWindow() {
         super.attachToWindow();
-        Answers.getInstance().logCustom(new CustomEvent("FloatingBar show"));
     }
 
     private void detachFromWindow(boolean reset) {
@@ -88,7 +87,6 @@ public class FloatingBar extends FloatingView {
         resetAll();
         super.detachFromWindow();
         ScreenTranslatorService.resetForeground();
-        Answers.getInstance().logCustom(new CustomEvent("FloatingBar hide"));
     }
 
     @Override
