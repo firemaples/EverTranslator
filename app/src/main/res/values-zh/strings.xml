@@ -62,4 +62,6 @@
     <string name="saveOcrEngineToExternalStorage">將文字辨識檔案儲存至外部記憶卡</string>
     <string name="canceledByUser">使用者取消下載任務</string>
     <string name="error_connectToServerFailed">連線至伺服器失敗，請檢查你的網路連線。</string>
+    <string name="notification_contentText_hide">點擊隱藏浮動視窗</string>
+    <string name="menu_changeMode">切換模式</string>
 </resources>
