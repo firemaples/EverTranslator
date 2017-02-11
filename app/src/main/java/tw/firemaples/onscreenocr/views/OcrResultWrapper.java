@@ -11,7 +11,7 @@ import java.util.List;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
-import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 
 /**
  * Created by firemaples on 29/11/2016.
@@ -68,7 +68,7 @@ public class OcrResultWrapper extends FrameLayout {
                 layoutParams.setMargins(parentRect.left, parentRect.top, 0, 0);
                 bgImage.setLayoutParams(layoutParams);
 
-                if (Tool.getInstance().isDebugMode()) {
+                if (SharePreferenceUtil.getInstance().isDebugMode()) {
                     bgImage.setImageBitmap(ocrResult.getDebugInfo().getCroppedBitmap());
                 }
 

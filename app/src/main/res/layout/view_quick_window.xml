@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="@dimen/quickWindow_OCRArea_minWidth"
+                android:layout_height="@dimen/quickWindow_OCRArea_minHeight"
+                android:minHeight="@dimen/quickWindow_OCRArea_minHeight"
+                android:minWidth="@dimen/quickWindow_OCRArea_minWidth">
+
+    <View
+        android:id="@+id/view_OCRArea"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/quickWindow_OCRArea_margin"
+        android:background="@drawable/bg_quick_window_ocr_area"/>
+
+    <ImageView
+        android:layout_width="@dimen/quickWindow_roundBtn_size"
+        android:layout_height="@dimen/quickWindow_roundBtn_size"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/bg_quick_window_round_btn"
+        android:padding="3dp"
+        android:rotation="90.0"
+        android:src="@drawable/arrow_expand"/>
+
+</RelativeLayout>

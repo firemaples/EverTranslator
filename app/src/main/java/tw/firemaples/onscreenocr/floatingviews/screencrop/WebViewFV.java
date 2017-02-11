@@ -16,7 +16,7 @@ import java.util.Locale;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.utils.Tool;
-import tw.firemaples.onscreenocr.utils.WebViewService;
+import tw.firemaples.onscreenocr.utils.WebViewUtil;
 
 /**
  * Created by firemaples on 01/12/2016.
@@ -77,13 +77,13 @@ public class WebViewFV extends FloatingView {
     }
 
     public void setContent(String text, String targetLanguage) {
-        WebViewService.Type type = getServiceType();
+        WebViewUtil.Type type = getServiceType();
         url = type.getFormattedUrl(text, targetLanguage);
         wv_webView.loadUrl(url);
     }
 
-    private WebViewService.Type getServiceType() {
-        return WebViewService.Type.Google;
+    private WebViewUtil.Type getServiceType() {
+        return WebViewUtil.Type.Google;
     }
 
     public interface OnWebViewFVCallback {

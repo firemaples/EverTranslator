@@ -17,6 +17,7 @@ import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
+import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
@@ -70,7 +71,7 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
             OcrResult ocrResult = new OcrResult();
             ocrResult.setRect(rect);
             String resultText = baseAPI.getUTF8Text();
-            if (Tool.getInstance().removeLineBreaks()) {
+            if (SharePreferenceUtil.getInstance().removeLineBreaks()) {
                 resultText = Tool.replaceAllLineBreaks(resultText, " ");
             }
             ocrResult.setText(resultText);
@@ -87,7 +88,7 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
                 ocrResult.setSubRect(subRect);
             }
 
-            if (Tool.getInstance().isDebugMode()) {
+            if (SharePreferenceUtil.getInstance().isDebugMode()) {
                 OcrResult.DebugInfo debugInfo = new OcrResult.DebugInfo();
                 Bitmap cropped = Bitmap.createBitmap(screenshot, rect.left, rect.top, rect.width(), rect.height());
                 debugInfo.setCroppedBitmap(cropped);

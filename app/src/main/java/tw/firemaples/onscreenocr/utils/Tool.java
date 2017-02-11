@@ -3,9 +3,7 @@ package tw.firemaples.onscreenocr.utils;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.github.johnpersano.supertoasts.SuperToast;
@@ -17,28 +15,21 @@ import tw.firemaples.onscreenocr.BuildConfig;
  * Created by firemaples on 2016/3/1.
  */
 public class Tool {
-    private static final String KEY_DEBUG_MODE = "KEY_DEBUG_MODE";
-    private static final String KEY_ENABLE_TRANSLATION = "KEY_ENABLE_TRANSLATION";
-    private static final String KEY_STARTING_WITH_SELECTION_MODE = "KEY_STARTING_WITH_SELECTION_MODE";
-    private static final String KEY_REMOVE_LINE_BREAKS = "KEY_REMOVE_LINE_BREAKS";
     private static Tool _instance;
 
     private static String LOG_TAG = "OnScreenOcr";
 
     private Context context;
 
-    public static void init() {
-        _instance = new Tool();
+    public static void init(Context context) {
+        _instance = new Tool(context);
     }
 
     public static Tool getInstance() {
         return _instance;
     }
 
-    private Tool() {
-    }
-
-    public void setContext(Context context) {
+    private Tool(Context context) {
         this.context = context;
     }
 
@@ -87,42 +78,6 @@ public class Tool {
         SuperToast.cancelAllSuperToasts();
         SuperToast.create(getContext(), msg, SuperToast.Duration.VERY_SHORT,
                 Style.getStyle(Style.RED, SuperToast.Animations.FADE)).show();
-    }
-
-    private SharedPreferences getSharedPreferences() {
-        return PreferenceManager.getDefaultSharedPreferences(getContext());
-    }
-
-    public boolean isDebugMode() {
-        return getSharedPreferences().getBoolean(KEY_DEBUG_MODE, false);
-    }
-
-    public void setDebugMode(boolean debugMode) {
-        getSharedPreferences().edit().putBoolean(KEY_DEBUG_MODE, debugMode).apply();
-    }
-
-    public boolean isEnableTranslation() {
-        return getSharedPreferences().getBoolean(KEY_ENABLE_TRANSLATION, true);
-    }
-
-    public void setEnableTranslation(boolean enableTranslation) {
-        getSharedPreferences().edit().putBoolean(KEY_ENABLE_TRANSLATION, enableTranslation).apply();
-    }
-
-    public boolean startingWithSelectionMode() {
-        return getSharedPreferences().getBoolean(KEY_STARTING_WITH_SELECTION_MODE, true);
-    }
-
-    public void setStartingWithSelectionMode(boolean startingWithSelectionMode) {
-        getSharedPreferences().edit().putBoolean(KEY_STARTING_WITH_SELECTION_MODE, startingWithSelectionMode).apply();
-    }
-
-    public boolean removeLineBreaks() {
-        return getSharedPreferences().getBoolean(KEY_REMOVE_LINE_BREAKS, true);
-    }
-
-    public void setRemoveLineBreaks(boolean removeLineBreaks) {
-        getSharedPreferences().edit().putBoolean(KEY_REMOVE_LINE_BREAKS, removeLineBreaks).apply();
     }
 
     public static String replaceAllLineBreaks(String str, String replaceWith) {

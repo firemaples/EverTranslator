@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
  * Created by firemaples on 30/11/2016.
  */
 
-public class WebViewService {
+public class WebViewUtil {
     private final static String FORMAT_TEXT = "{TEXT}";
     private final static String FORMAT_SOURCE_LANG = "{SL}";
     private final static String FORMAT_TARGET_LANG = "{TL}";

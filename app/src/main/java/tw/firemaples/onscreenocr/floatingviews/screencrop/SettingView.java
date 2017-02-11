@@ -18,6 +18,7 @@ import java.nio.channels.FileChannel;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
+import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
@@ -26,6 +27,7 @@ import tw.firemaples.onscreenocr.utils.Tool;
 
 public class SettingView extends FloatingView {
     private Tool tool;
+    private SharePreferenceUtil spUtil;
     private OcrNTranslateUtils ocrNTranslateUtils;
     private OnSettingChangedCallback callback;
 
@@ -33,6 +35,7 @@ public class SettingView extends FloatingView {
         super(context);
         this.callback = callback;
         tool = Tool.getInstance();
+        spUtil = SharePreferenceUtil.getInstance();
         ocrNTranslateUtils = OcrNTranslateUtils.getInstance();
         setViews();
     }
@@ -61,11 +64,11 @@ public class SettingView extends FloatingView {
         cb_startingWithSelectionMode.setOnCheckedChangeListener(onCheckChangeListener);
         cb_removeLineBreaks.setOnCheckedChangeListener(onCheckChangeListener);
 
-        cb_debugMode.setChecked(tool.isDebugMode());
-        cb_enableTranslation.setChecked(tool.isEnableTranslation());
+        cb_debugMode.setChecked(spUtil.isDebugMode());
+        cb_enableTranslation.setChecked(spUtil.isEnableTranslation());
         cb_saveOcrEngineToExternalStorage.setChecked(ocrNTranslateUtils.getTessDataLocation() == OcrNTranslateUtils.TessDataLocation.EXTERNAL_STORAGE);
-        cb_startingWithSelectionMode.setChecked(tool.startingWithSelectionMode());
-        cb_removeLineBreaks.setChecked(tool.removeLineBreaks());
+        cb_startingWithSelectionMode.setChecked(spUtil.startingWithSelectionMode());
+        cb_removeLineBreaks.setChecked(spUtil.removeLineBreaks());
 
         if (!ocrNTranslateUtils.isExternalStorageWritable()) {
             cb_saveOcrEngineToExternalStorage.setEnabled(false);
@@ -77,16 +80,16 @@ public class SettingView extends FloatingView {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             int id = buttonView.getId();
             if (id == R.id.cb_debugMode) {
-                tool.setDebugMode(isChecked);
+                spUtil.setDebugMode(isChecked);
             } else if (id == R.id.cb_enableTranslation) {
-                tool.setEnableTranslation(isChecked);
+                spUtil.setEnableTranslation(isChecked);
                 if (callback != null) {
                     callback.onEnableTranslationChanged(isChecked);
                 }
             } else if (id == R.id.cb_startingWithSelectionMode) {
-                tool.setStartingWithSelectionMode(isChecked);
+                spUtil.setStartingWithSelectionMode(isChecked);
             } else if (id == R.id.cb_removeLineBreaks) {
-                tool.setRemoveLineBreaks(isChecked);
+                spUtil.setRemoveLineBreaks(isChecked);
             } else if (id == R.id.cb_saveOcrEngineToExternalStorage) {
                 OcrNTranslateUtils.TessDataLocation currentSelectedLocation = isChecked ? OcrNTranslateUtils.TessDataLocation.EXTERNAL_STORAGE : OcrNTranslateUtils.TessDataLocation.INTERNAL_STORAGE;
                 OcrNTranslateUtils.TessDataLocation savedLocation = ocrNTranslateUtils.getTessDataLocation();

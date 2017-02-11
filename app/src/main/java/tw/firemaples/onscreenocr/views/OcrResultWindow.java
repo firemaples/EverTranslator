@@ -18,6 +18,7 @@ import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
+import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.utils.ViewPreparedWaiter;
 
@@ -57,7 +58,7 @@ public class OcrResultWindow {
         rootView.findViewById(R.id.bt_copy_ocrText).setOnClickListener(onClickListener);
         rootView.findViewById(R.id.bt_copy_translatedText).setOnClickListener(onClickListener);
 
-        view_translatedTextWrapper.setVisibility(Tool.getInstance().isEnableTranslation() ? View.VISIBLE : View.GONE);
+        view_translatedTextWrapper.setVisibility(SharePreferenceUtil.getInstance().isEnableTranslation() ? View.VISIBLE : View.GONE);
 
         layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(MARGIN, MARGIN, MARGIN, MARGIN);

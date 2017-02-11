@@ -13,7 +13,7 @@ import java.util.List;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
-import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.views.OcrResultWindow;
 import tw.firemaples.onscreenocr.views.OcrResultWrapper;
 
@@ -54,7 +54,7 @@ public class OcrResultView extends FloatingView {
     public void setOcrResults(List<OcrResult> results) {
         view_ocrResultWrapper.setOcrResults(results);
 
-        if (Tool.getInstance().isDebugMode() && results.size() > 0) {
+        if (SharePreferenceUtil.getInstance().isDebugMode() && results.size() > 0) {
             setDebugInfo(results.get(0));
         }
     }

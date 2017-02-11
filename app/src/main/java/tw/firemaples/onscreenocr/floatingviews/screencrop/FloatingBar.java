@@ -26,7 +26,9 @@ import tw.firemaples.onscreenocr.ocr.OcrRecognizeAsyncTask;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.translate.TranslateAsyncTask;
+import tw.firemaples.onscreenocr.utils.AppMode;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
+import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.views.AreaSelectionView;
 import tw.firemaples.onscreenocr.views.FloatingBarMenu;
@@ -63,7 +65,6 @@ public class FloatingBar extends FloatingView {
 
     public FloatingBar(Context context) {
         super(context);
-        Tool.getInstance().setContext(context);
         ocrNTranslateUtils = OcrNTranslateUtils.getInstance();
         setViews(getRootView());
     }
@@ -74,9 +75,19 @@ public class FloatingBar extends FloatingView {
         Answers.getInstance().logCustom(new CustomEvent("FloatingBar show"));
     }
 
+    private void detachFromWindow(boolean reset) {
+        if (reset) {
+            detachFromWindow();
+        } else {
+            super.detachFromWindow();
+        }
+    }
+
     @Override
     public void detachFromWindow() {
+        resetAll();
         super.detachFromWindow();
+        ScreenTranslatorService.resetForeground();
         Answers.getInstance().logCustom(new CustomEvent("FloatingBar hide"));
     }
 
@@ -106,7 +117,7 @@ public class FloatingBar extends FloatingView {
 
         sp_langFrom.setSelection(ocrNTranslateUtils.getOcrLangIndex());
         sp_langTo.setSelection(ocrNTranslateUtils.getTranslateToIndex());
-        sp_langTo.setEnabled(Tool.getInstance().isEnableTranslation());
+        sp_langTo.setEnabled(SharePreferenceUtil.getInstance().isEnableTranslation());
         sp_langFrom.setOnItemSelectedListener(onItemSelectedListener);
         sp_langTo.setOnItemSelectedListener(onItemSelectedListener);
 
@@ -114,7 +125,7 @@ public class FloatingBar extends FloatingView {
 
         webViewFV = new WebViewFV(getContext(), onWebViewFVCallback);
 
-        if (Tool.getInstance().startingWithSelectionMode()) {
+        if (SharePreferenceUtil.getInstance().startingWithSelectionMode()) {
             onClickListener.onClick(bt_selectArea);
         }
     }
@@ -204,7 +215,7 @@ public class FloatingBar extends FloatingView {
     private ProgressView.OnProgressViewCallback onProgressViewCallback = new ProgressView.OnProgressViewCallback() {
         @Override
         public void onProgressViewAttachedToWindow() {
-            FloatingBar.this.detachFromWindow();
+            FloatingBar.this.detachFromWindow(false);
             FloatingBar.this.attachToWindow();
         }
     };
@@ -267,7 +278,7 @@ public class FloatingBar extends FloatingView {
                     Answers.getInstance().logCustom(new CustomEvent("Do btn select area"));
                     drawAreaView = new DrawAreaView(getContext());
                     drawAreaView.attachToWindow();
-                    FloatingBar.this.detachFromWindow();
+                    FloatingBar.this.detachFromWindow(false);
                     FloatingBar.this.attachToWindow();
                     syncBtnState(BtnState.AreaSelecting);
                     drawAreaView.getAreaSelectionView().setCallback(onAreaSelectionViewCallback);
@@ -298,6 +309,11 @@ public class FloatingBar extends FloatingView {
     };
 
     private FloatingBarMenu.OnFloatingBarMenuCallback onFloatingBarMenuCallback = new FloatingBarMenu.OnFloatingBarMenuCallback() {
+        @Override
+        public void onChangeModeItemClick() {
+            ScreenTranslatorService.switchAppMode(AppMode.QuickWindow);
+        }
+
         @Override
         public void onSettingItemClick() {
             new SettingView(getContext(), onSettingChangedCallback).attachToWindow();
@@ -394,7 +410,7 @@ public class FloatingBar extends FloatingView {
     private ScreenshotHandler.OnScreenshotHandlerCallback onScreenshotHandlerCallback = new ScreenshotHandler.OnScreenshotHandlerCallback() {
         @Override
         public void onScreenshotStart() {
-            FloatingBar.this.detachFromWindow();
+            FloatingBar.this.detachFromWindow(false);
         }
 
         @Override
@@ -491,7 +507,7 @@ public class FloatingBar extends FloatingView {
     };
 
     private void startTranslate(List<OcrResult> results) {
-        if (Tool.getInstance().isEnableTranslation()) {
+        if (SharePreferenceUtil.getInstance().isEnableTranslation()) {
             Answers.getInstance().logCustom(new CustomEvent("Start Translation"));
             translateAsyncTask = new TranslateAsyncTask(getContext(), results, onTranslateAsyncTaskCallback);
             translateAsyncTask.execute();
@@ -511,7 +527,7 @@ public class FloatingBar extends FloatingView {
                     ocrResultView = new OcrResultView(getContext(), onOcrResultWindowCallback);
                     ocrResultView.attachToWindow();
                     ocrResultView.setOcrResults(translatedResult);
-                    FloatingBar.this.detachFromWindow();
+                    FloatingBar.this.detachFromWindow(false);
                     FloatingBar.this.attachToWindow();
                 }
 

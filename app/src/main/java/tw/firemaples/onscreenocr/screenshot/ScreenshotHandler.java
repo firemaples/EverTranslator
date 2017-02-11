@@ -31,6 +31,7 @@ import java.util.Locale;
 
 import tw.firemaples.onscreenocr.MainActivity;
 import tw.firemaples.onscreenocr.R;
+import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
@@ -199,7 +200,7 @@ public class ScreenshotHandler {
 
                     realSizeBitmap = Bitmap.createBitmap(tempBmp, 0, 0, metrics.widthPixels, tempBmp.getHeight());
 
-                    if (Tool.getInstance().isDebugMode()) {
+                    if (SharePreferenceUtil.getInstance().isDebugMode()) {
                         saveBmpToFile(realSizeBitmap);
                     }
                 } catch (Throwable e) {
