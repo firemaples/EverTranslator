@@ -16,7 +16,7 @@
         <TextView
             android:id="@+id/tv_link6"
             style="@style/thanksPage.itemLink"
-            android:text="https://github.com/firemaples/AnyTranslator"/>
+            android:text="https://github.com/firemaples/EverTranslator"/>
 
         <TextView
             style="@style/thanksPage.title"
