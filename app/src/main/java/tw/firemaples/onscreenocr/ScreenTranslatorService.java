@@ -131,7 +131,9 @@ public class ScreenTranslatorService extends Service {
         screenshotHandler = ScreenshotHandler.getInstance();
         OcrNTranslateUtils.init();
 
-        _startFloatingView();
+        if (SharePreferenceUtil.getInstance().isAppShowing()) {
+            _startFloatingView();
+        }
 
         startForeground();
     }
@@ -142,6 +144,9 @@ public class ScreenTranslatorService extends Service {
         stopForeground();
 
         _stopFloatingView(false);
+
+        //If process was been killed by system or user
+        SharePreferenceUtil.getInstance().setIsAppShowing(true, this);
 
         if (screenshotHandler != null) {
             screenshotHandler.release();
@@ -208,7 +213,9 @@ public class ScreenTranslatorService extends Service {
     }
 
     private void _stopFloatingView(boolean updateNotify) {
-        mainFloatingView.detachFromWindow();
+        if (mainFloatingView != null) {
+            mainFloatingView.detachFromWindow();
+        }
         if (updateNotify) {
             updateNotification();
         }

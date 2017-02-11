@@ -1,5 +1,6 @@
 package tw.firemaples.onscreenocr.utils;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -24,7 +25,11 @@ public class SharePreferenceUtil {
     }
 
     private SharedPreferences getSharedPreferences() {
-        return PreferenceManager.getDefaultSharedPreferences(Tool.getContext());
+        return getSharedPreferences(Tool.getContext());
+    }
+
+    private SharedPreferences getSharedPreferences(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public boolean isDebugMode() {
@@ -40,7 +45,11 @@ public class SharePreferenceUtil {
     }
 
     public void setIsAppShowing(boolean isAppShowing) {
-        getSharedPreferences().edit().putBoolean(KEY_APP_SHOWING, isAppShowing).apply();
+        setIsAppShowing(isAppShowing, Tool.getContext());
+    }
+
+    public void setIsAppShowing(boolean isAppShowing, Context context) {
+        getSharedPreferences(context).edit().putBoolean(KEY_APP_SHOWING, isAppShowing).apply();
     }
 
     public boolean isEnableTranslation() {

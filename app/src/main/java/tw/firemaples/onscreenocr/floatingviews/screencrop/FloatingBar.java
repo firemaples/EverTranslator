@@ -72,9 +72,11 @@ public class FloatingBar extends FloatingView {
     @Override
     public void attachToWindow() {
         super.attachToWindow();
+        SharePreferenceUtil.getInstance().setIsAppShowing(true);
     }
 
     private void detachFromWindow(boolean reset) {
+        SharePreferenceUtil.getInstance().setIsAppShowing(false);
         if (reset) {
             detachFromWindow();
         } else {
@@ -84,6 +86,7 @@ public class FloatingBar extends FloatingView {
 
     @Override
     public void detachFromWindow() {
+        SharePreferenceUtil.getInstance().setIsAppShowing(false);
         resetAll();
         super.detachFromWindow();
         ScreenTranslatorService.resetForeground();

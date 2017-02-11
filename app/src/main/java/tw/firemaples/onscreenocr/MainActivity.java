@@ -27,6 +27,7 @@ import io.fabric.sdk.android.Fabric;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.Callback;
 import tw.firemaples.onscreenocr.utils.PermissionUtil;
+import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,7 +57,11 @@ public class MainActivity extends AppCompatActivity {
         if (!Fabric.isInitialized()) {
             Fabric.with(this, new Crashlytics());
         }
-        Answers.getInstance().logCustom(new CustomEvent("App launched"));
+
+        if (getIntent() != null && getIntent().getAction() != null) {
+            Answers.getInstance().logCustom(new CustomEvent("App launched"));
+            SharePreferenceUtil.getInstance().setIsAppShowing(true, this);
+        }
 
         startApp();
     }
