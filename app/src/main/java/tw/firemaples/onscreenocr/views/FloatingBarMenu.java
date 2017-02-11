@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.PopupMenu;
 
 import tw.firemaples.onscreenocr.R;
+import tw.firemaples.onscreenocr.utils.FeatureUtil;
 
 /**
  * Created by firemaples on 31/10/2016.
@@ -21,6 +22,11 @@ public class FloatingBarMenu {
         popupMenu = new PopupMenu(context, anchor);
         popupMenu.inflate(R.menu.menu_floating_bar);
         popupMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+
+        if (!FeatureUtil.isNewModeEnabled()) {
+            MenuItem item_changeMode = popupMenu.getMenu().findItem(R.id.menu_changeMode);
+            item_changeMode.setVisible(false);
+        }
     }
 
     public void show() {
