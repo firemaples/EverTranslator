@@ -2,6 +2,7 @@ package tw.firemaples.onscreenocr;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -35,7 +36,7 @@ public class ScreenTranslatorService extends Service {
     private SharePreferenceUtil spUtil;
 
     private FloatingView mainFloatingView;
-    private boolean dismissNotify = true;
+    private boolean dismissNotify = false;
 
     public ScreenTranslatorService() {
         _instance = this;
@@ -49,14 +50,18 @@ public class ScreenTranslatorService extends Service {
     }
 
     public static boolean isRunning(Context context) {
-        return Tool.isServiceRunning(context, ScreenTranslatorService.class);
+        return Tool.isServiceRunning(context, ScreenTranslatorService.class) && _instance != null;
     }
 
-    public static void start(Context context, boolean fromNotify) {
+    public static void start(Context context, boolean fromNotify, boolean showFloatingView) {
         if (!isRunning(context)) {
             context.startService(new Intent(context, ScreenTranslatorService.class));
         } else if (fromNotify && _instance != null) {
-            _instance._startFloatingView();
+            if (showFloatingView) {
+                _instance._startFloatingView();
+            } else {
+                _instance._stopFloatingView(true);
+            }
         }
     }
 
@@ -69,7 +74,7 @@ public class ScreenTranslatorService extends Service {
 
     public static void switchAppMode(AppMode appMode) {
         if (_instance != null && SharePreferenceUtil.getInstance().getAppMode() != appMode) {
-            _instance._stopFloatingView();
+            _instance._stopFloatingView(true);
             SharePreferenceUtil.getInstance().setAppMode(appMode);
             _instance._startFloatingView();
         }
@@ -77,8 +82,7 @@ public class ScreenTranslatorService extends Service {
 
     public static void resetForeground() {
         if (_instance != null) {
-            _instance.stopForeground();
-            _instance.startForeground();
+            _instance.updateNotification();
         }
     }
 
@@ -90,7 +94,7 @@ public class ScreenTranslatorService extends Service {
 
     public static void stopFloatingView() {
         if (_instance != null) {
-            _instance._stopFloatingView();
+            _instance._stopFloatingView(true);
         }
     }
 
@@ -137,7 +141,7 @@ public class ScreenTranslatorService extends Service {
         super.onDestroy();
         stopForeground();
 
-        _stopFloatingView();
+        _stopFloatingView(false);
 
         if (screenshotHandler != null) {
             screenshotHandler.release();
@@ -147,6 +151,10 @@ public class ScreenTranslatorService extends Service {
     }
 
     private void startForeground() {
+        startForeground(ONGOING_NOTIFICATION_ID, getForegroundNotification());
+    }
+
+    private Notification getForegroundNotification() {
         Notification.Builder builder = new Notification.Builder(this);
         builder.setSmallIcon(R.mipmap.notify_icon);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.icon));
@@ -165,11 +173,18 @@ public class ScreenTranslatorService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
         builder.setAutoCancel(false);
-        startForeground(ONGOING_NOTIFICATION_ID, builder.build());
+        return builder.build();
     }
 
     private void stopForeground() {
         stopForeground(dismissNotify);
+    }
+
+    private void updateNotification() {
+        if (!dismissNotify) {
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.notify(ONGOING_NOTIFICATION_ID, getForegroundNotification());
+        }
     }
 
     private void _startFloatingView() {
@@ -189,9 +204,13 @@ public class ScreenTranslatorService extends Service {
                 break;
         }
         mainFloatingView.attachToWindow();
+        updateNotification();
     }
 
-    private void _stopFloatingView() {
+    private void _stopFloatingView(boolean updateNotify) {
         mainFloatingView.detachFromWindow();
+        if (updateNotify) {
+            updateNotification();
+        }
     }
 }

@@ -61,6 +61,14 @@ public class MainActivity extends AppCompatActivity {
         startApp();
     }
 
+    private void startApp() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkDrawOverlayPermission();
+        } else {
+            requestMediaProjection();
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_CHECK_DRAW_OVERLAY_PERM) {
@@ -188,23 +196,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestMediaProjection() {
-        //TODO Not request once if has media projection instance
-        Tool.logInfo("Requesting for media projection");
-        try {
+        if (ScreenshotHandler.isInitialized()) {
+            Tool.logInfo("Has media projection");
+            startService();
+        } else {
+            Tool.logInfo("Requesting for media projection");
+            try {
 //            throw new RuntimeException("Unable to start activity ComponentInfo{tw.firemaples.onscreenocr/tw.firemaples.onscreenocr.MainActivity}: android.content.ActivityNotFoundException: Unable to find explicit activity class {com.android.systemui/com.android.systemui.media.MediaProjectionPermissionActivity}; have you declared this activity in your AndroidManifest.xml?");
-            MediaProjectionManager projectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-            startActivityForResult(projectionManager.createScreenCaptureIntent(), REQUEST_CODE_REQUEST_MEDIA_PROJECTION_RESULT);
-        } catch (NoClassDefFoundError e) {
-            String errorMsg = "[MediaProjection] not found";
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                errorMsg += getString(R.string.error_mediaProjectionNotFound_need5UpperVersion);
-            } else {
-                errorMsg += " with unknown situation";
+                MediaProjectionManager projectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+                startActivityForResult(projectionManager.createScreenCaptureIntent(), REQUEST_CODE_REQUEST_MEDIA_PROJECTION_RESULT);
+            } catch (NoClassDefFoundError e) {
+                String errorMsg = "[MediaProjection] not found";
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    errorMsg += getString(R.string.error_mediaProjectionNotFound_need5UpperVersion);
+                } else {
+                    errorMsg += " with unknown situation";
+                }
+                showErrorDialog(errorMsg, null);
+            } catch (Throwable t) {
+                String errorMsg = getString(R.string.error_unknownErrorWhenRequestMediaProjection) + " \r\n\r\n" + t.getLocalizedMessage();
+                showErrorDialog(errorMsg, null);
             }
-            showErrorDialog(errorMsg, null);
-        } catch (Throwable t) {
-            String errorMsg = getString(R.string.error_unknownErrorWhenRequestMediaProjection) + " \r\n\r\n" + t.getLocalizedMessage();
-            showErrorDialog(errorMsg, null);
         }
     }
 
@@ -248,21 +260,16 @@ public class MainActivity extends AppCompatActivity {
         ab.show();
     }
 
-    private void startApp() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkDrawOverlayPermission();
-        } else {
-            requestMediaProjection();
-        }
-    }
-
     private void startService() {
-        //TODO pass INTENT_SHOW_FLOATING_VIEW into service and implement hide for notification feature
         boolean fromNotify = false;
+        boolean showFloatingView = true;
         if (getIntent() != null && getIntent().hasExtra(INTENT_START_FROM_NOTIFY)) {
             fromNotify = getIntent().getBooleanExtra(INTENT_START_FROM_NOTIFY, false);
+            if (getIntent().hasExtra(INTENT_SHOW_FLOATING_VIEW)) {
+                showFloatingView = getIntent().getBooleanExtra(INTENT_SHOW_FLOATING_VIEW, true);
+            }
         }
-        ScreenTranslatorService.start(this, fromNotify);
+        ScreenTranslatorService.start(this, fromNotify, showFloatingView);
         overridePendingTransition(0, 0);
         finish();
     }

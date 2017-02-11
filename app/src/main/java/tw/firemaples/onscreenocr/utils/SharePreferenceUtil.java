@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
  */
 public class SharePreferenceUtil {
     private static final String KEY_DEBUG_MODE = "KEY_DEBUG_MODE";
+    private static final String KEY_APP_SHOWING = "KEY_APP_SHOWING";
     private static final String KEY_ENABLE_TRANSLATION = "KEY_ENABLE_TRANSLATION";
     private static final String KEY_STARTING_WITH_SELECTION_MODE = "KEY_STARTING_WITH_SELECTION_MODE";
     private static final String KEY_REMOVE_LINE_BREAKS = "KEY_REMOVE_LINE_BREAKS";
@@ -32,6 +33,14 @@ public class SharePreferenceUtil {
 
     public void setDebugMode(boolean debugMode) {
         getSharedPreferences().edit().putBoolean(KEY_DEBUG_MODE, debugMode).apply();
+    }
+
+    public boolean isAppShowing() {
+        return getSharedPreferences().getBoolean(KEY_APP_SHOWING, true);
+    }
+
+    public void setIsAppShowing(boolean isAppShowing) {
+        getSharedPreferences().edit().putBoolean(KEY_APP_SHOWING, isAppShowing).apply();
     }
 
     public boolean isEnableTranslation() {
