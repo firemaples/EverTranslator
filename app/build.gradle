@@ -57,5 +57,4 @@ dependencies {
         transitive = true;
     }
     compile 'com.android.support:cardview-v7:23.0.0'
-    compile project(':microsoft-translator-java-api')
 }

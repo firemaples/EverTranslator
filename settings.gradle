@@ -1,4 +1,1 @@
 include ':app'
-include ':microsoft-translator-java-api'
-
-project(':microsoft-translator-java-api').projectDir = new File(settingsDir, '../microsoft-translator-java-api/android')
