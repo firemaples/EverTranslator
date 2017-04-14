@@ -7,12 +7,12 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
-import com.memetix.mst.language.Language;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import io.github.firemaples.language.Language;
 import tw.firemaples.onscreenocr.R;
 
 /**

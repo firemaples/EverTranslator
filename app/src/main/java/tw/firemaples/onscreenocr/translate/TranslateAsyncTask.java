@@ -7,12 +7,12 @@ import android.preference.PreferenceManager;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
-import com.memetix.mst.language.Language;
-import com.memetix.mst.translate.Translate;
 
 import java.util.List;
 import java.util.Locale;
 
+import io.github.firemaples.language.Language;
+import io.github.firemaples.translate.Translate;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.KeyId;
