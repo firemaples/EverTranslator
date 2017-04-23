@@ -36,6 +36,10 @@ public class OcrResultWrapper extends FrameLayout {
         updateView();
     }
 
+    public void update() {
+        updateView();
+    }
+
     public void clear() {
         ocrResults.clear();
         updateView();

@@ -57,6 +57,7 @@ public class OcrResultWindow {
         rootView.findViewById(R.id.bt_openInBrowser_translatedText).setOnClickListener(onClickListener);
         rootView.findViewById(R.id.bt_copy_ocrText).setOnClickListener(onClickListener);
         rootView.findViewById(R.id.bt_copy_translatedText).setOnClickListener(onClickListener);
+        rootView.findViewById(R.id.bt_edit_ocrText).setOnClickListener(onClickListener);
 
         view_translatedTextWrapper.setVisibility(SharePreferenceUtil.getInstance().isEnableTranslation() ? View.VISIBLE : View.GONE);
 
@@ -138,6 +139,10 @@ public class OcrResultWindow {
                 copyToClipboard("OCR text", ocrResult.getText());
             } else if (id == R.id.bt_copy_translatedText) {
                 copyToClipboard("Translated text", ocrResult.getTranslatedText());
+            } else if (id == R.id.bt_edit_ocrText) {
+                if (ocrResult != null) {
+                    callback.onEditOriTextClicked(ocrResult);
+                }
             }
         }
     };
@@ -153,5 +158,7 @@ public class OcrResultWindow {
 
     public interface OnOcrResultWindowCallback {
         void onOpenBrowserBtnClick(String text, boolean translated);
+
+        void onEditOriTextClicked(OcrResult ocrResult);
     }
 }

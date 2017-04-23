@@ -59,6 +59,10 @@ public class OcrResultView extends FloatingView {
         }
     }
 
+    public void update() {
+        view_ocrResultWrapper.update();
+    }
+
     private void setDebugInfo(OcrResult ocrResult) {
         TextView tv_debugInfo = (TextView) getRootView().findViewById(R.id.tv_debugInfo);
         String[] infoArray = ocrResult.getDebugInfo().getInfoList().toArray(new String[ocrResult.getDebugInfo().getInfoList().size()]);

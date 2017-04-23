@@ -46,6 +46,7 @@ public class FloatingBar extends FloatingView {
     private AsyncTask<Void, String, Boolean> lastAsyncTask;
 
     private DialogView dialogView;
+    private TextEditDialogView textEditDialogView;
     private DrawAreaView drawAreaView;
     private ProgressView progressView;
     private List<Rect> currentBoxList = new ArrayList<>();
@@ -382,6 +383,10 @@ public class FloatingBar extends FloatingView {
 //            webViewFV = null;
         }
 
+        if (textEditDialogView != null) {
+            textEditDialogView.detachFromWindow();
+        }
+
         currentBoxList.clear();
         currentScreenshot = null;
         syncBtnState(BtnState.Normal);
@@ -553,7 +558,30 @@ public class FloatingBar extends FloatingView {
             webViewFV.setContent(text);
             webViewFV.attachToWindow();
         }
+
+        @Override
+        public void onEditOriTextClicked(OcrResult ocrResult) {
+            Tool.logInfo("onEditOriTextClicked: " + ocrResult.getText());
+            textEditDialogView = new TextEditDialogView(getContext());
+            textEditDialogView.setCallback(onTextEditDialogViewCallback);
+            textEditDialogView.setContentText(ocrResult.getText());
+            textEditDialogView.setTag(ocrResult);
+            textEditDialogView.attachToWindow();
+        }
     };
+
+    private TextEditDialogView.OnTextEditDialogViewCallback onTextEditDialogViewCallback =
+            new TextEditDialogView.OnTextEditDialogViewCallback() {
+                @Override
+                public void OnConfirmClick(TextEditDialogView textEditDialogView, String text) {
+                    super.OnConfirmClick(textEditDialogView, text);
+                    OcrResult ocrResult = (OcrResult) textEditDialogView.getTag();
+                    if (ocrResult != null) {
+                        ocrResult.setText(text);
+                        ocrResultView.update();
+                    }
+                }
+            };
 
     private WebViewFV.OnWebViewFVCallback onWebViewFVCallback = new WebViewFV.OnWebViewFVCallback() {
         @Override
