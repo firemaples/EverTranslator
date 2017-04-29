@@ -26,10 +26,18 @@
                 android:textStyle="bold"/>
 
             <ImageView
+                android:id="@+id/bt_edit_ocrText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="12dp"
+                android:src="@drawable/edit"/>
+
+            <ImageView
                 android:id="@+id/bt_copy_ocrText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
+                android:layout_marginLeft="8dp"
                 android:src="@drawable/content_copy"/>
 
             <ImageView
@@ -40,11 +48,25 @@
                 android:src="@drawable/earth"/>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_originText"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Origin Text"/>
+            android:orientation="horizontal">
+
+            <ProgressBar
+                android:id="@+id/pb_origin"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/tv_originText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="false"
+                tools:text="Origin Text Origin Text Origin"/>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/view_translatedTextWrapper"
@@ -80,11 +102,26 @@
                     android:src="@drawable/earth"/>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_translatedText"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Translated Text"/>
+                android:orientation="horizontal">
+
+                <ProgressBar
+                    android:id="@+id/pb_translated"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tv_translatedText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="false"
+                    tools:text="Translated Text"/>
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

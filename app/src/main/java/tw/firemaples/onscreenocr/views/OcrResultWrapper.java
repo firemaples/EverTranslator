@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tw.firemaples.onscreenocr.R;
+import tw.firemaples.onscreenocr.floatingviews.screencrop.OcrResultView;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 
@@ -18,7 +19,8 @@ import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
  */
 
 public class OcrResultWrapper extends FrameLayout {
-    private List<OcrResult> ocrResults = new ArrayList<>();
+    private OcrResultView.OcrNTranslateState state;
+    private List<OcrResult> ocrResultList = new ArrayList<>();
 
     private OcrResultWindow ocrResultWindow;
 
@@ -31,19 +33,21 @@ public class OcrResultWrapper extends FrameLayout {
         ocrResultWindow = new OcrResultWindow(getContext(), this, callback);
     }
 
-    public void setOcrResults(List<OcrResult> ocrResults) {
-        this.ocrResults.addAll(ocrResults);
+    public void updateViewState(OcrResultView.OcrNTranslateState state, List<OcrResult> ocrResultList) {
+        this.state = state;
+        this.ocrResultList = ocrResultList;
         updateView();
     }
 
     public void clear() {
-        ocrResults.clear();
+        this.ocrResultList.clear();
         updateView();
     }
 
     private void updateView() {
-        if (ocrResults.size() > 0) {
-            for (OcrResult ocrResult : ocrResults) {
+        if (ocrResultList.size() > 0) {
+            for (OcrResult ocrResult : ocrResultList) {
+
                 Rect parentRect = ocrResult.getRect();
 
                 for (Rect rect : ocrResult.getBoxRects()) {
@@ -74,7 +78,7 @@ public class OcrResultWrapper extends FrameLayout {
 
                 this.addView(bgImage, 0);
 
-                ocrResultWindow.setOcrResult(ocrResult);
+                ocrResultWindow.setOcrResult(state, ocrResult);
                 ocrResultWindow.show(bgImage);
             }
         } else {

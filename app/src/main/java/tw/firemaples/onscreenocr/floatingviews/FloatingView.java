@@ -23,6 +23,7 @@ public abstract class FloatingView {
     private WindowManager.LayoutParams floatingLayoutParams;
     private boolean isAttached = false;
     private View rootView;
+    private Object tag;
 
     public FloatingView(Context context) {
         this.context = context;
@@ -32,7 +33,7 @@ public abstract class FloatingView {
                 getLayoutSize(),
                 getLayoutSize(),
                 WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT);
         if (fullScreenMode()) {
             floatingLayoutParams.flags = floatingLayoutParams.flags | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
@@ -72,6 +73,14 @@ public abstract class FloatingView {
 
     public boolean isAttached() {
         return isAttached;
+    }
+
+    public void setTag(Object tag) {
+        this.tag = tag;
+    }
+
+    public Object getTag() {
+        return tag;
     }
 
     public void attachToWindow() {
