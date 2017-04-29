@@ -233,6 +233,7 @@ public class OcrResultView extends FloatingView {
             Tool.logInfo("onEditOriTextClicked: " + ocrResult.getText());
             textEditDialogView = new TextEditDialogView(getContext());
             textEditDialogView.setCallback(onTextEditDialogViewCallback);
+            textEditDialogView.setTitle(getContext().getString(R.string.title_editOCRText));
             textEditDialogView.setContentText(ocrResult.getText());
             textEditDialogView.setTag(ocrResult);
             textEditDialogView.attachToWindow();

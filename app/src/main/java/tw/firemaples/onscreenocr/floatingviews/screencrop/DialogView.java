@@ -68,6 +68,12 @@ public class DialogView extends FloatingView {
         bt_dialogCancel.setText(android.R.string.cancel);
     }
 
+    @Override
+    public boolean onBackButtonPressed() {
+        callback.onCancelClicked(this);
+        return true;
+    }
+
     public void setCallback(OnDialogViewCallback callback) {
         this.callback = callback;
     }

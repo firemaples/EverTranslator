@@ -64,4 +64,5 @@
     <string name="error_connectToServerFailed">Connect to server failed, please check your network connection.</string>
     <string name="menu_changeMode">Change Mode</string>
     <string name="notification_contentText_hide">Click to hide floating bar</string>
+    <string name="title_editOCRText">Edit OCR text</string>
 </resources>
