@@ -21,18 +21,13 @@ import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ScreenTranslatorService;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.ocr.OcrDownloadAsyncTask;
-import tw.firemaples.onscreenocr.ocr.OcrInitAsyncTask;
-import tw.firemaples.onscreenocr.ocr.OcrRecognizeAsyncTask;
-import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
-import tw.firemaples.onscreenocr.translate.TranslateAsyncTask;
 import tw.firemaples.onscreenocr.utils.AppMode;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.views.AreaSelectionView;
 import tw.firemaples.onscreenocr.views.FloatingBarMenu;
-import tw.firemaples.onscreenocr.views.OcrResultWindow;
 
 /**
  * Created by firemaples on 21/10/2016.
@@ -46,23 +41,14 @@ public class FloatingBar extends FloatingView {
     private AsyncTask<Void, String, Boolean> lastAsyncTask;
 
     private DialogView dialogView;
-    private TextEditDialogView textEditDialogView;
     private DrawAreaView drawAreaView;
     private ProgressView progressView;
     private List<Rect> currentBoxList = new ArrayList<>();
-    private Bitmap currentScreenshot;
 
     //OCR
     private OcrNTranslateUtils ocrNTranslateUtils;
     private OcrResultView ocrResultView;
     private OcrDownloadAsyncTask ocrDownloadAsyncTask;
-    private OcrInitAsyncTask ocrInitAsyncTask;
-    private OcrRecognizeAsyncTask ocrRecognizeAsyncTask;
-
-    //Translation
-    private TranslateAsyncTask translateAsyncTask;
-
-    private WebViewFV webViewFV;
 
     public FloatingBar(Context context) {
         super(context);
@@ -124,8 +110,6 @@ public class FloatingBar extends FloatingView {
         sp_langTo.setOnItemSelectedListener(onItemSelectedListener);
 
         dialogView = new DialogView(getContext());
-
-        webViewFV = new WebViewFV(getContext(), onWebViewFVCallback);
 
         if (SharePreferenceUtil.getInstance().startingWithSelectionMode()) {
             onClickListener.onClick(bt_selectArea);
@@ -354,15 +338,6 @@ public class FloatingBar extends FloatingView {
         if (lastAsyncTask != null && !lastAsyncTask.isCancelled()) {
             lastAsyncTask.cancel(true);
         }
-        if (ocrInitAsyncTask != null && !ocrInitAsyncTask.isCancelled()) {
-            ocrInitAsyncTask.cancel(true);
-        }
-        if (ocrRecognizeAsyncTask != null && !ocrRecognizeAsyncTask.isCancelled()) {
-            ocrRecognizeAsyncTask.cancel(true);
-        }
-        if (translateAsyncTask != null && !translateAsyncTask.isCancelled()) {
-            translateAsyncTask.cancel(true);
-        }
 
         if (drawAreaView != null) {
             drawAreaView.detachFromWindow();
@@ -378,17 +353,7 @@ public class FloatingBar extends FloatingView {
 //            ocrResultView = null;
         }
 
-        if (webViewFV != null) {
-            webViewFV.detachFromWindow();
-//            webViewFV = null;
-        }
-
-        if (textEditDialogView != null) {
-            textEditDialogView.detachFromWindow();
-        }
-
         currentBoxList.clear();
-        currentScreenshot = null;
         syncBtnState(BtnState.Normal);
     }
 
@@ -421,9 +386,8 @@ public class FloatingBar extends FloatingView {
 
         @Override
         public void onScreenshotFinished(Bitmap bitmap) {
-            currentScreenshot = bitmap;
             FloatingBar.this.attachToWindow();
-            initOcrEngine();
+            showResultWindow(bitmap, currentBoxList);
         }
 
         @Override
@@ -451,144 +415,17 @@ public class FloatingBar extends FloatingView {
         }
     };
 
-    private void initOcrEngine() {
-        if (progressView != null) {
-            progressView.showMessage(getContext().getString(R.string.progress_ocrInitialize));
-        }
-
-        lastAsyncTask = new OcrInitAsyncTask(getContext(), onOcrInitAsyncTaskCallback).execute();
+    private void showResultWindow(Bitmap screenshot, List<Rect> boxList) {
+        ocrResultView = new OcrResultView(getContext(), onOcrResultViewCallback);
+        ocrResultView.attachToWindow();
+        ocrResultView.setupData(screenshot, boxList);
+        FloatingBar.this.detachFromWindow(false);
+        FloatingBar.this.attachToWindow();
     }
 
-    private OcrInitAsyncTask.OnOcrInitAsyncTaskCallback onOcrInitAsyncTaskCallback =
-            new OcrInitAsyncTask.OnOcrInitAsyncTaskCallback() {
-                @Override
-                public void onOcrInitialized() {
-                    showMessage(getContext().getString(R.string.progress_ocrInitialized));
-                    startTextRecognize();
-                }
-
-                @Override
-                public void showMessage(String message) {
-                    if (progressView != null) {
-                        progressView.showMessage(message);
-                    }
-                }
-
-                @Override
-                public void hideMessage() {
-                    if (progressView != null) {
-                        progressView.detachFromWindow();
-                    }
-                }
-            };
-
-    private void startTextRecognize() {
-        Answers.getInstance().logCustom(new CustomEvent("Start OCR"));
-        if (progressView != null) {
-            progressView.showMessage(getContext().getString(R.string.progress_textRecognition));
-        }
-        ocrRecognizeAsyncTask = new OcrRecognizeAsyncTask(getContext(), currentScreenshot, currentBoxList, onTextRecognizeAsyncTaskCallback);
-        ocrRecognizeAsyncTask.execute();
-    }
-
-    private OcrRecognizeAsyncTask.OnTextRecognizeAsyncTaskCallback onTextRecognizeAsyncTaskCallback = new OcrRecognizeAsyncTask.OnTextRecognizeAsyncTaskCallback() {
-        @Override
-        public void onTextRecognizeFinished(List<OcrResult> results) {
-            startTranslate(results);
-        }
-
-        @Override
-        public void showMessage(String message) {
-            if (progressView != null) {
-                progressView.showMessage(message);
-            }
-        }
-
-        @Override
-        public void hideMessage() {
-            if (progressView != null) {
-                progressView.detachFromWindow();
-            }
-        }
-    };
-
-    private void startTranslate(List<OcrResult> results) {
-        if (SharePreferenceUtil.getInstance().isEnableTranslation()) {
-            Answers.getInstance().logCustom(new CustomEvent("Start Translation"));
-            translateAsyncTask = new TranslateAsyncTask(getContext(), results, onTranslateAsyncTaskCallback);
-            translateAsyncTask.execute();
-        } else {
-            for (OcrResult result : results) {
-                result.setTranslatedText("");
-            }
-            onTranslateAsyncTaskCallback.onTranslateFinished(results);
-        }
-    }
-
-    private TranslateAsyncTask.OnTranslateAsyncTaskCallback onTranslateAsyncTaskCallback =
-            new TranslateAsyncTask.OnTranslateAsyncTaskCallback() {
-                @Override
-                public void onTranslateFinished(List<OcrResult> translatedResult) {
-                    Answers.getInstance().logCustom(new CustomEvent("Translation finished"));
-                    ocrResultView = new OcrResultView(getContext(), onOcrResultWindowCallback);
-                    ocrResultView.attachToWindow();
-                    ocrResultView.setOcrResults(translatedResult);
-                    FloatingBar.this.detachFromWindow(false);
-                    FloatingBar.this.attachToWindow();
-                }
-
-                @Override
-                public void showMessage(String message) {
-                    if (progressView != null) {
-                        progressView.showMessage(message);
-                    }
-                }
-
-                @Override
-                public void hideMessage() {
-                    if (progressView != null) {
-                        progressView.detachFromWindow();
-                    }
-                }
-            };
-
-    private OcrResultWindow.OnOcrResultWindowCallback onOcrResultWindowCallback = new OcrResultWindow.OnOcrResultWindowCallback() {
-        @Override
-        public void onOpenBrowserBtnClick(String text, boolean translated) {
-            webViewFV.setContent(text);
-            webViewFV.attachToWindow();
-        }
-
-        @Override
-        public void onEditOriTextClicked(OcrResult ocrResult) {
-            Tool.logInfo("onEditOriTextClicked: " + ocrResult.getText());
-            textEditDialogView = new TextEditDialogView(getContext());
-            textEditDialogView.setCallback(onTextEditDialogViewCallback);
-            textEditDialogView.setContentText(ocrResult.getText());
-            textEditDialogView.setTag(ocrResult);
-            textEditDialogView.attachToWindow();
-        }
-    };
-
-    private TextEditDialogView.OnTextEditDialogViewCallback onTextEditDialogViewCallback =
-            new TextEditDialogView.OnTextEditDialogViewCallback() {
-                @Override
-                public void OnConfirmClick(TextEditDialogView textEditDialogView, String text) {
-                    super.OnConfirmClick(textEditDialogView, text);
-                    OcrResult ocrResult = (OcrResult) textEditDialogView.getTag();
-                    if (ocrResult != null) {
-                        ocrResult.setText(text);
-                        ocrResultView.update();
-                    }
-                }
-            };
-
-    private WebViewFV.OnWebViewFVCallback onWebViewFVCallback = new WebViewFV.OnWebViewFVCallback() {
+    private OcrResultView.OnOcrResultViewCallback onOcrResultViewCallback = new OcrResultView.OnOcrResultViewCallback() {
         @Override
         public void onOpenBrowserClicked() {
-            webViewFV.detachFromWindow();
-            ocrResultView.clear();
-            ocrResultView.detachFromWindow();
             syncBtnState(BtnState.Normal);
         }
     };

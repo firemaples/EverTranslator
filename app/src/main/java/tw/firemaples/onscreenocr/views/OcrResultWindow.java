@@ -17,6 +17,7 @@ import com.crashlytics.android.answers.CustomEvent;
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
+import tw.firemaples.onscreenocr.floatingviews.screencrop.OcrResultView;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -35,12 +36,14 @@ public class OcrResultWindow {
 
     private View rootView;
     private View view_translatedTextWrapper;
+    private View pb_origin, pb_translated;
     private TextView tv_originText, tv_translatedText;
     private FrameLayout.LayoutParams layoutParams;
     private DisplayMetrics metrics;
 
     private OnOcrResultWindowCallback callback;
 
+    private OcrResultView.OcrNTranslateState state;
     private OcrResult ocrResult;
 
     public OcrResultWindow(Context context, ViewGroup parent, OnOcrResultWindowCallback callback) {
@@ -51,6 +54,8 @@ public class OcrResultWindow {
         rootView = View.inflate(context, R.layout.view_ocr_result_window, null);
 
         view_translatedTextWrapper = rootView.findViewById(R.id.view_translatedTextWrapper);
+        pb_origin = rootView.findViewById(R.id.pb_origin);
+        pb_translated = rootView.findViewById(R.id.pb_translated);
         tv_originText = (TextView) rootView.findViewById(R.id.tv_originText);
         tv_translatedText = (TextView) rootView.findViewById(R.id.tv_translatedText);
         rootView.findViewById(R.id.bt_openInBrowser_ocrText).setOnClickListener(onClickListener);
@@ -70,10 +75,30 @@ public class OcrResultWindow {
         display.getMetrics(metrics);
     }
 
-    public void setOcrResult(OcrResult ocrResult) {
+    public void setOcrResult(OcrResultView.OcrNTranslateState state, OcrResult ocrResult) {
+        this.state = state;
         this.ocrResult = ocrResult;
-        tv_originText.setText(ocrResult.getText());
-        tv_translatedText.setText(ocrResult.getTranslatedText());
+
+        switch (state) {
+            case OCR_INIT:
+            case OCR_RUNNING:
+                pb_origin.setVisibility(View.VISIBLE);
+                pb_translated.setVisibility(View.GONE);
+                break;
+            case OCR_FINISHED:
+                pb_origin.setVisibility(View.GONE);
+                tv_originText.setText(ocrResult.getText());
+                break;
+            case TRANSLATING:
+                pb_translated.setVisibility(View.VISIBLE);
+                tv_originText.setText(ocrResult.getText());
+                break;
+            case TRANSLATED:
+                pb_translated.setVisibility(View.GONE);
+                tv_originText.setText(ocrResult.getText());
+                tv_translatedText.setText(ocrResult.getTranslatedText());
+                break;
+        }
     }
 
     public void show(View anchorView) {
