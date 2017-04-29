@@ -25,27 +25,30 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textStyle="bold"/>
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/bt_edit_ocrText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="12dp"
-                android:src="@drawable/edit"/>
+                android:background="@null"
+                android:src="@drawable/edit_icon"/>
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/bt_copy_ocrText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:src="@drawable/content_copy"/>
+                android:background="@null"
+                android:src="@drawable/copy_icon"/>
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/bt_openInBrowser_ocrText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:src="@drawable/earth"/>
+                android:background="@null"
+                android:src="@drawable/open_web_view_icon"/>
         </LinearLayout>
 
         <LinearLayout
@@ -87,19 +90,21 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textStyle="bold"/>
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/bt_copy_translatedText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
-                    android:src="@drawable/content_copy"/>
+                    android:background="@null"
+                    android:src="@drawable/copy_icon"/>
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/bt_openInBrowser_translatedText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:src="@drawable/earth"/>
+                    android:background="@null"
+                    android:src="@drawable/open_web_view_icon"/>
             </LinearLayout>
 
             <LinearLayout

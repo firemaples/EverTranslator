@@ -37,7 +37,7 @@ public class OcrResultWindow {
     private View rootView;
     private View view_translatedTextWrapper;
     private View pb_origin, pb_translated;
-    View bt_openInBrowser_ocrText, bt_openInBrowser_translatedText, bt_copy_ocrText, bt_copy_translatedText, bt_edit_ocrText;
+    private View bt_openInBrowser_ocrText, bt_openInBrowser_translatedText, bt_copy_ocrText, bt_copy_translatedText, bt_edit_ocrText;
     private TextView tv_originText, tv_translatedText;
     private FrameLayout.LayoutParams layoutParams;
     private DisplayMetrics metrics;
