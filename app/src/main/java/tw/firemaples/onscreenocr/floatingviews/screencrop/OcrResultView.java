@@ -270,7 +270,17 @@ public class OcrResultView extends FloatingView {
     };
 
     public enum OcrNTranslateState {
-        OCR_INIT, OCR_RUNNING, OCR_FINISHED, TRANSLATING, TRANSLATED
+        OCR_INIT(1), OCR_RUNNING(2), OCR_FINISHED(3),
+        TRANSLATING(4), TRANSLATED(5);
+
+        private int step;
+        OcrNTranslateState(int step){
+            this.step = step;
+        }
+
+        public int getStep() {
+            return step;
+        }
     }
 
     public interface OnOcrResultViewCallback {
