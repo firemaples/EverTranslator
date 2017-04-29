@@ -37,6 +37,7 @@ public class OcrResultWindow {
     private View rootView;
     private View view_translatedTextWrapper;
     private View pb_origin, pb_translated;
+    View bt_openInBrowser_ocrText, bt_openInBrowser_translatedText, bt_copy_ocrText, bt_copy_translatedText, bt_edit_ocrText;
     private TextView tv_originText, tv_translatedText;
     private FrameLayout.LayoutParams layoutParams;
     private DisplayMetrics metrics;
@@ -58,11 +59,16 @@ public class OcrResultWindow {
         pb_translated = rootView.findViewById(R.id.pb_translated);
         tv_originText = (TextView) rootView.findViewById(R.id.tv_originText);
         tv_translatedText = (TextView) rootView.findViewById(R.id.tv_translatedText);
-        rootView.findViewById(R.id.bt_openInBrowser_ocrText).setOnClickListener(onClickListener);
-        rootView.findViewById(R.id.bt_openInBrowser_translatedText).setOnClickListener(onClickListener);
-        rootView.findViewById(R.id.bt_copy_ocrText).setOnClickListener(onClickListener);
-        rootView.findViewById(R.id.bt_copy_translatedText).setOnClickListener(onClickListener);
-        rootView.findViewById(R.id.bt_edit_ocrText).setOnClickListener(onClickListener);
+        bt_openInBrowser_ocrText = rootView.findViewById(R.id.bt_openInBrowser_ocrText);
+        bt_openInBrowser_translatedText = rootView.findViewById(R.id.bt_openInBrowser_translatedText);
+        bt_copy_ocrText = rootView.findViewById(R.id.bt_copy_ocrText);
+        bt_copy_translatedText = rootView.findViewById(R.id.bt_copy_translatedText);
+        bt_edit_ocrText = rootView.findViewById(R.id.bt_edit_ocrText);
+        bt_edit_ocrText.setOnClickListener(onClickListener);
+        bt_copy_ocrText.setOnClickListener(onClickListener);
+        bt_openInBrowser_ocrText.setOnClickListener(onClickListener);
+        bt_copy_translatedText.setOnClickListener(onClickListener);
+        bt_openInBrowser_translatedText.setOnClickListener(onClickListener);
 
         view_translatedTextWrapper.setVisibility(SharePreferenceUtil.getInstance().isEnableTranslation() ? View.VISIBLE : View.GONE);
 
@@ -79,26 +85,44 @@ public class OcrResultWindow {
         this.state = state;
         this.ocrResult = ocrResult;
 
-        switch (state) {
-            case OCR_INIT:
-            case OCR_RUNNING:
-                pb_origin.setVisibility(View.VISIBLE);
-                pb_translated.setVisibility(View.GONE);
-                break;
-            case OCR_FINISHED:
-                pb_origin.setVisibility(View.GONE);
-                tv_originText.setText(ocrResult.getText());
-                break;
-            case TRANSLATING:
-                pb_translated.setVisibility(View.VISIBLE);
-                tv_originText.setText(ocrResult.getText());
-                break;
-            case TRANSLATED:
-                pb_translated.setVisibility(View.GONE);
-                tv_originText.setText(ocrResult.getText());
-                tv_translatedText.setText(ocrResult.getTranslatedText());
-                break;
+//        switch (state) {
+//            case OCR_INIT:
+//            case OCR_RUNNING:
+//                pb_origin.setVisibility(View.VISIBLE);
+//                pb_translated.setVisibility(View.GONE);
+//                break;
+//            case OCR_FINISHED:
+//                pb_origin.setVisibility(View.GONE);
+//                tv_originText.setText(ocrResult.getText());
+//                break;
+//            case TRANSLATING:
+//                pb_translated.setVisibility(View.VISIBLE);
+//                tv_originText.setText(ocrResult.getText());
+//                break;
+//            case TRANSLATED:
+//                pb_translated.setVisibility(View.GONE);
+//                tv_originText.setText(ocrResult.getText());
+//                tv_translatedText.setText(ocrResult.getTranslatedText());
+//                break;
+//        }
+
+        boolean ocrFinished = state.getStep() >= OcrResultView.OcrNTranslateState.OCR_FINISHED.getStep();
+        boolean translated = state.getStep() >= OcrResultView.OcrNTranslateState.TRANSLATED.getStep();
+
+        pb_origin.setVisibility(!ocrFinished ? View.VISIBLE : View.GONE);
+        pb_translated.setVisibility(ocrFinished && !translated ? View.VISIBLE : View.GONE);
+        if (ocrFinished) {
+            tv_originText.setText(ocrResult.getText());
         }
+        if (translated) {
+            tv_translatedText.setText(ocrResult.getTranslatedText());
+        }
+
+        bt_edit_ocrText.setEnabled(ocrFinished);
+        bt_copy_ocrText.setEnabled(ocrFinished);
+        bt_openInBrowser_ocrText.setEnabled(ocrFinished);
+        bt_copy_translatedText.setEnabled(translated);
+        bt_openInBrowser_translatedText.setEnabled(translated);
     }
 
     public void show(View anchorView) {
