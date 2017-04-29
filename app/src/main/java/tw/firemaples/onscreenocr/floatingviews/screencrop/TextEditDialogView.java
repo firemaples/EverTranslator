@@ -47,6 +47,12 @@ public class TextEditDialogView extends FloatingView {
         bt_dialogCancel.setOnClickListener(onClickListener);
     }
 
+    @Override
+    public boolean onBackButtonPressed() {
+        callback.onCancelClicked(this);
+        return true;
+    }
+
     public void setCallback(OnTextEditDialogViewCallback callback) {
         this.callback = callback;
     }

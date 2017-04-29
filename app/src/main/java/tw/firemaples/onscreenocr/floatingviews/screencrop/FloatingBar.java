@@ -72,6 +72,15 @@ public class FloatingBar extends FloatingView {
     }
 
     @Override
+    public boolean onBackButtonPressed() {
+        if (btnState != BtnState.Normal) {
+            bt_clear.performClick();
+            return true;
+        }
+        return super.onBackButtonPressed();
+    }
+
+    @Override
     public void detachFromWindow() {
         SharePreferenceUtil.getInstance().setIsAppShowing(false);
         resetAll();

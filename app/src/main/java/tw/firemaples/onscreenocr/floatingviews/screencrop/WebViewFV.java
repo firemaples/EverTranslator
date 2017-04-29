@@ -15,6 +15,7 @@ import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
+import tw.firemaples.onscreenocr.utils.HomeWatcher;
 import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.utils.WebViewUtil;
 
@@ -52,6 +53,14 @@ public class WebViewFV extends FloatingView {
         wv_webView.setWebViewClient(new WebViewClient());
         WebSettings settings = wv_webView.getSettings();
         settings.setJavaScriptEnabled(true);
+
+        setupHomeButtonWatcher(onHomePressedListener);
+    }
+
+    @Override
+    public boolean onBackButtonPressed() {
+        detachFromWindow();
+        return true;
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -65,6 +74,18 @@ public class WebViewFV extends FloatingView {
             } else if (id == R.id.bt_close) {
                 detachFromWindow();
             }
+        }
+    };
+
+    private HomeWatcher.OnHomePressedListener onHomePressedListener = new HomeWatcher.OnHomePressedListener() {
+        @Override
+        public void onHomePressed() {
+            detachFromWindow();
+        }
+
+        @Override
+        public void onHomeLongPressed() {
+
         }
     };
 
