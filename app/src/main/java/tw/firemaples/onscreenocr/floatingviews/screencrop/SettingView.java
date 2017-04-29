@@ -75,6 +75,12 @@ public class SettingView extends FloatingView {
         }
     }
 
+    @Override
+    public boolean onBackButtonPressed() {
+        detachFromWindow();
+        return true;
+    }
+
     private CompoundButton.OnCheckedChangeListener onCheckChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
