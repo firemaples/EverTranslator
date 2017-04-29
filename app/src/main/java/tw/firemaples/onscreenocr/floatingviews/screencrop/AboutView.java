@@ -52,6 +52,12 @@ public class AboutView extends FloatingView {
         textView.setOnClickListener(onClickListener);
     }
 
+    @Override
+    public boolean onBackButtonPressed() {
+        detachFromWindow();
+        return true;
+    }
+
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
