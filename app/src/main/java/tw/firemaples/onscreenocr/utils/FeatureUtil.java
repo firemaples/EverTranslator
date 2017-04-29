@@ -7,11 +7,12 @@ import tw.firemaples.onscreenocr.BuildConfig;
  */
 
 public class FeatureUtil {
-    private static boolean isDebuggable(){
+    private static boolean isDebuggable() {
         return BuildConfig.DEBUG;
     }
 
     public static boolean isNewModeEnabled() {
-        return isDebuggable();
+//        return isDebuggable();
+        return false;
     }
 }
