@@ -20,6 +20,7 @@ import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.OcrResultView;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.TTSPlayerView;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
+import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.utils.ViewPreparedWaiter;
@@ -206,15 +207,18 @@ public class OcrResultWindow {
                     callback.onEditOriTextClicked(ocrResult);
                 }
             } else if (id == R.id.bt_tts_ocrText || id == R.id.bt_tts_translatedText) {
+                String lang;
                 String ttsContent;
                 if (id == R.id.bt_tts_ocrText) {
+                    lang = OcrNTranslateUtils.getInstance().getTranslateFromLang();
                     ttsContent = ocrResult.getText();
                 } else {
+                    lang = OcrNTranslateUtils.getInstance().getTranslateToLang();
                     ttsContent = ocrResult.getTranslatedText();
                 }
 
                 TTSPlayerView ttsPlayerView = new TTSPlayerView(context);
-                ttsPlayerView.setTTSContent(ttsContent);
+                ttsPlayerView.setTTSContent(lang, ttsContent);
                 ttsPlayerView.attachToWindow();
             }
         }

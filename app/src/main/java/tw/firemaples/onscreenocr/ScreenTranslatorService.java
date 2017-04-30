@@ -17,6 +17,7 @@ import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.floatingviews.quicktrans.QuickWindow;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.FloatingBar;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
+import tw.firemaples.onscreenocr.tts.AndroidTTSManager;
 import tw.firemaples.onscreenocr.utils.AppMode;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
@@ -130,6 +131,7 @@ public class ScreenTranslatorService extends Service {
         spUtil = SharePreferenceUtil.getInstance();
         screenshotHandler = ScreenshotHandler.getInstance();
         OcrNTranslateUtils.init();
+        AndroidTTSManager.getInstance(this).init();
 
         if (SharePreferenceUtil.getInstance().isAppShowing()) {
             _startFloatingView();

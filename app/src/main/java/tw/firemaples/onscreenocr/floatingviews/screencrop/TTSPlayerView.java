@@ -6,9 +6,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import java.io.File;
+
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
+import tw.firemaples.onscreenocr.tts.TTSRetrieverTask;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
+import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
  * Created by louis1chen on 30/04/2017.
@@ -19,6 +23,8 @@ public class TTSPlayerView extends FloatingView {
     private View bt_play, bt_pause, bt_stop, bt_time, bt_selectOff, bt_close;
 
     private String ttsContent;
+
+    private TTSRetrieverTask ttsRetrieverTask;
 
     public TTSPlayerView(Context context) {
         super(context);
@@ -60,10 +66,14 @@ public class TTSPlayerView extends FloatingView {
         setupHomeButtonWatcher(onHomePressedListener);
     }
 
-    public void setTTSContent(String ttsContent) {
+    public void setTTSContent(String lang, String ttsContent) {
         this.ttsContent = ttsContent;
 
         tv_textToSpeech.setText(ttsContent);
+
+        TTSRetrieverTask ttsRetrieverTask = new TTSRetrieverTask(getContext(), lang, ttsContent, onTTSRetrieverCallback);
+        ttsRetrieverTask.execute();
+        manageTask(ttsRetrieverTask);
     }
 
     @Override
@@ -71,6 +81,18 @@ public class TTSPlayerView extends FloatingView {
         detachFromWindow();
         return true;
     }
+
+    private TTSRetrieverTask.OnTTSRetrieverCallback onTTSRetrieverCallback = new TTSRetrieverTask.OnTTSRetrieverCallback() {
+        @Override
+        public void onSuccess(File ttsFile) {
+            Tool.logInfo("Retrieve tts file success, file: " + ttsFile.getAbsolutePath());
+        }
+
+        @Override
+        public void onFailed() {
+            Tool.logInfo("Retrieve tts file failed");
+        }
+    };
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override

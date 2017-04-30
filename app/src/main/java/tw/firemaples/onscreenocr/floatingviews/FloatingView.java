@@ -2,6 +2,7 @@ package tw.firemaples.onscreenocr.floatingviews;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -12,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import tw.firemaples.onscreenocr.MainActivity;
 import tw.firemaples.onscreenocr.ScreenTranslatorService;
@@ -32,6 +36,7 @@ public abstract class FloatingView {
     private CustomLayout rootView;
     private Object tag;
     private HomeWatcher homeWatcher;
+    private List<AsyncTask> manageTask = new ArrayList<>();
 
     public FloatingView(Context context) {
         this.context = context;
@@ -93,6 +98,10 @@ public abstract class FloatingView {
         return tag;
     }
 
+    public void manageTask(AsyncTask asyncTask) {
+        manageTask.add(asyncTask);
+    }
+
     public void attachToWindow() {
         if (!isAttached) {
             if (PermissionUtil.checkDrawOverlayPermission(context)) {
@@ -107,6 +116,13 @@ public abstract class FloatingView {
 
     public void detachFromWindow() {
         if (isAttached) {
+            for (AsyncTask asyncTask : manageTask) {
+                if (asyncTask != null && !asyncTask.isCancelled()) {
+                    asyncTask.cancel(true);
+                }
+            }
+            manageTask.clear();
+
             windowManager.removeView(rootView);
             isAttached = false;
 
