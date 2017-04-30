@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +24,8 @@ import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.ocr.OcrInitAsyncTask;
 import tw.firemaples.onscreenocr.ocr.OcrRecognizeAsyncTask;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
-import tw.firemaples.onscreenocr.translate.TranslateAsyncTask;
+import tw.firemaples.onscreenocr.translate.GoogleTranslateWebView;
+import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.views.OcrResultWindow;
@@ -193,33 +196,52 @@ public class OcrResultView extends FloatingView {
         if (SharePreferenceUtil.getInstance().isEnableTranslation()) {
             updateViewState(OcrNTranslateState.TRANSLATING);
             Answers.getInstance().logCustom(new CustomEvent("Start Translation"));
-            lastAsyncTask = new TranslateAsyncTask(getContext(), results, onTranslateAsyncTaskCallback).execute();
+//            lastAsyncTask = new TranslateAsyncTask(getContext(), results, onTranslateAsyncTaskCallback).execute();
+
+            new GoogleTranslateWebView(getContext())
+                    .startTranslate(results, OcrNTranslateUtils.getInstance().getTranslateToLang(), onGoogleTranslateWebViewCallback);
         } else {
             for (OcrResult result : results) {
                 result.setTranslatedText("");
             }
-            onTranslateAsyncTaskCallback.onTranslateFinished(results);
+//            onTranslateAsyncTaskCallback.onTranslateFinished(results);
+            onGoogleTranslateWebViewCallback.onTranslated(results);
         }
     }
 
-    private TranslateAsyncTask.OnTranslateAsyncTaskCallback onTranslateAsyncTaskCallback =
-            new TranslateAsyncTask.OnTranslateAsyncTaskCallback() {
+//    private TranslateAsyncTask.OnTranslateAsyncTaskCallback onTranslateAsyncTaskCallback =
+//            new TranslateAsyncTask.OnTranslateAsyncTaskCallback() {
+//                @Override
+//                public void onTranslateFinished(List<OcrResult> translatedResult) {
+//                    Answers.getInstance().logCustom(new CustomEvent("Translation finished"));
+//                    OcrResultView.this.ocrResultList.clear();
+//                    OcrResultView.this.ocrResultList.addAll(translatedResult);
+//                    updateViewState(OcrNTranslateState.TRANSLATED);
+//                }
+//
+//                @Override
+//                public void showMessage(String message) {
+//                }
+//
+//                @Override
+//                public void hideMessage() {
+//                }
+//            };
+
+    private GoogleTranslateWebView.OnGoogleTranslateWebViewCallback onGoogleTranslateWebViewCallback = new GoogleTranslateWebView.OnGoogleTranslateWebViewCallback() {
+        @Override
+        public void onTranslated(final List<OcrResult> ocrResultList) {
+            Answers.getInstance().logCustom(new CustomEvent("Translation finished"));
+//            OcrResultView.this.ocrResultList.clear();
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
-                public void onTranslateFinished(List<OcrResult> translatedResult) {
-                    Answers.getInstance().logCustom(new CustomEvent("Translation finished"));
-                    OcrResultView.this.ocrResultList.clear();
-                    OcrResultView.this.ocrResultList.addAll(translatedResult);
+                public void run() {
+                    OcrResultView.this.ocrResultList.addAll(ocrResultList);
                     updateViewState(OcrNTranslateState.TRANSLATED);
                 }
-
-                @Override
-                public void showMessage(String message) {
-                }
-
-                @Override
-                public void hideMessage() {
-                }
-            };
+            });
+        }
+    };
 
     private OcrResultWindow.OnOcrResultWindowCallback onOcrResultWindowCallback = new OcrResultWindow.OnOcrResultWindowCallback() {
         @Override
@@ -274,7 +296,8 @@ public class OcrResultView extends FloatingView {
         TRANSLATING(4), TRANSLATED(5);
 
         private int step;
-        OcrNTranslateState(int step){
+
+        OcrNTranslateState(int step) {
             this.step = step;
         }
 
