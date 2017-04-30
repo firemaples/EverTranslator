@@ -18,6 +18,7 @@ import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.OcrResultView;
+import tw.firemaples.onscreenocr.floatingviews.screencrop.TTSPlayerView;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -37,7 +38,8 @@ public class OcrResultWindow {
     private View rootView;
     private View view_translatedTextWrapper;
     private View pb_origin, pb_translated;
-    private View bt_openInBrowser_ocrText, bt_openInBrowser_translatedText, bt_copy_ocrText, bt_copy_translatedText, bt_edit_ocrText;
+    private View bt_openInBrowser_ocrText, bt_copy_ocrText, bt_edit_ocrText, bt_tts_ocrText;
+    private View bt_openInBrowser_translatedText, bt_copy_translatedText, bt_tts_translatedText;
     private TextView tv_originText, tv_translatedText;
     private FrameLayout.LayoutParams layoutParams;
     private DisplayMetrics metrics;
@@ -55,20 +57,28 @@ public class OcrResultWindow {
         rootView = View.inflate(context, R.layout.view_ocr_result_window, null);
 
         view_translatedTextWrapper = rootView.findViewById(R.id.view_translatedTextWrapper);
+
         pb_origin = rootView.findViewById(R.id.pb_origin);
         pb_translated = rootView.findViewById(R.id.pb_translated);
+
         tv_originText = (TextView) rootView.findViewById(R.id.tv_originText);
         tv_translatedText = (TextView) rootView.findViewById(R.id.tv_translatedText);
+
         bt_openInBrowser_ocrText = rootView.findViewById(R.id.bt_openInBrowser_ocrText);
-        bt_openInBrowser_translatedText = rootView.findViewById(R.id.bt_openInBrowser_translatedText);
         bt_copy_ocrText = rootView.findViewById(R.id.bt_copy_ocrText);
-        bt_copy_translatedText = rootView.findViewById(R.id.bt_copy_translatedText);
         bt_edit_ocrText = rootView.findViewById(R.id.bt_edit_ocrText);
+        bt_tts_ocrText = rootView.findViewById(R.id.bt_tts_ocrText);
+        bt_openInBrowser_translatedText = rootView.findViewById(R.id.bt_openInBrowser_translatedText);
+        bt_copy_translatedText = rootView.findViewById(R.id.bt_copy_translatedText);
+        bt_tts_translatedText = rootView.findViewById(R.id.bt_tts_translatedText);
+
         bt_edit_ocrText.setOnClickListener(onClickListener);
         bt_copy_ocrText.setOnClickListener(onClickListener);
         bt_openInBrowser_ocrText.setOnClickListener(onClickListener);
+        bt_tts_ocrText.setOnClickListener(onClickListener);
         bt_copy_translatedText.setOnClickListener(onClickListener);
         bt_openInBrowser_translatedText.setOnClickListener(onClickListener);
+        bt_tts_translatedText.setOnClickListener(onClickListener);
 
         view_translatedTextWrapper.setVisibility(SharePreferenceUtil.getInstance().isEnableTranslation() ? View.VISIBLE : View.GONE);
 
@@ -121,8 +131,11 @@ public class OcrResultWindow {
         bt_edit_ocrText.setEnabled(ocrFinished);
         bt_copy_ocrText.setEnabled(ocrFinished);
         bt_openInBrowser_ocrText.setEnabled(ocrFinished);
+        bt_tts_ocrText.setEnabled(ocrFinished);
+
         bt_copy_translatedText.setEnabled(translated);
         bt_openInBrowser_translatedText.setEnabled(translated);
+        bt_tts_translatedText.setEnabled(translated);
     }
 
     public void show(View anchorView) {
@@ -192,6 +205,17 @@ public class OcrResultWindow {
                 if (ocrResult != null) {
                     callback.onEditOriTextClicked(ocrResult);
                 }
+            } else if (id == R.id.bt_tts_ocrText || id == R.id.bt_tts_translatedText) {
+                String ttsContent;
+                if (id == R.id.bt_tts_ocrText) {
+                    ttsContent = ocrResult.getText();
+                } else {
+                    ttsContent = ocrResult.getTranslatedText();
+                }
+
+                TTSPlayerView ttsPlayerView = new TTSPlayerView(context);
+                ttsPlayerView.setTTSContent(ttsContent);
+                ttsPlayerView.attachToWindow();
             }
         }
     };
