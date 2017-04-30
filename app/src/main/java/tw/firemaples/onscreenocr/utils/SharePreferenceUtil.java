@@ -14,6 +14,7 @@ public class SharePreferenceUtil {
     private static final String KEY_STARTING_WITH_SELECTION_MODE = "KEY_STARTING_WITH_SELECTION_MODE";
     private static final String KEY_REMOVE_LINE_BREAKS = "KEY_REMOVE_LINE_BREAKS";
     private static final String KEY_APP_MODE = "KEY_APP_MODE";
+    private static final String KEY_READ_SPEED = "KEY_READ_SPEED";
 
     private static SharePreferenceUtil ourInstance = new SharePreferenceUtil();
 
@@ -82,5 +83,13 @@ public class SharePreferenceUtil {
 
     public void setAppMode(AppMode appMode) {
         getSharedPreferences().edit().putString(KEY_APP_MODE, appMode.name()).apply();
+    }
+
+    public float getReadSpeed() {
+        return getSharedPreferences().getFloat(KEY_READ_SPEED, 1f);
+    }
+
+    public void setReadSpeed(float speed) {
+        getSharedPreferences().edit().putFloat(KEY_READ_SPEED, speed).apply();
     }
 }

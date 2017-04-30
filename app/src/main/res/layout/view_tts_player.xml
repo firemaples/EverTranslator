@@ -6,7 +6,8 @@
                 android:layout_height="match_parent"
                 android:background="@color/tts_backgroundColor"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="10dp"
+                android:theme="@style/Base.Theme.AppCompat">
 
     <ImageView
         android:id="@+id/bt_close"
@@ -36,52 +37,82 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="12dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/bt_play"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:padding="2dp"
-                android:src="@drawable/play_icon_white"/>
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/bt_pause"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:padding="2dp"
-                android:src="@drawable/pause_white_icon"/>
+                <ImageButton
+                    android:id="@+id/bt_play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:padding="2dp"
+                    android:src="@drawable/play_icon_white"/>
 
-            <ImageButton
-                android:id="@+id/bt_stop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:padding="2dp"
-                android:src="@drawable/stop_white_icon"/>
+                <ImageButton
+                    android:id="@+id/bt_pause"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:padding="2dp"
+                    android:src="@drawable/pause_white_icon"/>
 
-            <ImageButton
-                android:id="@+id/bt_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:padding="2dp"
-                android:src="@drawable/time_white_icon"/>
+                <ImageButton
+                    android:id="@+id/bt_stop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:padding="2dp"
+                    android:src="@drawable/stop_white_icon"/>
 
-            <ImageButton
-                android:id="@+id/bt_selectOff"
-                android:layout_width="wrap_content"
+                <ImageButton
+                    android:id="@+id/bt_selectOff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="60dp"
+                    android:background="@null"
+                    android:padding="2dp"
+                    android:src="@drawable/select_off_white"
+                    android:visibility="visible"
+                    tools:visibility="visible"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:background="@null"
-                android:padding="2dp"
-                android:src="@drawable/select_off_white"
-                android:visibility="visible"
-                tools:visibility="visible"/>
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="6dp"
+                android:minWidth="100dp"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/bt_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:padding="2dp"
+                    android:src="@drawable/time_white_icon"/>
+
+                <TextView
+                    android:id="@+id/tv_speed"
+                    style="?android:textAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFF"
+                    tools:text="x1"/>
+
+                <SeekBar
+                    android:id="@+id/sb_speed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
         </LinearLayout>
+
 
     </LinearLayout>
 </RelativeLayout>

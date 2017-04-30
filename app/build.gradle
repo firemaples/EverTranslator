@@ -58,4 +58,5 @@ dependencies {
     }
     compile 'com.android.support:cardview-v7:23.0.0'
     compile 'io.github.firemaples:microsoft-translator-java-api:0.8.3'
+    compile 'com.google.android.exoplayer:exoplayer:r2.4.0'
 }

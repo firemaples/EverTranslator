@@ -5,15 +5,18 @@ import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.io.File;
+import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.tts.TTSPlayer;
 import tw.firemaples.onscreenocr.tts.TTSRetrieverTask;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
+import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
@@ -21,8 +24,9 @@ import tw.firemaples.onscreenocr.utils.Tool;
  */
 
 public class TTSPlayerView extends FloatingView {
-    private TextView tv_textToSpeech;
+    private TextView tv_textToSpeech, tv_speed;
     private View bt_play, bt_pause, bt_stop, bt_time, bt_selectOff, bt_close;
+    private SeekBar sb_speed;
 
     private TTSPlayer ttsPlayer;
     private PlayerState playerState = PlayerState.INIT;
@@ -58,12 +62,14 @@ public class TTSPlayerView extends FloatingView {
 
     private void setViews(View rootView) {
         tv_textToSpeech = (TextView) rootView.findViewById(R.id.tv_textToSpeech);
+        tv_speed = (TextView) rootView.findViewById(R.id.tv_speed);
         bt_play = rootView.findViewById(R.id.bt_play);
         bt_pause = rootView.findViewById(R.id.bt_pause);
         bt_stop = rootView.findViewById(R.id.bt_stop);
         bt_time = rootView.findViewById(R.id.bt_time);
         bt_selectOff = rootView.findViewById(R.id.bt_selectOff);
         bt_close = rootView.findViewById(R.id.bt_close);
+        sb_speed = (SeekBar) rootView.findViewById(R.id.sb_speed);
 
         bt_play.setOnClickListener(onClickListener);
         bt_pause.setOnClickListener(onClickListener);
@@ -71,6 +77,12 @@ public class TTSPlayerView extends FloatingView {
         bt_time.setOnClickListener(onClickListener);
         bt_selectOff.setOnClickListener(onClickListener);
         bt_close.setOnClickListener(onClickListener);
+        sb_speed.setMax(19);
+        float readSpeed = SharePreferenceUtil.getInstance().getReadSpeed();
+        ttsPlayer.setSpeed(readSpeed);
+        sb_speed.setProgress((int) (readSpeed * 10) - 1);
+        updateReadSpeedText();
+        sb_speed.setOnSeekBarChangeListener(onSeekBarChangeListener);
 
         setupHomeButtonWatcher(onHomePressedListener);
 
@@ -108,10 +120,25 @@ public class TTSPlayerView extends FloatingView {
         manageTask(ttsRetrieverTask);
     }
 
+    private float getReadSpeedFromSeekBar() {
+        return (sb_speed.getProgress() + 1) / 10f;
+    }
+
+    private void updateReadSpeedText() {
+        float readSpeed = (sb_speed.getProgress() + 1) / 10f;
+        tv_speed.setText(String.format(Locale.getDefault(), "x%.1f", readSpeed));
+    }
+
     @Override
     public boolean onBackButtonPressed() {
         detachFromWindow();
         return true;
+    }
+
+    @Override
+    public void detachFromWindow() {
+        super.detachFromWindow();
+        ttsPlayer.stop();
     }
 
     private void startPlayTTS(File ttsFile) {
@@ -148,6 +175,27 @@ public class TTSPlayerView extends FloatingView {
                 ttsPlayer.stop();
                 updateBtnState(PlayerState.STOP);
             }
+        }
+    };
+
+    private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            float speed = getReadSpeedFromSeekBar();
+            Tool.logInfo("Speed bar changed, progress: " + progress + ", speed: " + speed);
+            SharePreferenceUtil.getInstance().setReadSpeed(speed);
+            ttsPlayer.setSpeed(speed);
+            updateReadSpeedText();
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
         }
     };
 
