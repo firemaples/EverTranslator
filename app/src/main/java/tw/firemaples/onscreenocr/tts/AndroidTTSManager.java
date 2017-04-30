@@ -6,6 +6,7 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -14,11 +15,10 @@ import tw.firemaples.onscreenocr.utils.Tool;
  * Created by louis1chen on 30/04/2017.
  */
 
-public class AndroidTTSManager implements TTSManager {
+public class AndroidTTSManager {
     private static AndroidTTSManager _instance;
 
     private static final String PATH_TTS_FILE = "tts";
-    private static final String REQUEST_ID = "tts";
 
     private final Context context;
 
@@ -26,14 +26,15 @@ public class AndroidTTSManager implements TTSManager {
 
     private Boolean ttsReady;
 
-    private String lastLang;
-    private String lastTTSContent;
     private File ttsFolder;
+
+    private HashMap<String, AndroidTTSManagerCallback> callbackHashMap = new HashMap<>();
+    private HashMap<String, File> fileHashMap = new HashMap<>();
 
     private AndroidTTSManager(Context context) {
         this.context = context;
 
-        ttsFolder = new File(context.getCacheDir(), PATH_TTS_FILE);
+        ttsFolder = new File(context.getExternalCacheDir(), PATH_TTS_FILE);
         if (!ttsFolder.exists()) {
             ttsFolder.mkdirs();
         }
@@ -56,16 +57,16 @@ public class AndroidTTSManager implements TTSManager {
     }
 
     private File getTTSFile(String lang, String ttsContent) {
-        String fileName = lang + "_" + ttsContent.replaceAll(" ", "_");
+        String fileName = lang + "_" + ttsContent.replaceAll(" ", "_") + ".wav";
         File ttsFile = new File(ttsFolder.getAbsolutePath(), fileName);
         return ttsFile;
     }
 
-    @Override
-    public synchronized File retrieveTTSFile(String lang, String ttsContent) throws LanguageNotSupportException {
-        this.lastLang = lang;
-        this.lastTTSContent = ttsContent;
+    public void setCallback(String requestId, AndroidTTSManagerCallback callback) {
+        callbackHashMap.put(requestId, callback);
+    }
 
+    public synchronized void retrieveTTSFile(String lang, String ttsContent, String requestId) throws LanguageNotSupportException {
         if (ttsReady) {
             int setLangResult = tts.setLanguage(new Locale(lang));
             if (setLangResult == TextToSpeech.LANG_MISSING_DATA ||
@@ -75,17 +76,13 @@ public class AndroidTTSManager implements TTSManager {
                 throw new LanguageNotSupportException(String.format(Locale.getDefault(), "Language [%s] is not available.", lang));
             } else {
                 File ttsFile = getTTSFile(lang, ttsContent);
-                int requestFileResult = tts.synthesizeToFile(ttsContent, null, ttsFile, REQUEST_ID);
-                if (requestFileResult == TextToSpeech.SUCCESS) {
-                    return ttsFile;
-                } else {
+                fileHashMap.put(requestId, ttsFile);
+                int requestFileResult = tts.synthesizeToFile(ttsContent, null, ttsFile, requestId);
+                if (requestFileResult != TextToSpeech.SUCCESS) {
                     Tool.logError("retrieveTTSFile failed, failed to synthesizeToFile.");
-                    return null;
                 }
             }
         }
-
-        return null;
     }
 
     private TextToSpeech.OnInitListener onInitListener = new TextToSpeech.OnInitListener() {
@@ -115,12 +112,22 @@ public class AndroidTTSManager implements TTSManager {
 
         @Override
         public void onDone(String utteranceId) {
-            Tool.logInfo("utteranceProgressListener#onStart()");
+            Tool.logInfo("utteranceProgressListener#onDone()");
+            if (callbackHashMap.containsKey(utteranceId) && fileHashMap.containsKey(utteranceId)) {
+                AndroidTTSManagerCallback callback = callbackHashMap.get(utteranceId);
+                File file = fileHashMap.get(utteranceId);
+                callback.onDone(file);
+            }
         }
 
         @Override
         public void onError(String utteranceId) {
-            Tool.logError("utteranceProgressListener#onStart()");
+            Tool.logError("utteranceProgressListener#onError()");
+
+            if (callbackHashMap.containsKey(utteranceId)) {
+                AndroidTTSManagerCallback callback = callbackHashMap.get(utteranceId);
+                callback.onError();
+            }
         }
     };
 
@@ -128,5 +135,11 @@ public class AndroidTTSManager implements TTSManager {
         LanguageNotSupportException(String msg) {
             super(msg);
         }
+    }
+
+    public interface AndroidTTSManagerCallback {
+        void onDone(File file);
+
+        void onError();
     }
 }

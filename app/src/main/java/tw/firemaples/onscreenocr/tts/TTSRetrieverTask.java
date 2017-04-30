@@ -10,8 +10,11 @@ import java.io.File;
  */
 
 public class TTSRetrieverTask extends AsyncTask<Void, Void, File> {
-    private TTSManager ttsManager;
+    private AndroidTTSManager ttsManager;
 
+    private static int staticRequestId = 0;
+
+    private final int requestId;
     private final Context context;
     private final String lang;
     private final String ttsContent;
@@ -23,29 +26,33 @@ public class TTSRetrieverTask extends AsyncTask<Void, Void, File> {
         this.lang = lang;
         this.ttsContent = ttsContent;
         this.callback = callback;
+        requestId = ++staticRequestId;
 
         ttsManager = AndroidTTSManager.getInstance(context);
+        ttsManager.setCallback(String.valueOf(requestId), androidTTSManagerCallback);
     }
 
     @Override
     protected File doInBackground(Void... params) {
         try {
-            return ttsManager.retrieveTTSFile(lang, ttsContent);
+            ttsManager.retrieveTTSFile(lang, ttsContent, String.valueOf(requestId));
         } catch (AndroidTTSManager.LanguageNotSupportException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    @Override
-    protected void onPostExecute(File file) {
-        super.onPostExecute(file);
-        if (file != null) {
+    private AndroidTTSManager.AndroidTTSManagerCallback androidTTSManagerCallback = new AndroidTTSManager.AndroidTTSManagerCallback() {
+        @Override
+        public void onDone(File file) {
             callback.onSuccess(file);
-        } else {
+        }
+
+        @Override
+        public void onError() {
             callback.onFailed();
         }
-    }
+    };
 
     public interface OnTTSRetrieverCallback {
         void onSuccess(File ttsFile);

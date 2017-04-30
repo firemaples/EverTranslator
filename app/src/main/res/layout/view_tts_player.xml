@@ -5,7 +5,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/tts_backgroundColor"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="20dp">
 
     <ImageView
         android:id="@+id/bt_close"
@@ -13,8 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/close_white"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:src="@drawable/close_white"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -25,10 +26,10 @@
 
         <TextView
             android:id="@+id/tv_textToSpeech"
-            android:textColor="#FFF"
             style="?android:textAppearanceLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#FFF"
             tools:text="Text to speech"/>
 
         <LinearLayout
@@ -42,41 +43,41 @@
                 android:id="@+id/bt_play"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
                 android:background="@null"
-                android:src="@drawable/play_white"/>
+                android:padding="2dp"
+                android:src="@drawable/play_icon_white"/>
 
             <ImageButton
                 android:id="@+id/bt_pause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
                 android:background="@null"
-                android:src="@drawable/pause_icon"/>
+                android:padding="2dp"
+                android:src="@drawable/pause_white_icon"/>
 
             <ImageButton
                 android:id="@+id/bt_stop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
                 android:background="@null"
-                android:src="@drawable/stop_icon"/>
+                android:padding="2dp"
+                android:src="@drawable/stop_white_icon"/>
 
             <ImageButton
                 android:id="@+id/bt_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
                 android:background="@null"
-                android:src="@drawable/time_icon"/>
+                android:padding="2dp"
+                android:src="@drawable/time_white_icon"/>
 
             <ImageButton
                 android:id="@+id/bt_selectOff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
                 android:layout_marginLeft="16dp"
                 android:background="@null"
+                android:padding="2dp"
                 android:src="@drawable/select_off_white"
                 android:visibility="visible"
                 tools:visibility="visible"/>
