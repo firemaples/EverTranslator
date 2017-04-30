@@ -2,6 +2,10 @@ package tw.firemaples.onscreenocr.floatingviews.screencrop;
 
 import android.content.Context;
 import android.os.Handler;
+import android.text.SpannableString;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -10,6 +14,8 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
@@ -24,6 +30,9 @@ import tw.firemaples.onscreenocr.utils.Tool;
  */
 
 public class TTSPlayerView extends FloatingView {
+    // http://stackoverflow.com/questions/2159026/regex-how-to-get-words-from-a-string-c
+    private static final String PATTERN_WORD = "[^\\W\\d](\\w|[-'\\.]{1,2}(?=\\w))*";
+
     private TextView tv_textToSpeech, tv_speed;
     private View bt_play, bt_pause, bt_stop, bt_time, bt_selectOff, bt_close;
     private SeekBar sb_speed;
@@ -33,7 +42,9 @@ public class TTSPlayerView extends FloatingView {
 
     private Handler mainHandler;
 
+    private boolean subTextMode = false;
     private File currentTTSFile;
+    private String lang;
     private String ttsContent;
 
     public TTSPlayerView(Context context) {
@@ -101,23 +112,66 @@ public class TTSPlayerView extends FloatingView {
                     bt_play.setEnabled(false);
                     bt_pause.setEnabled(false);
                     bt_stop.setEnabled(false);
+                    bt_selectOff.setEnabled(false);
                 } else {
                     bt_play.setEnabled(state != PlayerState.PLAYING);
                     bt_pause.setEnabled(state == PlayerState.PLAYING);
                     bt_stop.setEnabled(state != PlayerState.STOP);
+                    bt_selectOff.setEnabled(subTextMode);
                 }
             }
         });
     }
 
     public void setTTSContent(String lang, String ttsContent) {
+        this.lang = lang;
         this.ttsContent = ttsContent;
 
         tv_textToSpeech.setText(ttsContent);
 
-        TTSRetrieverTask ttsRetrieverTask = new TTSRetrieverTask(getContext(), lang, ttsContent, onTTSRetrieverCallback);
+        makeWordLinks(tv_textToSpeech, ttsContent);
+
+        playTTS(lang, ttsContent);
+    }
+
+    private void playTTS(String lang, String text) {
+        TTSRetrieverTask ttsRetrieverTask = new TTSRetrieverTask(getContext(), lang, text, onTTSRetrieverCallback);
         ttsRetrieverTask.execute();
         manageTask(ttsRetrieverTask);
+    }
+
+    /**
+     * https://professorneurus.wordpress.com/2013/10/23/adding-multiple-clicking-regions-to-an-android-textview/
+     *
+     * @param tv
+     * @param text
+     */
+    private void makeWordLinks(TextView tv, String text) {
+        if (tv == null || text == null) {
+            return;
+        }
+
+        SpannableString ss = new SpannableString(text);
+        Pattern pattern = Pattern.compile(PATTERN_WORD);
+        Matcher matcher = pattern.matcher(text);
+        while (matcher.find()) {
+            String group = matcher.group();
+            int start = matcher.start();
+            int end = matcher.end();
+//            logger.d("Matched group:[" + group + "](" + start + "," + end + ")");
+            ss.setSpan(new MyClickableSpan(tv, group), start, end, 0);
+        }
+
+        tv.setMovementMethod(LinkMovementMethod.getInstance());
+        tv.setText(ss, TextView.BufferType.SPANNABLE);
+        tv.getCurrentTextColor();
+    }
+
+    private void onWordClicked(String text) {
+        Tool.logInfo("Selected word: " + text);
+        playTTS(lang, text);
+        subTextMode = true;
+        updateBtnState(playerState);
     }
 
     private float getReadSpeedFromSeekBar() {
@@ -174,6 +228,10 @@ public class TTSPlayerView extends FloatingView {
             } else if (id == R.id.bt_stop) {
                 ttsPlayer.stop();
                 updateBtnState(PlayerState.STOP);
+            } else if (id == R.id.bt_selectOff) {
+                subTextMode = false;
+                playTTS(lang, ttsContent);
+                makeWordLinks(tv_textToSpeech, ttsContent);
             }
         }
     };
@@ -222,6 +280,27 @@ public class TTSPlayerView extends FloatingView {
 
         }
     };
+
+    private class MyClickableSpan extends ClickableSpan {
+        private final TextView tv;
+        private final String mText;
+
+        private MyClickableSpan(final TextView tv, final String text) {
+            this.tv = tv;
+            mText = text;
+        }
+
+        @Override
+        public void onClick(final View widget) {
+            onWordClicked(mText);
+        }
+
+        @Override
+        public void updateDrawState(TextPaint ds) {
+            super.updateDrawState(ds);
+            ds.setColor(tv.getCurrentTextColor());
+        }
+    }
 
     private enum PlayerState {
         INIT, PLAYING, PAUSE, STOP
