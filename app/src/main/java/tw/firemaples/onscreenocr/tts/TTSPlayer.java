@@ -41,8 +41,6 @@ public class TTSPlayer {
     private ExtractorsFactory extractorsFactory;
 
     private File currentTTSFile;
-    private boolean pausing = false;
-    private int pausingPosition = 0;
 
     private TTSPlayer() {
         setupPlayer(Tool.getContext());
@@ -152,8 +150,5 @@ public class TTSPlayer {
 
     public interface OnTTSPlayCallback {
         void onPlayCompletion();
-
-        void onPlayStart();
-
     }
 }

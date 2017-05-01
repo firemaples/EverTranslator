@@ -262,11 +262,6 @@ public class TTSPlayerView extends FloatingView {
         public void onPlayCompletion() {
             updateBtnState(PlayerState.STOP);
         }
-
-        @Override
-        public void onPlayStart() {
-            updateBtnState(PlayerState.PLAYING);
-        }
     };
 
     private HomeWatcher.OnHomePressedListener onHomePressedListener = new HomeWatcher.OnHomePressedListener() {

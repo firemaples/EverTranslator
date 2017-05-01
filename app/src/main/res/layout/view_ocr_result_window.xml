@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="12dp"
+                android:layout_marginLeft="8dp"
                 android:background="@null"
                 android:src="@drawable/edit_icon"/>
 
@@ -112,7 +112,7 @@
                     android:id="@+id/bt_copy_translatedText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
+                    android:layout_marginLeft="8dp"
                     android:background="@null"
                     android:src="@drawable/copy_icon"/>
 
