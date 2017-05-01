@@ -1,0 +1,24 @@
+{
+  "TranslateService" : {
+    "current" : 1,
+    "services" : [ {
+      "key" : "d0fdbac3cc9c404bb643faf98af01458",
+      "name" : "microsoft"
+    }, {
+      "jsParser" : "javascript:window.HtmlViewer.getTranslatedText(document.getElementsByClassName('translation')[0].innerHTML);",
+      "name" : "google",
+      "url" : "https://translate.google.com/?sl=auto&tl={TL}&q={TEXT}"
+    } ]
+  },
+  "TranslateServiceDebug" : {
+    "current" : 1,
+    "services" : [ {
+      "key" : "d0fdbac3cc9c404bb643faf98af01458",
+      "name" : "microsoft"
+    }, {
+      "jsParser" : "javascript:window.HtmlViewer.getTranslatedText(document.getElementsByClassName('translation')[0].innerHTML);",
+      "name" : "google",
+      "url" : "https://translate.google.com/?sl=auto&tl={TL}&q={TEXT}"
+    } ]
+  }
+}
