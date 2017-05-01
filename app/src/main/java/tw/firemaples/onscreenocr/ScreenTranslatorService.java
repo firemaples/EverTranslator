@@ -13,6 +13,7 @@ import android.os.IBinder;
 import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
+import tw.firemaples.onscreenocr.database.DatabaseManager;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.floatingviews.quicktrans.QuickWindow;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.FloatingBar;
@@ -132,6 +133,7 @@ public class ScreenTranslatorService extends Service {
         screenshotHandler = ScreenshotHandler.getInstance();
         OcrNTranslateUtils.init();
         AndroidTTSManager.getInstance(this).init();
+        DatabaseManager.getInstance();
 
         if (SharePreferenceUtil.getInstance().isAppShowing()) {
             _startFloatingView();

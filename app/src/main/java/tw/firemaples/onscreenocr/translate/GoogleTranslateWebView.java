@@ -6,12 +6,10 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import java.util.List;
 import java.util.Locale;
 
-import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.Tool;
-import tw.firemaples.onscreenocr.utils.WebViewUtil;
+import tw.firemaples.onscreenocr.utils.GoogleWebViewUtil;
 
 /**
  * Created by louis1chen on 30/04/2017.
@@ -21,8 +19,6 @@ public class GoogleTranslateWebView {
     private WebView webView;
     private OnGoogleTranslateWebViewCallback callback;
 
-    private List<OcrResult> ocrResultList;
-
     public GoogleTranslateWebView(Context context) {
         webView = new WebView(context);
         webView.addJavascriptInterface(new MyJavaScriptInterface(context), "HtmlViewer");
@@ -31,26 +27,16 @@ public class GoogleTranslateWebView {
         settings.setJavaScriptEnabled(true);
     }
 
-    public void startTranslate(List<OcrResult> ocrResultList, String targetLanguage, OnGoogleTranslateWebViewCallback callback) {
-        this.ocrResultList = ocrResultList;
+    public void startTranslate(String textToTranslate, String targetLanguage, OnGoogleTranslateWebViewCallback callback) {
         this.callback = callback;
 
-        if (ocrResultList != null && ocrResultList.size() > 0) {
-            String text = ocrResultList.get(0).getText();
-
-            String lang = Locale.forLanguageTag(targetLanguage).getLanguage();
-            if (lang.equals(Locale.CHINESE.getLanguage())) {
-                lang += "-" + Locale.getDefault().getCountry();
-            }
-
-            WebViewUtil.Type type = getServiceType();
-            String url = type.getFormattedUrl(text, lang);
-            webView.loadUrl(url);
+        String lang = Locale.forLanguageTag(targetLanguage).getLanguage();
+        if (lang.equals(Locale.CHINESE.getLanguage())) {
+            lang += "-" + Locale.getDefault().getCountry();
         }
-    }
 
-    private WebViewUtil.Type getServiceType() {
-        return WebViewUtil.Type.Google;
+        String url = GoogleWebViewUtil.getFormattedUrl(textToTranslate, lang);
+        webView.loadUrl(url);
     }
 
     private class MyWebViewClient extends WebViewClient {
@@ -76,13 +62,12 @@ public class GoogleTranslateWebView {
         public void getTranslatedText(String text) {
             Tool.logInfo("Translated text: " + text);
             if (callback != null) {
-                ocrResultList.get(0).setTranslatedText(text);
-                callback.onTranslated(ocrResultList);
+                callback.onTranslated(text);
             }
         }
     }
 
     public interface OnGoogleTranslateWebViewCallback {
-        void onTranslated(List<OcrResult> ocrResultList);
+        void onTranslated(String translatedText);
     }
 }
