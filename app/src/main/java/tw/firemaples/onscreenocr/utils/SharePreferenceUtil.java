@@ -1,5 +1,6 @@
 package tw.firemaples.onscreenocr.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -14,6 +15,7 @@ public class SharePreferenceUtil {
     private static final String KEY_STARTING_WITH_SELECTION_MODE = "KEY_STARTING_WITH_SELECTION_MODE";
     private static final String KEY_REMOVE_LINE_BREAKS = "KEY_REMOVE_LINE_BREAKS";
     private static final String KEY_APP_MODE = "KEY_APP_MODE";
+    private static final String KEY_READ_SPEED_ENABLE = "KEY_READ_SPEED_ENABLE";
     private static final String KEY_READ_SPEED = "KEY_READ_SPEED";
 
     private static SharePreferenceUtil ourInstance = new SharePreferenceUtil();
@@ -85,8 +87,17 @@ public class SharePreferenceUtil {
         getSharedPreferences().edit().putString(KEY_APP_MODE, appMode.name()).apply();
     }
 
+    public boolean getReadSpeedEnable() {
+        return getSharedPreferences().getBoolean(KEY_READ_SPEED_ENABLE, false);
+    }
+
+    @SuppressLint("ApplySharedPref")
+    public void setReadSpeedEnable(boolean enable) {
+        getSharedPreferences().edit().putBoolean(KEY_READ_SPEED_ENABLE, enable).commit();
+    }
+
     public float getReadSpeed() {
-        return getSharedPreferences().getFloat(KEY_READ_SPEED, 1f);
+        return getSharedPreferences().getFloat(KEY_READ_SPEED, 0.6f);
     }
 
     public void setReadSpeed(float speed) {

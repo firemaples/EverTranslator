@@ -2,10 +2,16 @@ package tw.firemaples.onscreenocr.tts;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.os.AsyncTask;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -19,6 +25,7 @@ public class AndroidTTSManager {
     private static AndroidTTSManager _instance;
 
     private static final String PATH_TTS_FILE = "tts";
+    private static final String PATH_SILENCE_FILE = "silence.wav";
 
     private final Context context;
 
@@ -27,6 +34,7 @@ public class AndroidTTSManager {
     private Boolean ttsReady;
 
     private File ttsFolder;
+    private File silenceFile;
 
     private HashMap<String, AndroidTTSManagerCallback> callbackHashMap = new HashMap<>();
     private HashMap<String, File> fileHashMap = new HashMap<>();
@@ -38,6 +46,10 @@ public class AndroidTTSManager {
         if (!ttsFolder.exists()) {
             ttsFolder.mkdirs();
         }
+        silenceFile = new File(ttsFolder, PATH_SILENCE_FILE);
+//        if (!silenceFile.exists()) {
+        new CreateSilenceFileTask().execute();
+//        }
     }
 
     public static AndroidTTSManager getInstance(Context context) {
@@ -60,6 +72,13 @@ public class AndroidTTSManager {
         String fileName = lang + "_" + ttsContent.replaceAll(" ", "_") + ".wav";
         File ttsFile = new File(ttsFolder.getAbsolutePath(), fileName);
         return ttsFile;
+    }
+
+    public File getSilenceFile() {
+        if (silenceFile != null && silenceFile.exists()) {
+            return silenceFile;
+        }
+        return null;
     }
 
     public void setCallback(String requestId, AndroidTTSManagerCallback callback) {
@@ -130,6 +149,58 @@ public class AndroidTTSManager {
             }
         }
     };
+
+    private class CreateSilenceFileTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            if (silenceFile != null) {
+                if (silenceFile.exists()) {
+                    if (!silenceFile.delete()) {
+                        return false;
+                    }
+                }
+
+                AssetManager assetManager = context.getAssets();
+                try {
+                    InputStream stream = assetManager.open(PATH_SILENCE_FILE);
+                    if (createFileFromInputStream(stream, silenceFile)) {
+                        return true;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+        }
+
+        private boolean createFileFromInputStream(InputStream inputStream, File outputFile) {
+
+            try {
+                OutputStream outputStream = new FileOutputStream(outputFile);
+                byte buffer[] = new byte[1024];
+                int length;
+
+                while ((length = inputStream.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, length);
+                }
+
+                outputStream.close();
+                inputStream.close();
+
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return false;
+        }
+    }
 
     public class LanguageNotSupportException extends Exception {
         LanguageNotSupportException(String msg) {

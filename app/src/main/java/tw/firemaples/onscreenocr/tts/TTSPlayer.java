@@ -2,6 +2,8 @@ package tw.firemaples.onscreenocr.tts;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -25,6 +27,7 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.io.File;
 
+import tw.firemaples.onscreenocr.utils.Callback;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
@@ -34,6 +37,10 @@ import tw.firemaples.onscreenocr.utils.Tool;
 public class TTSPlayer {
     private static TTSPlayer _instance;
 
+    private Context context;
+
+    private static final long TIME_MAX_CHANGE_SPEED_WAIT = 1500;
+
     private OnTTSPlayCallback callback;
 
     private SimpleExoPlayer player;
@@ -41,6 +48,8 @@ public class TTSPlayer {
     private ExtractorsFactory extractorsFactory;
 
     private File currentTTSFile;
+
+    private PlaySpeedSettingTask playSpeedSettingTask;
 
     private TTSPlayer() {
         setupPlayer(Tool.getContext());
@@ -55,6 +64,7 @@ public class TTSPlayer {
     }
 
     private void setupPlayer(Context context) {
+        this.context = context;
         TrackSelection.Factory videoTrackSelectionFactory =
                 new AdaptiveTrackSelection.Factory(null);
         TrackSelector trackSelector =
@@ -101,8 +111,23 @@ public class TTSPlayer {
         player.seekTo(0);
     }
 
-    public void setSpeed(float speed) {
+    public void setSpeed(final float speed) {
+
         player.setPlaybackParameters(new PlaybackParameters(speed, 1f));
+//        new PlaySpeedSettingTask(speed, onSpeedChangedCallback).execute();
+//        if (speed == currentSpeed) {
+//            if (onSpeedChangedCallback != null) {
+//                onSpeedChangedCallback.onCallback(null);
+//            }
+//        } else {
+//            this.currentSpeed = speed;
+//            this.onSpeedChangedCallback = onSpeedChangedCallback;
+//            player.setPlaybackParameters(new PlaybackParameters(speed, 1f));
+//        }
+    }
+
+    public float getPlaySpeed() {
+        return player.getPlaybackParameters().speed;
     }
 
     private ExoPlayer.EventListener eventListener = new ExoPlayer.EventListener() {
@@ -147,6 +172,75 @@ public class TTSPlayer {
 
         }
     };
+
+    private class PlaySpeedSettingTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final float speed;
+        private final Callback<Boolean> callback;
+        private long stopTime;
+
+        private PlaySpeedSettingTask(float speed, @Nullable Callback<Boolean> callback) {
+            this.speed = speed;
+            this.callback = callback;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (playSpeedSettingTask != null && !playSpeedSettingTask.isCancelled()) {
+                playSpeedSettingTask.cancel(true);
+            }
+            TTSPlayer.this.playSpeedSettingTask = this;
+
+            player.setPlaybackParameters(new PlaybackParameters(speed, 1f));
+            stopTime = System.currentTimeMillis() + TIME_MAX_CHANGE_SPEED_WAIT;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            if (callback == null) {
+                return null;
+            }
+            if (player.getPlaybackParameters().speed == speed) {
+                return false;
+            }
+            while (player.getPlaybackParameters().speed != speed) {
+                if (System.currentTimeMillis() > stopTime) {
+                    Tool.logInfo("Waiting play speed change timeout");
+                    break;
+                }
+                Tool.logInfo("wait for set play speed effect");
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            AndroidTTSManager ttsManager = AndroidTTSManager.getInstance(context);
+            if (ttsManager.getSilenceFile() != null) {
+                stop();
+                play(ttsManager.getSilenceFile());
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (player.getPlaybackParameters().speed == speed) {
+                Tool.logInfo("Set play speed effected!");
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean hasChanged) {
+            super.onPostExecute(hasChanged);
+            if (callback != null && !isCancelled()) {
+                callback.onCallback(hasChanged);
+            }
+        }
+    }
 
     public interface OnTTSPlayCallback {
         void onPlayCompletion();
