@@ -9,6 +9,8 @@ import android.text.style.ClickableSpan;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ import java.util.regex.Pattern;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
+import tw.firemaples.onscreenocr.tts.AndroidTTSManager;
 import tw.firemaples.onscreenocr.tts.TTSPlayer;
 import tw.firemaples.onscreenocr.tts.TTSRetrieverTask;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
@@ -34,9 +37,11 @@ public class TTSPlayerView extends FloatingView {
     private static final String PATTERN_WORD = "[^\\W\\d](\\w|[-'\\.]{1,2}(?=\\w))*";
 
     private TextView tv_textToSpeech, tv_speed;
-    private View bt_play, bt_pause, bt_stop, bt_time, bt_selectOff, bt_close;
+    private CheckBox cb_enablePlaySlowly;
+    private View bt_play, bt_pause, bt_stop, bt_selectOff, bt_close;
     private SeekBar sb_speed;
 
+    private SharePreferenceUtil spUtil;
     private TTSPlayer ttsPlayer;
     private PlayerState playerState = PlayerState.INIT;
 
@@ -51,6 +56,7 @@ public class TTSPlayerView extends FloatingView {
         super(context);
 
         mainHandler = new Handler(context.getMainLooper());
+        spUtil = SharePreferenceUtil.getInstance();
         ttsPlayer = TTSPlayer.getInstance();
         ttsPlayer.setCallback(onTTSPlayCallback);
         setViews(getRootView());
@@ -74,25 +80,27 @@ public class TTSPlayerView extends FloatingView {
     private void setViews(View rootView) {
         tv_textToSpeech = (TextView) rootView.findViewById(R.id.tv_textToSpeech);
         tv_speed = (TextView) rootView.findViewById(R.id.tv_speed);
+        cb_enablePlaySlowly = (CheckBox) rootView.findViewById(R.id.cb_enablePlaySlowly);
         bt_play = rootView.findViewById(R.id.bt_play);
         bt_pause = rootView.findViewById(R.id.bt_pause);
         bt_stop = rootView.findViewById(R.id.bt_stop);
-        bt_time = rootView.findViewById(R.id.bt_time);
         bt_selectOff = rootView.findViewById(R.id.bt_selectOff);
         bt_close = rootView.findViewById(R.id.bt_close);
         sb_speed = (SeekBar) rootView.findViewById(R.id.sb_speed);
 
+        cb_enablePlaySlowly.setOnCheckedChangeListener(onCheckedChangeListener);
         bt_play.setOnClickListener(onClickListener);
         bt_pause.setOnClickListener(onClickListener);
         bt_stop.setOnClickListener(onClickListener);
-        bt_time.setOnClickListener(onClickListener);
         bt_selectOff.setOnClickListener(onClickListener);
         bt_close.setOnClickListener(onClickListener);
         sb_speed.setMax(19);
-        float readSpeed = SharePreferenceUtil.getInstance().getReadSpeed();
-        ttsPlayer.setSpeed(readSpeed);
+
+        cb_enablePlaySlowly.setChecked(spUtil.getReadSpeedEnable());
+        sb_speed.setEnabled(spUtil.getReadSpeedEnable());
+        float readSpeed = spUtil.getReadSpeed();
         sb_speed.setProgress((int) (readSpeed * 10) - 1);
-        updateReadSpeedText();
+        updatePlaySpeed();
         sb_speed.setOnSeekBarChangeListener(onSeekBarChangeListener);
 
         setupHomeButtonWatcher(onHomePressedListener);
@@ -174,13 +182,27 @@ public class TTSPlayerView extends FloatingView {
         updateBtnState(playerState);
     }
 
-    private float getReadSpeedFromSeekBar() {
+    private float getPlaySpeedFromSeekBar() {
         return (sb_speed.getProgress() + 1) / 10f;
     }
 
-    private void updateReadSpeedText() {
+    private void updatePlaySpeed() {
+        if (spUtil.getReadSpeedEnable()) {
+            ttsPlayer.setSpeed(getPlaySpeedFromSeekBar());
+        } else {
+            ttsPlayer.setSpeed(1);
+        }
+
         float readSpeed = (sb_speed.getProgress() + 1) / 10f;
         tv_speed.setText(String.format(Locale.getDefault(), "x%.1f", readSpeed));
+
+        File silenceFile = AndroidTTSManager.getInstance(getContext()).getSilenceFile();
+        if (silenceFile != null) {
+            updateBtnState(PlayerState.STOP);
+            ttsPlayer.stop();
+            ttsPlayer.play(silenceFile);
+            ttsPlayer.stop();
+        }
     }
 
     @Override
@@ -195,10 +217,18 @@ public class TTSPlayerView extends FloatingView {
         ttsPlayer.stop();
     }
 
-    private void startPlayTTS(File ttsFile) {
+    private void startPlayTTS(final File ttsFile) {
         this.currentTTSFile = ttsFile;
-        ttsPlayer.play(ttsFile);
-        updateBtnState(PlayerState.PLAYING);
+
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                updatePlaySpeed();
+                ttsPlayer.stop();
+                ttsPlayer.play(ttsFile);
+                updateBtnState(PlayerState.PLAYING);
+            }
+        });
     }
 
     private TTSRetrieverTask.OnTTSRetrieverCallback onTTSRetrieverCallback = new TTSRetrieverTask.OnTTSRetrieverCallback() {
@@ -236,14 +266,25 @@ public class TTSPlayerView extends FloatingView {
         }
     };
 
+    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            int id = buttonView.getId();
+            if (id == R.id.cb_enablePlaySlowly) {
+                spUtil.setReadSpeedEnable(isChecked);
+                sb_speed.setEnabled(isChecked);
+                updatePlaySpeed();
+            }
+        }
+    };
+
     private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            float speed = getReadSpeedFromSeekBar();
+            float speed = getPlaySpeedFromSeekBar();
             Tool.logInfo("Speed bar changed, progress: " + progress + ", speed: " + speed);
-            SharePreferenceUtil.getInstance().setReadSpeed(speed);
-            ttsPlayer.setSpeed(speed);
-            updateReadSpeedText();
+            spUtil.setReadSpeed(speed);
+            updatePlaySpeed();
         }
 
         @Override
