@@ -15,6 +15,8 @@ public class HomeWatcher {
     private OnHomePressedListener mListener;
     private InnerReceiver mReceiver;
 
+    private boolean isWatching;
+
     public HomeWatcher(Context context) {
         mContext = context;
         mFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
@@ -28,12 +30,17 @@ public class HomeWatcher {
     public void startWatch() {
         if (mReceiver != null) {
             mContext.registerReceiver(mReceiver, mFilter);
+            isWatching = true;
         }
     }
 
     public void stopWatch() {
-        if (mReceiver != null) {
-            mContext.unregisterReceiver(mReceiver);
+        if (mReceiver != null && isWatching) {
+            try {
+                mContext.unregisterReceiver(mReceiver);
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
         }
     }
 
