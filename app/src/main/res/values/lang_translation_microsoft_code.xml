@@ -6,8 +6,8 @@
         <item>ar</item> <!-- Arabic -->
         <item>bg</item> <!-- Bulgarian -->
         <item>ca</item> <!-- Catalan -->
-        <item>zh-CHS</item> <!-- Chinese (Simplified) -->
-        <item>zh-CHT</item> <!-- Chinese (Traditional) -->
+        <item>zh-Hans</item> <!-- Chinese (Simplified) -->
+        <item>zh-Hant</item> <!-- Chinese (Traditional) -->
         <item>cs</item> <!-- Czech -->
         <item>da</item> <!-- Danish -->
         <item>nl</item> <!-- Dutch -->
