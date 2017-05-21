@@ -349,9 +349,9 @@ public class OcrNTranslateUtils {
         } else if (languageCode.equals("cat")) { // Catalan
             return "ca";
         } else if (languageCode.equals("chi_sim")) { // Chinese (Simplified)
-            return "zh-CHS";
+            return "zh-Hans";
         } else if (languageCode.equals("chi_tra")) { // Chinese (Traditional)
-            return "zh-CHT";
+            return "zh-Hant";
         } else if (languageCode.equals("hrv")) { // Croatian
             return "hr";
         } else if (languageCode.equals("ces")) { // Czech
