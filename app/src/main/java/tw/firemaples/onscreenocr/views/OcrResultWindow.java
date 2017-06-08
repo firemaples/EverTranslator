@@ -208,9 +208,11 @@ public class OcrResultWindow {
                 String lang;
                 String ttsContent;
                 if (id == R.id.bt_tts_ocrText) {
+                    FabricUtil.logBtnPlayTTSClicked("OCR text");
                     lang = OcrNTranslateUtils.getInstance().getTranslateFromLang();
                     ttsContent = ocrResult.getText();
                 } else {
+                    FabricUtil.logBtnPlayTTSClicked("Translated text");
                     lang = OcrNTranslateUtils.getInstance().getTranslateToLang();
                     ttsContent = ocrResult.getTranslatedText();
                 }

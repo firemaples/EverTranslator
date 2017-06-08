@@ -83,6 +83,10 @@ public class FabricUtil {
         Answers.getInstance().logCustom(new CustomEvent("Btn open in webview clicked").putCustomAttribute("Type", type));
     }
 
+    public static void logBtnPlayTTSClicked(String type) {
+        Answers.getInstance().logCustom(new CustomEvent("Btn play TTS clicked").putCustomAttribute("Type", type));
+    }
+
     public static void logTranslationInfo(String text, String translateFromLang, String translateToLang, TranslateServiceModel.TranslateServiceEnum translateService) {
         Answers.getInstance().logCustom(
                 new CustomEvent("Translate Text")
