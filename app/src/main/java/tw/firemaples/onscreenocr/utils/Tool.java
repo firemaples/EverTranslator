@@ -67,7 +67,7 @@ public class Tool {
         }
     }
 
-    public static void logV(String msg){
+    public static void logV(String msg) {
         if (BuildConfig.DEBUG) {
             Log.v(LOG_TAG, msg);
         }
