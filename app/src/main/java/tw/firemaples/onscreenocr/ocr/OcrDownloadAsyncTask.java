@@ -2,8 +2,6 @@ package tw.firemaples.onscreenocr.ocr;
 
 import android.os.AsyncTask;
 
-import com.crashlytics.android.Crashlytics;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,6 +16,7 @@ import java.util.Locale;
 import javax.net.ssl.SSLException;
 
 import tw.firemaples.onscreenocr.R;
+import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.Tool;
 
@@ -204,7 +203,7 @@ public class OcrDownloadAsyncTask extends AsyncTask<Void, Long, Boolean> {
             } else if (e instanceof InterruptedIOException) {
                 errorMessage = Tool.getContext().getString(R.string.canceledByUser);
             } else {
-                Crashlytics.logException(e);
+                FabricUtil.postException(e);
                 errorMessage = e.getLocalizedMessage();
             }
             Tool.logError(errorMessage);

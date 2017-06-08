@@ -4,13 +4,9 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
-
-import java.util.Locale;
-
 import tw.firemaples.onscreenocr.database.DatabaseManager;
 import tw.firemaples.onscreenocr.database.TranslateServiceModel;
+import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -24,6 +20,8 @@ public class TranslateManager {
 
     private Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
+    GoogleTranslateWebView googleTranslateWebView;
+
     private TranslateManager() {
     }
 
@@ -35,7 +33,7 @@ public class TranslateManager {
         return _instance;
     }
 
-    public void startTranslate(Context context, String text, final OnTranslateManagerCallback callback) {
+    public void startTranslate(Context context, String text, OnTranslateManagerCallback callback) {
         if (text == null || text.trim().length() == 0 || callback == null) {
             return;
         }
@@ -45,21 +43,45 @@ public class TranslateManager {
         }
 
         TranslateServiceModel translateService = DatabaseManager.getInstance().getTranslateService();
-        String translateFromLang = OcrNTranslateUtils.getInstance().getTranslateFromLang();
-        String translateToLang = OcrNTranslateUtils.getInstance().getTranslateToLang();
-        Tool.logInfo("Translate with " + translateService.getCurrent().name());
-        switch (translateService.getCurrent()) {
+
+        _startTranslate(context, text, translateService.getCurrent(), callback);
+    }
+
+    private void _startTranslate(final Context context, final String text, final TranslateServiceModel.TranslateServiceEnum translateService, final OnTranslateManagerCallback callback) {
+        final String translateFromLang = OcrNTranslateUtils.getInstance().getTranslateFromLang();
+        final String translateToLang = OcrNTranslateUtils.getInstance().getTranslateToLang();
+
+        Tool.logInfo("Translate with " + translateService.name());
+        switch (translateService) {
             case google: {
-                GoogleTranslateWebView googleTranslateWebView = new GoogleTranslateWebView(context);
+                if (googleTranslateWebView == null) {
+                    googleTranslateWebView = new GoogleTranslateWebView(context);
+                }
                 googleTranslateWebView.startTranslate(text, translateToLang, new GoogleTranslateWebView.OnGoogleTranslateWebViewCallback() {
                     @Override
                     public void onTranslated(final String translatedText) {
                         mainThreadHandler.post(new Runnable() {
                             @Override
                             public void run() {
+                                FabricUtil.logTranslationInfo(text, translateFromLang, translateToLang, translateService);
                                 callback.onTranslateFinished(translatedText);
                             }
                         });
+                    }
+
+                    @Override
+                    public void onHttpException(int httpStatus, String reason) {
+                        _startTranslate(context, text, TranslateServiceModel.TranslateServiceEnum.microsoft, callback);
+                    }
+
+                    @Override
+                    public void onNoneException() {
+                        _startTranslate(context, text, TranslateServiceModel.TranslateServiceEnum.microsoft, callback);
+                    }
+
+                    @Override
+                    public void onTimeout() {
+                        _startTranslate(context, text, TranslateServiceModel.TranslateServiceEnum.microsoft, callback);
                     }
                 });
             }
@@ -71,6 +93,7 @@ public class TranslateManager {
                         mainThreadHandler.post(new Runnable() {
                             @Override
                             public void run() {
+                                FabricUtil.logTranslationInfo(text, translateFromLang, translateToLang, translateService);
                                 callback.onTranslateFinished(translatedText);
                             }
                         });
@@ -79,15 +102,7 @@ public class TranslateManager {
             }
             break;
         }
-        Answers.getInstance().logCustom(
-                new CustomEvent("Translate Text")
-                        .putCustomAttribute("Text length", text.length())
-                        .putCustomAttribute("Translate from", translateFromLang)
-                        .putCustomAttribute("Translate to", translateToLang)
-                        .putCustomAttribute("From > to", translateFromLang + " > " + translateToLang)
-                        .putCustomAttribute("System language", Locale.getDefault().getLanguage())
-                        .putCustomAttribute("Translate service", translateService.getCurrent().name())
-        );
+
     }
 
     public interface OnTranslateManagerCallback {

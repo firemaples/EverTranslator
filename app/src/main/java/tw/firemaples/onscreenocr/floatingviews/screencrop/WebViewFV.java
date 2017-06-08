@@ -8,16 +8,14 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
-
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
+import tw.firemaples.onscreenocr.utils.FabricUtil;
+import tw.firemaples.onscreenocr.utils.GoogleWebViewUtil;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
 import tw.firemaples.onscreenocr.utils.Tool;
-import tw.firemaples.onscreenocr.utils.GoogleWebViewUtil;
 
 /**
  * Created by firemaples on 01/12/2016.
@@ -68,7 +66,7 @@ public class WebViewFV extends FloatingView {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.bt_openBrowser) {
-                Answers.getInstance().logCustom(new CustomEvent("Btn open on other browser"));
+                FabricUtil.logBtnOpenOnOtherBrowserClicked();
                 Tool.getInstance().openBrowser(url);
                 callback.onOpenBrowserClicked();
             } else if (id == R.id.bt_close) {

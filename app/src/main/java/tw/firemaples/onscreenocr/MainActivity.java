@@ -20,12 +20,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
 
 import io.fabric.sdk.android.Fabric;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.Callback;
+import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.PermissionUtil;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (getIntent() != null && getIntent().getAction() != null) {
-            Answers.getInstance().logCustom(new CustomEvent("App launched"));
+            FabricUtil.logAppLaunched();
             SharePreferenceUtil.getInstance().setIsAppShowing(true, this);
         }
 
