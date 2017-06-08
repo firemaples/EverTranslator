@@ -7,8 +7,6 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
-import com.crashlytics.android.Crashlytics;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -17,6 +15,7 @@ import java.nio.channels.FileChannel;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
+import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -146,7 +145,7 @@ public class SettingView extends FloatingView {
                     moveFile(file, fileTo);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Crashlytics.logException(e);
+                    FabricUtil.postException(e);
                 }
 
             }

@@ -9,9 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +20,7 @@ import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.ocr.OcrDownloadAsyncTask;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.AppMode;
+import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -268,9 +266,9 @@ public class FloatingBar extends FloatingView {
             if (id == R.id.view_menu) {
                 new FloatingBarMenu(getContext(), view_menu, onFloatingBarMenuCallback).show();
             } else if (id == R.id.bt_selectArea) {
-                Answers.getInstance().logCustom(new CustomEvent("Btn select area"));
+                FabricUtil.logBtnSelectAreaClicked();
                 if (ScreenshotHandler.isInitialized()) {
-                    Answers.getInstance().logCustom(new CustomEvent("Do btn select area"));
+                    FabricUtil.logDoBtnSelectAreaAction();
                     drawAreaView = new DrawAreaView(getContext());
                     drawAreaView.attachToWindow();
                     FloatingBar.this.detachFromWindow(false);
@@ -282,9 +280,9 @@ public class FloatingBar extends FloatingView {
                     ScreenTranslatorService.stop(true);
                 }
             } else if (id == R.id.bt_translation) {
-                Answers.getInstance().logCustom(new CustomEvent("Btn translation"));
+                FabricUtil.logBtnTranslationClicked();
                 if (OcrDownloadAsyncTask.checkOcrFiles(OcrNTranslateUtils.getInstance().getOcrLang())) {
-                    Answers.getInstance().logCustom(new CustomEvent("Do btn translation"));
+                    FabricUtil.logDoBtnTranslationAction();
                     currentBoxList.addAll(drawAreaView.getAreaSelectionView().getBoxList());
                     drawAreaView.getAreaSelectionView().clear();
                     drawAreaView.detachFromWindow();
@@ -297,7 +295,7 @@ public class FloatingBar extends FloatingView {
                     showDownloadOcrFileDialog(OcrNTranslateUtils.getInstance().getOcrLangDisplayName());
                 }
             } else if (id == R.id.bt_clear) {
-                Answers.getInstance().logCustom(new CustomEvent("Btn clear"));
+                FabricUtil.logBtnClearClicked();
                 resetAll();
             }
         }

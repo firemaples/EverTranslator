@@ -11,15 +11,13 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
-
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.OcrResultView;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.TTSPlayerView;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
+import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -189,12 +187,12 @@ public class OcrResultWindow {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.bt_openInBrowser_ocrText) {
-                Answers.getInstance().logCustom(new CustomEvent("Btn open in browser").putCustomAttribute("Type", "OCR text"));
+                FabricUtil.logBtnOpenInWebViewClicked("OCR text");
                 if (ocrResult != null) {
                     callback.onOpenBrowserBtnClick(ocrResult.getText(), false);
                 }
             } else if (id == R.id.bt_openInBrowser_translatedText) {
-                Answers.getInstance().logCustom(new CustomEvent("Btn open in browser").putCustomAttribute("Type", "Translated text"));
+                FabricUtil.logBtnOpenInWebViewClicked("Translated text");
                 if (ocrResult != null) {
                     callback.onOpenBrowserBtnClick(ocrResult.getTranslatedText(), true);
                 }
@@ -225,7 +223,7 @@ public class OcrResultWindow {
     };
 
     private void copyToClipboard(String label, String text) {
-        Answers.getInstance().logCustom(new CustomEvent("Copy to Clipboard").putCustomAttribute("Type", label));
+        FabricUtil.logBtnCopyToClipboardClicked(label);
         ClipboardManager clipboard = (ClipboardManager)
                 context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = ClipData.newPlainText(label, text);

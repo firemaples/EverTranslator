@@ -39,7 +39,7 @@ public class HomeWatcher {
             try {
                 mContext.unregisterReceiver(mReceiver);
             } catch (Throwable t) {
-                t.printStackTrace();
+//                t.printStackTrace();
             }
         }
     }

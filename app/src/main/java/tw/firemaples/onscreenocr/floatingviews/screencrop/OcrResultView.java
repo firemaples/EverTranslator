@@ -11,9 +11,6 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +20,7 @@ import tw.firemaples.onscreenocr.ocr.OcrInitAsyncTask;
 import tw.firemaples.onscreenocr.ocr.OcrRecognizeAsyncTask;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.translate.TranslateManager;
+import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.views.OcrResultWindow;
@@ -165,7 +163,7 @@ public class OcrResultView extends FloatingView {
     private void startTextRecognize() {
         updateViewState(OcrNTranslateState.OCR_RUNNING);
 
-        Answers.getInstance().logCustom(new CustomEvent("Start OCR"));
+        FabricUtil.logStartOCROperation();
 
         lastAsyncTask = new OcrRecognizeAsyncTask(getContext(),
                 currentScreenshot,
@@ -195,7 +193,7 @@ public class OcrResultView extends FloatingView {
     private void startTranslate(List<OcrResult> results) {
         if (SharePreferenceUtil.getInstance().isEnableTranslation()) {
             updateViewState(OcrNTranslateState.TRANSLATING);
-            Answers.getInstance().logCustom(new CustomEvent("Start Translation"));
+            FabricUtil.logStartTranslateOperation();
 
             translateManager.startTranslate(getContext(), results.get(0).getText(), onTranslateManagerCallback);
 
@@ -210,7 +208,7 @@ public class OcrResultView extends FloatingView {
     private TranslateManager.OnTranslateManagerCallback onTranslateManagerCallback = new TranslateManager.OnTranslateManagerCallback() {
         @Override
         public void onTranslateFinished(String translatedText) {
-            Answers.getInstance().logCustom(new CustomEvent("Translation finished"));
+            FabricUtil.logFinishTranslateOperation();
             ocrResultList.get(0).setTranslatedText(translatedText);
             updateViewState(OcrNTranslateState.TRANSLATED);
         }
