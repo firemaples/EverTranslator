@@ -63,7 +63,7 @@ public class AndroidTTSManager {
     public void init() {
         if (tts == null) {
             ttsReady = false;
-            tts = new TextToSpeech(context, onInitListener);
+            tts = new TextToSpeech(context.getApplicationContext(), onInitListener);
             tts.setOnUtteranceProgressListener(utteranceProgressListener);
         }
     }
