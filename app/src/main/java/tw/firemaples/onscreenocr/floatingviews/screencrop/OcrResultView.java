@@ -111,7 +111,9 @@ public class OcrResultView extends FloatingView {
 
     private void updateViewState() {
         if (SharePreferenceUtil.getInstance().isDebugMode()) {
-            setDebugInfo(ocrResultList.get(0));
+            if (ocrResultList.size() > 0) {
+                setDebugInfo(ocrResultList.get(0));
+            }
         }
 
         view_ocrResultWrapper.updateViewState(state, ocrResultList);
@@ -209,7 +211,9 @@ public class OcrResultView extends FloatingView {
         @Override
         public void onTranslateFinished(String translatedText) {
             FabricUtil.logFinishTranslateOperation();
-            ocrResultList.get(0).setTranslatedText(translatedText);
+            if (ocrResultList.size() > 0) {
+                ocrResultList.get(0).setTranslatedText(translatedText);
+            }
             updateViewState(OcrNTranslateState.TRANSLATED);
         }
     };
