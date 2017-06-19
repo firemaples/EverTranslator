@@ -132,7 +132,7 @@ public class AndroidTTSManager {
         @Override
         public void onDone(String utteranceId) {
             Tool.logInfo("utteranceProgressListener#onDone()");
-            if (callbackHashMap.containsKey(utteranceId) && fileHashMap.containsKey(utteranceId)) {
+            if (callbackHashMap.containsKey(utteranceId) && fileHashMap.containsKey(utteranceId) && fileHashMap.get(utteranceId) != null) {
                 AndroidTTSManagerCallback callback = callbackHashMap.get(utteranceId);
                 File file = fileHashMap.get(utteranceId);
                 callback.onDone(file);
