@@ -62,7 +62,7 @@ public class DatabaseManager {
     }
 
     private TranslateServiceModel getDefaultTranslateService() {
-        TranslateServiceModel model = new TranslateServiceModel();
+        translateService = new TranslateServiceModel();
         translateService.current = 0;
 
         ServiceModel microsoftService = new ServiceModel();
@@ -70,6 +70,6 @@ public class DatabaseManager {
         microsoftService.key = KeyId.MICROSOFT_TRANSLATE_SUBSCRIPTION_KEY;
         translateService.services.add(microsoftService);
 
-        return model;
+        return translateService;
     }
 }
