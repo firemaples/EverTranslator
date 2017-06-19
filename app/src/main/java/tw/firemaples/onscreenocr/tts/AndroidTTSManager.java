@@ -31,7 +31,7 @@ public class AndroidTTSManager {
 
     private TextToSpeech tts;
 
-    private Boolean ttsReady;
+    private boolean ttsReady;
 
     private File ttsFolder;
     private File silenceFile;
@@ -62,7 +62,7 @@ public class AndroidTTSManager {
 
     public void init() {
         if (tts == null) {
-            ttsReady = null;
+            ttsReady = false;
             tts = new TextToSpeech(context, onInitListener);
             tts.setOnUtteranceProgressListener(utteranceProgressListener);
         }
