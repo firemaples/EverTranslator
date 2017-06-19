@@ -72,7 +72,7 @@ public class OcrResultWrapper extends FrameLayout {
                 layoutParams.setMargins(parentRect.left, parentRect.top, 0, 0);
                 bgImage.setLayoutParams(layoutParams);
 
-                if (SharePreferenceUtil.getInstance().isDebugMode()) {
+                if (SharePreferenceUtil.getInstance().isDebugMode() && ocrResult.getDebugInfo() != null) {
                     bgImage.setImageBitmap(ocrResult.getDebugInfo().getCroppedBitmap());
                 }
 
