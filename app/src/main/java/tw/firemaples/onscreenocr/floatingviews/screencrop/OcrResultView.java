@@ -84,7 +84,7 @@ public class OcrResultView extends FloatingView {
             OcrResult ocrResult = new OcrResult();
             ocrResult.setRect(rect);
             ArrayList<Rect> rects = new ArrayList<>();
-            rects.add(rect);
+            rects.add(new Rect(0, 0, rect.width(), rect.height()));
             ocrResult.setBoxRects(rects);
             ocrResultList.add(ocrResult);
         }
