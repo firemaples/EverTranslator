@@ -15,6 +15,8 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Locale;
 
+import tw.firemaples.onscreenocr.R;
+import tw.firemaples.onscreenocr.floatingviews.screencrop.DialogView;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
@@ -101,6 +103,9 @@ public class AndroidTTSManager {
                     Tool.logError("retrieveTTSFile failed, failed to synthesizeToFile.");
                 }
             }
+        } else {
+            tts = null;
+            init();
         }
     }
 
@@ -118,7 +123,17 @@ public class AndroidTTSManager {
                 Intent installIntent = new Intent();
                 installIntent.setAction(
                         TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-                context.startActivity(installIntent);
+                try {
+                    context.startActivity(installIntent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    DialogView dialogView = new DialogView(context);
+                    dialogView.reset();
+                    dialogView.setType(DialogView.Type.CONFIRM_ONLY);
+                    dialogView.setTitle(context.getString(R.string.error));
+                    dialogView.setContentMsg(context.getString(R.string.msg_ttsEngineInitFailed));
+                    dialogView.attachToWindow();
+                }
             }
         }
     };
