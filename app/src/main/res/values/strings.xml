@@ -65,4 +65,5 @@
     <string name="menu_changeMode">Change Mode</string>
     <string name="notification_contentText_hide">Click to hide floating bar</string>
     <string name="title_editOCRText">Edit OCR text</string>
+    <string name="msg_ttsEngineInitFailed">TTS engine init failed, the TTS feature will not working</string>
 </resources>

@@ -193,7 +193,7 @@ public class OcrResultView extends FloatingView {
             };
 
     private void startTranslate(List<OcrResult> results) {
-        if (SharePreferenceUtil.getInstance().isEnableTranslation() || results.size() > 0) {
+        if (SharePreferenceUtil.getInstance().isEnableTranslation() && results.size() > 0) {
             updateViewState(OcrNTranslateState.TRANSLATING);
             FabricUtil.logStartTranslateOperation();
 
