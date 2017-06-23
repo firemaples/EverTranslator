@@ -251,7 +251,9 @@ public class TTSPlayerView extends FloatingView {
             if (id == R.id.bt_close) {
                 detachFromWindow();
             } else if (id == R.id.bt_play) {
-                startPlayTTS(currentTTSFile);
+                if (currentTTSFile != null) {
+                    startPlayTTS(currentTTSFile);
+                }
             } else if (id == R.id.bt_pause) {
                 ttsPlayer.pause();
                 updateBtnState(PlayerState.PAUSE);
