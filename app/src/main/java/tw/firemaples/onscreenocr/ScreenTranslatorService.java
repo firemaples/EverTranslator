@@ -10,9 +10,6 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
 
-import com.crashlytics.android.Crashlytics;
-
-import io.fabric.sdk.android.Fabric;
 import tw.firemaples.onscreenocr.database.DatabaseManager;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.floatingviews.quicktrans.QuickWindow;
@@ -124,9 +121,6 @@ public class ScreenTranslatorService extends Service {
 
         if (_instance == null) {
             _instance = this;
-        }
-        if (!Fabric.isInitialized()) {
-            Fabric.with(this, new Crashlytics());
         }
 
         Tool.init(this);
