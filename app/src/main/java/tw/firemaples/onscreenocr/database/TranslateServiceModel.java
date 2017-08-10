@@ -1,5 +1,6 @@
 package tw.firemaples.onscreenocr.database;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import tw.firemaples.onscreenocr.BuildConfig;
@@ -14,7 +15,7 @@ public class TranslateServiceModel {
 
     public int current;
 
-    public List<ServiceModel> services;
+    public List<ServiceModel> services = new ArrayList<>();
 
     public TranslateServiceEnum getCurrent() {
         return services.get(current).name;
