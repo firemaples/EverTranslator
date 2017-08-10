@@ -19,9 +19,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
-import com.crashlytics.android.Crashlytics;
-
-import io.fabric.sdk.android.Fabric;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.Callback;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
@@ -53,9 +50,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(0, 0);
-        if (!Fabric.isInitialized()) {
-            Fabric.with(this, new Crashlytics());
-        }
 
         if (getIntent() != null && getIntent().getAction() != null) {
             FabricUtil.logAppLaunched();
