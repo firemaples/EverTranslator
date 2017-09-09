@@ -244,6 +244,10 @@ public class FloatingBar extends MovableFloatingView {
                 FabricUtil.logBtnTranslationClicked();
                 if (OcrDownloadAsyncTask.checkOcrFiles(OcrNTranslateUtils.getInstance().getOcrLang())) {
                     FabricUtil.logDoBtnTranslationAction();
+                    if (drawAreaView == null) {
+                        Tool.logError("drawAreaView is null, ignore.");
+                        return;
+                    }
                     currentBoxList.addAll(drawAreaView.getAreaSelectionView().getBoxList());
                     drawAreaView.getAreaSelectionView().clear();
                     drawAreaView.detachFromWindow();
