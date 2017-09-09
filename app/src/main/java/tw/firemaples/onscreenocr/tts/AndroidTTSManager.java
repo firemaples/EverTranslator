@@ -88,6 +88,11 @@ public class AndroidTTSManager {
     }
 
     public synchronized void retrieveTTSFile(String lang, String ttsContent, String requestId) throws LanguageNotSupportException {
+        if (ttsContent == null) {
+            AndroidTTSManagerCallback callback = callbackHashMap.get(requestId);
+            callback.onError();
+            return;
+        }
         if (ttsReady) {
             int setLangResult = tts.setLanguage(new Locale(lang));
             if (setLangResult == TextToSpeech.LANG_MISSING_DATA ||
