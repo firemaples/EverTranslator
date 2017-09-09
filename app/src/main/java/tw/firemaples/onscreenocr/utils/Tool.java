@@ -92,6 +92,9 @@ public class Tool {
     }
 
     public static String replaceAllLineBreaks(String str, String replaceWith) {
+        if (str == null) {
+            return null;
+        }
         return str.replace("\r\n", replaceWith).replace("\r", replaceWith).replace("\n", replaceWith);
     }
 
