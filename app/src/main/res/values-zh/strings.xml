@@ -59,7 +59,7 @@
     <string name="error_unknownErrorWhenRequestMediaProjection">請求 [螢幕擷取] 功能失敗，您的設備不支援此功能？</string>
     <string name="btn_openAppsPage">開啟 [應用程式] 設定頁</string>
     <string name="error_openManageOverlayPermissionPageFailed">您的設備似乎不支援快捷跳轉至 [ACTION_MANAGE_OVERLAY_PERMISSION] 設定頁，請您自行手動至 [設定] => [應用程式] => [在其他應用程式上層繪製內容] 開啟隨處翻譯的權限</string>
-    <string name="saveOcrEngineToExternalStorage">將文字辨識檔案儲存至外部記憶卡</string>
+    <string name="saveOcrEngineToExternalStorageFirst">將文字辨識檔案優先儲存至外部記憶卡</string>
     <string name="canceledByUser">使用者取消下載任務</string>
     <string name="error_connectToServerFailed">連線至伺服器失敗，請檢查你的網路連線。</string>
     <string name="notification_contentText_hide">點擊隱藏浮動視窗</string>

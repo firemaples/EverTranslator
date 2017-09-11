@@ -52,7 +52,7 @@ public class SettingView extends FloatingView {
     private void setViews() {
         CheckBox cb_debugMode = (CheckBox) getRootView().findViewById(R.id.cb_debugMode);
         CheckBox cb_enableTranslation = (CheckBox) getRootView().findViewById(R.id.cb_enableTranslation);
-        CheckBox cb_saveOcrEngineToExternalStorage = (CheckBox) getRootView().findViewById(R.id.cb_saveOcrEngineToExternalStorage);
+        CheckBox cb_saveOcrEngineToExternalStorage = (CheckBox) getRootView().findViewById(R.id.cb_saveOcrEngineToExternalStorageFirst);
         CheckBox cb_startingWithSelectionMode = (CheckBox) getRootView().findViewById(R.id.cb_startingWithSelectionMode);
         CheckBox cb_removeLineBreaks = (CheckBox) getRootView().findViewById(R.id.cb_removeLineBreaks);
         getRootView().findViewById(R.id.bt_close).setOnClickListener(onClickListener);
@@ -95,7 +95,7 @@ public class SettingView extends FloatingView {
                 spUtil.setStartingWithSelectionMode(isChecked);
             } else if (id == R.id.cb_removeLineBreaks) {
                 spUtil.setRemoveLineBreaks(isChecked);
-            } else if (id == R.id.cb_saveOcrEngineToExternalStorage) {
+            } else if (id == R.id.cb_saveOcrEngineToExternalStorageFirst) {
                 OcrNTranslateUtils.TessDataLocation currentSelectedLocation = isChecked ? OcrNTranslateUtils.TessDataLocation.EXTERNAL_STORAGE : OcrNTranslateUtils.TessDataLocation.INTERNAL_STORAGE;
                 OcrNTranslateUtils.TessDataLocation savedLocation = ocrNTranslateUtils.getTessDataLocation();
                 if (currentSelectedLocation != savedLocation) {

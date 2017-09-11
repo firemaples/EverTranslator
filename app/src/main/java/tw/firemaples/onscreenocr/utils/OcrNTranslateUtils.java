@@ -65,7 +65,7 @@ public class OcrNTranslateUtils {
         return getTessDataLocation().getSaveDir();
     }
 
-    public File getTessDataBaseDir(){
+    public File getTessDataBaseDir() {
         return getTessDataDir().getParentFile();
     }
 
@@ -447,7 +447,7 @@ public class OcrNTranslateUtils {
 
     public enum TessDataLocation {
         INTERNAL_STORAGE(Tool.getContext().getFilesDir()),
-        EXTERNAL_STORAGE(getRemovableFileDir());
+        EXTERNAL_STORAGE(getRemovableFileDirOrNormalFilesDir());
 
         private File saveDir;
 
@@ -459,7 +459,7 @@ public class OcrNTranslateUtils {
             return saveDir;
         }
 
-        private static File getRemovableFileDir() {
+        private static File getRemovableFileDirOrNormalFilesDir() {
             Context context = Tool.getContext();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 File[] externalCacheDirs = context.getExternalFilesDirs(null);
@@ -469,7 +469,13 @@ public class OcrNTranslateUtils {
                     }
                 }
             }
-            return context.getExternalFilesDir(null);
+
+            File externalFilesDir = context.getExternalFilesDir(null);
+            if (externalFilesDir != null) {
+                return externalFilesDir;
+            } else {
+                return context.getFilesDir();
+            }
         }
     }
 }
