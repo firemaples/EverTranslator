@@ -27,6 +27,11 @@ public class TextEditDialogView extends FloatingView {
     }
 
     @Override
+    protected boolean layoutFocusable() {
+        return true;
+    }
+
+    @Override
     protected int getLayoutId() {
         return R.layout.view_text_edit_dialog;
     }
