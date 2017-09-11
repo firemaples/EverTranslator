@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 
@@ -132,12 +134,17 @@ public class AndroidTTSManager {
                     context.startActivity(installIntent);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    DialogView dialogView = new DialogView(context);
-                    dialogView.reset();
-                    dialogView.setType(DialogView.Type.CONFIRM_ONLY);
-                    dialogView.setTitle(context.getString(R.string.error));
-                    dialogView.setContentMsg(context.getString(R.string.msg_ttsEngineInitFailed));
-                    dialogView.attachToWindow();
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogView dialogView = new DialogView(context);
+                            dialogView.reset();
+                            dialogView.setType(DialogView.Type.CONFIRM_ONLY);
+                            dialogView.setTitle(context.getString(R.string.error));
+                            dialogView.setContentMsg(context.getString(R.string.msg_ttsEngineInitFailed));
+                            dialogView.attachToWindow();
+                        }
+                    });
                 }
             }
         }
