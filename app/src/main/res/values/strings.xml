@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Ever Translator</string>
+    <string name="app_name">EverTranslator</string>
 
     <!-- Strings for dialog -->
     <string name="dialog_title_error">ERROR</string>
