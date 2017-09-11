@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">随处翻译</string>
+
+    <!-- Strings for dialog -->
+    <string name="dialog_title_error">错误</string>
+    <string name="dialog_title_ocrFileNotFound">未找到文字辨识档案</string>
+    <string name="dialog_content_ocrFileNotFound">[%s] 语言的文字辨识档案尚未下载，您要现在下载吗？</string>
+    <string name="dialog_title_ocrFileDownloading">档案下载</string>
+    <string name="dialog_content_ocrFileDownloadStarting">正在启动文字辨识档案下载...</string>
+    <string name="dialog_content_progressingDownloadOCRFile" formatted="false">正在下载 [%s] 文字辨识档案 (%.2fMB/%.2fMB)(%d%%)</string>
+    <string name="dialog_title_needPermission">权限需求</string>
+    <string name="dialog_content_needPermission_drawOverlay">请允许 [允许在其他应用程式上绘製内容] 功能来使用本程式</string>
+    <string name="dialog_content_needPermission_rwExternalStorage">请允许 [读写外部储存空间] 功能来使用本程式</string>
+    <string name="dialog_content_needPermission_mediaProjection">请允许 [萤幕撷取] 功能来使用本程式</string>
+    <string name="dialog_title_setting">设定</string>
+
+    <!-- Strings for error message -->
+    <string name="error">错误</string>
+    <string name="error_makingFolderFailed">建立资料夹失败： %s</string>
+    <string name="error_deleteTempFileFailed">删除暂存档案失败： %s</string>
+    <string name="error_downloadOCRFileFailed">下载文字辨识档案失败，请稍后再试或更换其他网路再试。 错误讯息： %s</string>
+    <string name="error_noOCRResultFound">文字辨识程式未辨识出任何内容</string>
+    <string name="error_noMediaProjectionFound">请允许 [萤幕录影] 功能来使用本程式</string>
+    <string name="dialog_content_screenshotTimeout">取得萤幕截图超时，请稍候重试！</string>
+    <string name="dialog_content_screenshotWithUnknownError">取得萤幕截图失败，错误讯息： %s</string>
+    <string name="dialog_content_screenshotWithImageFormatError">萤幕截图格式错误，您的设备不支援格式 RGBA_8888 输出。 错误讯息： %s</string>
+
+    <!-- Strings for progress state -->
+    <string name="progress_ocrInitialize">文字辨识引擎初始化中，请稍候...</string>
+    <string name="progress_ocrInitialized">文字辨识引擎初始化完成</string>
+    <string name="progress_textRecognition">开始进行文字辨识...</string>
+    <string name="progress_ocrInitializing">文字辨识引擎初始化中</string>
+    <string name="progress_textRecognizing">文字辨识中...</string>
+    <string name="progress_translating">开始进行翻译...</string>
+    <string name="progress_startMovingOcrEngineFiles">移动已下载的档案中...</string>
+    <string name="progress_movingFile">移动档案:</string>
+
+    <!-- Strings for UI -->
+    <string name="msg_textHasBeenCopied">文字 [%s] 已被複製到剪贴簿</string>
+    <string name="btn_download">下载</string>
+    <string name="btn_setting">设定</string>
+    <string name="btn_close">关闭</string>
+    <string name="btn_requestAgain">再次请求</string>
+    <string name="ocr_text">识别文字</string>
+    <string name="notification_contentText_show">点击开启浮动视窗</string>
+    <string name="translated_text">翻译结果</string>
+    <string name="debug_mode">除错模式</string>
+    <string name="title_browser">翻译</string>
+    <string name="enable_translation">开启翻译功能 (需要使用网路)</string>
+    <string name="menu_exit">退出</string>
+    <string name="menu_hide">隐藏</string>
+    <string name="menu_setting">设定</string>
+    <string name="menu_about">关于</string>
+    <string name="title_about">关于</string>
+    <string name="startingWithSelectionMode">启动时进入圈选模式</string>
+    <string name="removeLineBreaks">移除换行字元</string>
+    <string name="error_mediaProjectionNotFound_need5UpperVersion">, 此应用程式需要 5.0 以上的 Android 系统</string>
+    <string name="error_unknownErrorWhenRequestMediaProjection">请求 [萤幕撷取] 功能失败，您的设备不支援此功能？</string>
+    <string name="btn_openAppsPage">开启 [应用程式] 设定页</string>
+    <string name="error_openManageOverlayPermissionPageFailed">您的设备似乎不支援快捷跳转至 [ACTION_MANAGE_OVERLAY_PERMISSION] 设定页，请您自行手动至 [设定] => [应用程式] => [在其他应用程式上层绘製内容] 开启随处翻译的权限</string>
+    <string name="saveOcrEngineToExternalStorageFirst">将文字辨识档案优先储存至外部记忆卡</string>
+    <string name="canceledByUser">使用者取消下载任务</string>
+    <string name="error_connectToServerFailed">连线至伺服器失败，请检查你的网路连线。</string>
+    <string name="notification_contentText_hide">点击隐藏浮动视窗</string>
+    <string name="menu_changeMode">切换模式</string>
+    <string name="title_editOCRText">修改识别文字</string>
+    <string name="msg_ttsEngineInitFailed">「文字转语音」引擎初始化失败，语音功能将无法运作</string>
+</resources>
