@@ -188,12 +188,12 @@ public class OcrResultWindow {
             int id = v.getId();
             if (id == R.id.bt_openInBrowser_ocrText) {
                 FabricUtil.logBtnOpenInWebViewClicked("OCR text");
-                if (ocrResult != null) {
+                if (ocrResult != null && ocrResult.getText() != null) {
                     callback.onOpenBrowserBtnClick(ocrResult.getText(), false);
                 }
             } else if (id == R.id.bt_openInBrowser_translatedText) {
                 FabricUtil.logBtnOpenInWebViewClicked("Translated text");
-                if (ocrResult != null) {
+                if (ocrResult != null && ocrResult.getTranslatedText() != null) {
                     callback.onOpenBrowserBtnClick(ocrResult.getTranslatedText(), true);
                 }
             } else if (id == R.id.bt_copy_ocrText) {
