@@ -179,7 +179,7 @@ public abstract class FloatingView {
 
         @Override
         public boolean dispatchKeyEvent(KeyEvent event) {
-            if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && getKeyDispatcherState() != null) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
                     getKeyDispatcherState().startTracking(event, this);
                     return true;
