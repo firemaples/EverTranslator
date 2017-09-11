@@ -33,6 +33,11 @@ public class WebViewFV extends FloatingView {
     }
 
     @Override
+    protected boolean layoutFocusable() {
+        return true;
+    }
+
+    @Override
     protected int getLayoutId() {
         return R.layout.view_web_view;
     }
@@ -78,7 +83,7 @@ public class WebViewFV extends FloatingView {
     private HomeWatcher.OnHomePressedListener onHomePressedListener = new HomeWatcher.OnHomePressedListener() {
         @Override
         public void onHomePressed() {
-            detachFromWindow();
+            WebViewFV.this.detachFromWindow();
         }
 
         @Override

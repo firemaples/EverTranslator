@@ -48,12 +48,16 @@ public abstract class FloatingView {
                 getLayoutSize(),
                 getLayoutSize(),
                 WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                layoutFocusable() ? WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL : WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
         if (fullScreenMode()) {
             floatingLayoutParams.flags = floatingLayoutParams.flags | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         }
         floatingLayoutParams.gravity = getLayoutGravity();
+    }
+
+    protected boolean layoutFocusable() {
+        return false;
     }
 
     protected abstract int getLayoutId();
