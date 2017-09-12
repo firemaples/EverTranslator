@@ -8,7 +8,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -40,7 +40,7 @@ public class OcrResultWindow {
     private View bt_openInBrowser_ocrText, bt_copy_ocrText, bt_edit_ocrText, bt_tts_ocrText;
     private View bt_openInBrowser_translatedText, bt_copy_translatedText, bt_tts_translatedText;
     private TextView tv_originText, tv_translatedText;
-    private FrameLayout.LayoutParams layoutParams;
+    private RelativeLayout.LayoutParams layoutParams;
     private DisplayMetrics metrics;
 
     private OnOcrResultWindowCallback callback;
@@ -81,7 +81,7 @@ public class OcrResultWindow {
 
         view_translatedTextWrapper.setVisibility(SharePreferenceUtil.getInstance().isEnableTranslation() ? View.VISIBLE : View.GONE);
 
-        layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(MARGIN, MARGIN, MARGIN, MARGIN);
 
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -155,12 +155,19 @@ public class OcrResultWindow {
         int width = rootView.getWidth();
         int height = rootView.getHeight();
 
-        if (anchorView.getTop() > height + MARGIN * 2) {
+        int parentHeight = parent.getHeight();
+
+        int needHeight = height + MARGIN * 2;
+
+        if (anchorView.getTop() > needHeight) {
             //Gravity = TOP
             layoutParams.topMargin = anchorView.getTop() - height;
-        } else {
+        } else if (parentHeight - anchorView.getBottom() > needHeight) {
             //Gravity = BOTTOM
             layoutParams.topMargin = anchorView.getTop() + anchorView.getHeight();
+        } else {
+            layoutParams.topMargin = MARGIN;
+            layoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
         }
 
         if (anchorView.getLeft() + width + MARGIN > metrics.widthPixels) {
