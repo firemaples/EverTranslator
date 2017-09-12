@@ -3,8 +3,8 @@ package tw.firemaples.onscreenocr.views;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ import tw.firemaples.onscreenocr.utils.Tool;
  * Created by firemaples on 29/11/2016.
  */
 
-public class OcrResultWrapper extends FrameLayout {
+public class OcrResultWrapper extends RelativeLayout {
     private OcrResultView.OcrNTranslateState state;
     private List<OcrResult> ocrResultList = new ArrayList<>();
 
