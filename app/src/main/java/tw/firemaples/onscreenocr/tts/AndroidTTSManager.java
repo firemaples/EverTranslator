@@ -73,7 +73,7 @@ public class AndroidTTSManager {
     }
 
     private File getTTSFile(String lang, String ttsContent) {
-        String fileName = lang + "_" + ttsContent.replaceAll(" ", "_") + ".wav";
+        String fileName = lang + "_" + ttsContent.hashCode() + ".wav";
         File ttsFile = new File(ttsFolder.getAbsolutePath(), fileName);
         return ttsFile;
     }
@@ -87,6 +87,10 @@ public class AndroidTTSManager {
 
     public void setCallback(String requestId, AndroidTTSManagerCallback callback) {
         callbackHashMap.put(requestId, callback);
+    }
+
+    private AndroidTTSManagerCallback getCallback(String requestId) {
+        return callbackHashMap.get(requestId);
     }
 
     public synchronized void retrieveTTSFile(String lang, String ttsContent, String requestId) throws LanguageNotSupportException {
@@ -104,10 +108,17 @@ public class AndroidTTSManager {
                 throw new LanguageNotSupportException(String.format(Locale.getDefault(), "Language [%s] is not available.", lang));
             } else {
                 File ttsFile = getTTSFile(lang, ttsContent);
-                fileHashMap.put(requestId, ttsFile);
-                int requestFileResult = tts.synthesizeToFile(ttsContent, null, ttsFile, requestId);
-                if (requestFileResult != TextToSpeech.SUCCESS) {
-                    Tool.logError("retrieveTTSFile failed, failed to synthesizeToFile.");
+                if (ttsFile.exists()) {
+                    Tool.logInfo("TTSFile has exist: " + ttsFile.getAbsolutePath());
+                    if (getCallback(requestId) != null) {
+                        getCallback(requestId).onDone(ttsFile);
+                    }
+                } else {
+                    fileHashMap.put(requestId, ttsFile);
+                    int requestFileResult = tts.synthesizeToFile(ttsContent, null, ttsFile, requestId);
+                    if (requestFileResult != TextToSpeech.SUCCESS) {
+                        Tool.logError("retrieveTTSFile failed, failed to synthesizeToFile.");
+                    }
                 }
             }
         } else {
@@ -159,8 +170,8 @@ public class AndroidTTSManager {
         @Override
         public void onDone(String utteranceId) {
             Tool.logInfo("utteranceProgressListener#onDone()");
-            if (callbackHashMap.containsKey(utteranceId) && fileHashMap.containsKey(utteranceId) && fileHashMap.get(utteranceId) != null) {
-                AndroidTTSManagerCallback callback = callbackHashMap.get(utteranceId);
+            if (getCallback(utteranceId) != null && fileHashMap.containsKey(utteranceId) && fileHashMap.get(utteranceId) != null) {
+                AndroidTTSManagerCallback callback = getCallback(utteranceId);
                 File file = fileHashMap.get(utteranceId);
                 callback.onDone(file);
             }
@@ -170,8 +181,8 @@ public class AndroidTTSManager {
         public void onError(String utteranceId) {
             Tool.logError("utteranceProgressListener#onError()");
 
-            if (callbackHashMap.containsKey(utteranceId)) {
-                AndroidTTSManagerCallback callback = callbackHashMap.get(utteranceId);
+            if (getCallback(utteranceId) != null) {
+                AndroidTTSManagerCallback callback = getCallback(utteranceId);
                 callback.onError();
             }
         }
