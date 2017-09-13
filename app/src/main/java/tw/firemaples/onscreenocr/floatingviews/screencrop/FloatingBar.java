@@ -16,11 +16,13 @@ import java.util.Locale;
 import tw.firemaples.onscreenocr.MainActivity;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ScreenTranslatorService;
+import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.floatingviews.MovableFloatingView;
 import tw.firemaples.onscreenocr.ocr.OcrDownloadAsyncTask;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.AppMode;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
+import tw.firemaples.onscreenocr.utils.HomeWatcher;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -68,6 +70,25 @@ public class FloatingBar extends MovableFloatingView {
             super.detachFromWindow();
         }
     }
+
+    private OnBackButtonPressedListener subViewOnBackButtonPressedListener = new OnBackButtonPressedListener() {
+        @Override
+        public boolean onBackButtonPressed(FloatingView floatingView) {
+            return FloatingBar.this.onBackButtonPressed();
+        }
+    };
+
+    private HomeWatcher.OnHomePressedListener subViewOnHomePressedListener = new HomeWatcher.OnHomePressedListener() {
+        @Override
+        public void onHomePressed() {
+            FloatingBar.this.onBackButtonPressed();
+        }
+
+        @Override
+        public void onHomeLongPressed() {
+
+        }
+    };
 
     @Override
     public boolean onBackButtonPressed() {
@@ -231,6 +252,8 @@ public class FloatingBar extends MovableFloatingView {
                 if (ScreenshotHandler.isInitialized()) {
                     FabricUtil.logDoBtnSelectAreaAction();
                     drawAreaView = new DrawAreaView(getContext());
+                    drawAreaView.setOnBackButtonPressedListener(subViewOnBackButtonPressedListener);
+                    drawAreaView.setupHomeButtonWatcher(subViewOnHomePressedListener);
                     drawAreaView.attachToWindow();
                     FloatingBar.this.detachFromWindow(false);
                     FloatingBar.this.attachToWindow();
@@ -389,6 +412,8 @@ public class FloatingBar extends MovableFloatingView {
 
     private void showResultWindow(Bitmap screenshot, List<Rect> boxList) {
         ocrResultView = new OcrResultView(getContext(), onOcrResultViewCallback);
+        ocrResultView.setOnBackButtonPressedListener(subViewOnBackButtonPressedListener);
+        ocrResultView.setupHomeButtonWatcher(subViewOnHomePressedListener);
         ocrResultView.attachToWindow();
         ocrResultView.setupData(screenshot, boxList);
         FloatingBar.this.detachFromWindow(false);
