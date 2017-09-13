@@ -24,6 +24,7 @@ import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.tts.AndroidTTSManager;
 import tw.firemaples.onscreenocr.tts.TTSPlayer;
 import tw.firemaples.onscreenocr.tts.TTSRetrieverTask;
+import tw.firemaples.onscreenocr.utils.AudioFocusManager;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -35,6 +36,8 @@ import tw.firemaples.onscreenocr.utils.Tool;
 public class TTSPlayerView extends FloatingView {
     // http://stackoverflow.com/questions/2159026/regex-how-to-get-words-from-a-string-c
     private static final String PATTERN_WORD = "[^\\W\\d](\\w|[-'\\.]{1,2}(?=\\w))*";
+
+    private AudioFocusManager audioFocusManager;
 
     private TextView tv_textToSpeech, tv_speed;
     private CheckBox cb_enablePlaySlowly;
@@ -56,6 +59,8 @@ public class TTSPlayerView extends FloatingView {
         super(context);
 
         mainHandler = new Handler(context.getMainLooper());
+        audioFocusManager = new AudioFocusManager(context);
+        audioFocusManager.setCallback(onAudioFocusChangedCallback);
         spUtil = SharePreferenceUtil.getInstance();
         ttsPlayer = TTSPlayer.getInstance();
         ttsPlayer.setCallback(onTTSPlayCallback);
@@ -112,6 +117,12 @@ public class TTSPlayerView extends FloatingView {
         this.playerState = state;
 
         Tool.logInfo("updateBtnState: " + state.name());
+
+        if (state == PlayerState.PLAYING) {
+            audioFocusManager.requestAudioFocus();
+        } else if (state == PlayerState.PAUSE || state == PlayerState.STOP) {
+            audioFocusManager.abandonAudioFocus();
+        }
 
         mainHandler.post(new Runnable() {
             @Override
@@ -215,6 +226,7 @@ public class TTSPlayerView extends FloatingView {
     public void detachFromWindow() {
         super.detachFromWindow();
         ttsPlayer.stop();
+        audioFocusManager.abandonAudioFocus();
     }
 
     private void startPlayTTS(final File ttsFile) {
@@ -258,8 +270,7 @@ public class TTSPlayerView extends FloatingView {
                 ttsPlayer.pause();
                 updateBtnState(PlayerState.PAUSE);
             } else if (id == R.id.bt_stop) {
-                ttsPlayer.stop();
-                updateBtnState(PlayerState.STOP);
+                _stop();
             } else if (id == R.id.bt_selectOff) {
                 subTextMode = false;
                 playTTS(lang, ttsContent);
@@ -267,6 +278,11 @@ public class TTSPlayerView extends FloatingView {
             }
         }
     };
+
+    private void _stop() {
+        ttsPlayer.stop();
+        updateBtnState(PlayerState.STOP);
+    }
 
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
@@ -315,6 +331,28 @@ public class TTSPlayerView extends FloatingView {
 
         @Override
         public void onHomeLongPressed() {
+
+        }
+    };
+
+    private AudioFocusManager.OnAudioFocusChangedCallback onAudioFocusChangedCallback = new AudioFocusManager.OnAudioFocusChangedCallback() {
+        @Override
+        public void onAudioFocusLossTransientCanDuck() {
+            _stop();
+        }
+
+        @Override
+        public void onAudioFocusLossTransient() {
+            _stop();
+        }
+
+        @Override
+        public void onAudioFocusLoss() {
+            _stop();
+        }
+
+        @Override
+        public void onAudioFocusGain() {
 
         }
     };
