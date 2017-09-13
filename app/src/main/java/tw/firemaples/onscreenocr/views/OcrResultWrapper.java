@@ -1,8 +1,11 @@
 package tw.firemaples.onscreenocr.views;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -21,6 +24,8 @@ import tw.firemaples.onscreenocr.utils.Tool;
  */
 
 public class OcrResultWrapper extends RelativeLayout {
+    private Paint borderPaint;
+
     private OcrResultView.OcrNTranslateState state;
     private List<OcrResult> ocrResultList = new ArrayList<>();
 
@@ -32,6 +37,14 @@ public class OcrResultWrapper extends RelativeLayout {
     }
 
     private void initViews(OcrResultWindow.OnOcrResultWindowCallback callback) {
+        borderPaint = new Paint();
+        borderPaint.setAntiAlias(true);
+        borderPaint.setStyle(Paint.Style.STROKE);
+        borderPaint.setStrokeWidth(6);
+        borderPaint.setColor(ContextCompat.getColor(getContext(), R.color.orcResultBorder_color));
+
+        setBackgroundColor(ContextCompat.getColor(getContext(), R.color.captureAreaSelectionViewBackground_enable));
+
         ocrResultWindow = new OcrResultWindow(getContext(), this, callback);
     }
 
@@ -91,5 +104,11 @@ public class OcrResultWrapper extends RelativeLayout {
 
             ocrResultWindow.dismiss();
         }
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), borderPaint);
     }
 }

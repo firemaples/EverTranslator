@@ -46,8 +46,15 @@ public class DrawAreaView extends FloatingView {
     }
 
     @Override
+    public void attachToWindow() {
+        super.attachToWindow();
+        view_areaSelectionView.startBorderAnimation();
+    }
+
+    @Override
     public void detachFromWindow() {
         view_areaSelectionView.clear();
+        view_areaSelectionView.stopBorderAnimation();
         super.detachFromWindow();
     }
 }

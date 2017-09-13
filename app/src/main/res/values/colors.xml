@@ -7,9 +7,11 @@
     <color name="captureAreaSelectionViewBackground_enable">#66000000</color>
     <color name="captureAreaSelectionViewPaint_drawingLinePaint">#664527A0</color>
     <color name="captureAreaSelectionViewPaint_boxPaint">#FF006064</color>
+    <color name="captureAreaSelectionViewPaint_borderPaint">#FF4081</color>
 
     <color name="captureAreaSelectionViewProgressBackground">#77000000</color>
 
+    <color name="orcResultBorder_color">#303F9F</color>
     <color name="ocrResultCover_color">#8800FF00</color>
 
     <color name="quickWindow_borderColor1">#FF4081</color>
