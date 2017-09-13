@@ -24,7 +24,7 @@ import static android.R.attr.duration;
  * Created by Firemaples on 2016/3/1.
  */
 public class AreaSelectionView extends ImageView {
-    private static final long TIME_BORDER_ANIM = 500;
+    private static final long TIME_BORDER_ANIM = 1000;
     private static final long INTERVAL_BORDER_ANIM = 10;
 
     private boolean enable = true;
