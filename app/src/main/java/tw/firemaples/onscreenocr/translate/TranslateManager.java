@@ -20,7 +20,7 @@ public class TranslateManager {
 
     private Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
-    GoogleTranslateWebView googleTranslateWebView;
+//    GoogleTranslateWebView googleTranslateWebView;
 
     private TranslateManager() {
     }
@@ -54,10 +54,10 @@ public class TranslateManager {
         Tool.logInfo("Translate with " + translateService.name());
         switch (translateService) {
             case google: {
-                if (googleTranslateWebView == null) {
-                    googleTranslateWebView = new GoogleTranslateWebView(context);
-                }
-                new GoogleTranslateAsyncTask().startTranslate(text, translateToLang, new GoogleTranslateAsyncTask.OnGoogleTranslateTaskCallback(){
+//                if (googleTranslateWebView == null) {
+//                    googleTranslateWebView = new GoogleTranslateWebView(context);
+//                }
+                new GoogleTranslateAsyncTask().startTranslate(text, translateToLang, new GoogleTranslateAsyncTask.OnGoogleTranslateTaskCallback() {
 
                     @Override
                     public void onTranslated(final String translatedText) {

@@ -9,4 +9,6 @@ public class ServiceModel {
     public String url;
     public String jsParser;
     public String key;
+    public String regexResultMatcher;
+    public String defaultUserAgent;
 }
