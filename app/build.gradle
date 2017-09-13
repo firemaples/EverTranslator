@@ -67,6 +67,9 @@ dependencies {
     compile 'io.github.firemaples:microsoft-translator-java-api:0.8.5'
     compile 'com.google.android.exoplayer:exoplayer:r2.4.0'
     compile 'com.google.firebase:firebase-database:10.0.1'
+    compile 'com.amitshekhar.android:android-networking:1.0.0'
+    compile 'com.facebook.stetho:stetho:1.5.0'
+    compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     testCompile 'junit:junit:4.12'
 }
 

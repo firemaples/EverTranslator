@@ -3,10 +3,13 @@ package tw.firemaples.onscreenocr;
 import android.app.Application;
 import android.util.Log;
 
+import com.androidnetworking.AndroidNetworking;
 import com.crashlytics.android.Crashlytics;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.firebase.FirebaseApp;
 
 import io.fabric.sdk.android.Fabric;
+import okhttp3.OkHttpClient;
 import tw.firemaples.onscreenocr.utils.SignatureUtil;
 
 /**
@@ -24,6 +27,8 @@ public class CoreApplication extends Application {
 
         FirebaseApp.initializeApp(this);
 
+        initFastAndroidNetworking();
+        
         validateSignature();
     }
 
@@ -41,5 +46,12 @@ public class CoreApplication extends Application {
             Crashlytics.setString("ValidateSignatureFailed", e.getMessage());
             Crashlytics.log(Log.getStackTraceString(e));
         }
+    }
+
+    private void initFastAndroidNetworking() {
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .addNetworkInterceptor(new StethoInterceptor())
+                .build();
+        AndroidNetworking.initialize(getApplicationContext(), okHttpClient);
     }
 }
