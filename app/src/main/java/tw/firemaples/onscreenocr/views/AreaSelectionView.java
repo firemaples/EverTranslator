@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -15,11 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tw.firemaples.onscreenocr.R;
+import tw.firemaples.onscreenocr.utils.Tool;
+
+import static android.R.attr.duration;
 
 /**
  * Created by Firemaples on 2016/3/1.
  */
 public class AreaSelectionView extends ImageView {
+    private static final long TIME_BORDER_ANIM = 500;
+    private static final long INTERVAL_BORDER_ANIM = 10;
 
     private boolean enable = true;
 
@@ -28,6 +34,10 @@ public class AreaSelectionView extends ImageView {
 
     private List<Rect> boxList = new ArrayList<>();
     private Paint boxPaint;
+
+    private CountDownTimer timer;
+    private int borderAnimationProgress = 0;
+    private Paint borderPaint;
 
     private int maxRectCount = 0;
 
@@ -95,6 +105,10 @@ public class AreaSelectionView extends ImageView {
         boxPaint.setStrokeWidth(6);
         boxPaint.setStyle(Paint.Style.STROKE);
 
+        borderPaint = new Paint();
+        borderPaint.setAntiAlias(true);
+        borderPaint.setStrokeWidth(6);
+        borderPaint.setColor(ContextCompat.getColor(getContext(), R.color.captureAreaSelectionViewPaint_borderPaint));
 
 //        enable();
     }
@@ -158,7 +172,90 @@ public class AreaSelectionView extends ImageView {
                 canvas.drawRect(box, boxPaint);
             }
 
+            drawBorder(canvas, borderAnimationProgress);
+
             canvas.restore();
+        }
+    }
+
+    public void startBorderAnimation() {
+        borderAnimationProgress = 0;
+        stopBorderAnimation();
+
+        timer = new CountDownTimer(TIME_BORDER_ANIM, INTERVAL_BORDER_ANIM) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                borderAnimationProgress = (int) (((float) (TIME_BORDER_ANIM - millisUntilFinished) / (float) TIME_BORDER_ANIM) * 100f);
+//                Tool.logInfo("borderAnimationProgress: " + borderAnimationProgress);
+                invalidate();
+            }
+
+            @Override
+            public void onFinish() {
+                borderAnimationProgress = 100;
+//                Tool.logInfo("borderAnimationProgress: finished");
+                invalidate();
+            }
+        }.start();
+    }
+
+    public void stopBorderAnimation() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
+
+    private void drawBorder(Canvas canvas, int progress) {
+        Tool.logInfo("drawBorder: progress: " + progress);
+        int topSteps = 25;
+        int centerSteps = 50;
+        int bottomSteps = 25;
+
+        int width = canvas.getWidth();
+        int height = canvas.getHeight();
+
+        float topRunLength;
+        float topXStart = width / 2;
+        if (progress >= topSteps) {
+            topRunLength = width / 2;
+        } else {
+            topRunLength = ((float) width / 2f / (float) topSteps * (float) progress);
+        }
+        //draw top-right
+        canvas.drawLine(topXStart, 0, topXStart + topRunLength, 0, borderPaint);
+        //draw top-left
+        canvas.drawLine(topXStart, 0, topXStart - topRunLength, 0, borderPaint);
+
+        if (progress > topSteps) {
+            float leftRightRunLength;
+            float leftRightYStartY = 0;
+            if (progress >= topSteps + centerSteps) {
+                //noinspection SuspiciousNameCombination
+                leftRightRunLength = height;
+            } else {
+                leftRightRunLength = (float) height / (float) centerSteps * (float) (progress - topSteps);
+            }
+            //draw left
+            canvas.drawLine(0, leftRightYStartY, 0, leftRightYStartY + leftRightRunLength, borderPaint);
+            //draw right
+            canvas.drawLine(width, leftRightYStartY, width, leftRightYStartY + leftRightRunLength, borderPaint);
+        }
+
+        if (progress > topSteps + centerSteps) {
+            float bottomRunLength;
+            float bottomLeftXStart = 0;
+            @SuppressWarnings("UnnecessaryLocalVariable") float bottomRightXStart = width;
+
+            if (progress == 100) {
+                bottomRunLength = width / 2;
+            } else {
+                bottomRunLength = ((float) width / 2f / (float) bottomSteps * (float) (progress - topSteps - centerSteps));
+            }
+            //draw bottom-right
+            canvas.drawLine(bottomRightXStart, height, bottomRightXStart - bottomRunLength, height, borderPaint);
+            //draw bottom-left
+            canvas.drawLine(bottomLeftXStart, height, bottomLeftXStart + bottomRunLength, height, borderPaint);
         }
     }
 
