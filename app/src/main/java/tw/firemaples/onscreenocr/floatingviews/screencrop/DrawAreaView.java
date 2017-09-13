@@ -37,6 +37,11 @@ public class DrawAreaView extends FloatingView {
     }
 
     @Override
+    protected boolean layoutFocusable() {
+        return true;
+    }
+
+    @Override
     protected int getLayoutSize() {
         return WindowManager.LayoutParams.MATCH_PARENT;
     }

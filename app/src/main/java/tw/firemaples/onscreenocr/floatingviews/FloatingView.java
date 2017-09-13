@@ -36,6 +36,7 @@ public abstract class FloatingView {
     private CustomLayout rootView;
     private Object tag;
     private HomeWatcher homeWatcher;
+    private OnBackButtonPressedListener onBackButtonPressedListener;
     private List<AsyncTask> manageTask = new ArrayList<>();
 
     public FloatingView(Context context) {
@@ -134,11 +135,18 @@ public abstract class FloatingView {
         }
     }
 
+    public void setOnBackButtonPressedListener(OnBackButtonPressedListener onBackButtonPressedListener) {
+        this.onBackButtonPressedListener = onBackButtonPressedListener;
+    }
+
     public boolean onBackButtonPressed() {
+        if (onBackButtonPressedListener != null) {
+            return onBackButtonPressedListener.onBackButtonPressed(this);
+        }
         return false;
     }
 
-    protected void setupHomeButtonWatcher(HomeWatcher.OnHomePressedListener onHomePressedListener) {
+    public void setupHomeButtonWatcher(HomeWatcher.OnHomePressedListener onHomePressedListener) {
         if (homeWatcher == null) {
             homeWatcher = new HomeWatcher(getContext());
         }
@@ -146,7 +154,7 @@ public abstract class FloatingView {
         homeWatcher.startWatch();
     }
 
-    protected void removeHomeButtonWatcher() {
+    public void removeHomeButtonWatcher() {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
@@ -202,5 +210,9 @@ public abstract class FloatingView {
 
             return super.dispatchKeyEvent(event);
         }
+    }
+
+    public interface OnBackButtonPressedListener {
+        boolean onBackButtonPressed(FloatingView floatingView);
     }
 }

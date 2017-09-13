@@ -54,6 +54,11 @@ public class OcrResultView extends FloatingView {
     }
 
     @Override
+    protected boolean layoutFocusable() {
+        return true;
+    }
+
+    @Override
     protected int getLayoutId() {
         return R.layout.view_result_view;
     }
