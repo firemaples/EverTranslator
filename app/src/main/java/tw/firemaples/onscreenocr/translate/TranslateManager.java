@@ -57,7 +57,8 @@ public class TranslateManager {
                 if (googleTranslateWebView == null) {
                     googleTranslateWebView = new GoogleTranslateWebView(context);
                 }
-                googleTranslateWebView.startTranslate(text, translateToLang, new GoogleTranslateWebView.OnGoogleTranslateWebViewCallback() {
+                new GoogleTranslateAsyncTask().startTranslate(text, translateToLang, new GoogleTranslateAsyncTask.OnGoogleTranslateTaskCallback(){
+
                     @Override
                     public void onTranslated(final String translatedText) {
                         mainThreadHandler.post(new Runnable() {
@@ -70,20 +71,37 @@ public class TranslateManager {
                     }
 
                     @Override
-                    public void onHttpException(int httpStatus, String reason) {
-                        _startTranslate(context, text, TranslateServiceModel.TranslateServiceEnum.microsoft, callback);
-                    }
-
-                    @Override
-                    public void onNoneException() {
-                        _startTranslate(context, text, TranslateServiceModel.TranslateServiceEnum.microsoft, callback);
-                    }
-
-                    @Override
-                    public void onTimeout() {
+                    public void onError(Throwable throwable) {
                         _startTranslate(context, text, TranslateServiceModel.TranslateServiceEnum.microsoft, callback);
                     }
                 });
+//                googleTranslateWebView.startTranslate(text, translateToLang, new GoogleTranslateWebView.OnGoogleTranslateWebViewCallback() {
+//                    @Override
+//                    public void onTranslated(final String translatedText) {
+//                        mainThreadHandler.post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                FabricUtil.logTranslationInfo(text, translateFromLang, translateToLang, translateService);
+//                                callback.onTranslateFinished(translatedText);
+//                            }
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void onHttpException(int httpStatus, String reason) {
+//                        _startTranslate(context, text, TranslateServiceModel.TranslateServiceEnum.microsoft, callback);
+//                    }
+//
+//                    @Override
+//                    public void onNoneException() {
+//                        _startTranslate(context, text, TranslateServiceModel.TranslateServiceEnum.microsoft, callback);
+//                    }
+//
+//                    @Override
+//                    public void onTimeout() {
+//                        _startTranslate(context, text, TranslateServiceModel.TranslateServiceEnum.microsoft, callback);
+//                    }
+//                });
             }
             break;
             case microsoft: {
