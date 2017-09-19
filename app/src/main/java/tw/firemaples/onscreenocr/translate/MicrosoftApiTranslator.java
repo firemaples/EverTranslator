@@ -12,7 +12,7 @@ import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 /**
  * Created by firemaples on 2016/3/7.
  */
-public class TranslateAsyncTask extends AsyncTask<Void, String, String> {
+public class MicrosoftApiTranslator extends AsyncTask<Void, String, String> {
 
     private final Context context;
     private final String textToTranslate;
@@ -21,7 +21,7 @@ public class TranslateAsyncTask extends AsyncTask<Void, String, String> {
 
     private Language translateFromLang, translateToLang;
 
-    public TranslateAsyncTask(Context context, String textToTranslate, OnTranslateAsyncTaskCallback callback) {
+    public MicrosoftApiTranslator(Context context, String textToTranslate, OnTranslateAsyncTaskCallback callback) {
         this.context = context;
         this.textToTranslate = textToTranslate;
         this.callback = callback;

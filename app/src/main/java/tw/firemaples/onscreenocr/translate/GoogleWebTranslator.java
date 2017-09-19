@@ -10,9 +10,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import java.util.Locale;
-
 import tw.firemaples.onscreenocr.BuildConfig;
+import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.GoogleWebViewUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -21,14 +20,14 @@ import tw.firemaples.onscreenocr.utils.Tool;
  * Created by louis1chen on 30/04/2017.
  */
 
-public class GoogleTranslateWebView {
+public class GoogleWebTranslator {
     private static final long TIMEOUT = 5000;
 
     private WebView webView;
     private OnGoogleTranslateWebViewCallback callback;
 
     @SuppressLint("SetJavaScriptEnabled")
-    public GoogleTranslateWebView(Context context) {
+    public GoogleWebTranslator(Context context) {
         webView = new WebView(context);
         webView.addJavascriptInterface(new MyJavaScriptInterface(context), "HtmlViewer");
         webView.setWebViewClient(new MyWebViewClient());
@@ -39,12 +38,12 @@ public class GoogleTranslateWebView {
     public void startTranslate(String textToTranslate, String targetLanguage, OnGoogleTranslateWebViewCallback callback) {
         this.callback = callback;
 
-        String lang = Locale.forLanguageTag(targetLanguage).getLanguage();
-        if (lang.equals(Locale.CHINESE.getLanguage())) {
-            lang += "-" + Locale.getDefault().getCountry();
-        }
+//        String lang = Locale.forLanguageTag(targetLanguage).getLanguage();
+//        if (lang.equals(Locale.CHINESE.getLanguage())) {
+//            lang += "-" + Locale.getDefault().getCountry();
+//        }
 
-        String url = GoogleWebViewUtil.getFormattedUrl(textToTranslate, lang);
+        String url = GoogleWebViewUtil.getFormattedUrl(ServiceHolderModel.SERVICE_GOOGLE_WEB, textToTranslate, targetLanguage);
 
         Tool.logInfo("Google translate WebView start loading url:" + url);
         webView.loadUrl(url);

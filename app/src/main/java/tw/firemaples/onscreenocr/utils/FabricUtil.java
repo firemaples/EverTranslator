@@ -7,7 +7,7 @@ import com.crashlytics.android.answers.CustomEvent;
 import java.net.ConnectException;
 import java.util.Locale;
 
-import tw.firemaples.onscreenocr.database.TranslateServiceModel;
+import tw.firemaples.onscreenocr.translate.GoogleWebApiTranslator;
 
 import static tw.firemaples.onscreenocr.utils.Tool.getIPAddress;
 
@@ -87,7 +87,7 @@ public class FabricUtil {
         Answers.getInstance().logCustom(new CustomEvent("Btn play TTS clicked").putCustomAttribute("Type", type));
     }
 
-    public static void logTranslationInfo(String text, String translateFromLang, String translateToLang, TranslateServiceModel.TranslateServiceEnum translateService) {
+    public static void logTranslationInfo(String text, String translateFromLang, String translateToLang, String serviceName) {
         Answers.getInstance().logCustom(
                 new CustomEvent("Translate Text")
                         .putCustomAttribute("Text length", text.length())
@@ -95,7 +95,7 @@ public class FabricUtil {
                         .putCustomAttribute("Translate to", translateToLang)
                         .putCustomAttribute("From > to", translateFromLang + " > " + translateToLang)
                         .putCustomAttribute("System language", Locale.getDefault().getLanguage())
-                        .putCustomAttribute("Translate service", translateService.name())
+                        .putCustomAttribute("Translate service", serviceName)
         );
     }
 
@@ -127,6 +127,14 @@ public class FabricUtil {
     public static void postException(Throwable t) {
         logClientInfo();
         Crashlytics.logException(t);
+        logClientInfo();
+    }
+
+    public static void logGoogleTranslateResultNotFoundException(GoogleWebApiTranslator.GoogleTranslateResultNotFoundException e, String html, String resultParser) {
+        logClientInfo();
+        Crashlytics.setString("ResultParser", resultParser);
+        Crashlytics.log("html=" + html);
+        Crashlytics.logException(e);
         logClientInfo();
     }
 }

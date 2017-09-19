@@ -6,6 +6,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Collections;
+
 import tw.firemaples.onscreenocr.utils.KeyId;
 import tw.firemaples.onscreenocr.utils.Tool;
 
@@ -18,7 +20,7 @@ public class DatabaseManager {
 
     private FirebaseDatabase db;
 
-    private TranslateServiceModel translateService;
+    private ServiceHolderModel translateService;
 
     private DatabaseManager() {
         setup();
@@ -36,16 +38,16 @@ public class DatabaseManager {
         db = FirebaseDatabase.getInstance();
         db.setPersistenceEnabled(true);
 
-        DatabaseReference translateServiceRef = db.getReference(TranslateServiceModel.getKey());
+        DatabaseReference translateServiceRef = db.getReference(ServiceHolderModel.getKey());
         translateServiceRef.keepSynced(true);
 
         //current translate service
         translateServiceRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Tool.logInfo("TranslateServiceModel onDataChange");
-                DatabaseManager.this.translateService = dataSnapshot.getValue(TranslateServiceModel.class);
-                Tool.logInfo("Current translate service is " + translateService.getCurrent().name());
+                Tool.logInfo("ServiceHolderModel onDataChange");
+                DatabaseManager.this.translateService = dataSnapshot.getValue(ServiceHolderModel.class);
+                Tool.logInfo("Current translate service is " + translateService.getUsingService().name);
             }
 
             @Override
@@ -57,16 +59,16 @@ public class DatabaseManager {
         });
     }
 
-    public TranslateServiceModel getTranslateService() {
+    public ServiceHolderModel getTranslateServiceHolder() {
         return translateService == null ? getDefaultTranslateService() : translateService;
     }
 
-    private TranslateServiceModel getDefaultTranslateService() {
-        translateService = new TranslateServiceModel();
-        translateService.current = 0;
+    private ServiceHolderModel getDefaultTranslateService() {
+        translateService = new ServiceHolderModel();
+        translateService.usingOrder = Collections.singletonList(ServiceHolderModel.SERVICE_MICROSOFT_API);
 
         ServiceModel microsoftService = new ServiceModel();
-        microsoftService.name = TranslateServiceModel.TranslateServiceEnum.microsoft;
+        microsoftService.name = ServiceHolderModel.SERVICE_MICROSOFT_API;
         microsoftService.key = KeyId.MICROSOFT_TRANSLATE_SUBSCRIPTION_KEY;
         translateService.services.add(microsoftService);
 
