@@ -17,11 +17,13 @@ public class ServiceHolderModel {
     public static final String SERVICE_GOOGLE_WEB_API = "google-web-api";
     public static final String SERVICE_GOOGLE_WEB = "google-web";
     public static final String SERVICE_MICROSOFT_API = "microsoft-api";
+    public static final String SERVICE_YANDEX_API = "yandex-api";
 
     public static final List<String> supportedServiceNames = Arrays.asList(
             SERVICE_GOOGLE_WEB_API,
             SERVICE_GOOGLE_WEB,
-            SERVICE_MICROSOFT_API
+            SERVICE_MICROSOFT_API,
+            SERVICE_YANDEX_API
     );
 
     @SuppressWarnings("unused")

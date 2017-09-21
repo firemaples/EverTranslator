@@ -15,7 +15,7 @@ import tw.firemaples.onscreenocr.database.DatabaseManager;
 import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.database.ServiceModel;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
-import tw.firemaples.onscreenocr.utils.GoogleWebViewUtil;
+import tw.firemaples.onscreenocr.utils.UrlFormatter;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
@@ -26,7 +26,7 @@ public class GoogleWebApiTranslator {
     private static String REGEX_RESULT_MATCHER = "TRANSLATED_TEXT='(.[^\\']*)'";
     private static String DEFAULT_USER_AGENT = "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Mobile Safari/537.36";
 
-    public void startTranslate(String textToTranslate, String targetLanguage, final OnGoogleTranslateTaskCallback callback) {
+    public static void startTranslate(String textToTranslate, String targetLanguage, final OnGoogleTranslateTaskCallback callback) {
         ServiceHolderModel translateService = DatabaseManager.getInstance().getTranslateServiceHolder();
         ServiceModel serviceModel = translateService.getService(ServiceHolderModel.SERVICE_GOOGLE_WEB_API);
         if (serviceModel.regexResultMatcher != null && serviceModel.regexResultMatcher.trim().length() > 0) {
@@ -41,7 +41,7 @@ public class GoogleWebApiTranslator {
 //            lang += "-" + Locale.getDefault().getCountry();
 //        }
 
-        String url = GoogleWebViewUtil.getFormattedUrl(ServiceHolderModel.SERVICE_GOOGLE_WEB_API, textToTranslate, targetLanguage);
+        String url = UrlFormatter.getFormattedUrl(ServiceHolderModel.SERVICE_GOOGLE_WEB_API, textToTranslate, targetLanguage);
 
         Tool.logInfo("GoogleWebApiTranslator start loading url:" + url);
 

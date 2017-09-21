@@ -15,7 +15,7 @@ import android.webkit.WebViewClient;
 import tw.firemaples.onscreenocr.BuildConfig;
 import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
-import tw.firemaples.onscreenocr.utils.GoogleWebViewUtil;
+import tw.firemaples.onscreenocr.utils.UrlFormatter;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
@@ -63,7 +63,7 @@ public class GoogleWebTranslator {
 //            lang += "-" + Locale.getDefault().getCountry();
 //        }
 
-        String url = GoogleWebViewUtil.getFormattedUrl(ServiceHolderModel.SERVICE_GOOGLE_WEB, textToTranslate, targetLanguage);
+        String url = UrlFormatter.getFormattedUrl(ServiceHolderModel.SERVICE_GOOGLE_WEB, textToTranslate, targetLanguage);
 
         Tool.logInfo("Google translate WebView start loading url:" + url);
         webView.loadUrl(url);
