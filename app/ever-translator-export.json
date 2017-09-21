@@ -13,6 +13,39 @@
       }
     ]
   },
+  "TranslateService-V2": {
+    "current": 1,
+    "usingOrder": [
+      "yandex-api",
+      "google-web",
+      "microsoft-api"
+    ],
+    "services": [
+      {
+        "key": "d0fdbac3cc9c404bb643faf98af01458",
+        "name": "microsoft-api",
+        "desc": "Microsoft translation api"
+      },
+      {
+        "jsParser": "javascript:window.HtmlViewer.getTranslatedText(document.getElementsByClassName('translation')[0].innerHTML);",
+        "name": "google-web",
+        "url": "https://translate.google.com/m/translate?sl=auto&tl={TL}&ie=UTF-8&q={TEXT}",
+        "desc": "Google web"
+      },
+      {
+        "defaultUserAgent": "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Mobile Safari/537.36",
+        "name": "google-web-api",
+        "regexResultMatcher": "\\[\\[\\[\"([^\"]*)\",",
+        "url": "https://translate.google.com/translate_a/single?client=t&sl=auto&tl={TL}&hl={TL}&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&ie=UTF-8&oe=UTF-8&otf=1&ssel=0&tsel=0&kc=7&q={TEXT}",
+        "desc": "Google web api"
+      },
+      {
+        "key": "trnsl.1.1.20170921T151631Z.be2cca957b83f7ec.ac654e378566d8255d2090c1e37ba41559e88210",
+        "name": "yandex-api",
+        "desc": "Yandex translator api"
+      }
+    ]
+  },
   "TranslateServiceDebug": {
     "current": 1,
     "usingOrder": [

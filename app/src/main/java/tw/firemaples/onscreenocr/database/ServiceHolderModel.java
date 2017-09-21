@@ -11,7 +11,7 @@ import tw.firemaples.onscreenocr.BuildConfig;
  */
 
 public class ServiceHolderModel {
-    private static final String KEY = "TranslateService";
+    private static final String KEY = "TranslateService-V2";
     private static final String DEBUG_KEY = "TranslateServiceDebug";
 
     public static final String SERVICE_GOOGLE_WEB_API = "google-web-api";
