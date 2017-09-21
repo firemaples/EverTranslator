@@ -110,7 +110,7 @@ public class TranslateManager {
             }
             break;
             case ServiceHolderModel.SERVICE_GOOGLE_WEB_API:
-                new GoogleWebApiTranslator().startTranslate(text, translateToLang, new GoogleWebApiTranslator.OnGoogleTranslateTaskCallback() {
+                GoogleWebApiTranslator.startTranslate(text, translateToLang, new GoogleWebApiTranslator.OnGoogleTranslateTaskCallback() {
 
                     @Override
                     public void onTranslated(final String translatedText) {
@@ -144,6 +144,25 @@ public class TranslateManager {
                 }).execute();
             }
             break;
+            case ServiceHolderModel.SERVICE_YANDEX_API:
+                YandexApiTranslator.startTranslate(text, new YandexApiTranslator.OnYandexTranslateTaskCallback() {
+                    @Override
+                    public void onTranslated(final String translatedText) {
+                        mainThreadHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                FabricUtil.logTranslationInfo(text, translateFromLang, translateToLang, translateService.name);
+                                callback.onTranslateFinished(translatedText);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        _startTranslate(context, text, serviceHolder.switchNextService(true), callback);
+                    }
+                });
+                break;
         }
 
     }

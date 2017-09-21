@@ -14,7 +14,7 @@ import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
-import tw.firemaples.onscreenocr.utils.GoogleWebViewUtil;
+import tw.firemaples.onscreenocr.utils.UrlFormatter;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
 import tw.firemaples.onscreenocr.utils.Tool;
 
@@ -102,7 +102,7 @@ public class WebViewFV extends FloatingView {
     }
 
     public void setContent(String text, String targetLanguage) {
-        url = GoogleWebViewUtil.getFormattedUrl(ServiceHolderModel.SERVICE_GOOGLE_WEB, text, targetLanguage);
+        url = UrlFormatter.getFormattedUrl(ServiceHolderModel.SERVICE_GOOGLE_WEB, text, targetLanguage);
         wv_webView.loadUrl(url);
     }
 

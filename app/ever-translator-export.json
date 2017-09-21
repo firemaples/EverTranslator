@@ -16,6 +16,7 @@
   "TranslateServiceDebug": {
     "current": 1,
     "usingOrder": [
+      "yandex-api",
       "google-web",
       "microsoft-api"
     ],
@@ -37,6 +38,11 @@
         "regexResultMatcher": "\\[\\[\\[\"([^\"]*)\",",
         "url": "https://translate.google.com/translate_a/single?client=t&sl=auto&tl={TL}&hl={TL}&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&ie=UTF-8&oe=UTF-8&otf=1&ssel=0&tsel=0&kc=7&q={TEXT}",
         "desc": "Google web api"
+      },
+      {
+        "key": "trnsl.1.1.20170921T151631Z.be2cca957b83f7ec.ac654e378566d8255d2090c1e37ba41559e88210",
+        "name": "yandex-api",
+        "desc": "Yandex translator api"
       }
     ]
   }
