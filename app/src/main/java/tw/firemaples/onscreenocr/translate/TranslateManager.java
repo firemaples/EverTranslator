@@ -37,6 +37,15 @@ public class TranslateManager {
         return _instance;
     }
 
+    public void test(Context context) {
+        startTranslate(context, "Note Editor", new OnTranslateManagerCallback() {
+            @Override
+            public void onTranslateFinished(String translatedText) {
+                googleWebTranslator = null;
+            }
+        });
+    }
+
     public void startTranslate(Context context, String text, OnTranslateManagerCallback callback) {
         if (text == null || text.trim().length() == 0 || callback == null) {
             return;
@@ -69,9 +78,11 @@ public class TranslateManager {
                     googleWebTranslator = new GoogleWebTranslator(context);
                 }
 
+                final long timeStart = System.currentTimeMillis();
                 googleWebTranslator.startTranslate(text, translateToLang, new GoogleWebTranslator.OnGoogleTranslateWebViewCallback() {
                     @Override
                     public void onTranslated(final String translatedText) {
+                        Tool.logInfo("Translated spent: " + (System.currentTimeMillis() - timeStart) + " ms");
                         mainThreadHandler.post(new Runnable() {
                             @Override
                             public void run() {

@@ -20,6 +20,7 @@ import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.floatingviews.MovableFloatingView;
 import tw.firemaples.onscreenocr.ocr.OcrDownloadAsyncTask;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
+import tw.firemaples.onscreenocr.translate.TranslateManager;
 import tw.firemaples.onscreenocr.utils.AppMode;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
@@ -248,6 +249,10 @@ public class FloatingBar extends MovableFloatingView {
             if (id == R.id.view_menu) {
                 new FloatingBarMenu(getContext(), view_menu, onFloatingBarMenuCallback).show();
             } else if (id == R.id.bt_selectArea) {
+                if (SharePreferenceUtil.getInstance().isDebugMode()) {
+                    TranslateManager.getInstance().test(getContext());
+                }
+
                 FabricUtil.logBtnSelectAreaClicked();
                 if (ScreenshotHandler.isInitialized()) {
                     FabricUtil.logDoBtnSelectAreaAction();

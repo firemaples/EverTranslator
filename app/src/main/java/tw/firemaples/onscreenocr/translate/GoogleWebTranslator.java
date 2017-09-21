@@ -3,6 +3,8 @@ package tw.firemaples.onscreenocr.translate;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.view.MotionEvent;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -31,8 +33,26 @@ public class GoogleWebTranslator {
         webView = new WebView(context);
         webView.addJavascriptInterface(new MyJavaScriptInterface(context), "HtmlViewer");
         webView.setWebViewClient(new MyWebViewClient());
+        webView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return false;
+            }
+        });
+        webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
+
+//        settings.setAppCacheEnabled(false);
+        settings.setBuiltInZoomControls(false);
+        settings.setBlockNetworkImage(true);
+        settings.setDatabaseEnabled(false);
+        settings.setGeolocationEnabled(false);
+        settings.setJavaScriptCanOpenWindowsAutomatically(false);
+        settings.setLoadsImagesAutomatically(false);
+        settings.setSaveFormData(false);
+        settings.setSavePassword(false);
+        settings.setSupportMultipleWindows(false);
     }
 
     public void startTranslate(String textToTranslate, String targetLanguage, OnGoogleTranslateWebViewCallback callback) {

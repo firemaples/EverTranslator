@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+import tw.firemaples.onscreenocr.BuildConfig;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
@@ -71,6 +72,10 @@ public class SettingView extends FloatingView {
 
         if (!ocrNTranslateUtils.isExternalStorageWritable()) {
             cb_saveOcrEngineToExternalStorage.setEnabled(false);
+        }
+
+        if (!BuildConfig.DEBUG) {
+            cb_debugMode.setVisibility(View.GONE);
         }
     }
 
