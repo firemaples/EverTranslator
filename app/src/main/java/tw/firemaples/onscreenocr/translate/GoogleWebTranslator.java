@@ -3,6 +3,8 @@ package tw.firemaples.onscreenocr.translate;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.view.MotionEvent;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -10,9 +12,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import java.util.Locale;
-
 import tw.firemaples.onscreenocr.BuildConfig;
+import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.GoogleWebViewUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -21,30 +22,48 @@ import tw.firemaples.onscreenocr.utils.Tool;
  * Created by louis1chen on 30/04/2017.
  */
 
-public class GoogleTranslateWebView {
+public class GoogleWebTranslator {
     private static final long TIMEOUT = 5000;
 
     private WebView webView;
     private OnGoogleTranslateWebViewCallback callback;
 
     @SuppressLint("SetJavaScriptEnabled")
-    public GoogleTranslateWebView(Context context) {
+    public GoogleWebTranslator(Context context) {
         webView = new WebView(context);
         webView.addJavascriptInterface(new MyJavaScriptInterface(context), "HtmlViewer");
         webView.setWebViewClient(new MyWebViewClient());
+        webView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return false;
+            }
+        });
+        webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
+
+//        settings.setAppCacheEnabled(false);
+        settings.setBuiltInZoomControls(false);
+        settings.setBlockNetworkImage(true);
+        settings.setDatabaseEnabled(false);
+        settings.setGeolocationEnabled(false);
+        settings.setJavaScriptCanOpenWindowsAutomatically(false);
+        settings.setLoadsImagesAutomatically(false);
+        settings.setSaveFormData(false);
+        settings.setSavePassword(false);
+        settings.setSupportMultipleWindows(false);
     }
 
     public void startTranslate(String textToTranslate, String targetLanguage, OnGoogleTranslateWebViewCallback callback) {
         this.callback = callback;
 
-        String lang = Locale.forLanguageTag(targetLanguage).getLanguage();
-        if (lang.equals(Locale.CHINESE.getLanguage())) {
-            lang += "-" + Locale.getDefault().getCountry();
-        }
+//        String lang = Locale.forLanguageTag(targetLanguage).getLanguage();
+//        if (lang.equals(Locale.CHINESE.getLanguage())) {
+//            lang += "-" + Locale.getDefault().getCountry();
+//        }
 
-        String url = GoogleWebViewUtil.getFormattedUrl(textToTranslate, lang);
+        String url = GoogleWebViewUtil.getFormattedUrl(ServiceHolderModel.SERVICE_GOOGLE_WEB, textToTranslate, targetLanguage);
 
         Tool.logInfo("Google translate WebView start loading url:" + url);
         webView.loadUrl(url);

@@ -5,10 +5,11 @@ package tw.firemaples.onscreenocr.database;
  */
 
 public class ServiceModel {
-    public TranslateServiceModel.TranslateServiceEnum name;
+    public String name;
     public String url;
     public String jsParser;
     public String key;
     public String regexResultMatcher;
     public String defaultUserAgent;
+    public String desc;
 }

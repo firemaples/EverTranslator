@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import tw.firemaples.onscreenocr.BuildConfig;
+
 /**
  * Created by louis1chen on 01/02/2017.
  */
@@ -36,7 +38,7 @@ public class SharePreferenceUtil {
     }
 
     public boolean isDebugMode() {
-        return getSharedPreferences().getBoolean(KEY_DEBUG_MODE, false);
+        return BuildConfig.DEBUG && getSharedPreferences().getBoolean(KEY_DEBUG_MODE, false);
     }
 
     public void setDebugMode(boolean debugMode) {

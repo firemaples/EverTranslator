@@ -207,7 +207,7 @@ public class AreaSelectionView extends ImageView {
     }
 
     private void drawBorder(Canvas canvas, int progress) {
-        Tool.logInfo("drawBorder: progress: " + progress);
+//        Tool.logInfo("drawBorder: progress: " + progress);
         int topSteps = 25;
         int centerSteps = 50;
         int bottomSteps = 25;

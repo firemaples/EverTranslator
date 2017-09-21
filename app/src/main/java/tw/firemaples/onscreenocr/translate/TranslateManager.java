@@ -3,9 +3,11 @@ package tw.firemaples.onscreenocr.translate;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 
 import tw.firemaples.onscreenocr.database.DatabaseManager;
-import tw.firemaples.onscreenocr.database.TranslateServiceModel;
+import tw.firemaples.onscreenocr.database.ServiceHolderModel;
+import tw.firemaples.onscreenocr.database.ServiceModel;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
@@ -20,7 +22,9 @@ public class TranslateManager {
 
     private Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
-//    GoogleTranslateWebView googleTranslateWebView;
+    private ServiceHolderModel serviceHolder;
+
+    private GoogleWebTranslator googleWebTranslator;
 
     private TranslateManager() {
     }
@@ -33,6 +37,15 @@ public class TranslateManager {
         return _instance;
     }
 
+    public void test(Context context) {
+        startTranslate(context, "Note Editor", new OnTranslateManagerCallback() {
+            @Override
+            public void onTranslateFinished(String translatedText) {
+                googleWebTranslator = null;
+            }
+        });
+    }
+
     public void startTranslate(Context context, String text, OnTranslateManagerCallback callback) {
         if (text == null || text.trim().length() == 0 || callback == null) {
             return;
@@ -42,29 +55,69 @@ public class TranslateManager {
             return;
         }
 
-        TranslateServiceModel translateService = DatabaseManager.getInstance().getTranslateService();
+        if (serviceHolder == null) {
+            serviceHolder = DatabaseManager.getInstance().getTranslateServiceHolder();
+        }
 
-        _startTranslate(context, text, translateService.getCurrent(), callback);
+        _startTranslate(context, text, serviceHolder.getUsingService(), callback);
     }
 
-    private void _startTranslate(final Context context, final String text, final TranslateServiceModel.TranslateServiceEnum translateService, final OnTranslateManagerCallback callback) {
+    private void _startTranslate(final Context context, final String text, @Nullable final ServiceModel translateService, final OnTranslateManagerCallback callback) {
+        if (translateService == null) {
+            callback.onTranslateFinished(null);
+            return;
+        }
+
         final String translateFromLang = OcrNTranslateUtils.getInstance().getTranslateFromLang();
         final String translateToLang = OcrNTranslateUtils.getInstance().getTranslateToLang();
 
-        Tool.logInfo("Translate with " + translateService.name());
-        switch (translateService) {
-            case google: {
-//                if (googleTranslateWebView == null) {
-//                    googleTranslateWebView = new GoogleTranslateWebView(context);
-//                }
-                new GoogleTranslateAsyncTask().startTranslate(text, translateToLang, new GoogleTranslateAsyncTask.OnGoogleTranslateTaskCallback() {
+        Tool.logInfo("Translate with " + translateService.name);
+        switch (translateService.name) {
+            case ServiceHolderModel.SERVICE_GOOGLE_WEB: {
+                if (googleWebTranslator == null) {
+                    googleWebTranslator = new GoogleWebTranslator(context);
+                }
+
+                final long timeStart = System.currentTimeMillis();
+                googleWebTranslator.startTranslate(text, translateToLang, new GoogleWebTranslator.OnGoogleTranslateWebViewCallback() {
+                    @Override
+                    public void onTranslated(final String translatedText) {
+                        Tool.logInfo("Translated spent: " + (System.currentTimeMillis() - timeStart) + " ms");
+                        mainThreadHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                FabricUtil.logTranslationInfo(text, translateFromLang, translateToLang, translateService.name);
+                                callback.onTranslateFinished(translatedText);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onHttpException(int httpStatus, String reason) {
+                        _startTranslate(context, text, serviceHolder.switchNextService(true), callback);
+                    }
+
+                    @Override
+                    public void onNoneException() {
+                        _startTranslate(context, text, serviceHolder.switchNextService(true), callback);
+                    }
+
+                    @Override
+                    public void onTimeout() {
+                        _startTranslate(context, text, serviceHolder.switchNextService(true), callback);
+                    }
+                });
+            }
+            break;
+            case ServiceHolderModel.SERVICE_GOOGLE_WEB_API:
+                new GoogleWebApiTranslator().startTranslate(text, translateToLang, new GoogleWebApiTranslator.OnGoogleTranslateTaskCallback() {
 
                     @Override
                     public void onTranslated(final String translatedText) {
                         mainThreadHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                FabricUtil.logTranslationInfo(text, translateFromLang, translateToLang, translateService);
+                                FabricUtil.logTranslationInfo(text, translateFromLang, translateToLang, translateService.name);
                                 callback.onTranslateFinished(translatedText);
                             }
                         });
@@ -72,46 +125,18 @@ public class TranslateManager {
 
                     @Override
                     public void onError(Throwable throwable) {
-                        _startTranslate(context, text, TranslateServiceModel.TranslateServiceEnum.microsoft, callback);
+                        _startTranslate(context, text, serviceHolder.switchNextService(true), callback);
                     }
                 });
-//                googleTranslateWebView.startTranslate(text, translateToLang, new GoogleTranslateWebView.OnGoogleTranslateWebViewCallback() {
-//                    @Override
-//                    public void onTranslated(final String translatedText) {
-//                        mainThreadHandler.post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                FabricUtil.logTranslationInfo(text, translateFromLang, translateToLang, translateService);
-//                                callback.onTranslateFinished(translatedText);
-//                            }
-//                        });
-//                    }
-//
-//                    @Override
-//                    public void onHttpException(int httpStatus, String reason) {
-//                        _startTranslate(context, text, TranslateServiceModel.TranslateServiceEnum.microsoft, callback);
-//                    }
-//
-//                    @Override
-//                    public void onNoneException() {
-//                        _startTranslate(context, text, TranslateServiceModel.TranslateServiceEnum.microsoft, callback);
-//                    }
-//
-//                    @Override
-//                    public void onTimeout() {
-//                        _startTranslate(context, text, TranslateServiceModel.TranslateServiceEnum.microsoft, callback);
-//                    }
-//                });
-            }
-            break;
-            case microsoft: {
-                new TranslateAsyncTask(context, text, new TranslateAsyncTask.OnTranslateAsyncTaskCallback() {
+                break;
+            case ServiceHolderModel.SERVICE_MICROSOFT_API: {
+                new MicrosoftApiTranslator(context, text, new MicrosoftApiTranslator.OnTranslateAsyncTaskCallback() {
                     @Override
                     public void onTranslateFinished(final String translatedText) {
                         mainThreadHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                FabricUtil.logTranslationInfo(text, translateFromLang, translateToLang, translateService);
+                                FabricUtil.logTranslationInfo(text, translateFromLang, translateToLang, translateService.name);
                                 callback.onTranslateFinished(translatedText);
                             }
                         });
