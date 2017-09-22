@@ -120,6 +120,8 @@ public abstract class FloatingView {
     }
 
     public void detachFromWindow() {
+        removeHomeButtonWatcher();
+
         if (isAttached) {
             for (AsyncTask asyncTask : manageTask) {
                 if (asyncTask != null && !asyncTask.isCancelled()) {
@@ -130,8 +132,6 @@ public abstract class FloatingView {
 
             windowManager.removeView(rootView);
             isAttached = false;
-
-            removeHomeButtonWatcher();
         }
     }
 

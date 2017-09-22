@@ -24,7 +24,9 @@ public class HomeWatcher {
 
     public void setOnHomePressedListener(OnHomePressedListener listener) {
         mListener = listener;
-        mReceiver = new InnerReceiver();
+        if (mReceiver == null) {
+            mReceiver = new InnerReceiver();
+        }
     }
 
     public void startWatch() {
@@ -39,7 +41,7 @@ public class HomeWatcher {
             try {
                 mContext.unregisterReceiver(mReceiver);
             } catch (Throwable t) {
-//                t.printStackTrace();
+                t.printStackTrace();
             }
         }
     }

@@ -68,6 +68,7 @@ public class ScreenTranslatorService extends Service {
     public static void stop(boolean dismissNotify) {
         if (_instance != null) {
             _instance.dismissNotify = dismissNotify;
+            _instance._stopFloatingView(false);
             _instance.stopSelf();
         }
     }

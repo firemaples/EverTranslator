@@ -38,7 +38,9 @@ public class DatabaseManager {
         db = FirebaseDatabase.getInstance();
         db.setPersistenceEnabled(true);
 
-        DatabaseReference translateServiceRef = db.getReference(ServiceHolderModel.getKey());
+        String key = ServiceHolderModel.getKey();
+        Tool.logInfo("Use key["+key+"] for Firebase db");
+        DatabaseReference translateServiceRef = db.getReference(key);
         translateServiceRef.keepSynced(true);
 
         //current translate service

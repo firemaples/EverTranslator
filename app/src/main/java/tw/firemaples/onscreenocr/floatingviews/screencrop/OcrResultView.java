@@ -21,6 +21,7 @@ import tw.firemaples.onscreenocr.ocr.OcrRecognizeAsyncTask;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.translate.TranslateManager;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
+import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.views.OcrResultWindow;
@@ -226,7 +227,13 @@ public class OcrResultView extends FloatingView {
     private OcrResultWindow.OnOcrResultWindowCallback onOcrResultWindowCallback = new OcrResultWindow.OnOcrResultWindowCallback() {
         @Override
         public void onOpenBrowserBtnClick(String text, boolean translated) {
-            webViewFV.setContent(text);
+            String lang;
+            if (translated) {
+                lang = OcrNTranslateUtils.getInstance().getTranslateFromLang();
+            } else {
+                lang = OcrNTranslateUtils.getInstance().getTranslateToLang();
+            }
+            webViewFV.setContent(text, lang);
             webViewFV.attachToWindow();
         }
 

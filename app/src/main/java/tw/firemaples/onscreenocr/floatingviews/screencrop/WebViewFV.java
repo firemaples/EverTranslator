@@ -8,15 +8,13 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import java.util.Locale;
-
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
-import tw.firemaples.onscreenocr.utils.UrlFormatter;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
 import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.utils.UrlFormatter;
 
 /**
  * Created by firemaples on 01/12/2016.
@@ -93,16 +91,9 @@ public class WebViewFV extends FloatingView {
         }
     };
 
-    public void setContent(String text) {
-        String lang = Locale.getDefault().getLanguage();
-        if (lang.equals(Locale.CHINESE.getLanguage())) {
-            lang += "-" + Locale.getDefault().getCountry();
-        }
-        setContent(text, lang);
-    }
-
     public void setContent(String text, String targetLanguage) {
         url = UrlFormatter.getFormattedUrl(ServiceHolderModel.SERVICE_GOOGLE_WEB, text, targetLanguage);
+        Tool.logInfo("Start loading google web: " + url);
         wv_webView.loadUrl(url);
     }
 
