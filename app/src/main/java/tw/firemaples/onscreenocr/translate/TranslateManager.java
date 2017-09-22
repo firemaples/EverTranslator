@@ -55,6 +55,12 @@ public class TranslateManager {
             return;
         }
 
+        OcrNTranslateUtils translateUtils = OcrNTranslateUtils.getInstance();
+        if (translateUtils.getTranslateFromLanguage() == translateUtils.getTranslateToLanguage()) {
+            callback.onTranslateFinished(text);
+            return;
+        }
+
         if (serviceHolder == null) {
             serviceHolder = DatabaseManager.getInstance().getTranslateServiceHolder();
         }
