@@ -16,8 +16,8 @@
   "TranslateService-V2": {
     "current": 1,
     "usingOrder": [
-      "yandex-api",
       "google-web",
+      "yandex-api",
       "microsoft-api"
     ],
     "services": [
