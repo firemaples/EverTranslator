@@ -18,7 +18,7 @@ import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ScreenTranslatorService;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.floatingviews.MovableFloatingView;
-import tw.firemaples.onscreenocr.ocr.OcrDownloadAsyncTask;
+import tw.firemaples.onscreenocr.ocr.OcrDownloadTask;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.translate.TranslateManager;
 import tw.firemaples.onscreenocr.utils.AppMode;
@@ -49,7 +49,7 @@ public class FloatingBar extends MovableFloatingView {
     //OCR
     private OcrNTranslateUtils ocrNTranslateUtils;
     private OcrResultView ocrResultView;
-    private OcrDownloadAsyncTask ocrDownloadAsyncTask;
+    private OcrDownloadTask ocrDownloadTask;
 
     public FloatingBar(Context context) {
         super(context);
@@ -159,7 +159,7 @@ public class FloatingBar extends MovableFloatingView {
                 String lang = ocrNTranslateUtils.getOcrLangList().get(position);
                 ocrNTranslateUtils.setOcrLang(lang);
 
-                if (!OcrDownloadAsyncTask.checkOcrFiles(lang)) {
+                if (!OcrDownloadTask.checkOcrFiles(lang)) {
                     showDownloadOcrFileDialog(OcrNTranslateUtils.getInstance().getOcrLangDisplayName(lang));
                 }
 
@@ -185,14 +185,14 @@ public class FloatingBar extends MovableFloatingView {
             @Override
             public void OnConfirmClick(DialogView dialogView) {
                 super.OnConfirmClick(dialogView);
-                ocrDownloadAsyncTask = new OcrDownloadAsyncTask(onOcrDownloadAsyncTaskCallback);
-                ocrDownloadAsyncTask.execute();
+                ocrDownloadTask = new OcrDownloadTask(getContext(), onOcrDownloadAsyncTaskCallback);
+                ocrDownloadTask.startDownload();
             }
         });
         dialogView.attachToWindow();
     }
 
-    private OcrDownloadAsyncTask.OnOcrDownloadAsyncTaskCallback onOcrDownloadAsyncTaskCallback = new OcrDownloadAsyncTask.OnOcrDownloadAsyncTaskCallback() {
+    private OcrDownloadTask.OnOcrDownloadAsyncTaskCallback onOcrDownloadAsyncTaskCallback = new OcrDownloadTask.OnOcrDownloadAsyncTaskCallback() {
         @Override
         public void onDownloadStart() {
             dialogView.reset();
@@ -203,8 +203,8 @@ public class FloatingBar extends MovableFloatingView {
             dialogView.setCallback(new DialogView.OnDialogViewCallback() {
                 @Override
                 public void onCancelClicked(DialogView dialogView) {
-                    if (ocrDownloadAsyncTask != null) {
-                        ocrDownloadAsyncTask.cancel(true);
+                    if (ocrDownloadTask != null) {
+                        ocrDownloadTask.cancel();
                     }
                     super.onCancelClicked(dialogView);
                 }
@@ -270,7 +270,7 @@ public class FloatingBar extends MovableFloatingView {
                 }
             } else if (id == R.id.bt_translation) {
                 FabricUtil.logBtnTranslationClicked();
-                if (OcrDownloadAsyncTask.checkOcrFiles(OcrNTranslateUtils.getInstance().getOcrLang())) {
+                if (OcrDownloadTask.checkOcrFiles(OcrNTranslateUtils.getInstance().getOcrLang())) {
                     FabricUtil.logDoBtnTranslationAction();
                     if (drawAreaView == null) {
                         Tool.logError("drawAreaView is null, ignore.");

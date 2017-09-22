@@ -36,6 +36,8 @@ public class ServiceHolderModel {
 
     ServiceModel currentService;
 
+    public String ocrDataUrl;
+
     public ServiceModel getUsingService() {
         if (currentService == null) {
             currentService = getUsingService(null);
