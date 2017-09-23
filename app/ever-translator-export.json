@@ -17,7 +17,6 @@
     "ocrDataUrl": "https://github.com/firemaples/tessdata/raw/master/%s.traineddata",
     "current": 1,
     "usingOrder": [
-      "google-web",
       "yandex-api",
       "microsoft-api"
     ],
