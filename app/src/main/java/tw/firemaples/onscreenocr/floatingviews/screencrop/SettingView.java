@@ -143,16 +143,19 @@ public class SettingView extends FloatingView {
             if (!fileTo.exists()) {
                 fileTo.mkdirs();
             }
-            for (File file : fileFrom.listFiles()) {
-                try {
-                    Tool.logInfo("Start move ocr file from:" + file.getAbsolutePath() + " to:" + fileTo.getAbsolutePath());
-                    publishProgress(getContext().getString(R.string.progress_movingFile) + file.getName());
-                    moveFile(file, fileTo);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    FabricUtil.postException(e);
-                }
+            File[] fromFiles = fileFrom.listFiles();
+            if (fromFiles != null) {
+                for (File file : fromFiles) {
+                    try {
+                        Tool.logInfo("Start move ocr file from:" + file.getAbsolutePath() + " to:" + fileTo.getAbsolutePath());
+                        publishProgress(getContext().getString(R.string.progress_movingFile) + file.getName());
+                        moveFile(file, fileTo);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        FabricUtil.postException(e);
+                    }
 
+                }
             }
             return null;
         }
