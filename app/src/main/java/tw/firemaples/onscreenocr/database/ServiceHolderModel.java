@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import tw.firemaples.onscreenocr.BuildConfig;
+import tw.firemaples.onscreenocr.utils.JsonUtil;
 
 /**
  * Created by louis1chen on 01/05/2017.
@@ -96,5 +97,9 @@ public class ServiceHolderModel {
         } else {
             return KEY;
         }
+    }
+
+    public String toJsonString() {
+        return new JsonUtil<ServiceHolderModel>().writeJson(this);
     }
 }
