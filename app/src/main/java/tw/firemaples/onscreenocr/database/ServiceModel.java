@@ -1,7 +1,7 @@
 package tw.firemaples.onscreenocr.database;
 
 /**
- * Created by louis1chen on 01/05/2017.
+ * Created by firemaples on 01/05/2017.
  */
 
 public class ServiceModel {

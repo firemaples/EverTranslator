@@ -12,7 +12,7 @@ import tw.firemaples.onscreenocr.utils.KeyId;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
- * Created by louis1chen on 01/05/2017.
+ * Created by firemaples on 01/05/2017.
  */
 
 public class DatabaseManager {

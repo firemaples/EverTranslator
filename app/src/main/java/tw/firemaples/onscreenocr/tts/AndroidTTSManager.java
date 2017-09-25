@@ -22,7 +22,7 @@ import tw.firemaples.onscreenocr.floatingviews.screencrop.DialogView;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
- * Created by louis1chen on 30/04/2017.
+ * Created by firemaples on 30/04/2017.
  */
 
 public class AndroidTTSManager {

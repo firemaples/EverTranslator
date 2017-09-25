@@ -12,7 +12,7 @@ import tw.firemaples.onscreenocr.translate.GoogleWebApiTranslator;
 import static tw.firemaples.onscreenocr.utils.Tool.getIPAddress;
 
 /**
- * Created by louis1chen on 08/06/2017.
+ * Created by firemaples on 08/06/2017.
  */
 
 public class FabricUtil {

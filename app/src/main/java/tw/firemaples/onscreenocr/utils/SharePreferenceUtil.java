@@ -8,7 +8,7 @@ import android.preference.PreferenceManager;
 import tw.firemaples.onscreenocr.BuildConfig;
 
 /**
- * Created by louis1chen on 01/02/2017.
+ * Created by firemaples on 01/02/2017.
  */
 public class SharePreferenceUtil {
     private static final String KEY_DEBUG_MODE = "KEY_DEBUG_MODE";

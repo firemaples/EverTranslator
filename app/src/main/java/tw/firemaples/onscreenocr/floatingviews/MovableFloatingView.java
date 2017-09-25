@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * Created by louis1chen on 01/09/2017.
+ * Created by firemaples on 01/09/2017.
  */
 
 public abstract class MovableFloatingView extends FloatingView {

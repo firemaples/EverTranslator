@@ -5,7 +5,7 @@ import android.os.Build;
 import android.provider.Settings;
 
 /**
- * Created by louis1chen on 22/01/2017.
+ * Created by firemaples on 22/01/2017.
  */
 
 public class PermissionUtil {

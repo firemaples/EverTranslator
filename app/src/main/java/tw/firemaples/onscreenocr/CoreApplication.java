@@ -13,7 +13,7 @@ import okhttp3.OkHttpClient;
 import tw.firemaples.onscreenocr.utils.SignatureUtil;
 
 /**
- * Created by louis1chen on 11/08/2017.
+ * Created by firemaples on 11/08/2017.
  */
 
 public class CoreApplication extends Application {

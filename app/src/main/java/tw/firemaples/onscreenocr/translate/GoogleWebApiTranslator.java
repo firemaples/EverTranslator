@@ -19,7 +19,7 @@ import tw.firemaples.onscreenocr.utils.UrlFormatter;
 import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
- * Created by louis1chen on 13/09/2017.
+ * Created by firemaples on 13/09/2017.
  */
 
 public class GoogleWebApiTranslator {

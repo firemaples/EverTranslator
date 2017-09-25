@@ -11,7 +11,7 @@ import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 
 /**
- * Created by louis1chen on 23/04/2017.
+ * Created by firemaples on 23/04/2017.
  */
 
 public class TextEditDialogView extends FloatingView {

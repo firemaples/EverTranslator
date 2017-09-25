@@ -3,7 +3,7 @@ package tw.firemaples.onscreenocr.utils;
 import tw.firemaples.onscreenocr.BuildConfig;
 
 /**
- * Created by louis1chen on 11/02/2017.
+ * Created by firemaples on 11/02/2017.
  */
 
 public class FeatureUtil {

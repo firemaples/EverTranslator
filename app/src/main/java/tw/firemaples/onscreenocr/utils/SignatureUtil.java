@@ -9,7 +9,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Created by louis1chen on 07/07/2017.
+ * Created by firemaples on 07/07/2017.
  */
 
 public class SignatureUtil {
