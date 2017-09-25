@@ -2,9 +2,11 @@ package tw.firemaples.onscreenocr.utils;
 
 import android.support.annotation.NonNull;
 
+import com.crashlytics.android.Crashlytics;
+
 import tw.firemaples.onscreenocr.database.DatabaseManager;
-import tw.firemaples.onscreenocr.database.ServiceModel;
 import tw.firemaples.onscreenocr.database.ServiceHolderModel;
+import tw.firemaples.onscreenocr.database.ServiceModel;
 
 /**
  * Created by firemaples on 30/11/2016.
@@ -28,7 +30,15 @@ public class UrlFormatter {
         }
 
         ServiceModel serviceModel = serviceHolder.getService(serviceName);
-        return serviceModel.url;
+        if (serviceModel != null) {
+            return serviceModel.url;
+        } else {
+            String fullJson = serviceHolder.toJsonString();
+            Crashlytics.log("TranslateServiceHolder: " + fullJson);
+            Crashlytics.setString("serviceName", serviceName);
+            Crashlytics.logException(new Exception("Can't not get service with service name [" + serviceName + "]"));
+            return "";
+        }
     }
 
     public static String getFormattedUrl(String serviceName, @NonNull String text, @NonNull String targetLanguage) {

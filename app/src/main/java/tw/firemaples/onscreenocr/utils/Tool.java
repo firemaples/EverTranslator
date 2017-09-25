@@ -61,6 +61,12 @@ public class Tool {
         }
     }
 
+    public static void logError(String msg, Throwable t) {
+        if (BuildConfig.DEBUG) {
+            Log.e(LOG_TAG, msg, t);
+        }
+    }
+
     public static void logInfo(String msg) {
         if (BuildConfig.DEBUG) {
             Log.i(LOG_TAG, msg);
