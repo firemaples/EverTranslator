@@ -67,4 +67,13 @@
     <string name="title_editOCRText">修改識別文字</string>
     <string name="msg_ttsEngineInitFailed">「文字轉語音」引擎初始化失敗，語音功能將無法運作</string>
     <string name="rememberLastSelection">記住上次的選擇區域</string>
+    <string name="drawAnAreaForTranslation">請在螢幕上圈選要翻譯的區域</string>
+    <string name="menu_help">說明</string>
+    <string name="title_help">操作說明</string>
+    <string name="guide_select_source_language_and_translation_destination_language">1. 選擇來源語言及要翻譯的目標語言</string>
+    <string name="guide_click_selection_button">2. 點擊[選擇]按鈕</string>
+    <string name="guide_tap_and_drag_on_screen_to_create_selection_area_for_translation">3. 在畫面上拖曳圈選想要翻譯的區域</string>
+    <string name="guide_click_translation_button">4. 點擊[翻譯]按鈕</string>
+    <string name="guide_get_the_result">5. 獲得結果</string>
+    <string name="guide_clear_result">6. 清除結果</string>
 </resources>

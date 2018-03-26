@@ -312,7 +312,7 @@ public class FloatingBar extends MovableFloatingView {
         }
 
         @Override
-        public void onThanksItemClick() {
+        public void onAboutItemClick() {
             new AboutView(getContext()).attachToWindow();
         }
 
@@ -330,6 +330,11 @@ public class FloatingBar extends MovableFloatingView {
             progressView = null;
 
             ScreenTranslatorService.stop(true);
+        }
+
+        @Override
+        public void onHelpClick() {
+            new HelpView(getContext()).attachToWindow();
         }
     };
 

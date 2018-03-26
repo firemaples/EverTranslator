@@ -25,18 +25,20 @@
                 android:padding="24dp">
 
                 <TextView
+                    android:id="@+id/tv_infoDialogTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/title_about"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    tools:text="@string/title_about"/>
 
-                <ScrollView
+                <FrameLayout
+                    android:id="@+id/wrapper_infoDialogContent"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:layout_marginTop="20dp">
 
-                    <include layout="@layout/content_about"/>
-                </ScrollView>
+
+                </FrameLayout>
 
             </LinearLayout>
 
