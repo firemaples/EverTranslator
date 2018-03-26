@@ -3,7 +3,11 @@ package tw.firemaples.onscreenocr.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.preference.PreferenceManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import tw.firemaples.onscreenocr.BuildConfig;
 
@@ -19,6 +23,8 @@ public class SharePreferenceUtil {
     private static final String KEY_APP_MODE = "KEY_APP_MODE";
     private static final String KEY_READ_SPEED_ENABLE = "KEY_READ_SPEED_ENABLE";
     private static final String KEY_READ_SPEED = "KEY_READ_SPEED";
+    private static final String KEY_REMEMBER_LAST_SELECTION = "KEY_REMEMBER_LAST_SELECTION";
+    private static final String KEY_LAST_SELECTION_AREA = "KEY_LAST_SELECTION_AREA";
 
     private static SharePreferenceUtil ourInstance = new SharePreferenceUtil();
 
@@ -104,5 +110,28 @@ public class SharePreferenceUtil {
 
     public void setReadSpeed(float speed) {
         getSharedPreferences().edit().putFloat(KEY_READ_SPEED, speed).apply();
+    }
+
+    public boolean isRememberLastSelection() {
+        return getSharedPreferences().getBoolean(KEY_REMEMBER_LAST_SELECTION, false);
+    }
+
+    public void setRememberLastSelection(boolean rememberLastSelection) {
+        getSharedPreferences().edit().putBoolean(KEY_REMEMBER_LAST_SELECTION, rememberLastSelection).apply();
+    }
+
+    public List<Rect> getLastSelectionArea() {
+        String json = getSharedPreferences().getString(KEY_LAST_SELECTION_AREA, null);
+        if (json == null) {
+            return new ArrayList<>();
+        } else {
+            return new JsonUtil<List<Rect>>().parseJson(json, new TypeReference<List<Rect>>() {
+            });
+        }
+    }
+
+    public void setLastSelectionArea(List<Rect> lastSelectionArea) {
+        String json = new JsonUtil<List<Rect>>().writeJson(lastSelectionArea);
+        getSharedPreferences().edit().putString(KEY_LAST_SELECTION_AREA, json).apply();
     }
 }

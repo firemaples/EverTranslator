@@ -264,6 +264,9 @@ public class FloatingBar extends MovableFloatingView {
                     FloatingBar.this.attachToWindow();
                     syncBtnState(BtnState.AreaSelecting);
                     drawAreaView.getAreaSelectionView().setCallback(onAreaSelectionViewCallback);
+                    if (SharePreferenceUtil.getInstance().isRememberLastSelection()) {
+                        drawAreaView.getAreaSelectionView().setBoxList(SharePreferenceUtil.getInstance().getLastSelectionArea());
+                    }
                 } else {
                     MainActivity.start(getContext());
                     ScreenTranslatorService.stop(true);
@@ -277,6 +280,9 @@ public class FloatingBar extends MovableFloatingView {
                         return;
                     }
                     currentBoxList.addAll(drawAreaView.getAreaSelectionView().getBoxList());
+                    if (SharePreferenceUtil.getInstance().isRememberLastSelection()) {
+                        SharePreferenceUtil.getInstance().setLastSelectionArea(currentBoxList);
+                    }
                     drawAreaView.getAreaSelectionView().clear();
                     drawAreaView.detachFromWindow();
                     drawAreaView = null;

@@ -55,6 +55,7 @@
     <string name="menu_about">About</string>
     <string name="title_about">About</string>
     <string name="startingWithSelectionMode">Starting with selection mode</string>
+    <string name="rememberLastSelection">Remember last selection area</string>
     <string name="removeLineBreaks">Remove line breaks</string>
     <string name="saveOcrEngineToExternalStorageFirst">Save OCR files into external storage first</string>
     <string name="canceledByUser">Download task canceled by user</string>
