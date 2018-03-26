@@ -67,4 +67,5 @@
     <string name="title_editOCRText">修改識別文字</string>
     <string name="msg_ttsEngineInitFailed">「文字轉語音」引擎初始化失敗，語音功能將無法運作</string>
     <string name="rememberLastSelection">記住上次的選擇區域</string>
+    <string name="drawAnAreaForTranslation">請在螢幕上圈選要翻譯的區域</string>
 </resources>

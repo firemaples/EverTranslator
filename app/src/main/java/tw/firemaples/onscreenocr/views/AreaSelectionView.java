@@ -16,9 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.utils.Tool;
-
-import static android.R.attr.duration;
+import tw.firemaples.onscreenocr.utils.UIUtil;
 
 /**
  * Created by Firemaples on 2016/3/1.
@@ -38,6 +36,8 @@ public class AreaSelectionView extends ImageView {
     private CountDownTimer timer;
     private int borderAnimationProgress = 0;
     private Paint borderPaint;
+
+    private Paint helpTextPaint;
 
     private int maxRectCount = 0;
 
@@ -110,6 +110,12 @@ public class AreaSelectionView extends ImageView {
         borderPaint.setStrokeWidth(6);
         borderPaint.setColor(ContextCompat.getColor(getContext(), R.color.captureAreaSelectionViewPaint_borderPaint));
 
+        helpTextPaint = new Paint();
+        helpTextPaint.setAntiAlias(true);
+        helpTextPaint.setTextAlign(Paint.Align.CENTER);
+        helpTextPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.areaSelectionView_helpTextSize));
+        helpTextPaint.setColor(ContextCompat.getColor(getContext(), R.color.captureAreaSelectionViewPaint_helpTextPaint));
+
 //        enable();
     }
 
@@ -142,7 +148,11 @@ public class AreaSelectionView extends ImageView {
     }
 
     public void setBoxList(List<Rect> boxList) {
-        this.boxList = boxList;
+        if (boxList != null) {
+            this.boxList = boxList;
+        } else {
+            this.boxList.clear();
+        }
         invalidate();
         if (boxList.size() > 0) {
             callback.onAreaSelected(this);
@@ -181,6 +191,8 @@ public class AreaSelectionView extends ImageView {
             }
 
             drawBorder(canvas, borderAnimationProgress);
+
+            drawHelpText(canvas);
 
             canvas.restore();
         }
@@ -265,6 +277,18 @@ public class AreaSelectionView extends ImageView {
             //draw bottom-left
             canvas.drawLine(bottomLeftXStart, height, bottomLeftXStart + bottomRunLength, height, borderPaint);
         }
+    }
+
+    private void drawHelpText(Canvas canvas) {
+        if (boxList.size() > 0) {
+            return;
+        }
+
+        int xPos = (canvas.getWidth() / 2);
+        int yPos = (int) ((canvas.getHeight() / 2) - ((helpTextPaint.descent() + helpTextPaint.ascent()) / 2));
+        //((textPaint.descent() + textPaint.ascent()) / 2) is the distance from the baseline to the center.
+
+        canvas.drawText(getContext().getString(R.string.drawAnAreaForTranslation), xPos, yPos, helpTextPaint);
     }
 
     public interface OnAreaSelectionViewCallback {
