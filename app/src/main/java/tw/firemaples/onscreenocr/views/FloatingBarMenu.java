@@ -53,11 +53,15 @@ public class FloatingBarMenu {
                 }
             } else if (itemId == R.id.menu_about) {
                 if (callback != null) {
-                    callback.onThanksItemClick();
+                    callback.onAboutItemClick();
                 }
             } else if (itemId == R.id.menu_changeMode) {
                 if (callback != null) {
                     callback.onChangeModeItemClick();
+                }
+            } else if(itemId == R.id.menu_help){
+                if(callback != null){
+                    callback.onHelpClick();
                 }
             }
             return false;
@@ -69,10 +73,12 @@ public class FloatingBarMenu {
 
         void onSettingItemClick();
 
-        void onThanksItemClick();
+        void onAboutItemClick();
 
         void onHideItemClick();
 
         void onCloseItemClick();
+
+        void onHelpClick();
     }
 }

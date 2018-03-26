@@ -54,6 +54,8 @@
     <string name="menu_exit">Exit</string>
     <string name="menu_about">About</string>
     <string name="title_about">About</string>
+    <string name="menu_help">Help</string>
+    <string name="title_help">How to use</string>
     <string name="startingWithSelectionMode">Starting with selection mode</string>
     <string name="rememberLastSelection">Remember last selection area</string>
     <string name="removeLineBreaks">Remove line breaks</string>
