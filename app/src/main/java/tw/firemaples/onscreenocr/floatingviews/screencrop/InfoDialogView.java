@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
+import tw.firemaples.onscreenocr.utils.HomeWatcher;
 
 /**
  * Created by louis1chen on 26/03/2018.
@@ -18,6 +19,12 @@ public abstract class InfoDialogView extends FloatingView {
     public InfoDialogView(Context context) {
         super(context);
         setViews(getRootView());
+        setupHomeButtonWatcher(onHomePressedListener);
+    }
+
+    @Override
+    protected boolean layoutFocusable() {
+        return true;
     }
 
     @Override
@@ -51,6 +58,18 @@ public abstract class InfoDialogView extends FloatingView {
         detachFromWindow();
         return true;
     }
+
+    private HomeWatcher.OnHomePressedListener onHomePressedListener = new HomeWatcher.OnHomePressedListener() {
+        @Override
+        public void onHomePressed() {
+            onBackButtonPressed();
+        }
+
+        @Override
+        public void onHomeLongPressed() {
+
+        }
+    };
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override

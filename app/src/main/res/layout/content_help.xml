@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:theme="@style/Base.Theme.AppCompat.Light"
-            tools:ignore="HardcodedText">
+            android:theme="@style/Base.Theme.AppCompat.Light">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,63 +10,49 @@
         android:orientation="vertical">
 
         <TextView
-            style="@style/thanksPage.title"
-            android:text="Develop by Firemaples"/>
+            style="@style/helpPage.stepText"
+            android:layout_marginTop="0dp"
+            android:text="@string/guide_select_source_language_and_translation_destination_language"/>
+
+        <ImageView
+            style="@style/helpPage.stepPicture"
+            android:src="@drawable/guide_select_language"/>
 
         <TextView
-            android:id="@+id/tv_link6"
-            style="@style/thanksPage.itemLink"
-            android:text="https://github.com/firemaples/EverTranslator"/>
+            style="@style/helpPage.stepText"
+            android:text="@string/guide_click_selection_button"/>
+
+        <ImageView
+            style="@style/helpPage.stepPicture"
+            android:src="@drawable/guide_click_selection_button"/>
 
         <TextView
-            style="@style/thanksPage.title"
-            android:layout_marginTop="12dp"
-            android:text="Thanks for"/>
+            style="@style/helpPage.stepText"
+            android:text="@string/guide_tap_and_drag_on_screen_to_create_selection_area_for_translation"/>
 
         <TextView
-            style="@style/thanksPage.itemTitle"
-            android:text="rmtheis/tess-two"/>
+            style="@style/helpPage.stepText"
+            android:text="@string/guide_click_translation_button"/>
+
+        <ImageView
+            style="@style/helpPage.stepPicture"
+            android:src="@drawable/guide_click_translation_button"/>
 
         <TextView
-            android:id="@+id/tv_link1"
-            style="@style/thanksPage.itemLink"
-            android:text="https://github.com/rmtheis/tess-two"/>
+            style="@style/helpPage.stepText"
+            android:text="@string/guide_get_the_result"/>
+
+        <ImageView
+            style="@style/helpPage.stepPicture"
+            android:src="@drawable/guide_get_the_result"/>
 
         <TextView
-            style="@style/thanksPage.itemTitle"
-            android:layout_marginTop="12dp"
-            android:text="boatmeme/microsoft-translator-java-api"/>
+            style="@style/helpPage.stepText"
+            android:text="@string/guide_clear_result"/>
 
-        <TextView
-            android:id="@+id/tv_link5"
-            style="@style/thanksPage.itemLink"
-            android:text="https://github.com/boatmeme/microsoft-translator-java-api"/>
-
-        <TextView
-            style="@style/thanksPage.itemTitle"
-            android:layout_marginTop="12dp"
-            android:text="JohnPersano/SuperToasts"/>
-
-        <TextView
-            android:id="@+id/tv_link2"
-            style="@style/thanksPage.itemLink"
-            android:text="https://github.com/JohnPersano/SuperToasts"/>
-
-        <TextView
-            style="@style/thanksPage.itemTitle"
-            android:layout_marginTop="12dp"
-            android:text="crashlytics"/>
-
-        <TextView
-            android:id="@+id/tv_link3"
-            style="@style/thanksPage.itemLink"
-            android:text="http://try.crashlytics.com/"/>
-
-        <TextView
-            android:id="@+id/tv_link4"
-            style="@style/thanksPage.itemLink"
-            android:layout_marginTop="12dp"
-            android:text="http://binwaheed.blogspot.tw/2015/03/how-to-correctly-take-screenshot-using.html"/>
+        <ImageView
+            style="@style/helpPage.stepPicture"
+            android:src="@drawable/guide_clear_result"/>
 
     </LinearLayout>
 
