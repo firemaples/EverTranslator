@@ -55,6 +55,7 @@ public class SettingView extends FloatingView {
         CheckBox cb_enableTranslation = (CheckBox) getRootView().findViewById(R.id.cb_enableTranslation);
         CheckBox cb_saveOcrEngineToExternalStorage = (CheckBox) getRootView().findViewById(R.id.cb_saveOcrEngineToExternalStorageFirst);
         CheckBox cb_startingWithSelectionMode = (CheckBox) getRootView().findViewById(R.id.cb_startingWithSelectionMode);
+        CheckBox cb_rememberLastSelection = (CheckBox) getRootView().findViewById(R.id.cb_rememberLastSelection);
         CheckBox cb_removeLineBreaks = (CheckBox) getRootView().findViewById(R.id.cb_removeLineBreaks);
         getRootView().findViewById(R.id.bt_close).setOnClickListener(onClickListener);
 
@@ -62,12 +63,14 @@ public class SettingView extends FloatingView {
         cb_enableTranslation.setOnCheckedChangeListener(onCheckChangeListener);
         cb_saveOcrEngineToExternalStorage.setOnCheckedChangeListener(onCheckChangeListener);
         cb_startingWithSelectionMode.setOnCheckedChangeListener(onCheckChangeListener);
+        cb_rememberLastSelection.setOnCheckedChangeListener(onCheckChangeListener);
         cb_removeLineBreaks.setOnCheckedChangeListener(onCheckChangeListener);
 
         cb_debugMode.setChecked(spUtil.isDebugMode());
         cb_enableTranslation.setChecked(spUtil.isEnableTranslation());
         cb_saveOcrEngineToExternalStorage.setChecked(ocrNTranslateUtils.getTessDataLocation() == OcrNTranslateUtils.TessDataLocation.EXTERNAL_STORAGE);
         cb_startingWithSelectionMode.setChecked(spUtil.startingWithSelectionMode());
+        cb_rememberLastSelection.setChecked(spUtil.isRememberLastSelection());
         cb_removeLineBreaks.setChecked(spUtil.removeLineBreaks());
 
         if (!ocrNTranslateUtils.isExternalStorageWritable()) {
@@ -111,6 +114,8 @@ public class SettingView extends FloatingView {
                         ocrNTranslateUtils.setTessDataLocation(currentSelectedLocation);
                     }
                 }
+            } else if (id == R.id.cb_rememberLastSelection) {
+                spUtil.setRememberLastSelection(isChecked);
             }
         }
     };

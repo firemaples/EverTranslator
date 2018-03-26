@@ -141,6 +141,14 @@ public class AreaSelectionView extends ImageView {
         return boxList;
     }
 
+    public void setBoxList(List<Rect> boxList) {
+        this.boxList = boxList;
+        invalidate();
+        if (boxList.size() > 0) {
+            callback.onAreaSelected(this);
+        }
+    }
+
     private void addBox(Point startPoint, Point endPoint) {
         boxList.add(getNewBox(startPoint, endPoint));
     }
