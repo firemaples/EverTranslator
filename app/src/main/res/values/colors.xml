@@ -5,8 +5,8 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="captureAreaSelectionViewBackground_enable">#66000000</color>
-    <color name="captureAreaSelectionViewPaint_drawingLinePaint">#664527A0</color>
-    <color name="captureAreaSelectionViewPaint_boxPaint">#FF006064</color>
+    <color name="captureAreaSelectionViewPaint_drawingLinePaint">#6629B6F6</color>
+    <color name="captureAreaSelectionViewPaint_boxPaint">#8800FF00</color>
     <color name="captureAreaSelectionViewPaint_borderPaint">#FF4081</color>
     <color name="captureAreaSelectionViewPaint_helpTextPaint">#FFF</color>
 

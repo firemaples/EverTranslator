@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tw.firemaples.onscreenocr.BuildConfig;
+import tw.firemaples.onscreenocr.floatingviews.screencrop.HelpView;
 
 /**
  * Created by firemaples on 01/02/2017.
@@ -28,6 +29,7 @@ public class SharePreferenceUtil {
     private static final String KEY_REMEMBER_LAST_SELECTION = "KEY_REMEMBER_LAST_SELECTION";
     private static final String KEY_LAST_SELECTION_AREA = "KEY_LAST_SELECTION_AREA";
     private static final String KEY_VERSION_HISTORY_SHOWN_VERSION = "KEY_VERSION_HISTORY_SHOWN_VERSION";
+    private static final String KEY_HOW_TO_USE_SHOWN_VERSION = "KEY_HOW_TO_USE_SHOWN_VERSION";
 
     private static SharePreferenceUtil ourInstance = new SharePreferenceUtil();
 
@@ -154,5 +156,17 @@ public class SharePreferenceUtil {
             e.printStackTrace();
             return true;
         }
+    }
+
+    @SuppressLint("ApplySharedPref")
+    public boolean isHowToUseAlreadyShown() {
+        String versionName = HelpView.VERSION;
+
+        String shownVersion = getSharedPreferences().getString(KEY_HOW_TO_USE_SHOWN_VERSION, null);
+        boolean result = shownVersion != null && shownVersion.equalsIgnoreCase(versionName);
+        if (!result) {
+            getSharedPreferences().edit().putString(KEY_HOW_TO_USE_SHOWN_VERSION, versionName).commit();
+        }
+        return result;
     }
 }
