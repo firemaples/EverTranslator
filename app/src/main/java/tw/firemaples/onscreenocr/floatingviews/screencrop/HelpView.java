@@ -14,6 +14,11 @@ public class HelpView extends InfoDialogView {
     }
 
     @Override
+    int getButtonMode() {
+        return MODE_CLOSE;
+    }
+
+    @Override
     int getContentLayoutId() {
         return R.layout.content_help;
     }

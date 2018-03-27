@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="versionCodes">
+        <item>1.7.2</item>
+        <item>1.7.1</item>
+    </string-array>
+    <string-array name="versionMessage">
+        <item>● 增加设定选项 [记住前次选择区域]\n● 增加说明页面\n● 增加版本信息页面</item>
+        <item>● 修正错误</item>
+    </string-array>
+</resources>
