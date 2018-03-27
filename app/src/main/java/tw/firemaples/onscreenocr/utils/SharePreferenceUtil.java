@@ -116,7 +116,7 @@ public class SharePreferenceUtil {
     }
 
     public boolean isRememberLastSelection() {
-        return getSharedPreferences().getBoolean(KEY_REMEMBER_LAST_SELECTION, false);
+        return getSharedPreferences().getBoolean(KEY_REMEMBER_LAST_SELECTION, true);
     }
 
     public void setRememberLastSelection(boolean rememberLastSelection) {
