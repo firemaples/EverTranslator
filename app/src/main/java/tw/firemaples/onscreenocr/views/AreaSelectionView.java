@@ -107,7 +107,7 @@ public class AreaSelectionView extends ImageView {
 
         borderPaint = new Paint();
         borderPaint.setAntiAlias(true);
-        borderPaint.setStrokeWidth(6);
+        borderPaint.setStrokeWidth(12);
         borderPaint.setColor(ContextCompat.getColor(getContext(), R.color.captureAreaSelectionViewPaint_borderPaint));
 
         helpTextPaint = new Paint();
