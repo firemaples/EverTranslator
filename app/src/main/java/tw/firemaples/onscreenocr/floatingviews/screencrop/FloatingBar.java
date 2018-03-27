@@ -62,6 +62,10 @@ public class FloatingBar extends MovableFloatingView {
         super.attachToWindow();
         SharePreferenceUtil.getInstance().setIsAppShowing(true);
 
+        if (!SharePreferenceUtil.getInstance().isHowToUseAlreadyShown()) {
+            new HelpView(getContext()).attachToWindow();
+        }
+
         if (!SharePreferenceUtil.getInstance().isVersionHistoryAlreadyShown(getContext())) {
             new VersionHistoryView(getContext()).attachToWindow();
         }

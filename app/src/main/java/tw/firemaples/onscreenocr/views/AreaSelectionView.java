@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tw.firemaples.onscreenocr.R;
+import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.utils.UIUtil;
 
 /**
@@ -25,6 +26,10 @@ public class AreaSelectionView extends ImageView {
     private static final long TIME_BORDER_ANIM = 1000;
     private static final long INTERVAL_BORDER_ANIM = 10;
 
+    private static final long DELAY_TEXT_HIDDEN_ANIM = 2000;
+    private static final long TIME_TEXT_HIDDEN_ANIM = 800;
+    private static final long INTERVAL_TEXT_HIDDEN_ANIM = 10;
+
     private boolean enable = true;
 
     private Point drawingStartPoint, drawingEndPoint;
@@ -33,11 +38,11 @@ public class AreaSelectionView extends ImageView {
     private List<Rect> boxList = new ArrayList<>();
     private Paint boxPaint;
 
-    private CountDownTimer timer;
+    private CountDownTimer timer, redrawHelpTextTimer;
     private int borderAnimationProgress = 0;
     private Paint borderPaint;
 
-    private Paint helpTextPaint;
+    private Paint helpTextPaint, helpTextAlphaPaint;
 
     private int maxRectCount = 0;
 
@@ -66,6 +71,7 @@ public class AreaSelectionView extends ImageView {
                         addBox(drawingStartPoint, point);
                         drawingStartPoint = drawingEndPoint = null;
                         invalidate();
+                        startRedrawHintHiddenCountDown();
                         if (callback != null) {
                             callback.onAreaSelected(AreaSelectionView.this);
                         }
@@ -89,6 +95,12 @@ public class AreaSelectionView extends ImageView {
         if (!isInEditMode()) {
             this.iniView();
         }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        stopRedrawHintHiddenCountDown();
     }
 
     private void iniView() {
@@ -115,6 +127,9 @@ public class AreaSelectionView extends ImageView {
         helpTextPaint.setTextAlign(Paint.Align.CENTER);
         helpTextPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.areaSelectionView_helpTextSize));
         helpTextPaint.setColor(ContextCompat.getColor(getContext(), R.color.captureAreaSelectionViewPaint_helpTextPaint));
+
+        helpTextAlphaPaint = new Paint(helpTextPaint);
+        helpTextAlphaPaint.setAlpha(0);
 
 //        enable();
     }
@@ -155,6 +170,7 @@ public class AreaSelectionView extends ImageView {
         }
         invalidate();
         if (boxList.size() > 0) {
+            startRedrawHintHiddenCountDown();
             callback.onAreaSelected(this);
         }
     }
@@ -181,6 +197,8 @@ public class AreaSelectionView extends ImageView {
         if (!isInEditMode()) {
             canvas.save();
 
+            drawHelpText(canvas);
+
             if (drawingStartPoint != null && drawingEndPoint != null) {
 //                canvas.drawLine(drawingStartPoint.x, drawingStartPoint.y, drawingEndPoint.x, drawingEndPoint.y, drawingLinePaint);
                 canvas.drawRect(getNewBox(drawingStartPoint, drawingEndPoint), drawingLinePaint);
@@ -191,8 +209,6 @@ public class AreaSelectionView extends ImageView {
             }
 
             drawBorder(canvas, borderAnimationProgress);
-
-            drawHelpText(canvas);
 
             canvas.restore();
         }
@@ -280,15 +296,62 @@ public class AreaSelectionView extends ImageView {
     }
 
     private void drawHelpText(Canvas canvas) {
-        if (boxList.size() > 0) {
+        //Do not show when drawing
+        if (drawingStartPoint != null || drawingEndPoint != null) {
             return;
         }
 
+        String message;
+        Paint textPaint;
+        if (boxList.size() > 0) {
+            message = getContext().getString(R.string.redrawAnAreaForTranslation);
+            textPaint = helpTextAlphaPaint;
+        } else {
+            message = getContext().getString(R.string.drawAnAreaForTranslation);
+            textPaint = helpTextPaint;
+        }
+
         int xPos = (canvas.getWidth() / 2);
-        int yPos = (int) ((canvas.getHeight() / 2) - ((helpTextPaint.descent() + helpTextPaint.ascent()) / 2));
+        int yPos = (int) ((canvas.getHeight() / 2) - ((textPaint.descent() + textPaint.ascent()) / 2));
         //((textPaint.descent() + textPaint.ascent()) / 2) is the distance from the baseline to the center.
 
-        canvas.drawText(getContext().getString(R.string.drawAnAreaForTranslation), xPos, yPos, helpTextPaint);
+        canvas.drawText(message, xPos, yPos, textPaint);
+    }
+
+    private void startRedrawHintHiddenCountDown() {
+        stopRedrawHintHiddenCountDown();
+        redrawHelpTextTimer = new CountDownTimer(TIME_TEXT_HIDDEN_ANIM + DELAY_TEXT_HIDDEN_ANIM, INTERVAL_TEXT_HIDDEN_ANIM) {
+            int MAX_ALPHA = 200;
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int alpha;
+                if (millisUntilFinished < TIME_TEXT_HIDDEN_ANIM) {
+                    alpha = (int) ((float) millisUntilFinished / (float) TIME_TEXT_HIDDEN_ANIM * (float) MAX_ALPHA);
+                    Tool.logInfo("Alpha: " + alpha);
+                } else {
+                    alpha = MAX_ALPHA;
+                    Tool.logInfo("Alpha: fixed " + alpha);
+                }
+                helpTextAlphaPaint.setAlpha(alpha);
+//                Tool.logInfo("borderAnimationProgress: " + borderAnimationProgress);
+                invalidate();
+            }
+
+            @Override
+            public void onFinish() {
+                helpTextAlphaPaint.setAlpha(0);
+//                Tool.logInfo("borderAnimationProgress: finished");
+                invalidate();
+            }
+        }.start();
+    }
+
+    private void stopRedrawHintHiddenCountDown() {
+        if (redrawHelpTextTimer != null) {
+            redrawHelpTextTimer.cancel();
+            redrawHelpTextTimer = null;
+        }
     }
 
     public interface OnAreaSelectionViewCallback {

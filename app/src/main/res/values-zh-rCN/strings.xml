@@ -68,14 +68,15 @@
     <string name="msg_ttsEngineInitFailed">「文字转语音」引擎初始化失败，语音功能将无法运作</string>
     <string name="rememberLastSelection">记住前次选择区域</string>
     <string name="drawAnAreaForTranslation">请在萤幕上圈选欲翻译的区域</string>
-    <string name="menu_help">说明</string>
+    <string name="menu_help">操作说明</string>
     <string name="title_help">操作说明</string>
     <string name="guide_select_source_language_and_translation_destination_language">1. 选择来源语言及要翻译的目标语言</string>
     <string name="guide_click_selection_button">2. 点击[选择]按钮</string>
-    <string name="guide_tap_and_drag_on_screen_to_create_selection_area_for_translation">3. 在画面上拖曳圈选想要翻译的区域</string>
+    <string name="guide_tap_and_drag_on_screen_to_create_selection_area_for_translation">3. 在画面上拖曳圈选翻译区域 (再次拖曳可以重新圈选翻译区域)</string>
     <string name="guide_click_translation_button">4. 点击[翻译]按钮</string>
     <string name="guide_get_the_result">5. 获得结果</string>
     <string name="guide_clear_result">6. 清除结果</string>
     <string name="menu_version_history">版本信息</string>
     <string name="title_version_history">版本信息</string>
+    <string name="redrawAnAreaForTranslation">再次拖曳可以重新圈选欲翻译的区域</string>
 </resources>
