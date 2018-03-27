@@ -3,6 +3,7 @@ package tw.firemaples.onscreenocr.floatingviews.screencrop;
 import android.content.Context;
 import android.text.Html;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Arrays;
@@ -23,6 +24,11 @@ public class AboutView extends InfoDialogView {
     }
 
     @Override
+    int getButtonMode() {
+        return MODE_CLOSE;
+    }
+
+    @Override
     int getContentLayoutId() {
         return R.layout.content_about;
     }
@@ -39,6 +45,10 @@ public class AboutView extends InfoDialogView {
         for (int linkRes : linkResArray) {
             setupLinkText(linkRes);
         }
+
+        Button bt_versionHistory = getButtonCancel();
+        bt_versionHistory.setText(R.string.menu_version_history);
+        bt_versionHistory.setVisibility(View.VISIBLE);
     }
 
     private void setupLinkText(int textViewRes) {
@@ -47,6 +57,12 @@ public class AboutView extends InfoDialogView {
         textView.setTag(url);
         textView.setText(Html.fromHtml(String.format(Locale.getDefault(), "<u>%s</u>", url)));
         textView.setOnClickListener(onClickListener);
+    }
+
+    @Override
+    protected void onButtonCancelClicked() {
+        super.onButtonCancelClicked();
+        new VersionHistoryView(getContext()).attachToWindow();
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {

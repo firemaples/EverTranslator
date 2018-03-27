@@ -3,6 +3,8 @@ package tw.firemaples.onscreenocr.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.preference.PreferenceManager;
 
@@ -25,6 +27,7 @@ public class SharePreferenceUtil {
     private static final String KEY_READ_SPEED = "KEY_READ_SPEED";
     private static final String KEY_REMEMBER_LAST_SELECTION = "KEY_REMEMBER_LAST_SELECTION";
     private static final String KEY_LAST_SELECTION_AREA = "KEY_LAST_SELECTION_AREA";
+    private static final String KEY_VERSION_HISTORY_SHOWN_VERSION = "KEY_VERSION_HISTORY_SHOWN_VERSION";
 
     private static SharePreferenceUtil ourInstance = new SharePreferenceUtil();
 
@@ -133,5 +136,23 @@ public class SharePreferenceUtil {
     public void setLastSelectionArea(List<Rect> lastSelectionArea) {
         String json = new JsonUtil<List<Rect>>().writeJson(lastSelectionArea);
         getSharedPreferences().edit().putString(KEY_LAST_SELECTION_AREA, json).apply();
+    }
+
+    @SuppressLint("ApplySharedPref")
+    public boolean isVersionHistoryAlreadyShown(Context context) {
+        try {
+            PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            String versionName = info.versionName;
+
+            String shownVersion = getSharedPreferences().getString(KEY_VERSION_HISTORY_SHOWN_VERSION, null);
+            boolean result = shownVersion != null && shownVersion.equalsIgnoreCase(versionName);
+            if (!result) {
+                getSharedPreferences().edit().putString(KEY_VERSION_HISTORY_SHOWN_VERSION, versionName).commit();
+            }
+            return result;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return true;
+        }
     }
 }

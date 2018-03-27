@@ -75,6 +75,9 @@ public abstract class FloatingView {
         return false;
     }
 
+    public void onViewStart() {
+    }
+
     public Context getContext() {
         return context;
     }
@@ -190,6 +193,13 @@ public abstract class FloatingView {
         }
 
         @Override
+        protected void onAttachedToWindow() {
+            super.onAttachedToWindow();
+            FloatingView.this.onViewStart();
+        }
+
+        @Override
+
         public boolean dispatchKeyEvent(KeyEvent event) {
             if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && getKeyDispatcherState() != null) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {

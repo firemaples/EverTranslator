@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="versionCodes">
+        <item>1.7.2</item>
+        <item>1.7.1</item>
+    </string-array>
+    <string-array name="versionMessage">
+        <item>● New setting option [Remember last selection area]\n● Add readme page\n● Add history page</item>
+        <item>● Fix crash issues</item>
+    </string-array>
+</resources>

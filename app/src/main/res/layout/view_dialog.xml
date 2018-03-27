@@ -55,6 +55,7 @@
                     android:background="@null"
                     android:minWidth="64dp"
                     android:padding="8dp"
+                    android:layout_marginRight="8dp"
                     android:text="@android:string/cancel"
                     android:textColor="#2196F3"/>
 
