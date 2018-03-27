@@ -82,6 +82,11 @@ public class TTSPlayerView extends FloatingView {
         return WindowManager.LayoutParams.MATCH_PARENT;
     }
 
+    @Override
+    protected boolean layoutFocusable() {
+        return true;
+    }
+
     private void setViews(View rootView) {
         tv_textToSpeech = (TextView) rootView.findViewById(R.id.tv_textToSpeech);
         tv_speed = (TextView) rootView.findViewById(R.id.tv_speed);

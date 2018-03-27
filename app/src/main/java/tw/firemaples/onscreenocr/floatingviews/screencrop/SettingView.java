@@ -50,6 +50,11 @@ public class SettingView extends FloatingView {
         return WindowManager.LayoutParams.MATCH_PARENT;
     }
 
+    @Override
+    protected boolean layoutFocusable() {
+        return true;
+    }
+
     private void setViews() {
         CheckBox cb_debugMode = (CheckBox) getRootView().findViewById(R.id.cb_debugMode);
         CheckBox cb_enableTranslation = (CheckBox) getRootView().findViewById(R.id.cb_enableTranslation);
