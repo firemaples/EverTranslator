@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="versionMessage">
-        <item>● 增加設定選項 [記住前次選擇區域]\n● 增加說明頁面\n● 增加版本資訊頁面</item>
-        <item>● 修正錯誤</item>
-    </string-array>
+    <string name="versionMessage_1_8_1">● 增加設定選項 [記住前次選擇區域]\n● 增加說明頁面\n● 增加版本資訊頁面</string>
+    <string name="versionMessage_1_7_1">● 修正錯誤</string>
 </resources>

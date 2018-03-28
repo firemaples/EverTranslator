@@ -3,8 +3,6 @@ package tw.firemaples.onscreenocr.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.preference.PreferenceManager;
 
@@ -13,6 +11,7 @@ import java.util.List;
 
 import tw.firemaples.onscreenocr.BuildConfig;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.HelpView;
+import tw.firemaples.onscreenocr.floatingviews.screencrop.VersionHistoryView;
 
 /**
  * Created by firemaples on 01/02/2017.
@@ -142,20 +141,14 @@ public class SharePreferenceUtil {
 
     @SuppressLint("ApplySharedPref")
     public boolean isVersionHistoryAlreadyShown(Context context) {
-        try {
-            PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            String versionName = info.versionName;
+        String versionName = VersionHistoryView.getLastHistoryVersion(context);
 
-            String shownVersion = getSharedPreferences().getString(KEY_VERSION_HISTORY_SHOWN_VERSION, null);
-            boolean result = shownVersion != null && shownVersion.equalsIgnoreCase(versionName);
-            if (!result) {
-                getSharedPreferences().edit().putString(KEY_VERSION_HISTORY_SHOWN_VERSION, versionName).commit();
-            }
-            return result;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return true;
+        String shownVersion = getSharedPreferences().getString(KEY_VERSION_HISTORY_SHOWN_VERSION, null);
+        boolean result = shownVersion != null && shownVersion.equalsIgnoreCase(versionName);
+        if (!result) {
+            getSharedPreferences().edit().putString(KEY_VERSION_HISTORY_SHOWN_VERSION, versionName).commit();
         }
+        return result;
     }
 
     @SuppressLint("ApplySharedPref")
