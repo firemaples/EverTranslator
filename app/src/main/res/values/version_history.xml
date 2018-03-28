@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="versionCodes">
-        <item>1.7.2</item>
+    <string-array name="versionCodes" translatable="false">
+        <item>1.8.1</item>
         <item>1.7.1</item>
     </string-array>
     <string-array name="versionMessage">
