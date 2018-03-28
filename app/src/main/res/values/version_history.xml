@@ -4,8 +4,7 @@
         <item>1.8.1</item>
         <item>1.7.1</item>
     </string-array>
-    <string-array name="versionMessage">
-        <item>● New setting option [Remember last selection area]\n● Add readme page\n● Add history page</item>
-        <item>● Fix crash issues</item>
-    </string-array>
+
+    <string name="versionMessage_1_8_1">● New setting option [Remember last selection area]\n● Add readme page\n● Add history page</string>
+    <string name="versionMessage_1_7_1">● Fix crash issues</string>
 </resources>

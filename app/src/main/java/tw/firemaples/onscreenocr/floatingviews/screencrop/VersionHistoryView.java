@@ -9,6 +9,7 @@ import android.widget.SimpleAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
 
@@ -20,8 +21,14 @@ public class VersionHistoryView extends InfoDialogView {
     private static final String KEY_VERSION_CODE = "KEY_VERSION_CODE";
     private static final String KEY_VERSION_MESSAGE = "KEY_VERSION_MESSAGE";
 
+    private static final String ID_FORMAT_VERSION_MESSAGE = "versionMessage_%s";
+
     private SimpleAdapter adapter;
     private List<HashMap<String, String>> dataList = new ArrayList<>();
+
+    public static String getLastHistoryVersion(Context context) {
+        return context.getResources().getStringArray(R.array.versionCodes)[0];
+    }
 
     public VersionHistoryView(Context context) {
         super(context);
@@ -53,16 +60,35 @@ public class VersionHistoryView extends InfoDialogView {
 
         Resources resources = getContext().getResources();
         String[] versionCodes = resources.getStringArray(R.array.versionCodes);
-        String[] versionMessages = resources.getStringArray(R.array.versionMessage);
 
-        for (int i = 0; i < versionCodes.length; i++) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put(KEY_VERSION_CODE, versionCodes[i]);
-            map.put(KEY_VERSION_MESSAGE, versionMessages[i]);
+        for (String versionCode : versionCodes) {
+            if (versionCode == null) {
+                continue;
+            }
 
-            dataList.add(map);
+            String resourceName = String.format(Locale.US, ID_FORMAT_VERSION_MESSAGE, versionCode.replaceAll("[.]", "_"));
+            int stringRes = getStringResourceId(resourceName, getContext().getPackageName());
+            if (stringRes >= 0) {
+                try {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put(KEY_VERSION_CODE, versionCode);
+                    map.put(KEY_VERSION_MESSAGE, getContext().getString(stringRes));
+                    dataList.add(map);
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+            }
         }
 
         adapter.notifyDataSetChanged();
+    }
+
+    private int getStringResourceId(String pVariableName, String pPackageName) {
+        try {
+            return getContext().getResources().getIdentifier(pVariableName, "string", pPackageName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 }
