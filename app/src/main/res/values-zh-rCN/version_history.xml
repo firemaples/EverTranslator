@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="versionMessage_1_9_0">● 修正在 Android 8.0 上文字辨识失效问题</string>
+    <string name="versionMessage_1_9_0">● 修正在 Android 8.0 上文字辨识失效问题\n● 修正在部分设备上横向萤幕时截图失败问题</string>
     <string name="versionMessage_1_8_1">● 增加设定选项 [记住前次选择区域]\n● 增加说明页面\n● 增加版本信息页面</string>
     <string name="versionMessage_1_7_1">● 修正错误</string>
 </resources>
