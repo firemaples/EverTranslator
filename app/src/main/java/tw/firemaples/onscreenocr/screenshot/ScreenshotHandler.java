@@ -153,6 +153,7 @@ public class ScreenshotHandler {
         final int mWidth = size.x;
         final int mHeight = size.y;
         int mDensity = metrics.densityDpi;
+        final boolean isPortrait = mHeight > mWidth;
 
         //Create a imageReader for catch result
         final ImageReader mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
@@ -191,16 +192,26 @@ public class ScreenshotHandler {
                     image = reader.acquireLatestImage();
 //                    throw new UnsupportedOperationException("The producer output buffer format 0x5 doesn't match the ImageReader's configured buffer format 0x1.");
                     logger.info("screenshot image info: width:" + image.getWidth() + " height:" + image.getHeight());
+                    int deviceWidth = metrics.widthPixels;
+                    int deviceHeight = metrics.heightPixels;
+                    if (deviceHeight > deviceWidth != isPortrait) {
+                        logger.warn("Height & width ratio is not match orientation, swap height & width");
+                        //noinspection SuspiciousNameCombination
+                        deviceWidth = metrics.heightPixels;
+                        //noinspection SuspiciousNameCombination
+                        deviceHeight = metrics.widthPixels;
+                    }
+
                     final Image.Plane[] planes = image.getPlanes();
                     final ByteBuffer buffer = planes[0].getBuffer();
                     int pixelStride = planes[0].getPixelStride();
                     int rowStride = planes[0].getRowStride();
-                    int rowPadding = rowStride - pixelStride * metrics.widthPixels;
+                    int rowPadding = rowStride - pixelStride * deviceWidth;
                     // create bitmap
-                    tempBmp = Bitmap.createBitmap(metrics.widthPixels + (int) ((float) rowPadding / (float) pixelStride), metrics.heightPixels, Bitmap.Config.ARGB_8888);
+                    tempBmp = Bitmap.createBitmap(deviceWidth + (int) ((float) rowPadding / (float) pixelStride), deviceHeight, Bitmap.Config.ARGB_8888);
                     tempBmp.copyPixelsFromBuffer(buffer);
 
-                    realSizeBitmap = Bitmap.createBitmap(tempBmp, 0, 0, metrics.widthPixels, tempBmp.getHeight());
+                    realSizeBitmap = Bitmap.createBitmap(tempBmp, 0, 0, deviceWidth, tempBmp.getHeight());
 
                     if (SharePreferenceUtil.getInstance().isDebugMode()) {
                         saveBmpToFile(realSizeBitmap);
