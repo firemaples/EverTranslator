@@ -11,6 +11,9 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +26,6 @@ import tw.firemaples.onscreenocr.translate.TranslateManager;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
-import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.views.OcrResultWindow;
 import tw.firemaples.onscreenocr.views.OcrResultWrapper;
 
@@ -32,6 +34,8 @@ import tw.firemaples.onscreenocr.views.OcrResultWrapper;
  */
 
 public class OcrResultView extends FloatingView {
+    private static final Logger logger = LoggerFactory.getLogger(OcrResultView.class);
+
     private OcrResultWrapper view_ocrResultWrapper;
     private WebViewFV webViewFV;
     private TextEditDialogView textEditDialogView;
@@ -239,7 +243,7 @@ public class OcrResultView extends FloatingView {
 
         @Override
         public void onEditOriTextClicked(OcrResult ocrResult) {
-            Tool.logInfo("onEditOriTextClicked: " + ocrResult.getText());
+            logger.info("onEditOriTextClicked: " + ocrResult.getText());
             textEditDialogView = new TextEditDialogView(getContext());
             textEditDialogView.setCallback(onTextEditDialogViewCallback);
             textEditDialogView.setTitle(getContext().getString(R.string.title_editOCRText));

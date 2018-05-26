@@ -10,9 +10,14 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 
 public class JsonUtil<T> {
+    private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
+
 
     private static Gson gson = null;
     private static GsonBuilder gsonBuilder = null;
@@ -26,7 +31,7 @@ public class JsonUtil<T> {
             sThreadLocalReadObject.set(clazz);
             return defaultGson().fromJson(str, clazz);
         } catch (Exception e) {
-            Tool.logError("Failed to parse JSON entity " + clazz.getSimpleName(), e);
+            logger.error("Failed to parse JSON entity " + clazz.getSimpleName(), e);
             throw new RuntimeException(e);
         } finally {
             sThreadLocalReadObject.set(null);
@@ -38,7 +43,7 @@ public class JsonUtil<T> {
             sThreadLocalReadObject.set(clazz);
             return defaultGson().fromJson(json, clazz);
         } catch (Exception e) {
-            Tool.logError("Failed to parse JSON entity " + clazz.getSimpleName(), e);
+            logger.error("Failed to parse JSON entity " + clazz.getSimpleName(), e);
             throw new RuntimeException(e);
         } finally {
             sThreadLocalReadObject.set(null);
@@ -56,7 +61,7 @@ public class JsonUtil<T> {
             sThreadLocalReadObject.set(typeRef);
             return defaultGson().fromJson(str, typeRef.getType());
         } catch (Exception e) {
-            Tool.logError("Failed to parse JSON entity " + typeRef, e);
+            logger.error("Failed to parse JSON entity " + typeRef, e);
             throw new RuntimeException(e);
         } finally {
             sThreadLocalReadObject.set(null);
@@ -68,7 +73,7 @@ public class JsonUtil<T> {
         try {
             return defaultGson().toJson(obj);
         } catch (Exception e) {
-            Tool.logError("Failed to encode JSON entity", e);
+            logger.error("Failed to encode JSON entity", e);
             throw new RuntimeException(e);
         }
     }

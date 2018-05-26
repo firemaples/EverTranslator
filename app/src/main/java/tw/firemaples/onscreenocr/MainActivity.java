@@ -19,14 +19,18 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.Callback;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.PermissionUtil;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
-import tw.firemaples.onscreenocr.utils.Tool;
 
 public class MainActivity extends AppCompatActivity {
+    private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
+
     public static final String INTENT_START_FROM_NOTIFY = "INTENT_START_FROM_NOTIFY";
     public static final String INTENT_SHOW_FLOATING_VIEW = "INTENT_SHOW_FLOATING_VIEW";
 
@@ -86,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.M)
     private void checkDrawOverlayPermission() {
         if (!PermissionUtil.checkDrawOverlayPermission(this)) {
-            Tool.logInfo("Requesting draw overlay permission");
+            logger.info("Requesting draw overlay permission");
             AlertDialog.Builder ab = new AlertDialog.Builder(this);
             ab.setTitle(getString(R.string.dialog_title_needPermission));
             ab.setMessage(getString(R.string.dialog_content_needPermission_drawOverlay));
@@ -127,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
             });
             ab.show();
         } else {
-            Tool.logInfo("Has draw overlay permission");
+            logger.info("Has draw overlay permission");
             checkExternalStorageReadWritePermission();
         }
     }
@@ -135,14 +139,14 @@ public class MainActivity extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.M)
     private void onCheckDrawOverlayPermissionResult() {
         if (Settings.canDrawOverlays(this)) {
-            Tool.logInfo("Got draw overlay permission");
+            logger.info("Got draw overlay permission");
             checkExternalStorageReadWritePermission();
         } else {
-            Tool.logInfo("Not get draw overlay permission, show error dialog");
+            logger.info("Not get draw overlay permission, show error dialog");
             showErrorDialog(getString(R.string.dialog_content_needPermission_drawOverlay), new Callback<Void>() {
                 @Override
                 public boolean onCallback(Void result) {
-                    Tool.logInfo("Retry to get draw overlay permission");
+                    logger.info("Retry to get draw overlay permission");
                     checkDrawOverlayPermission();
                     return false;
                 }
@@ -152,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkExternalStorageReadWritePermission() {
         if (!hasExternalStorageReadWritePermission()) {
-            Tool.logInfo("Requesting read/write external storage permission");
+            logger.info("Requesting read/write external storage permission");
             ActivityCompat.requestPermissions(
                     this,
                     new String[]{
@@ -162,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                     REQUEST_CODE_REQUEST_EXTERNAL_STORAGE_READ_WRITE
             );
         } else {
-            Tool.logInfo("Has read/write external storage permission");
+            logger.info("Has read/write external storage permission");
             requestMediaProjection();
         }
     }
@@ -178,14 +182,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void onRequestExternalStorageReadWritePermissionResult() {
         if (hasExternalStorageReadWritePermission()) {
-            Tool.logInfo("Got read/write external storage permission");
+            logger.info("Got read/write external storage permission");
             requestMediaProjection();
         } else {
-            Tool.logInfo("Not get read/write external storage permission");
+            logger.info("Not get read/write external storage permission");
             showErrorDialog(getString(R.string.dialog_content_needPermission_rwExternalStorage), new Callback<Void>() {
                 @Override
                 public boolean onCallback(Void result) {
-                    Tool.logInfo("Retry to get read/write external storage permission");
+                    logger.info("Retry to get read/write external storage permission");
                     checkExternalStorageReadWritePermission();
                     return false;
                 }
@@ -195,10 +199,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void requestMediaProjection() {
         if (ScreenshotHandler.isInitialized()) {
-            Tool.logInfo("Has media projection");
+            logger.info("Has media projection");
             startService();
         } else {
-            Tool.logInfo("Requesting for media projection");
+            logger.info("Requesting for media projection");
             try {
 //            throw new RuntimeException("Unable to start activity ComponentInfo{tw.firemaples.onscreenocr/tw.firemaples.onscreenocr.MainActivity}: android.content.ActivityNotFoundException: Unable to find explicit activity class {com.android.systemui/com.android.systemui.media.MediaProjectionPermissionActivity}; have you declared this activity in your AndroidManifest.xml?");
                 MediaProjectionManager projectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
@@ -220,15 +224,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void onRequestMediaProjectionResult(int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            Tool.logInfo("Got media projection");
+            logger.info("Got media projection");
             ScreenshotHandler.init(this).setMediaProjectionIntent(data);
             startService();
         } else {
-            Tool.logInfo("Not get media projection");
+            logger.info("Not get media projection");
             showErrorDialog(getString(R.string.dialog_content_needPermission_mediaProjection), new Callback<Void>() {
                 @Override
                 public boolean onCallback(Void result) {
-                    Tool.logInfo("Retry to get media projection");
+                    logger.info("Retry to get media projection");
                     requestMediaProjection();
                     return false;
                 }

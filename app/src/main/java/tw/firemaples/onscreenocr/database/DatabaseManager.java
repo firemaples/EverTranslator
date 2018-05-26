@@ -6,16 +6,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Collections;
 
 import tw.firemaples.onscreenocr.utils.KeyId;
-import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
  * Created by firemaples on 01/05/2017.
  */
 
 public class DatabaseManager {
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseManager.class);
+
     private static DatabaseManager _instance;
 
     private FirebaseDatabase db;
@@ -39,7 +43,7 @@ public class DatabaseManager {
         db.setPersistenceEnabled(true);
 
         String key = ServiceHolderModel.getKey();
-        Tool.logInfo("Use key["+key+"] for Firebase db");
+        logger.info("Use key["+key+"] for Firebase db");
         DatabaseReference translateServiceRef = db.getReference(key);
         translateServiceRef.keepSynced(true);
 
@@ -47,14 +51,14 @@ public class DatabaseManager {
         translateServiceRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Tool.logInfo("ServiceHolderModel onDataChange");
+                logger.info("ServiceHolderModel onDataChange");
                 DatabaseManager.this.translateService = dataSnapshot.getValue(ServiceHolderModel.class);
-                Tool.logInfo("Current translate service is " + translateService.getUsingService().name);
+                logger.info("Current translate service is " + translateService.getUsingService().name);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Tool.logError("Database error: " + databaseError.getMessage());
+                logger.error("Database error: " + databaseError.getMessage());
                 //noinspection ThrowableResultOfMethodCallIgnored
                 databaseError.toException().printStackTrace();
             }

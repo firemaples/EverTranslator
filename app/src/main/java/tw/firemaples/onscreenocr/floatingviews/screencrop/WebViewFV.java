@@ -8,6 +8,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
@@ -21,6 +24,8 @@ import tw.firemaples.onscreenocr.utils.UrlFormatter;
  */
 
 public class WebViewFV extends FloatingView {
+    private static final Logger logger = LoggerFactory.getLogger(WebViewFV.class);
+
     private WebView wv_webView;
     private String url;
     private OnWebViewFVCallback callback;
@@ -93,7 +98,7 @@ public class WebViewFV extends FloatingView {
 
     public void setContent(String text, String targetLanguage) {
         url = UrlFormatter.getFormattedUrl(ServiceHolderModel.SERVICE_GOOGLE_WEB, text, targetLanguage);
-        Tool.logInfo("Start loading google web: " + url);
+        logger.info("Start loading google web: " + url);
         wv_webView.loadUrl(url);
     }
 

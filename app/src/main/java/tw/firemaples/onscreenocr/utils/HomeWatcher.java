@@ -5,10 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * From http://stackoverflow.com/a/31340960/2906153
  */
 public class HomeWatcher {
+    private static final Logger logger = LoggerFactory.getLogger(HomeWatcher.class);
+
 
     private Context mContext;
     private IntentFilter mFilter;
@@ -59,7 +64,7 @@ public class HomeWatcher {
             if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
                 String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
                 if (reason != null) {
-                    Tool.logError("HomeWatcher, action:" + action + ",reason:" + reason);
+                    logger.error("HomeWatcher, action:" + action + ",reason:" + reason);
                     if (mListener != null) {
                         if (reason.equals(SYSTEM_DIALOG_REASON_HOME_KEY)) {
                             mListener.onHomePressed();

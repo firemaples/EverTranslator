@@ -11,6 +11,9 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
@@ -28,6 +31,8 @@ import tw.firemaples.onscreenocr.utils.ViewPreparedWaiter;
  */
 
 public class OcrResultWindow {
+    private static final Logger logger = LoggerFactory.getLogger(OcrResultWindow.class);
+
     private final static int MARGIN = 10;
 
     private final Context context;
@@ -184,7 +189,7 @@ public class OcrResultWindow {
     private ViewPreparedWaiter.OnViewPrepared onViewPrepared = new ViewPreparedWaiter.OnViewPrepared() {
         @Override
         public void onViewPrepared(View viewToWait) {
-            Tool.logInfo("Width:" + viewToWait.getWidth() + " Height:" + viewToWait.getHeight());
+            logger.info("Width:" + viewToWait.getWidth() + " Height:" + viewToWait.getHeight());
             adjustViewPosition();
         }
     };

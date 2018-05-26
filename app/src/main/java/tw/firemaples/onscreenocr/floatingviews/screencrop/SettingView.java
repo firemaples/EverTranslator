@@ -7,6 +7,9 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,6 +29,8 @@ import tw.firemaples.onscreenocr.utils.Tool;
  */
 
 public class SettingView extends FloatingView {
+    private static final Logger logger = LoggerFactory.getLogger(SettingView.class);
+
     private Tool tool;
     private SharePreferenceUtil spUtil;
     private OcrNTranslateUtils ocrNTranslateUtils;
@@ -157,7 +162,7 @@ public class SettingView extends FloatingView {
             if (fromFiles != null) {
                 for (File file : fromFiles) {
                     try {
-                        Tool.logInfo("Start move ocr file from:" + file.getAbsolutePath() + " to:" + fileTo.getAbsolutePath());
+                        logger.info("Start move ocr file from:" + file.getAbsolutePath() + " to:" + fileTo.getAbsolutePath());
                         publishProgress(getContext().getString(R.string.progress_movingFile) + file.getName());
                         moveFile(file, fileTo);
                     } catch (IOException e) {

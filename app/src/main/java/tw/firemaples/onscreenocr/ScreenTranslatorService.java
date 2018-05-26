@@ -12,6 +12,9 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.IBinder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tw.firemaples.onscreenocr.database.DatabaseManager;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.floatingviews.quicktrans.QuickWindow;
@@ -30,6 +33,8 @@ import tw.firemaples.onscreenocr.utils.Tool;
 
 public class ScreenTranslatorService extends Service {
     private static final int ONGOING_NOTIFICATION_ID = 12345;
+
+    private static final Logger logger = LoggerFactory.getLogger(ScreenTranslatorService.class);
 
     @SuppressLint("StaticFieldLeak")
     private static ScreenTranslatorService _instance;

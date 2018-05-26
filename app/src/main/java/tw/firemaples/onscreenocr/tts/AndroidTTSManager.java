@@ -9,6 +9,9 @@ import android.os.Looper;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,13 +22,14 @@ import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.DialogView;
-import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
  * Created by firemaples on 30/04/2017.
  */
 
 public class AndroidTTSManager {
+    private static final Logger logger = LoggerFactory.getLogger(AndroidTTSManager.class);
+
     private static AndroidTTSManager _instance;
 
     private static final String PATH_TTS_FILE = "tts";
@@ -104,12 +108,12 @@ public class AndroidTTSManager {
             if (setLangResult == TextToSpeech.LANG_MISSING_DATA ||
                     setLangResult == TextToSpeech.LANG_NOT_SUPPORTED) {
                 // Lanuage data is missing or the language is not supported.
-                Tool.logError("retrieveTTSFile failed, Language is not available.");
+                logger.error("retrieveTTSFile failed, Language is not available.");
                 throw new LanguageNotSupportException(String.format(Locale.getDefault(), "Language [%s] is not available.", lang));
             } else {
                 File ttsFile = getTTSFile(lang, ttsContent);
                 if (ttsFile.exists()) {
-                    Tool.logInfo("TTSFile has exist: " + ttsFile.getAbsolutePath());
+                    logger.info("TTSFile has exist: " + ttsFile.getAbsolutePath());
                     if (getCallback(requestId) != null) {
                         getCallback(requestId).onDone(ttsFile);
                     }
@@ -117,7 +121,7 @@ public class AndroidTTSManager {
                     fileHashMap.put(requestId, ttsFile);
                     int requestFileResult = tts.synthesizeToFile(ttsContent, null, ttsFile, requestId);
                     if (requestFileResult != TextToSpeech.SUCCESS) {
-                        Tool.logError("retrieveTTSFile failed, failed to synthesizeToFile.");
+                        logger.error("retrieveTTSFile failed, failed to synthesizeToFile.");
                     }
                 }
             }
@@ -130,13 +134,13 @@ public class AndroidTTSManager {
     private TextToSpeech.OnInitListener onInitListener = new TextToSpeech.OnInitListener() {
         @Override
         public void onInit(int status) {
-            Tool.logInfo("onInit()");
+            logger.info("onInit()");
             if (status == TextToSpeech.SUCCESS) {
                 ttsReady = true;
             } else {
                 ttsReady = false;
                 // Initialization failed.
-                Tool.logError("Could not initialize TextToSpeech.");
+                logger.error("Could not initialize TextToSpeech.");
                 // May be its not installed so we prompt it to be installed
                 Intent installIntent = new Intent();
                 installIntent.setAction(
@@ -164,12 +168,12 @@ public class AndroidTTSManager {
     private UtteranceProgressListener utteranceProgressListener = new UtteranceProgressListener() {
         @Override
         public void onStart(String utteranceId) {
-            Tool.logInfo("utteranceProgressListener#onStart()");
+            logger.info("utteranceProgressListener#onStart()");
         }
 
         @Override
         public void onDone(String utteranceId) {
-            Tool.logInfo("utteranceProgressListener#onDone()");
+            logger.info("utteranceProgressListener#onDone()");
             if (getCallback(utteranceId) != null && fileHashMap.containsKey(utteranceId) && fileHashMap.get(utteranceId) != null) {
                 AndroidTTSManagerCallback callback = getCallback(utteranceId);
                 File file = fileHashMap.get(utteranceId);
@@ -179,7 +183,7 @@ public class AndroidTTSManager {
 
         @Override
         public void onError(String utteranceId) {
-            Tool.logError("utteranceProgressListener#onError()");
+            logger.error("utteranceProgressListener#onError()");
 
             if (getCallback(utteranceId) != null) {
                 AndroidTTSManagerCallback callback = getCallback(utteranceId);

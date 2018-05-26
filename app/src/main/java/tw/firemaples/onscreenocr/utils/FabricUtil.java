@@ -4,6 +4,9 @@ import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.ConnectException;
 import java.util.Locale;
 
@@ -16,6 +19,8 @@ import static tw.firemaples.onscreenocr.utils.Tool.getIPAddress;
  */
 
 public class FabricUtil {
+    private static final Logger logger = LoggerFactory.getLogger(FabricUtil.class);
+
     public static void logClientInfo() {
         String str = "Language:" + Locale.getDefault().getLanguage() + "\r\n" +
                 "Display language:" + Locale.getDefault().getDisplayLanguage() + "\r\n" +
@@ -105,7 +110,7 @@ public class FabricUtil {
                 , httpStatus, reason
         );
 
-        Tool.logError(msg);
+        logger.error(msg);
         logClientInfo();
         Crashlytics.logException(
                 new ConnectException(msg));

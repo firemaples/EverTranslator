@@ -14,6 +14,9 @@ import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -27,13 +30,14 @@ import tw.firemaples.onscreenocr.tts.TTSRetrieverTask;
 import tw.firemaples.onscreenocr.utils.AudioFocusManager;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
-import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
  * Created by firemaples on 30/04/2017.
  */
 
 public class TTSPlayerView extends FloatingView {
+    private static final Logger logger = LoggerFactory.getLogger(TTSPlayerView.class);
+
     // http://stackoverflow.com/questions/2159026/regex-how-to-get-words-from-a-string-c
     private static final String PATTERN_WORD = "[^\\W\\d](\\w|[-'\\.]{1,2}(?=\\w))*";
 
@@ -121,7 +125,7 @@ public class TTSPlayerView extends FloatingView {
     private void updateBtnState(final PlayerState state) {
         this.playerState = state;
 
-        Tool.logInfo("updateBtnState: " + state.name());
+        logger.info("updateBtnState: " + state.name());
 
         if (state == PlayerState.PLAYING) {
             audioFocusManager.requestAudioFocus();
@@ -192,7 +196,7 @@ public class TTSPlayerView extends FloatingView {
     }
 
     private void onWordClicked(String text) {
-        Tool.logInfo("Selected word: " + text);
+        logger.info("Selected word: " + text);
         playTTS(lang, text);
         subTextMode = true;
         updateBtnState(playerState);
@@ -251,13 +255,13 @@ public class TTSPlayerView extends FloatingView {
     private TTSRetrieverTask.OnTTSRetrieverCallback onTTSRetrieverCallback = new TTSRetrieverTask.OnTTSRetrieverCallback() {
         @Override
         public void onSuccess(File ttsFile) {
-            Tool.logInfo("Retrieve tts file success, file: " + ttsFile.getAbsolutePath());
+            logger.info("Retrieve tts file success, file: " + ttsFile.getAbsolutePath());
             startPlayTTS(ttsFile);
         }
 
         @Override
         public void onFailed() {
-            Tool.logInfo("Retrieve tts file failed");
+            logger.info("Retrieve tts file failed");
         }
     };
 
@@ -305,7 +309,7 @@ public class TTSPlayerView extends FloatingView {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             float speed = getPlaySpeedFromSeekBar();
-            Tool.logInfo("Speed bar changed, progress: " + progress + ", speed: " + speed);
+            logger.info("Speed bar changed, progress: " + progress + ", speed: " + speed);
             spUtil.setReadSpeed(speed);
             updatePlaySpeed();
         }

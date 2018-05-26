@@ -5,19 +5,23 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tw.firemaples.onscreenocr.database.DatabaseManager;
 import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.database.ServiceModel;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
-import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
  * Created by firemaples on 01/05/2017.
  */
 
 public class TranslateManager {
+    private static final Logger logger = LoggerFactory.getLogger(TranslateManager.class);
+
     private static TranslateManager _instance;
 
     private Handler mainThreadHandler = new Handler(Looper.getMainLooper());
@@ -77,7 +81,7 @@ public class TranslateManager {
         final String translateFromLang = OcrNTranslateUtils.getInstance().getTranslateFromLang();
         final String translateToLang = OcrNTranslateUtils.getInstance().getTranslateToLang();
 
-        Tool.logInfo("Translate with " + translateService.name);
+        logger.info("Translate with " + translateService.name);
         switch (translateService.name) {
             case ServiceHolderModel.SERVICE_GOOGLE_WEB: {
                 if (googleWebTranslator == null) {
@@ -88,7 +92,7 @@ public class TranslateManager {
                 googleWebTranslator.startTranslate(text, translateToLang, new GoogleWebTranslator.OnGoogleTranslateWebViewCallback() {
                     @Override
                     public void onTranslated(final String translatedText) {
-                        Tool.logInfo("Translated spent: " + (System.currentTimeMillis() - timeStart) + " ms");
+                        logger.info("Translated spent: " + (System.currentTimeMillis() - timeStart) + " ms");
                         mainThreadHandler.post(new Runnable() {
                             @Override
                             public void run() {

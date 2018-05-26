@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -26,7 +29,6 @@ import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
-import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.views.AreaSelectionView;
 import tw.firemaples.onscreenocr.views.FloatingBarMenu;
 
@@ -35,6 +37,8 @@ import tw.firemaples.onscreenocr.views.FloatingBarMenu;
  */
 
 public class FloatingBar extends MovableFloatingView {
+    private static final Logger logger = LoggerFactory.getLogger(FloatingBar.class);
+
     private View view_menu, bt_selectArea, bt_translation, bt_clear;
     private Spinner sp_langFrom, sp_langTo;
 
@@ -252,7 +256,7 @@ public class FloatingBar extends MovableFloatingView {
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Tool.logInfo("onClick");
+            logger.info("onClick");
             int id = v.getId();
             if (id == R.id.view_menu) {
                 new FloatingBarMenu(getContext(), view_menu, onFloatingBarMenuCallback).show();
@@ -284,7 +288,7 @@ public class FloatingBar extends MovableFloatingView {
                 if (OcrDownloadTask.checkOcrFiles(OcrNTranslateUtils.getInstance().getOcrLang())) {
                     FabricUtil.logDoBtnTranslationAction();
                     if (drawAreaView == null) {
-                        Tool.logError("drawAreaView is null, ignore.");
+                        logger.error("drawAreaView is null, ignore.");
                         return;
                     }
                     currentBoxList.addAll(drawAreaView.getAreaSelectionView().getBoxList());

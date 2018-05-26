@@ -12,17 +12,21 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import tw.firemaples.onscreenocr.BuildConfig;
 import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.UrlFormatter;
-import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
  * Created by firemaples on 30/04/2017.
  */
 
 public class GoogleWebTranslator {
+    private static final Logger logger = LoggerFactory.getLogger(GoogleWebTranslator.class);
+
     private static final long TIMEOUT = 5000;
 
     private WebView webView;
@@ -65,7 +69,7 @@ public class GoogleWebTranslator {
 
         String url = UrlFormatter.getFormattedUrl(ServiceHolderModel.SERVICE_GOOGLE_WEB, textToTranslate, targetLanguage);
 
-        Tool.logInfo("Google translate WebView start loading url:" + url);
+        logger.info("Google translate WebView start loading url:" + url);
         webView.loadUrl(url);
     }
 
@@ -87,7 +91,7 @@ public class GoogleWebTranslator {
                     }
 
                     if (timeout) {
-                        Tool.logError("Google translate timeout");
+                        logger.error("Google translate timeout");
                         FabricUtil.postOnGoogleTranslateTimeout(TIMEOUT);
                         if (callback != null) {
                             callback.onTimeout();
@@ -134,7 +138,7 @@ public class GoogleWebTranslator {
         @SuppressWarnings("unused")
         @JavascriptInterface
         public void getTranslatedText(String text) {
-            Tool.logInfo("Translated text: " + text);
+            logger.info("Translated text: " + text);
             if (callback != null) {
                 callback.onTranslated(text);
             }
@@ -143,15 +147,15 @@ public class GoogleWebTranslator {
         @SuppressWarnings("unused")
         @JavascriptInterface
         public void getHtmlFullContent(String html) {
-            Tool.logV("Full html: " + html);
+            logger.debug("Full html: " + html);
         }
 
         @SuppressWarnings("unused")
         @JavascriptInterface
         public void getBodyContent(String body) {
-            Tool.logV("Body content: " + body);
+            logger.debug("Body content: " + body);
             if (body == null || body.trim().length() == 0) {
-                Tool.logError("postOnGoogleTranslateFailedWithNoneContentException");
+                logger.error("postOnGoogleTranslateFailedWithNoneContentException");
                 FabricUtil.postOnGoogleTranslateFailedWithNoneContentException();
                 if (callback != null) {
                     callback.onNoneException();
