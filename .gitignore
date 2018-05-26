@@ -40,3 +40,4 @@ obj/
 #Custom
 #KeyId.java
 app/debug_config/*
+app/release_config/*
