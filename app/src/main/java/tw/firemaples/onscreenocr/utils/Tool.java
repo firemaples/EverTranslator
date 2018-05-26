@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
@@ -14,8 +13,6 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.List;
-
-import tw.firemaples.onscreenocr.BuildConfig;
 
 /**
  * Created by firemaples on 2016/3/1.
@@ -54,30 +51,6 @@ public class Tool {
             }
         }
         return false;
-    }
-
-    public static void logError(String msg) {
-        if (BuildConfig.DEBUG) {
-            Log.e(LOG_TAG, msg);
-        }
-    }
-
-    public static void logError(String msg, Throwable t) {
-        if (BuildConfig.DEBUG) {
-            Log.e(LOG_TAG, msg, t);
-        }
-    }
-
-    public static void logInfo(String msg) {
-        if (BuildConfig.DEBUG) {
-            Log.i(LOG_TAG, msg);
-        }
-    }
-
-    public static void logV(String msg) {
-        if (BuildConfig.DEBUG) {
-            Log.v(LOG_TAG, msg);
-        }
     }
 
     public void showMsg(String msg) {

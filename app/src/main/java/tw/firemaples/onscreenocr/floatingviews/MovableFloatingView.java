@@ -5,11 +5,15 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Created by firemaples on 01/09/2017.
  */
 
 public abstract class MovableFloatingView extends FloatingView {
+    private static final Logger logger = LoggerFactory.getLogger(MovableFloatingView.class);
 
     public MovableFloatingView(Context context) {
         super(context);
@@ -41,7 +45,7 @@ public abstract class MovableFloatingView extends FloatingView {
                     initY = getFloatingLayoutParams().y;
                     initTouchX = event.getRawX();
                     initTouchY = event.getRawY();
-//                    Tool.logInfo("Action down: initX" + initX + " initY:" + initY + " initTouchX:" + initTouchX + " initTouchY:" + initTouchY);
+//                    logger.info("Action down: initX" + initX + " initY:" + initY + " initTouchX:" + initTouchX + " initTouchY:" + initTouchY);
                     break;
                 case MotionEvent.ACTION_UP:
                     if (hasMoved) {
@@ -69,8 +73,8 @@ public abstract class MovableFloatingView extends FloatingView {
                     getFloatingLayoutParams().x = nextX;
                     getFloatingLayoutParams().y = nextY;
                     getWindowManager().updateViewLayout(getRootView(), getFloatingLayoutParams());
-//                    Tool.logInfo("Touch location: x:" + event.getRawX() + " y:" + event.getRawY());
-//                    Tool.logInfo("New location: x:" + nextX + " y:" + nextY);
+//                    logger.info("Touch location: x:" + event.getRawX() + " y:" + event.getRawY());
+//                    logger.info("New location: x:" + nextX + " y:" + nextY);
                     break;
             }
             return false;

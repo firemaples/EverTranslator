@@ -7,17 +7,20 @@ import android.preference.PreferenceManager;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.util.Arrays;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
-import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
  * Created by firemaples on 2016/3/2.
  */
 public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
+    private static final Logger logger = LoggerFactory.getLogger(OcrInitAsyncTask.class);
 
     private final Context context;
     private final TessBaseAPI baseAPI;
@@ -57,7 +60,7 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
     @Override
     protected void onProgressUpdate(String... values) {
         super.onProgressUpdate(values);
-        Tool.logInfo(values[0]);
+        logger.info(values[0]);
         if (callback != null) {
             callback.showMessage(values[0]);
         }

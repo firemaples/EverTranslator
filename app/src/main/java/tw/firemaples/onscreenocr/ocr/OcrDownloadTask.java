@@ -7,6 +7,9 @@ import android.support.annotation.NonNull;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.FileAsyncHttpResponseHandler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.util.Locale;
 
@@ -21,6 +24,8 @@ import tw.firemaples.onscreenocr.utils.Tool;
  */
 @SuppressWarnings("SpellCheckingInspection")
 public class OcrDownloadTask {
+    private static final Logger logger = LoggerFactory.getLogger(OcrDownloadTask.class);
+
     private final Context context;
     private final String recognitionLang;
     private final String recognitionLangName;
@@ -52,13 +57,13 @@ public class OcrDownloadTask {
     public static boolean checkOcrFiles(String recognitionLang) {
         File tessDataDir = OcrNTranslateUtils.getInstance().getTessDataDir();
         if (!tessDataDir.exists()) {
-            Tool.logInfo("checkOcrFiles(): tess dir not found");
+            logger.info("checkOcrFiles(): tess dir not found");
             return false;
         }
 
         File tessDataFile = new File(tessDataDir, recognitionLang + ".traineddata");
         if (!tessDataFile.exists()) {
-            Tool.logInfo("checkOcrFiles(): target OCR file not found");
+            logger.info("checkOcrFiles(): target OCR file not found");
             return false;
         }
 
@@ -124,7 +129,7 @@ public class OcrDownloadTask {
                         (float) totalSize / 1024f / 1024f,
                         (int) (bytesWritten * 100 / totalSize));
 
-                Tool.logInfo(msg);
+                logger.info(msg);
 
                 if (callback != null) {
                     callback.downloadProgressing(bytesWritten, totalSize, msg);
@@ -143,12 +148,12 @@ public class OcrDownloadTask {
         @Override
         protected Boolean doInBackground(Void... params) {
             if (checkOcrFiles(recognitionLang)) {
-                Tool.logInfo("OCR file found");
+                logger.info("OCR file found");
                 return null;
             }
 
             if (!tessDataDir.exists() && !tessDataDir.mkdirs()) {
-                Tool.logError("Making folder failed: " + tessDataDir.getAbsolutePath());
+                logger.error("Making folder failed: " + tessDataDir.getAbsolutePath());
                 callback.onError(
                         String.format(
                                 Locale.getDefault(),
@@ -160,7 +165,7 @@ public class OcrDownloadTask {
             tessDataTempFile = new File(tessDataDir, recognitionLang + ".tmp");
             if (tessDataTempFile.exists()) {
                 if (!tessDataTempFile.delete()) {
-                    Tool.logError("Delete temp file failed: " + tessDataTempFile.getAbsolutePath());
+                    logger.error("Delete temp file failed: " + tessDataTempFile.getAbsolutePath());
                     callback.onError(
                             String.format(
                                     Locale.getDefault(),
@@ -188,7 +193,7 @@ public class OcrDownloadTask {
                     (float) totalFileLength / 1024f / 1024f,
                     (int) (currentFileLength * 100 / totalFileLength));
 
-            Tool.logInfo(msg);
+            logger.info(msg);
 
             if (callback != null) {
                 callback.downloadProgressing(currentFileLength, totalFileLength, msg);
@@ -231,7 +236,7 @@ public class OcrDownloadTask {
                     callback.onDownloadFinished();
                 }
             } else {
-                Tool.logError("Move file failed");
+                logger.error("Move file failed");
                 if (callback != null) {
                     callback.onError("Move file failed: from:" + tmpFile.getAbsolutePath() + " to:" + destFile.getAbsolutePath());
                 }

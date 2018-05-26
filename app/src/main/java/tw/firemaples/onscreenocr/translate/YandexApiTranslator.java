@@ -5,10 +5,12 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.github.firemaples.language.Language;
 import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
-import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.utils.UrlFormatter;
 
 /**
@@ -16,6 +18,8 @@ import tw.firemaples.onscreenocr.utils.UrlFormatter;
  */
 
 public class YandexApiTranslator {
+    private static final Logger logger = LoggerFactory.getLogger(YandexApiTranslator.class);
+
     private static final int CODE_RESULT_OK = 200;
 
     public static void startTranslate(String textToTranslate, final OnYandexTranslateTaskCallback callback) {
@@ -27,7 +31,7 @@ public class YandexApiTranslator {
 
         String url = UrlFormatter.getFormattedUrl(ServiceHolderModel.SERVICE_YANDEX_API, textToTranslate, lang);
 
-        Tool.logInfo("YandexApiTranslator start loading url:" + url);
+        logger.info("YandexApiTranslator start loading url:" + url);
 
         AndroidNetworking.get(url).setPriority(Priority.HIGH)
                 .build()
@@ -36,7 +40,7 @@ public class YandexApiTranslator {
                     public void onResponse(Object response) {
                         if (response != null) {
                             TranslateResult result = (TranslateResult) response;
-                            Tool.logInfo("YandexApiTranslator: result code:" + result.code);
+                            logger.info("YandexApiTranslator: result code:" + result.code);
                             if (result.code == CODE_RESULT_OK
                                     && result.text != null && result.text.length > 0
                                     && result.text[0].trim().length() > 0) {
@@ -44,7 +48,7 @@ public class YandexApiTranslator {
                                 if (targetLanguageObject == Language.CHINESE_TRADITIONAL) {
                                     text = ChineseTSConverter.StoT(text);
                                 }
-                                Tool.logInfo("YandexApiTranslator: result found:" + text);
+                                logger.info("YandexApiTranslator: result found:" + text);
                                 callback.onTranslated(text);
                                 return;
                             } else {
@@ -61,8 +65,8 @@ public class YandexApiTranslator {
 
                     @Override
                     public void onError(ANError anError) {
-                        Tool.logError("YandexApiTranslator: error: " + anError.getMessage() + "(" + anError.getErrorCode() + ")");
-                        Tool.logError(anError.getErrorBody());
+                        logger.error("YandexApiTranslator: error: " + anError.getMessage() + "(" + anError.getErrorCode() + ")");
+                        logger.error(anError.getErrorBody());
                         callback.onError(anError);
                     }
                 });

@@ -12,17 +12,21 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.utils.Tool;
-import tw.firemaples.onscreenocr.utils.UIUtil;
+import tw.firemaples.onscreenocr.tts.AndroidTTSManager;
 
 /**
  * Created by Firemaples on 2016/3/1.
  */
 public class AreaSelectionView extends ImageView {
+    private static final Logger logger = LoggerFactory.getLogger(AreaSelectionView.class);
+
     private static final long TIME_BORDER_ANIM = 1000;
     private static final long INTERVAL_BORDER_ANIM = 10;
 
@@ -222,14 +226,14 @@ public class AreaSelectionView extends ImageView {
             @Override
             public void onTick(long millisUntilFinished) {
                 borderAnimationProgress = (int) (((float) (TIME_BORDER_ANIM - millisUntilFinished) / (float) TIME_BORDER_ANIM) * 100f);
-//                Tool.logInfo("borderAnimationProgress: " + borderAnimationProgress);
+//                logger.info("borderAnimationProgress: " + borderAnimationProgress);
                 invalidate();
             }
 
             @Override
             public void onFinish() {
                 borderAnimationProgress = 100;
-//                Tool.logInfo("borderAnimationProgress: finished");
+//                logger.info("borderAnimationProgress: finished");
                 invalidate();
             }
         }.start();
@@ -243,7 +247,7 @@ public class AreaSelectionView extends ImageView {
     }
 
     private void drawBorder(Canvas canvas, int progress) {
-//        Tool.logInfo("drawBorder: progress: " + progress);
+//        logger.info("drawBorder: progress: " + progress);
         int topSteps = 25;
         int centerSteps = 50;
         int bottomSteps = 25;
@@ -328,20 +332,20 @@ public class AreaSelectionView extends ImageView {
                 int alpha;
                 if (millisUntilFinished < TIME_TEXT_HIDDEN_ANIM) {
                     alpha = (int) ((float) millisUntilFinished / (float) TIME_TEXT_HIDDEN_ANIM * (float) MAX_ALPHA);
-                    Tool.logInfo("Alpha: " + alpha);
+                    logger.info("Alpha: " + alpha);
                 } else {
                     alpha = MAX_ALPHA;
-                    Tool.logInfo("Alpha: fixed " + alpha);
+                    logger.info("Alpha: fixed " + alpha);
                 }
                 helpTextAlphaPaint.setAlpha(alpha);
-//                Tool.logInfo("borderAnimationProgress: " + borderAnimationProgress);
+//                logger.info("borderAnimationProgress: " + borderAnimationProgress);
                 invalidate();
             }
 
             @Override
             public void onFinish() {
                 helpTextAlphaPaint.setAlpha(0);
-//                Tool.logInfo("borderAnimationProgress: finished");
+//                logger.info("borderAnimationProgress: finished");
                 invalidate();
             }
         }.start();

@@ -3,6 +3,9 @@ package tw.firemaples.onscreenocr.utils;
 import android.content.Context;
 import android.media.AudioManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Created by firemaples on 31/05/2017.
  */
@@ -14,6 +17,8 @@ import android.media.AudioManager;
  * https://stackoverflow.com/questions/21633495/how-to-pause-different-music-players-in-android/21633772#21633772
  */
 public class AudioFocusManager {
+    private static final Logger logger = LoggerFactory.getLogger(AudioFocusManager.class);
+
     protected Context context;
 
     protected AudioManager audioManager;
@@ -29,25 +34,25 @@ public class AudioFocusManager {
         public void onAudioFocusChange(int focusChange) {
             switch (focusChange) {
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                    Tool.logV("onAudioFocusChange(), AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
+                    logger.debug("onAudioFocusChange(), AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
                     if (callback != null) {
                         callback.onAudioFocusLossTransientCanDuck();
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                    Tool.logV("onAudioFocusChange(), AUDIOFOCUS_LOSS_TRANSIENT");
+                    logger.debug("onAudioFocusChange(), AUDIOFOCUS_LOSS_TRANSIENT");
                     if (callback != null) {
                         callback.onAudioFocusLossTransient();
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS:
-                    Tool.logV("onAudioFocusChange(), AUDIOFOCUS_LOSS");
+                    logger.debug("onAudioFocusChange(), AUDIOFOCUS_LOSS");
                     if (callback != null) {
                         callback.onAudioFocusLoss();
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
-                    Tool.logV("onAudioFocusChange(), AUDIOFOCUS_GAIN");
+                    logger.debug("onAudioFocusChange(), AUDIOFOCUS_GAIN");
                     if (callback != null) {
                         callback.onAudioFocusGain();
                     }
@@ -66,9 +71,9 @@ public class AudioFocusManager {
     }
 
     public boolean requestAudioFocus() {
-        Tool.logV("requestAudioFocus()");
+        logger.debug("requestAudioFocus()");
         if (isRequesting) {
-            Tool.logV("Current is requesting, ignore this action");
+            logger.debug("Current is requesting, ignore this action");
             return true;
         }
 
@@ -79,7 +84,7 @@ public class AudioFocusManager {
 
         boolean resultBoolean = result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
 
-        Tool.logV("requestAudioFocus(), result: " + resultBoolean);
+        logger.debug("requestAudioFocus(), result: " + resultBoolean);
 
 //        if (isOtherMusicAppPlaying) {
 //            sendMediaPauseButton();
@@ -89,9 +94,9 @@ public class AudioFocusManager {
     }
 
     public void abandonAudioFocus() {
-        Tool.logV("abandonAudioFocus()");
+        logger.debug("abandonAudioFocus()");
         if (!isRequesting) {
-            Tool.logV("Current is not requesting, ignore this action");
+            logger.debug("Current is not requesting, ignore this action");
             return;
         }
 

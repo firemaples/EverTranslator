@@ -9,6 +9,9 @@ import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -17,13 +20,14 @@ import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.OcrResultView;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
-import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
  * Created by firemaples on 29/11/2016.
  */
 
 public class OcrResultWrapper extends RelativeLayout {
+    private static final Logger logger = LoggerFactory.getLogger(OcrResultWrapper.class);
+
     private Paint borderPaint;
 
     private OcrResultView.OcrNTranslateState state;
@@ -69,7 +73,7 @@ public class OcrResultWrapper extends RelativeLayout {
                 for (Rect rect : ocrResult.getBoxRects()) {
                     ImageView ocrResultCover = new ImageView(getContext());
 
-                    Tool.logInfo(String.format(Locale.getDefault(), "parentRect:[%d,%d], rect[%d,%d]", parentRect.left, parentRect.top, rect.left, rect.top));
+                    logger.info(String.format(Locale.getDefault(), "parentRect:[%d,%d], rect[%d,%d]", parentRect.left, parentRect.top, rect.left, rect.top));
 
                     LayoutParams layoutParams = new LayoutParams(rect.width(), rect.height());
                     layoutParams.setMargins(parentRect.left + rect.left, parentRect.top + rect.top, 0, 0);

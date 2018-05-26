@@ -25,6 +25,9 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 
 import tw.firemaples.onscreenocr.utils.Callback;
@@ -35,6 +38,8 @@ import tw.firemaples.onscreenocr.utils.Tool;
  */
 
 public class TTSPlayer {
+    private static final Logger logger = LoggerFactory.getLogger(TTSPlayer.class);
+
     private static TTSPlayer _instance;
 
     private Context context;
@@ -206,10 +211,10 @@ public class TTSPlayer {
             }
             while (player.getPlaybackParameters().speed != speed) {
                 if (System.currentTimeMillis() > stopTime) {
-                    Tool.logInfo("Waiting play speed change timeout");
+                    logger.info("Waiting play speed change timeout");
                     break;
                 }
-                Tool.logInfo("wait for set play speed effect");
+                logger.info("wait for set play speed effect");
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
@@ -228,7 +233,7 @@ public class TTSPlayer {
                 }
             }
             if (player.getPlaybackParameters().speed == speed) {
-                Tool.logInfo("Set play speed effected!");
+                logger.info("Set play speed effected!");
             }
             return true;
         }

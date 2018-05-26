@@ -17,6 +17,9 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -35,6 +38,8 @@ import tw.firemaples.onscreenocr.utils.Tool;
  * Created by firemaples on 2016/3/4.
  */
 public class ScreenshotHandler {
+    private static final Logger logger = LoggerFactory.getLogger(ScreenshotHandler.class);
+
     private static ScreenshotHandler _instance;
     private final static int TIMEOUT = 5000;
 
@@ -128,13 +133,13 @@ public class ScreenshotHandler {
     }
 
     private void _takeScreenshot() {
-        Tool.logInfo("Start screenshot");
+        logger.info("Start screenshot");
         final long screenshotStartTime = System.currentTimeMillis();
         FabricUtil.logStartScreenshotOperation();
 
         final MediaProjection mProjection = getMediaProjection();
         if (mProjection == null) {
-            Tool.logError("MediaProjection is null");
+            logger.error("MediaProjection is null");
             return;
         }
         // http://binwaheed.blogspot.tw/2015/03/how-to-correctly-take-screenshot-using.html
@@ -159,7 +164,7 @@ public class ScreenshotHandler {
         mProjection.createVirtualDisplay("screen-mirror", mWidth, mHeight, mDensity, flags, mImageReader.getSurface(), null, handler);
 
         //convert result into image
-        Tool.logInfo("add setOnImageAvailableListener");
+        logger.info("add setOnImageAvailableListener");
         timeoutRunnable = new Runnable() {
             @Override
             public void run() {
@@ -167,7 +172,7 @@ public class ScreenshotHandler {
                 mImageReader.close();
                 mProjection.stop();
 
-                Tool.logError("Screenshot timeout");
+                logger.error("Screenshot timeout");
                 if (callback != null) {
                     callback.onScreenshotFailed(ERROR_CODE_TIMEOUT, null);
                 }
@@ -178,14 +183,14 @@ public class ScreenshotHandler {
             @Override
             public void onImageAvailable(ImageReader reader) {
                 reader.setOnImageAvailableListener(null, handler);
-                Tool.logInfo("onImageAvailable");
+                logger.info("onImageAvailable");
                 Image image = null;
                 Bitmap tempBmp = null;
                 Bitmap realSizeBitmap = null;
                 try {
                     image = reader.acquireLatestImage();
 //                    throw new UnsupportedOperationException("The producer output buffer format 0x5 doesn't match the ImageReader's configured buffer format 0x1.");
-                    Tool.logInfo("screenshot image info: width:" + image.getWidth() + " height:" + image.getHeight());
+                    logger.info("screenshot image info: width:" + image.getWidth() + " height:" + image.getHeight());
                     final Image.Plane[] planes = image.getPlanes();
                     final ByteBuffer buffer = planes[0].getBuffer();
                     int pixelStride = planes[0].getPixelStride();
@@ -201,7 +206,7 @@ public class ScreenshotHandler {
                         saveBmpToFile(realSizeBitmap);
                     }
                 } catch (Throwable e) {
-                    Tool.logError("Screenshot failed");
+                    logger.error("Screenshot failed");
                     e.printStackTrace();
                     if (callback != null) {
                         if (e instanceof UnsupportedOperationException) {
@@ -228,7 +233,7 @@ public class ScreenshotHandler {
                 }
                 if (realSizeBitmap != null) {
                     long spentTime = System.currentTimeMillis() - screenshotStartTime;
-                    Tool.logInfo("Screenshot finished, spent: " + spentTime + " ms");
+                    logger.info("Screenshot finished, spent: " + spentTime + " ms");
                     FabricUtil.logFinishScreenshotOperation(spentTime);
                     if (callback != null) {
                         callback.onScreenshotFinished(realSizeBitmap);
@@ -243,7 +248,7 @@ public class ScreenshotHandler {
                 new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.getDefault())
                         .format(new Date(System.currentTimeMillis())));
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName);
-        Tool.logInfo("Saving debug screenshot to " + file.getAbsolutePath());
+        logger.info("Saving debug screenshot to " + file.getAbsolutePath());
         Tool.getInstance().showMsg("Saving debug screenshot to " + file.getAbsolutePath());
         FileOutputStream out = null;
         try {
@@ -251,7 +256,7 @@ public class ScreenshotHandler {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
             // PNG is a lossless format, the compression factor (100) is ignored
         } catch (Exception e) {
-            Tool.logError("Save debug screenshot failed");
+            logger.error("Save debug screenshot failed");
             Tool.getInstance().showErrorMsg("Save debug screenshot failed");
             e.printStackTrace();
         } finally {
