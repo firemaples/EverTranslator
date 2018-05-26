@@ -42,8 +42,8 @@ public class OcrResultWindow {
     private View rootView;
     private View view_translatedTextWrapper;
     private View pb_origin, pb_translated;
-    private View bt_openInBrowser_ocrText, bt_copy_ocrText, bt_edit_ocrText, bt_tts_ocrText;
-    private View bt_openInBrowser_translatedText, bt_copy_translatedText, bt_tts_translatedText;
+    private View bt_openInBrowser_ocrText, bt_copy_ocrText, bt_edit_ocrText, bt_tts_ocrText, bt_openGoogleTranslate_ocrText;
+    private View bt_openInBrowser_translatedText, bt_copy_translatedText, bt_tts_translatedText, bt_openGoogleTranslate_translatedText;
     private TextView tv_originText, tv_translatedText;
     private RelativeLayout.LayoutParams layoutParams;
     private DisplayMetrics metrics;
@@ -68,21 +68,27 @@ public class OcrResultWindow {
         tv_originText = (TextView) rootView.findViewById(R.id.tv_originText);
         tv_translatedText = (TextView) rootView.findViewById(R.id.tv_translatedText);
 
-        bt_openInBrowser_ocrText = rootView.findViewById(R.id.bt_openInBrowser_ocrText);
-        bt_copy_ocrText = rootView.findViewById(R.id.bt_copy_ocrText);
-        bt_edit_ocrText = rootView.findViewById(R.id.bt_edit_ocrText);
         bt_tts_ocrText = rootView.findViewById(R.id.bt_tts_ocrText);
-        bt_openInBrowser_translatedText = rootView.findViewById(R.id.bt_openInBrowser_translatedText);
-        bt_copy_translatedText = rootView.findViewById(R.id.bt_copy_translatedText);
-        bt_tts_translatedText = rootView.findViewById(R.id.bt_tts_translatedText);
+        bt_edit_ocrText = rootView.findViewById(R.id.bt_edit_ocrText);
+        bt_copy_ocrText = rootView.findViewById(R.id.bt_copy_ocrText);
+        bt_openInBrowser_ocrText = rootView.findViewById(R.id.bt_openInBrowser_ocrText);
+        bt_openGoogleTranslate_ocrText = rootView.findViewById(R.id.bt_openGoogleTranslate_ocrText);
 
+        bt_tts_translatedText = rootView.findViewById(R.id.bt_tts_translatedText);
+        bt_copy_translatedText = rootView.findViewById(R.id.bt_copy_translatedText);
+        bt_openInBrowser_translatedText = rootView.findViewById(R.id.bt_openInBrowser_translatedText);
+        bt_openGoogleTranslate_translatedText = rootView.findViewById(R.id.bt_openGoogleTranslate_translatedText);
+
+        bt_tts_ocrText.setOnClickListener(onClickListener);
         bt_edit_ocrText.setOnClickListener(onClickListener);
         bt_copy_ocrText.setOnClickListener(onClickListener);
         bt_openInBrowser_ocrText.setOnClickListener(onClickListener);
-        bt_tts_ocrText.setOnClickListener(onClickListener);
+        bt_openGoogleTranslate_ocrText.setOnClickListener(onClickListener);
+
         bt_copy_translatedText.setOnClickListener(onClickListener);
         bt_openInBrowser_translatedText.setOnClickListener(onClickListener);
         bt_tts_translatedText.setOnClickListener(onClickListener);
+        bt_openGoogleTranslate_translatedText.setOnClickListener(onClickListener);
 
         view_translatedTextWrapper.setVisibility(SharePreferenceUtil.getInstance().isEnableTranslation() ? View.VISIBLE : View.GONE);
 
@@ -132,14 +138,16 @@ public class OcrResultWindow {
             tv_translatedText.setText(ocrResult.getTranslatedText());
         }
 
+        bt_tts_ocrText.setEnabled(ocrFinished);
         bt_edit_ocrText.setEnabled(ocrFinished);
         bt_copy_ocrText.setEnabled(ocrFinished);
         bt_openInBrowser_ocrText.setEnabled(ocrFinished);
-        bt_tts_ocrText.setEnabled(ocrFinished);
+        bt_openGoogleTranslate_ocrText.setEnabled(ocrFinished);
 
+        bt_tts_translatedText.setEnabled(translated);
         bt_copy_translatedText.setEnabled(translated);
         bt_openInBrowser_translatedText.setEnabled(translated);
-        bt_tts_translatedText.setEnabled(translated);
+        bt_openGoogleTranslate_translatedText.setEnabled(translated);
     }
 
     public void show(View anchorView) {
@@ -232,6 +240,14 @@ public class OcrResultWindow {
                 TTSPlayerView ttsPlayerView = new TTSPlayerView(context);
                 ttsPlayerView.setTTSContent(lang, ttsContent);
                 ttsPlayerView.attachToWindow();
+            } else if (id == R.id.bt_openGoogleTranslate_ocrText) {
+                if (ocrResult != null && ocrResult.getText() != null) {
+                    callback.openGoogleTranslate(ocrResult.getText(), false);
+                }
+            } else if (id == R.id.bt_openGoogleTranslate_translatedText) {
+                if (ocrResult != null && ocrResult.getTranslatedText() != null) {
+                    callback.openGoogleTranslate(ocrResult.getTranslatedText(), true);
+                }
             }
         }
     };
@@ -249,5 +265,7 @@ public class OcrResultWindow {
         void onOpenBrowserBtnClick(String text, boolean translated);
 
         void onEditOriTextClicked(OcrResult ocrResult);
+
+        void openGoogleTranslate(String text, boolean translated);
     }
 }
