@@ -47,12 +47,12 @@
         <TextView
             style="@style/thanksPage.itemTitle"
             android:layout_marginTop="12dp"
-            android:text="JohnPersano/SuperToasts"/>
+            android:text="Muddz/StyleableToast"/>
 
         <TextView
             android:id="@+id/tv_link2"
             style="@style/thanksPage.itemLink"
-            android:text="https://github.com/JohnPersano/SuperToasts"/>
+            android:text="https://github.com/Muddz/StyleableToast"/>
 
         <TextView
             style="@style/thanksPage.itemTitle"

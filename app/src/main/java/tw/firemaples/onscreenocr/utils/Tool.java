@@ -3,11 +3,12 @@ package tw.firemaples.onscreenocr.utils;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.github.johnpersano.supertoasts.SuperToast;
-import com.github.johnpersano.supertoasts.util.Style;
+import com.muddzdev.styleabletoastlibrary.StyleableToast;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -83,18 +84,27 @@ public class Tool {
         if (getContext() == null) {
             return;
         }
-        SuperToast.cancelAllSuperToasts();
-        SuperToast.create(getContext(), msg, SuperToast.Duration.VERY_SHORT,
-                Style.getStyle(Style.BLACK, SuperToast.Animations.FADE)).show();
+
+        new StyleableToast.Builder(context)
+                .text(msg)
+                .textColor(Color.WHITE)
+                .backgroundColor(Color.BLACK)
+                .length(Toast.LENGTH_LONG)
+                .show();
     }
 
     public void showErrorMsg(String msg) {
         if (getContext() == null) {
             return;
         }
-        SuperToast.cancelAllSuperToasts();
-        SuperToast.create(getContext(), msg, SuperToast.Duration.VERY_SHORT,
-                Style.getStyle(Style.RED, SuperToast.Animations.FADE)).show();
+        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+
+        new StyleableToast.Builder(context)
+                .text(msg)
+                .textColor(Color.WHITE)
+                .backgroundColor(Color.RED)
+                .length(Toast.LENGTH_LONG)
+                .show();
     }
 
     public static String replaceAllLineBreaks(String str, String replaceWith) {
