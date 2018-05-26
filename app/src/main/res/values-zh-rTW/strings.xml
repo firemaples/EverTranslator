@@ -79,4 +79,5 @@
     <string name="menu_version_history">版本資訊</string>
     <string name="title_version_history">版本資訊</string>
     <string name="redrawAnAreaForTranslation">再次拖曳可以重新圈選要翻譯的區域</string>
+    <string name="foregroundNotification">常駐通知</string>
 </resources>
