@@ -2,12 +2,14 @@ package tw.firemaples.onscreenocr;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.IBinder;
 
 import tw.firemaples.onscreenocr.database.DatabaseManager;
@@ -31,6 +33,8 @@ public class ScreenTranslatorService extends Service {
 
     @SuppressLint("StaticFieldLeak")
     private static ScreenTranslatorService _instance;
+
+    private NotificationManager notificationManager;
 
     private ScreenshotHandler screenshotHandler;
     private SharePreferenceUtil spUtil;
@@ -131,6 +135,7 @@ public class ScreenTranslatorService extends Service {
         OcrNTranslateUtils.init();
         AndroidTTSManager.getInstance(this).init();
         DatabaseManager.getInstance();
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (SharePreferenceUtil.getInstance().isAppShowing()) {
             _startFloatingView();
@@ -161,6 +166,15 @@ public class ScreenTranslatorService extends Service {
     }
 
     private Notification getForegroundNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (notificationManager.getNotificationChannel(getPackageName()) == null) {
+                notificationManager.createNotificationChannel(
+                        new NotificationChannel(getPackageName(),
+                                getString(R.string.foregroundNotification),
+                                NotificationManager.IMPORTANCE_LOW));
+            }
+        }
+
         Notification.Builder builder = new Notification.Builder(this);
         builder.setSmallIcon(R.mipmap.notify_icon);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.icon));
@@ -179,6 +193,9 @@ public class ScreenTranslatorService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
         builder.setAutoCancel(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder.setChannelId(getPackageName());
+        }
         return builder.build();
     }
 
@@ -188,8 +205,7 @@ public class ScreenTranslatorService extends Service {
 
     private void updateNotification() {
         if (!dismissNotify) {
-            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.notify(ONGOING_NOTIFICATION_ID, getForegroundNotification());
+            notificationManager.notify(ONGOING_NOTIFICATION_ID, getForegroundNotification());
         }
     }
 
