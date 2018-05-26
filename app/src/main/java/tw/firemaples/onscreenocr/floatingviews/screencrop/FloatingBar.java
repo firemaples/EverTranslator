@@ -453,6 +453,11 @@ public class FloatingBar extends MovableFloatingView {
         public void onOpenBrowserClicked() {
             syncBtnState(BtnState.Normal);
         }
+
+        @Override
+        public void onOpenGoogleTranslateClicked() {
+            resetAll();
+        }
     };
 
     private void syncBtnState(BtnState btnState) {

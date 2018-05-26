@@ -1,9 +1,13 @@
 package tw.firemaples.onscreenocr.floatingviews.screencrop;
 
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +30,7 @@ import tw.firemaples.onscreenocr.translate.TranslateManager;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
+import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.views.OcrResultWindow;
 import tw.firemaples.onscreenocr.views.OcrResultWrapper;
 
@@ -251,6 +256,48 @@ public class OcrResultView extends FloatingView {
             textEditDialogView.setTag(ocrResult);
             textEditDialogView.attachToWindow();
         }
+
+        @Override
+        public void openGoogleTranslate(String text, boolean translated) {
+            String lang;
+            if (translated) {
+                lang = OcrNTranslateUtils.getInstance().getTranslateFromLang();
+            } else {
+                lang = OcrNTranslateUtils.getInstance().getTranslateToLang();
+            }
+
+            Intent intent = new Intent();
+            intent.setType("text/plain");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                intent.setAction(Intent.ACTION_PROCESS_TEXT);
+                intent.putExtra(Intent.EXTRA_PROCESS_TEXT, text);
+                intent.putExtra("key_language_to", lang);
+                intent.setPackage("com.google.android.apps.translate");
+            } else {
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, text);
+                intent.putExtra("key_text_input", text);
+                intent.putExtra("key_text_output", "");
+                intent.putExtra("key_language_from", "auto");
+                intent.putExtra("key_language_to", lang);
+                intent.putExtra("key_suggest_translation", "");
+                intent.putExtra("key_from_floating_window", false);
+                intent.setComponent(new ComponentName(
+                        "com.google.android.apps.translate",
+                        //Change is here
+                        //"com.google.android.apps.translate.HomeActivity"));
+                        "com.google.android.apps.translate.TranslateActivity"));
+            }
+
+            try {
+                getContext().startActivity(intent);
+
+                callback.onOpenGoogleTranslateClicked();
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+                Tool.getInstance().showErrorMsg(getContext().getString(R.string.error_googleTranslatorNotInstalled));
+            }
+        }
     };
 
     private TextEditDialogView.OnTextEditDialogViewCallback onTextEditDialogViewCallback =
@@ -299,5 +346,6 @@ public class OcrResultView extends FloatingView {
 
     public interface OnOcrResultViewCallback {
         void onOpenBrowserClicked();
+        void onOpenGoogleTranslateClicked();
     }
 }

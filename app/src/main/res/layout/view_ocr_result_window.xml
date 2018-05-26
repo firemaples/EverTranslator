@@ -57,7 +57,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:background="@null"
-                android:src="@drawable/open_web_view_icon"/>
+                android:src="@drawable/open_web_view_icon"
+                android:visibility="gone"/>
+
+            <ImageButton
+                android:id="@+id/bt_openGoogleTranslate_ocrText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:background="@null"
+                android:src="@drawable/google_translate_icon"/>
         </LinearLayout>
 
         <LinearLayout
@@ -122,7 +131,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:background="@null"
-                    android:src="@drawable/open_web_view_icon"/>
+                    android:src="@drawable/open_web_view_icon"
+                    android:visibility="gone"/>
+
+                <ImageButton
+                    android:id="@+id/bt_openGoogleTranslate_translatedText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:background="@null"
+                    android:src="@drawable/google_translate_icon"/>
             </LinearLayout>
 
             <LinearLayout

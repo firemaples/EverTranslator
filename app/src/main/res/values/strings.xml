@@ -82,4 +82,5 @@
     <string name="drawAnAreaForTranslation">Tap and drag here to create a translation area</string>
     <string name="redrawAnAreaForTranslation">Tap and drag here to re-draw a translation area</string>
     <string name="foregroundNotification">Foreground notification</string>
+    <string name="error_googleTranslatorNotInstalled">Sorry, Google translator not installed</string>
 </resources>
