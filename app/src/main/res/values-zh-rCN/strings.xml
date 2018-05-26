@@ -80,4 +80,5 @@
     <string name="title_version_history">版本信息</string>
     <string name="redrawAnAreaForTranslation">再次拖曳可以重新圈选欲翻译的区域</string>
     <string name="foregroundNotification">常驻通知</string>
+    <string name="error_googleTranslatorNotInstalled">您尚未安装 Google 翻译 app</string>
 </resources>
