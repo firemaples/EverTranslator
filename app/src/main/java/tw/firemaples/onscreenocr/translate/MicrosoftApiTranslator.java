@@ -2,6 +2,8 @@ package tw.firemaples.onscreenocr.translate;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 
 import io.github.firemaples.language.Language;
 import io.github.firemaples.translate.Translate;
@@ -43,8 +45,14 @@ public class MicrosoftApiTranslator extends AsyncTask<Void, String, String> {
         Translate.setUsingSSL(true);
         try {
             return Translate.execute(textToTranslate, translateFromLang, translateToLang);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onError(e);
+                }
+            });
             return null;
         }
     }
@@ -59,5 +67,7 @@ public class MicrosoftApiTranslator extends AsyncTask<Void, String, String> {
 
     public interface OnTranslateAsyncTaskCallback {
         void onTranslateFinished(String translatedText);
+
+        void onError(Exception e);
     }
 }

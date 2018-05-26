@@ -151,6 +151,11 @@ public class TranslateManager {
                             }
                         });
                     }
+
+                    @Override
+                    public void onError(Exception e) {
+                        _startTranslate(context, text, serviceHolder.switchNextService(true), callback);
+                    }
                 }).execute();
             }
             break;
