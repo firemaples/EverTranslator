@@ -40,6 +40,7 @@ public class MicrosoftApiTranslator extends AsyncTask<Void, String, String> {
     @Override
     protected String doInBackground(Void... params) {
         Translate.setSubscriptionKey(KeyId.MICROSOFT_TRANSLATE_SUBSCRIPTION_KEY);
+        Translate.setUsingSSL(true);
         try {
             return Translate.execute(textToTranslate, translateFromLang, translateToLang);
         } catch (Exception e) {
