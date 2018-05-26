@@ -45,10 +45,17 @@ public abstract class FloatingView {
         View innerView = LayoutInflater.from(context).inflate(getLayoutId(), null);
         rootView.addView(innerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         windowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
+
+        int type;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            type = WindowManager.LayoutParams.TYPE_PHONE;
+        }
         floatingLayoutParams = new WindowManager.LayoutParams(
                 getLayoutSize(),
                 getLayoutSize(),
-                WindowManager.LayoutParams.TYPE_PHONE,
+                type,
                 layoutFocusable() ? WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL : WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
         if (fullScreenMode()) {
