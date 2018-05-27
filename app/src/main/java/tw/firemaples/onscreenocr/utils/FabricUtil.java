@@ -104,6 +104,10 @@ public class FabricUtil {
         );
     }
 
+    public static void logSwitchMode(AppMode toMode) {
+        Answers.getInstance().logCustom(new CustomEvent("Switch mode").putCustomAttribute("Switch to", toMode.name()));
+    }
+
     public static void postOnGoogleTranslateFailedException(int httpStatus, String reason) {
         String msg = String.format(Locale.getDefault(),
                 "Google translation can't not be reached, http status code: %d, reason: %s"

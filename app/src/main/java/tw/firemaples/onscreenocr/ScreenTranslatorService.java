@@ -84,6 +84,7 @@ public class ScreenTranslatorService extends Service {
 
     public static void switchAppMode(AppMode appMode) {
         if (_instance != null && SharePreferenceUtil.getInstance().getAppMode() != appMode) {
+            FabricUtil.logSwitchMode(appMode);
             _instance._stopFloatingView(true);
             SharePreferenceUtil.getInstance().setAppMode(appMode);
             _instance._startFloatingView();
