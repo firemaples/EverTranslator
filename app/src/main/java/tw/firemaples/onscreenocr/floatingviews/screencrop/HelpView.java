@@ -9,7 +9,7 @@ import tw.firemaples.onscreenocr.R;
  */
 
 public class HelpView extends InfoDialogView {
-    public static String VERSION = "1.7.2";
+    public static String VERSION = "2.0.0";
 
     public HelpView(Context context) {
         super(context);
