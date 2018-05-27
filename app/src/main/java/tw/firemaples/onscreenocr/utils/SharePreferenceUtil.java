@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tw.firemaples.onscreenocr.BuildConfig;
+import tw.firemaples.onscreenocr.floatingviews.screencrop.HelpLiteView;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.HelpView;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.VersionHistoryView;
 
@@ -29,6 +30,7 @@ public class SharePreferenceUtil {
     private static final String KEY_LAST_SELECTION_AREA = "KEY_LAST_SELECTION_AREA";
     private static final String KEY_VERSION_HISTORY_SHOWN_VERSION = "KEY_VERSION_HISTORY_SHOWN_VERSION";
     private static final String KEY_HOW_TO_USE_SHOWN_VERSION = "KEY_HOW_TO_USE_SHOWN_VERSION";
+    private static final String KEY_LITE_HOW_TO_USE_SHOWN_VERSION = "KEY_LITE_HOW_TO_USE_SHOWN_VERSION";
 
     private static SharePreferenceUtil ourInstance = new SharePreferenceUtil();
 
@@ -160,6 +162,18 @@ public class SharePreferenceUtil {
         boolean result = shownVersion != null && shownVersion.equalsIgnoreCase(versionName);
         if (!result) {
             getSharedPreferences().edit().putString(KEY_HOW_TO_USE_SHOWN_VERSION, versionName).commit();
+        }
+        return result;
+    }
+
+    @SuppressLint("ApplySharedPref")
+    public boolean isLiteHowToUseAlreadyShown() {
+        String versionName = HelpLiteView.VERSION;
+
+        String shownVersion = getSharedPreferences().getString(KEY_LITE_HOW_TO_USE_SHOWN_VERSION, null);
+        boolean result = shownVersion != null && shownVersion.equalsIgnoreCase(versionName);
+        if (!result) {
+            getSharedPreferences().edit().putString(KEY_LITE_HOW_TO_USE_SHOWN_VERSION, versionName).commit();
         }
         return result;
     }

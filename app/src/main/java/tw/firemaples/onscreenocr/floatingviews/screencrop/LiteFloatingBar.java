@@ -12,6 +12,7 @@ import tw.firemaples.onscreenocr.ocr.OCRManager;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
+import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 
 public class LiteFloatingBar extends FloatingBar {
     private View pg_progress;
@@ -34,6 +35,16 @@ public class LiteFloatingBar extends FloatingBar {
     @Override
     protected int getLayoutId() {
         return R.layout.view_floating_bar_lite;
+    }
+
+
+    @Override
+    public void attachToWindow() {
+        super.attachToWindow();
+
+        if (!SharePreferenceUtil.getInstance().isLiteHowToUseAlreadyShown()) {
+            new HelpLiteView(getContext()).attachToWindow();
+        }
     }
 
     @Override

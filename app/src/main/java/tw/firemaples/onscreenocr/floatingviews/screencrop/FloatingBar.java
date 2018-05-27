@@ -64,10 +64,6 @@ public abstract class FloatingBar extends MovableFloatingView {
         super.attachToWindow();
         SharePreferenceUtil.getInstance().setIsAppShowing(true);
 
-        if (!SharePreferenceUtil.getInstance().isHowToUseAlreadyShown()) {
-            new HelpView(getContext()).attachToWindow();
-        }
-
         if (!SharePreferenceUtil.getInstance().isVersionHistoryAlreadyShown(getContext())) {
             new VersionHistoryView(getContext()).attachToWindow();
         }
@@ -323,7 +319,15 @@ public abstract class FloatingBar extends MovableFloatingView {
 
         @Override
         public void onHelpClick() {
-            new HelpView(getContext()).attachToWindow();
+            AppMode appMode = SharePreferenceUtil.getInstance().getAppMode();
+            switch (appMode){
+                case Normal:
+                    new HelpView(getContext()).attachToWindow();
+                    break;
+                case Lite:
+                    new HelpLiteView(getContext()).attachToWindow();
+                    break;
+            }
         }
     };
 

@@ -3,6 +3,7 @@ package tw.firemaples.onscreenocr.floatingviews.screencrop;
 import android.content.Context;
 
 import tw.firemaples.onscreenocr.R;
+import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 
 public class NormalFloatingBar extends FloatingBar {
 
@@ -13,6 +14,15 @@ public class NormalFloatingBar extends FloatingBar {
     @Override
     protected int getLayoutId() {
         return R.layout.view_floating_bar_normal;
+    }
+
+    @Override
+    public void attachToWindow() {
+        super.attachToWindow();
+
+        if (!SharePreferenceUtil.getInstance().isHowToUseAlreadyShown()) {
+            new HelpView(getContext()).attachToWindow();
+        }
     }
 
     @Override
