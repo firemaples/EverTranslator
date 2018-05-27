@@ -19,7 +19,7 @@
     <string name="error_makingFolderFailed">Making folder failed: %s</string>
     <string name="error_deleteTempFileFailed">Delete temp file failed: %s</string>
     <string name="error_downloadOCRFileFailed">Download OCR file failed, please try again later or change another network. message: %s</string>
-    <string name="error_unknownError" translatable="false">Unknown error</string>
+    <string name="error_unknownError">Unknown error</string>
     <string name="error_noOCRResultFound">No OCR result found</string>
     <string name="error_noMediaProjectionFound">Please submit media projection for using this service!</string>
     <string name="dialog_content_screenshotTimeout">Screenshot timeout, please try again later.</string>
@@ -43,6 +43,7 @@
     <string name="guide_click_translation_button">4. Click translation button</string>
     <string name="guide_get_the_result">5. Get the result</string>
     <string name="guide_clear_result">6. Clear result</string>
+    <string name="guide_menu">** Click menu button to find more settings or switch mode **</string>
 
     <!-- Strings for UI -->
     <string name="msg_textHasBeenCopied">Text [%s] has been copied.</string>
@@ -63,7 +64,8 @@
     <string name="menu_about">About</string>
     <string name="title_about">About</string>
     <string name="menu_help">Readme</string>
-    <string name="title_help">How to use</string>
+    <string name="title_help">How to use\n(Normal Mode)</string>
+    <string name="title_help_lite">How to use\n(Lite Mode)</string>
     <string name="menu_version_history">Version history</string>
     <string name="title_version_history">Version history</string>
     <string name="startingWithSelectionMode">Starting with selection mode</string>
@@ -83,4 +85,6 @@
     <string name="redrawAnAreaForTranslation">Tap and drag here to re-draw a translation area</string>
     <string name="foregroundNotification">Foreground notification</string>
     <string name="error_googleTranslatorNotInstalled">Sorry, Google translator not installed</string>
+    <string name="toLiteMode">Lite Mode</string>
+    <string name="toNormalMode">Normal Mode</string>
 </resources>

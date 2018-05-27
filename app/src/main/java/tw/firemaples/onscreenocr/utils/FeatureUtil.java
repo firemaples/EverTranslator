@@ -12,7 +12,6 @@ public class FeatureUtil {
     }
 
     public static boolean isNewModeEnabled() {
-//        return isDebuggable();
-        return false;
+        return isDebuggable();
     }
 }

@@ -19,6 +19,7 @@ import java.nio.channels.FileChannel;
 import tw.firemaples.onscreenocr.BuildConfig;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
+import tw.firemaples.onscreenocr.utils.AppMode;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
@@ -61,12 +62,12 @@ public class SettingView extends FloatingView {
     }
 
     private void setViews() {
-        CheckBox cb_debugMode = (CheckBox) getRootView().findViewById(R.id.cb_debugMode);
-        CheckBox cb_enableTranslation = (CheckBox) getRootView().findViewById(R.id.cb_enableTranslation);
-        CheckBox cb_saveOcrEngineToExternalStorage = (CheckBox) getRootView().findViewById(R.id.cb_saveOcrEngineToExternalStorageFirst);
-        CheckBox cb_startingWithSelectionMode = (CheckBox) getRootView().findViewById(R.id.cb_startingWithSelectionMode);
-        CheckBox cb_rememberLastSelection = (CheckBox) getRootView().findViewById(R.id.cb_rememberLastSelection);
-        CheckBox cb_removeLineBreaks = (CheckBox) getRootView().findViewById(R.id.cb_removeLineBreaks);
+        CheckBox cb_debugMode = getRootView().findViewById(R.id.cb_debugMode);
+        CheckBox cb_enableTranslation = getRootView().findViewById(R.id.cb_enableTranslation);
+        CheckBox cb_saveOcrEngineToExternalStorage = getRootView().findViewById(R.id.cb_saveOcrEngineToExternalStorageFirst);
+        CheckBox cb_startingWithSelectionMode = getRootView().findViewById(R.id.cb_startingWithSelectionMode);
+        CheckBox cb_rememberLastSelection = getRootView().findViewById(R.id.cb_rememberLastSelection);
+        CheckBox cb_removeLineBreaks = getRootView().findViewById(R.id.cb_removeLineBreaks);
         getRootView().findViewById(R.id.bt_close).setOnClickListener(onClickListener);
 
         cb_debugMode.setOnCheckedChangeListener(onCheckChangeListener);
@@ -85,6 +86,10 @@ public class SettingView extends FloatingView {
 
         if (!ocrNTranslateUtils.isExternalStorageWritable()) {
             cb_saveOcrEngineToExternalStorage.setEnabled(false);
+        }
+
+        if (SharePreferenceUtil.getInstance().getAppMode() != AppMode.Normal) {
+            cb_enableTranslation.setVisibility(View.GONE);
         }
 
         if (!BuildConfig.DEBUG) {

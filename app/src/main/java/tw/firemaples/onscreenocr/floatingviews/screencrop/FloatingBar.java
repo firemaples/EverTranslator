@@ -3,7 +3,6 @@ package tw.firemaples.onscreenocr.floatingviews.screencrop;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.os.AsyncTask;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,14 +35,13 @@ import tw.firemaples.onscreenocr.views.FloatingBarMenu;
  * Created by firemaples on 21/10/2016.
  */
 
-public class FloatingBar extends MovableFloatingView {
+public abstract class FloatingBar extends MovableFloatingView {
     private static final Logger logger = LoggerFactory.getLogger(FloatingBar.class);
 
-    private View view_menu, bt_selectArea, bt_translation, bt_clear;
-    private Spinner sp_langFrom, sp_langTo;
+    protected View view_menu, bt_selectArea, bt_translation, bt_clear;
+    protected Spinner sp_langFrom, sp_langTo;
 
     private BtnState btnState = BtnState.Normal;
-    private AsyncTask<Void, String, Boolean> lastAsyncTask;
 
     private DialogView dialogView;
     private DrawAreaView drawAreaView;
@@ -65,10 +63,6 @@ public class FloatingBar extends MovableFloatingView {
     public void attachToWindow() {
         super.attachToWindow();
         SharePreferenceUtil.getInstance().setIsAppShowing(true);
-
-        if (!SharePreferenceUtil.getInstance().isHowToUseAlreadyShown()) {
-            new HelpView(getContext()).attachToWindow();
-        }
 
         if (!SharePreferenceUtil.getInstance().isVersionHistoryAlreadyShown(getContext())) {
             new VersionHistoryView(getContext()).attachToWindow();
@@ -106,7 +100,7 @@ public class FloatingBar extends MovableFloatingView {
     @Override
     public boolean onBackButtonPressed() {
         if (btnState != BtnState.Normal) {
-            bt_clear.performClick();
+            resetAll();
             return true;
         }
         return super.onBackButtonPressed();
@@ -121,38 +115,37 @@ public class FloatingBar extends MovableFloatingView {
     }
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.view_floating_bar;
-    }
-
-    @Override
     protected int getLayoutGravity() {
         return Gravity.TOP | Gravity.RIGHT;
     }
 
-    private void setViews(View rootView) {
+    protected void setViews(View rootView) {
         view_menu = rootView.findViewById(R.id.view_menu);
         bt_selectArea = rootView.findViewById(R.id.bt_selectArea);
         bt_translation = rootView.findViewById(R.id.bt_translation);
         bt_clear = rootView.findViewById(R.id.bt_clear);
-        sp_langFrom = (Spinner) rootView.findViewById(R.id.sp_langFrom);
-        sp_langTo = (Spinner) rootView.findViewById(R.id.sp_langTo);
+        sp_langFrom = rootView.findViewById(R.id.sp_langFrom);
+        sp_langTo = rootView.findViewById(R.id.sp_langTo);
 
         view_menu.setOnClickListener(onClickListener);
         bt_selectArea.setOnClickListener(onClickListener);
         bt_translation.setOnClickListener(onClickListener);
-        bt_clear.setOnClickListener(onClickListener);
+        if (bt_clear != null) {
+            bt_clear.setOnClickListener(onClickListener);
+        }
 
-        syncBtnState(BtnState.Normal);
+        nextBtnState(BtnState.Normal);
 
         progressView = new ProgressView(getContext());
         progressView.setCallback(onProgressViewCallback);
 
         sp_langFrom.setSelection(ocrNTranslateUtils.getOcrLangIndex());
-        sp_langTo.setSelection(ocrNTranslateUtils.getTranslateToIndex());
-        sp_langTo.setEnabled(SharePreferenceUtil.getInstance().isEnableTranslation());
         sp_langFrom.setOnItemSelectedListener(onItemSelectedListener);
-        sp_langTo.setOnItemSelectedListener(onItemSelectedListener);
+        if (sp_langTo != null) {
+            sp_langTo.setSelection(ocrNTranslateUtils.getTranslateToIndex());
+            sp_langTo.setEnabled(SharePreferenceUtil.getInstance().isEnableTranslation());
+            sp_langTo.setOnItemSelectedListener(onItemSelectedListener);
+        }
 
         dialogView = new DialogView(getContext());
 
@@ -274,7 +267,7 @@ public class FloatingBar extends MovableFloatingView {
                     drawAreaView.attachToWindow();
                     FloatingBar.this.detachFromWindow(false);
                     FloatingBar.this.attachToWindow();
-                    syncBtnState(BtnState.AreaSelecting);
+                    nextBtnState(BtnState.AreaSelecting);
                     drawAreaView.getAreaSelectionView().setCallback(onAreaSelectionViewCallback);
                     if (SharePreferenceUtil.getInstance().isRememberLastSelection()) {
                         drawAreaView.getAreaSelectionView().setBoxList(SharePreferenceUtil.getInstance().getLastSelectionArea());
@@ -284,27 +277,7 @@ public class FloatingBar extends MovableFloatingView {
                     ScreenTranslatorService.stop(true);
                 }
             } else if (id == R.id.bt_translation) {
-                FabricUtil.logBtnTranslationClicked();
-                if (OcrDownloadTask.checkOcrFiles(OcrNTranslateUtils.getInstance().getOcrLang())) {
-                    FabricUtil.logDoBtnTranslationAction();
-                    if (drawAreaView == null) {
-                        logger.error("drawAreaView is null, ignore.");
-                        return;
-                    }
-                    currentBoxList.addAll(drawAreaView.getAreaSelectionView().getBoxList());
-                    if (SharePreferenceUtil.getInstance().isRememberLastSelection()) {
-                        SharePreferenceUtil.getInstance().setLastSelectionArea(currentBoxList);
-                    }
-                    drawAreaView.getAreaSelectionView().clear();
-                    drawAreaView.detachFromWindow();
-                    drawAreaView = null;
-
-                    if (takeScreenshot()) {
-                        syncBtnState(BtnState.Translating);
-                    }
-                } else {
-                    showDownloadOcrFileDialog(OcrNTranslateUtils.getInstance().getOcrLangDisplayName());
-                }
+                onTranslateBtnClicked();
             } else if (id == R.id.bt_clear) {
                 FabricUtil.logBtnClearClicked();
                 resetAll();
@@ -314,8 +287,8 @@ public class FloatingBar extends MovableFloatingView {
 
     private FloatingBarMenu.OnFloatingBarMenuCallback onFloatingBarMenuCallback = new FloatingBarMenu.OnFloatingBarMenuCallback() {
         @Override
-        public void onChangeModeItemClick() {
-            ScreenTranslatorService.switchAppMode(AppMode.QuickWindow);
+        public void onChangeModeItemClick(AppMode toAppMode) {
+            ScreenTranslatorService.switchAppMode(toAppMode);
         }
 
         @Override
@@ -346,22 +319,28 @@ public class FloatingBar extends MovableFloatingView {
 
         @Override
         public void onHelpClick() {
-            new HelpView(getContext()).attachToWindow();
+            AppMode appMode = SharePreferenceUtil.getInstance().getAppMode();
+            switch (appMode){
+                case Normal:
+                    new HelpView(getContext()).attachToWindow();
+                    break;
+                case Lite:
+                    new HelpLiteView(getContext()).attachToWindow();
+                    break;
+            }
         }
     };
 
     private SettingView.OnSettingChangedCallback onSettingChangedCallback = new SettingView.OnSettingChangedCallback() {
         @Override
         public void onEnableTranslationChanged(boolean enableTranslation) {
-            sp_langTo.setEnabled(enableTranslation);
+            if (sp_langTo != null) {
+                sp_langTo.setEnabled(enableTranslation);
+            }
         }
     };
 
-    private void resetAll() {
-        if (lastAsyncTask != null && !lastAsyncTask.isCancelled()) {
-            lastAsyncTask.cancel(true);
-        }
-
+    protected void resetAll() {
         if (drawAreaView != null) {
             drawAreaView.detachFromWindow();
 //            drawAreaView = null;
@@ -377,15 +356,39 @@ public class FloatingBar extends MovableFloatingView {
         }
 
         currentBoxList.clear();
-        syncBtnState(BtnState.Normal);
+        nextBtnState(BtnState.Normal);
     }
 
     private AreaSelectionView.OnAreaSelectionViewCallback onAreaSelectionViewCallback = new AreaSelectionView.OnAreaSelectionViewCallback() {
         @Override
         public void onAreaSelected(AreaSelectionView areaSelectionView) {
-            syncBtnState(BtnState.AreaSelected);
+            nextBtnState(BtnState.AreaSelected);
         }
     };
+
+    protected void onTranslateBtnClicked() {
+        FabricUtil.logBtnTranslationClicked();
+        if (OcrDownloadTask.checkOcrFiles(OcrNTranslateUtils.getInstance().getOcrLang())) {
+            FabricUtil.logDoBtnTranslationAction();
+            if (drawAreaView == null) {
+                logger.error("drawAreaView is null, ignore.");
+                return;
+            }
+            currentBoxList.addAll(drawAreaView.getAreaSelectionView().getBoxList());
+            if (SharePreferenceUtil.getInstance().isRememberLastSelection()) {
+                SharePreferenceUtil.getInstance().setLastSelectionArea(currentBoxList);
+            }
+            drawAreaView.getAreaSelectionView().clear();
+            drawAreaView.detachFromWindow();
+            drawAreaView = null;
+
+            if (takeScreenshot()) {
+                nextBtnState(BtnState.Translating);
+            }
+        } else {
+            showDownloadOcrFileDialog(OcrNTranslateUtils.getInstance().getOcrLangDisplayName());
+        }
+    }
 
     private boolean takeScreenshot() {
         final ScreenshotHandler screenshotHandler = ScreenshotHandler.getInstance();
@@ -438,7 +441,7 @@ public class FloatingBar extends MovableFloatingView {
         }
     };
 
-    private void showResultWindow(Bitmap screenshot, List<Rect> boxList) {
+    protected void showResultWindow(Bitmap screenshot, List<Rect> boxList) {
         ocrResultView = new OcrResultView(getContext(), onOcrResultViewCallback);
         ocrResultView.setOnBackButtonPressedListener(subViewOnBackButtonPressedListener);
         ocrResultView.setupHomeButtonWatcher(subViewOnHomePressedListener);
@@ -451,7 +454,7 @@ public class FloatingBar extends MovableFloatingView {
     private OcrResultView.OnOcrResultViewCallback onOcrResultViewCallback = new OcrResultView.OnOcrResultViewCallback() {
         @Override
         public void onOpenBrowserClicked() {
-            syncBtnState(BtnState.Normal);
+            nextBtnState(BtnState.Normal);
         }
 
         @Override
@@ -460,38 +463,14 @@ public class FloatingBar extends MovableFloatingView {
         }
     };
 
-    private void syncBtnState(BtnState btnState) {
+    private void nextBtnState(BtnState btnState) {
         this.btnState = btnState;
-        switch (btnState) {
-            case Normal:
-                bt_selectArea.setEnabled(true);
-                bt_translation.setEnabled(false);
-                bt_clear.setEnabled(false);
-                break;
-            case AreaSelecting:
-                bt_selectArea.setEnabled(false);
-                bt_translation.setEnabled(false);
-                bt_clear.setEnabled(true);
-                break;
-            case AreaSelected:
-                bt_selectArea.setEnabled(false);
-                bt_translation.setEnabled(true);
-                bt_clear.setEnabled(true);
-                break;
-            case Translating:
-                bt_selectArea.setEnabled(false);
-                bt_translation.setEnabled(false);
-                bt_clear.setEnabled(true);
-                break;
-            case Translated:
-                bt_selectArea.setEnabled(true);
-                bt_translation.setEnabled(false);
-                bt_clear.setEnabled(true);
-                break;
-        }
+        syncBtnState(btnState);
     }
 
-    private enum BtnState {
+    protected abstract void syncBtnState(BtnState btnState);
+
+    protected enum BtnState {
         Normal, AreaSelecting, AreaSelected, Translating, Translated
     }
 }

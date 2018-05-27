@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.floatingviews.screencrop.OcrResultView;
+import tw.firemaples.onscreenocr.ocr.OcrNTranslateState;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 
@@ -30,7 +30,7 @@ public class OcrResultWrapper extends RelativeLayout {
 
     private Paint borderPaint;
 
-    private OcrResultView.OcrNTranslateState state;
+    private OcrNTranslateState state;
     private List<OcrResult> ocrResultList = new ArrayList<>();
 
     private OcrResultWindow ocrResultWindow;
@@ -52,7 +52,7 @@ public class OcrResultWrapper extends RelativeLayout {
         ocrResultWindow = new OcrResultWindow(getContext(), this, callback);
     }
 
-    public void updateViewState(OcrResultView.OcrNTranslateState state, List<OcrResult> ocrResultList) {
+    public void updateViewState(OcrNTranslateState state, List<OcrResult> ocrResultList) {
         this.state = state;
         this.ocrResultList = ocrResultList;
         updateView();

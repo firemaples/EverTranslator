@@ -15,16 +15,16 @@
             android:text="@string/guide_select_source_language_and_translation_destination_language"/>
 
         <ImageView
-            style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_step1_select_language"/>
+            style="@style/helpPage.stepPictureLite"
+            android:src="@drawable/guide_lite_step1_select_language"/>
 
         <TextView
             style="@style/helpPage.stepText"
             android:text="@string/guide_click_selection_button"/>
 
         <ImageView
-            style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_step2_click_selection_button"/>
+            style="@style/helpPage.stepPictureLite"
+            android:src="@drawable/guide_lite_step2_click_selection_button"/>
 
         <TextView
             style="@style/helpPage.stepText"
@@ -35,33 +35,25 @@
             android:text="@string/guide_click_translation_button"/>
 
         <ImageView
-            style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_step4_click_translation_button"/>
+            style="@style/helpPage.stepPictureLite"
+            android:src="@drawable/guide_lite_step4_click_translation_button"/>
 
         <TextView
             style="@style/helpPage.stepText"
             android:text="@string/guide_get_the_result"/>
 
         <ImageView
-            style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_step5_get_the_result"/>
-
-        <TextView
-            style="@style/helpPage.stepText"
-            android:text="@string/guide_clear_result"/>
-
-        <ImageView
-            style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_step6_clear_result"/>
+            style="@style/helpPage.stepPictureLite"
+            android:src="@drawable/guide_lite_step5_get_the_result"/>
 
         <TextView
             style="@style/helpPage.stepText"
             android:text="@string/guide_menu"/>
 
         <ImageView
-            style="@style/helpPage.stepPicture"
+            style="@style/helpPage.stepPictureLite"
             android:layout_height="200dp"
-            android:src="@drawable/guide_step7_menu"/>
+            android:src="@drawable/guide_lite_step7_menu"/>
 
     </LinearLayout>
 

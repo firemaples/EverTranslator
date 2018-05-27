@@ -69,16 +69,21 @@
     <string name="rememberLastSelection">記住前次選擇區域</string>
     <string name="drawAnAreaForTranslation">請在螢幕上圈選要翻譯的區域</string>
     <string name="menu_help">操作說明</string>
-    <string name="title_help">操作說明</string>
+    <string name="title_help">操作說明\n(一般模式)</string>
+    <string name="title_help_lite">操作說明\n(簡易模式)</string>
     <string name="guide_select_source_language_and_translation_destination_language">1. 選擇來源語言及要翻譯的目標語言</string>
     <string name="guide_click_selection_button">2. 點擊[選擇]按鈕</string>
     <string name="guide_tap_and_drag_on_screen_to_create_selection_area_for_translation">3. 在畫面上拖曳圈選翻譯區域 (再次拖曳可以重新圈選翻譯區域)</string>
     <string name="guide_click_translation_button">4. 點擊[翻譯]按鈕</string>
     <string name="guide_get_the_result">5. 獲得結果</string>
     <string name="guide_clear_result">6. 清除結果</string>
+    <string name="guide_menu">** 點擊[選單]按鈕來取得更多設定或切換模式 **</string>
     <string name="menu_version_history">版本資訊</string>
     <string name="title_version_history">版本資訊</string>
     <string name="redrawAnAreaForTranslation">再次拖曳可以重新圈選要翻譯的區域</string>
     <string name="foregroundNotification">常駐通知</string>
     <string name="error_googleTranslatorNotInstalled">您尚未安裝 Google 翻譯 app</string>
+    <string name="toLiteMode">簡易模式</string>
+    <string name="toNormalMode">一般模式</string>
+    <string name="error_unknownError">未知的錯誤</string>
 </resources>
