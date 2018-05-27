@@ -7,7 +7,6 @@ import android.widget.PopupMenu;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.utils.AppMode;
-import tw.firemaples.onscreenocr.utils.FeatureUtil;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 
 /**
@@ -26,15 +25,11 @@ public class FloatingBarMenu {
         popupMenu.setOnMenuItemClickListener(onMenuItemClickListener);
 
         MenuItem item_changeMode = popupMenu.getMenu().findItem(R.id.menu_changeMode);
-        if (!FeatureUtil.isNewModeEnabled()) {
-            item_changeMode.setVisible(false);
+        AppMode currentAppMode = SharePreferenceUtil.getInstance().getAppMode();
+        if (currentAppMode == AppMode.Normal) {
+            item_changeMode.setTitle(R.string.toLiteMode);
         } else {
-            AppMode currentAppMode = SharePreferenceUtil.getInstance().getAppMode();
-            if (currentAppMode == AppMode.Normal) {
-                item_changeMode.setTitle(R.string.toLiteMode);
-            } else {
-                item_changeMode.setTitle(R.string.toNormalMode);
-            }
+            item_changeMode.setTitle(R.string.toNormalMode);
         }
     }
 

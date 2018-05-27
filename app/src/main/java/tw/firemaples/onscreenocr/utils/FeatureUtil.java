@@ -10,8 +10,4 @@ public class FeatureUtil {
     private static boolean isDebuggable() {
         return BuildConfig.DEBUG;
     }
-
-    public static boolean isNewModeEnabled() {
-        return isDebuggable();
-    }
 }
