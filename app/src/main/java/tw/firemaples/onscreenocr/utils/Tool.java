@@ -3,6 +3,7 @@ package tw.firemaples.onscreenocr.utils;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.widget.Toast;
@@ -96,6 +97,15 @@ public class Tool {
         }
     }
 
+    public static void openPlayStore(Context context, String packageName) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("market://details?id=" + packageName));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            context.startActivity(intent);
+        }
+    }
+
     /**
      * Get IP address from first non-localhost interface
      *
@@ -129,5 +139,15 @@ public class Tool {
         } catch (Exception ex) {
         } // for now eat exceptions
         return "";
+    }
+
+    public static boolean isPackageInstalled(Context context, String packageName) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            packageManager.getPackageInfo(packageName, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 }

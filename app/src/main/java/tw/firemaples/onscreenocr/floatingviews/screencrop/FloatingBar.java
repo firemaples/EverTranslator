@@ -281,27 +281,7 @@ public abstract class FloatingBar extends MovableFloatingView {
                     ScreenTranslatorService.stop(true);
                 }
             } else if (id == R.id.bt_translation) {
-                FabricUtil.logBtnTranslationClicked();
-                if (OcrDownloadTask.checkOcrFiles(OcrNTranslateUtils.getInstance().getOcrLang())) {
-                    FabricUtil.logDoBtnTranslationAction();
-                    if (drawAreaView == null) {
-                        logger.error("drawAreaView is null, ignore.");
-                        return;
-                    }
-                    currentBoxList.addAll(drawAreaView.getAreaSelectionView().getBoxList());
-                    if (SharePreferenceUtil.getInstance().isRememberLastSelection()) {
-                        SharePreferenceUtil.getInstance().setLastSelectionArea(currentBoxList);
-                    }
-                    drawAreaView.getAreaSelectionView().clear();
-                    drawAreaView.detachFromWindow();
-                    drawAreaView = null;
-
-                    if (takeScreenshot()) {
-                        nextBtnState(BtnState.Translating);
-                    }
-                } else {
-                    showDownloadOcrFileDialog(OcrNTranslateUtils.getInstance().getOcrLangDisplayName());
-                }
+                onTranslateBtnClicked();
             } else if (id == R.id.bt_clear) {
                 FabricUtil.logBtnClearClicked();
                 resetAll();
@@ -381,6 +361,30 @@ public abstract class FloatingBar extends MovableFloatingView {
             nextBtnState(BtnState.AreaSelected);
         }
     };
+
+    protected void onTranslateBtnClicked() {
+        FabricUtil.logBtnTranslationClicked();
+        if (OcrDownloadTask.checkOcrFiles(OcrNTranslateUtils.getInstance().getOcrLang())) {
+            FabricUtil.logDoBtnTranslationAction();
+            if (drawAreaView == null) {
+                logger.error("drawAreaView is null, ignore.");
+                return;
+            }
+            currentBoxList.addAll(drawAreaView.getAreaSelectionView().getBoxList());
+            if (SharePreferenceUtil.getInstance().isRememberLastSelection()) {
+                SharePreferenceUtil.getInstance().setLastSelectionArea(currentBoxList);
+            }
+            drawAreaView.getAreaSelectionView().clear();
+            drawAreaView.detachFromWindow();
+            drawAreaView = null;
+
+            if (takeScreenshot()) {
+                nextBtnState(BtnState.Translating);
+            }
+        } else {
+            showDownloadOcrFileDialog(OcrNTranslateUtils.getInstance().getOcrLangDisplayName());
+        }
+    }
 
     private boolean takeScreenshot() {
         final ScreenshotHandler screenshotHandler = ScreenshotHandler.getInstance();

@@ -37,6 +37,16 @@ public class LiteFloatingBar extends FloatingBar {
     }
 
     @Override
+    protected void onTranslateBtnClicked() {
+        if (GoogleTranslateUtil.isGoogleTranslateInstalled(getContext())) {
+            super.onTranslateBtnClicked();
+        } else {
+            resetAll();
+            GoogleTranslateUtil.showGoogleTranslateNotInstallDialog(getContext());
+        }
+    }
+
+    @Override
     protected void showResultWindow(Bitmap screenshot, List<Rect> boxList) {
         ocrManager.start(screenshot, boxList);
     }
