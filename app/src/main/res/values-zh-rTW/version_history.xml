@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="versionMessage_2_0_0">● 增加簡易模式，操作起來更方便快速! (使用 Google 翻譯 app，可以離線翻譯)</string>
     <string name="versionMessage_1_9_1">● 修正在 Android 8.0 上文字辨識失效問題\n● 修正在部分設備上橫向螢幕時截圖失敗問題\n● 你可以在結果視窗中將文字傳給 Google 翻譯</string>
     <string name="versionMessage_1_8_1">● 增加設定選項 [記住前次選擇區域]\n● 增加說明頁面\n● 增加版本資訊頁面</string>
     <string name="versionMessage_1_7_1">● 修正錯誤</string>
