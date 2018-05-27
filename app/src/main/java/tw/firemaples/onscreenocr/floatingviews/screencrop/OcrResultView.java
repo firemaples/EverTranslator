@@ -268,6 +268,7 @@ public class OcrResultView extends FloatingView {
 
             Intent intent = new Intent();
             intent.setType("text/plain");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 intent.setAction(Intent.ACTION_PROCESS_TEXT);
                 intent.putExtra(Intent.EXTRA_PROCESS_TEXT, text);
@@ -346,6 +347,7 @@ public class OcrResultView extends FloatingView {
 
     public interface OnOcrResultViewCallback {
         void onOpenBrowserClicked();
+
         void onOpenGoogleTranslateClicked();
     }
 }
