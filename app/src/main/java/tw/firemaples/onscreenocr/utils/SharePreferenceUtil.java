@@ -92,11 +92,12 @@ public class SharePreferenceUtil {
     }
 
     public AppMode getAppMode() {
-        return AppMode.valueOf(getSharedPreferences().getString(KEY_APP_MODE, AppMode.ScreenCrop.name()));
+        return AppMode.valueOf(getSharedPreferences().getString(KEY_APP_MODE, AppMode.Lite.name()));
     }
 
+    @SuppressLint("ApplySharedPref")
     public void setAppMode(AppMode appMode) {
-        getSharedPreferences().edit().putString(KEY_APP_MODE, appMode.name()).apply();
+        getSharedPreferences().edit().putString(KEY_APP_MODE, appMode.name()).commit();
     }
 
     public boolean getReadSpeedEnable() {

@@ -81,4 +81,6 @@
     <string name="redrawAnAreaForTranslation">再次拖曳可以重新圈选欲翻译的区域</string>
     <string name="foregroundNotification">常驻通知</string>
     <string name="error_googleTranslatorNotInstalled">您尚未安装 Google 翻译 app</string>
+    <string name="toLiteMode">简易模式</string>
+    <string name="toNormalMode">一般模式</string>
 </resources>

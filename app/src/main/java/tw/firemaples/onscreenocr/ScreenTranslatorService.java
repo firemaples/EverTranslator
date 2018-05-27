@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import tw.firemaples.onscreenocr.database.DatabaseManager;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
-import tw.firemaples.onscreenocr.floatingviews.quicktrans.QuickWindow;
-import tw.firemaples.onscreenocr.floatingviews.screencrop.FloatingBar;
+import tw.firemaples.onscreenocr.floatingviews.screencrop.LiteFloatingBar;
+import tw.firemaples.onscreenocr.floatingviews.screencrop.NormalFloatingBar;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.tts.AndroidTTSManager;
 import tw.firemaples.onscreenocr.utils.AppMode;
@@ -219,14 +219,14 @@ public class ScreenTranslatorService extends Service {
             return;
         }
         switch (spUtil.getAppMode()) {
-            case ScreenCrop:
-                if (!(mainFloatingView instanceof FloatingBar)) {
-                    mainFloatingView = new FloatingBar(this);
+            case Normal:
+                if (!(mainFloatingView instanceof NormalFloatingBar)) {
+                    mainFloatingView = new NormalFloatingBar(this);
                 }
                 break;
-            case QuickWindow:
-                if (!(mainFloatingView instanceof QuickWindow)) {
-                    mainFloatingView = new QuickWindow(this);
+            case Lite:
+                if (!(mainFloatingView instanceof LiteFloatingBar)) {
+                    mainFloatingView = new LiteFloatingBar(this);
                 }
                 break;
         }

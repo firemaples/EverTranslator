@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.floatingviews.screencrop.OcrResultView;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.TTSPlayerView;
+import tw.firemaples.onscreenocr.ocr.OcrNTranslateState;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
@@ -50,7 +50,7 @@ public class OcrResultWindow {
 
     private OnOcrResultWindowCallback callback;
 
-    private OcrResultView.OcrNTranslateState state;
+    private OcrNTranslateState state;
     private OcrResult ocrResult;
 
     public OcrResultWindow(Context context, ViewGroup parent, OnOcrResultWindowCallback callback) {
@@ -101,7 +101,7 @@ public class OcrResultWindow {
         display.getMetrics(metrics);
     }
 
-    public void setOcrResult(OcrResultView.OcrNTranslateState state, OcrResult ocrResult) {
+    public void setOcrResult(OcrNTranslateState state, OcrResult ocrResult) {
         this.state = state;
         this.ocrResult = ocrResult;
 
@@ -126,8 +126,8 @@ public class OcrResultWindow {
 //                break;
 //        }
 
-        boolean ocrFinished = state.getStep() >= OcrResultView.OcrNTranslateState.OCR_FINISHED.getStep();
-        boolean translated = state.getStep() >= OcrResultView.OcrNTranslateState.TRANSLATED.getStep();
+        boolean ocrFinished = state.getStep() >= OcrNTranslateState.OCR_FINISHED.getStep();
+        boolean translated = state.getStep() >= OcrNTranslateState.TRANSLATED.getStep();
 
         pb_origin.setVisibility(!ocrFinished ? View.VISIBLE : View.GONE);
         pb_translated.setVisibility(ocrFinished && !translated ? View.VISIBLE : View.GONE);

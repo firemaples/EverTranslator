@@ -332,10 +332,10 @@ public class AreaSelectionView extends ImageView {
                 int alpha;
                 if (millisUntilFinished < TIME_TEXT_HIDDEN_ANIM) {
                     alpha = (int) ((float) millisUntilFinished / (float) TIME_TEXT_HIDDEN_ANIM * (float) MAX_ALPHA);
-                    logger.info("Alpha: " + alpha);
+//                    logger.info("Alpha: " + alpha);
                 } else {
                     alpha = MAX_ALPHA;
-                    logger.info("Alpha: fixed " + alpha);
+//                    logger.info("Alpha: fixed " + alpha);
                 }
                 helpTextAlphaPaint.setAlpha(alpha);
 //                logger.info("borderAnimationProgress: " + borderAnimationProgress);

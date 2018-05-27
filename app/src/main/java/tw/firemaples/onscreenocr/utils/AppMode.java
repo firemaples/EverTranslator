@@ -5,5 +5,5 @@ package tw.firemaples.onscreenocr.utils;
  */
 
 public enum AppMode {
-    ScreenCrop, QuickWindow
+    Normal, Lite
 }

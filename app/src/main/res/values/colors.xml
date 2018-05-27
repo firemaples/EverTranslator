@@ -19,4 +19,6 @@
     <color name="quickWindow_borderColor2">#FF006064</color>
 
     <color name="tts_backgroundColor">#EE000000</color>
+
+    <color name="spinnerBorderColor">@color/md_grey_700</color>
 </resources>

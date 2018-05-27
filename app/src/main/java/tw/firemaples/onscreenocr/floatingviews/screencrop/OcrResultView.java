@@ -1,13 +1,8 @@
 package tw.firemaples.onscreenocr.floatingviews.screencrop;
 
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,14 +18,14 @@ import java.util.List;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
-import tw.firemaples.onscreenocr.ocr.OcrInitAsyncTask;
-import tw.firemaples.onscreenocr.ocr.OcrRecognizeAsyncTask;
+import tw.firemaples.onscreenocr.ocr.OCRManager;
+import tw.firemaples.onscreenocr.ocr.OcrNTranslateState;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
+import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil;
 import tw.firemaples.onscreenocr.translate.TranslateManager;
 import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
-import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.views.OcrResultWindow;
 import tw.firemaples.onscreenocr.views.OcrResultWrapper;
 
@@ -49,17 +44,18 @@ public class OcrResultView extends FloatingView {
 
     private OcrNTranslateState state = OcrNTranslateState.OCR_INIT;
 
-    private AsyncTask lastAsyncTask = null;
-    private Bitmap currentScreenshot;
-    private List<Rect> boxList;
     private List<OcrResult> ocrResultList = new ArrayList<>();
 
+    private OCRManager ocrManager;
     private TranslateManager translateManager;
 
     public OcrResultView(Context context, OnOcrResultViewCallback callback) {
         super(context);
         this.callback = callback;
         setViews(getRootView());
+
+        ocrManager = OCRManager.getInstance(context);
+        ocrManager.setListener(onOCRStateChangedListener);
         translateManager = TranslateManager.getInstance();
     }
 
@@ -91,8 +87,6 @@ public class OcrResultView extends FloatingView {
     }
 
     public void setupData(Bitmap screenshot, List<Rect> boxList) {
-        this.currentScreenshot = screenshot;
-        this.boxList = boxList;
         this.ocrResultList = new ArrayList<>();
 
         for (Rect rect : boxList) {
@@ -104,7 +98,7 @@ public class OcrResultView extends FloatingView {
             ocrResultList.add(ocrResult);
         }
 
-        initOcrEngine();
+        ocrManager.start(screenshot, boxList);
     }
 
     private void setDebugInfo(OcrResult ocrResult) {
@@ -136,7 +130,7 @@ public class OcrResultView extends FloatingView {
 
 
     public void clear() {
-        lastAsyncTask.cancel(true);
+        ocrManager.cancelRunningTask();
 
         view_ocrResultWrapper.clear();
         if (textEditDialogView != null) {
@@ -154,58 +148,30 @@ public class OcrResultView extends FloatingView {
         super.detachFromWindow();
     }
 
-    private void initOcrEngine() {
-        updateViewState(OcrNTranslateState.OCR_INIT);
+    private OCRManager.OnOCRStateChangedListener onOCRStateChangedListener = new OCRManager.OnOCRStateChangedListener() {
+        @Override
+        public void onInitializing() {
+            updateViewState(OcrNTranslateState.OCR_INIT);
+        }
 
-        lastAsyncTask = new OcrInitAsyncTask(getContext(), onOcrInitAsyncTaskCallback).execute();
-    }
+        @Override
+        public void onInitialized() {
 
-    private OcrInitAsyncTask.OnOcrInitAsyncTaskCallback onOcrInitAsyncTaskCallback =
-            new OcrInitAsyncTask.OnOcrInitAsyncTaskCallback() {
-                @Override
-                public void onOcrInitialized() {
-//                    showMessage(getContext().getString(R.string.progress_ocrInitialized));
-                    startTextRecognize();
-                }
+        }
 
-                @Override
-                public void showMessage(String message) {
-                }
+        @Override
+        public void onRecognizing() {
+            updateViewState(OcrNTranslateState.OCR_RUNNING);
+        }
 
-                @Override
-                public void hideMessage() {
-                }
-            };
-
-    private void startTextRecognize() {
-        updateViewState(OcrNTranslateState.OCR_RUNNING);
-
-        FabricUtil.logStartOCROperation();
-
-        lastAsyncTask = new OcrRecognizeAsyncTask(getContext(),
-                currentScreenshot,
-                boxList,
-                onTextRecognizeAsyncTaskCallback).execute();
-    }
-
-    private OcrRecognizeAsyncTask.OnTextRecognizeAsyncTaskCallback onTextRecognizeAsyncTaskCallback =
-            new OcrRecognizeAsyncTask.OnTextRecognizeAsyncTaskCallback() {
-                @Override
-                public void onTextRecognizeFinished(List<OcrResult> results) {
-                    OcrResultView.this.ocrResultList.clear();
-                    OcrResultView.this.ocrResultList.addAll(results);
-                    updateViewState(state = OcrNTranslateState.OCR_FINISHED);
-                    startTranslate(results);
-                }
-
-                @Override
-                public void showMessage(String message) {
-                }
-
-                @Override
-                public void hideMessage() {
-                }
-            };
+        @Override
+        public void onRecognized(List<OcrResult> results) {
+            OcrResultView.this.ocrResultList.clear();
+            OcrResultView.this.ocrResultList.addAll(results);
+            updateViewState(state = OcrNTranslateState.OCR_FINISHED);
+            startTranslate(results);
+        }
+    };
 
     private void startTranslate(List<OcrResult> results) {
         if (SharePreferenceUtil.getInstance().isEnableTranslation() && results.size() > 0) {
@@ -266,36 +232,8 @@ public class OcrResultView extends FloatingView {
                 lang = OcrNTranslateUtils.getInstance().getTranslateToLang();
             }
 
-            Intent intent = new Intent();
-            intent.setType("text/plain");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                intent.setAction(Intent.ACTION_PROCESS_TEXT);
-                intent.putExtra(Intent.EXTRA_PROCESS_TEXT, text);
-                intent.putExtra("key_language_to", lang);
-                intent.setPackage("com.google.android.apps.translate");
-            } else {
-                intent.setAction(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TEXT, text);
-                intent.putExtra("key_text_input", text);
-                intent.putExtra("key_text_output", "");
-                intent.putExtra("key_language_from", "auto");
-                intent.putExtra("key_language_to", lang);
-                intent.putExtra("key_suggest_translation", "");
-                intent.putExtra("key_from_floating_window", false);
-                intent.setComponent(new ComponentName(
-                        "com.google.android.apps.translate",
-                        //Change is here
-                        //"com.google.android.apps.translate.HomeActivity"));
-                        "com.google.android.apps.translate.TranslateActivity"));
-            }
-
-            try {
-                getContext().startActivity(intent);
-
+            if (GoogleTranslateUtil.start(getContext(), lang, text)) {
                 callback.onOpenGoogleTranslateClicked();
-            } catch (ActivityNotFoundException e) {
-                e.printStackTrace();
-                Tool.getInstance().showErrorMsg(getContext().getString(R.string.error_googleTranslatorNotInstalled));
             }
         }
     };
@@ -329,23 +267,9 @@ public class OcrResultView extends FloatingView {
         }
     };
 
-    public enum OcrNTranslateState {
-        OCR_INIT(1), OCR_RUNNING(2), OCR_FINISHED(3),
-        TRANSLATING(4), TRANSLATED(5);
-
-        private int step;
-
-        OcrNTranslateState(int step) {
-            this.step = step;
-        }
-
-        public int getStep() {
-            return step;
-        }
-    }
-
     public interface OnOcrResultViewCallback {
         void onOpenBrowserClicked();
+
         void onOpenGoogleTranslateClicked();
     }
 }
