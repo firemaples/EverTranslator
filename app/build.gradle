@@ -45,13 +45,13 @@ android {
 //    }
     flavorDimensions "tier"
     productFlavors {
-        debug_config {
+        dev {
             dimension "tier"
             applicationId "tw.firemaples.onscreenocr_debug"
             versionCode 100
             versionName "10.0.0"
         }
-        release_config {
+        prod {
             dimension "tier"
             signingConfig signingConfigs.SignConfig
         }
@@ -72,6 +72,7 @@ dependencies {
     implementation 'com.android.support:cardview-v7:26.1.0'
     implementation 'io.github.firemaples:microsoft-translator-java-api:0.8.6'
     implementation 'com.google.android.exoplayer:exoplayer:r2.4.0'
+    implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation 'com.google.firebase:firebase-database:16.0.1'
     implementation 'com.amitshekhar.android:android-networking:1.0.0'
     implementation 'com.facebook.stetho:stetho:1.5.0'
