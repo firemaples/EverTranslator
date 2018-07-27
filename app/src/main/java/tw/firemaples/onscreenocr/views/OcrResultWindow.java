@@ -20,7 +20,6 @@ import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.TTSPlayerView;
 import tw.firemaples.onscreenocr.ocr.OcrNTranslateState;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
-import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -207,12 +206,10 @@ public class OcrResultWindow {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.bt_openInBrowser_ocrText) {
-                FabricUtil.logBtnOpenInWebViewClicked("OCR text");
                 if (ocrResult != null && ocrResult.getText() != null) {
                     callback.onOpenBrowserBtnClick(ocrResult.getText(), false);
                 }
             } else if (id == R.id.bt_openInBrowser_translatedText) {
-                FabricUtil.logBtnOpenInWebViewClicked("Translated text");
                 if (ocrResult != null && ocrResult.getTranslatedText() != null) {
                     callback.onOpenBrowserBtnClick(ocrResult.getTranslatedText(), true);
                 }
@@ -228,11 +225,9 @@ public class OcrResultWindow {
                 String lang;
                 String ttsContent;
                 if (id == R.id.bt_tts_ocrText) {
-                    FabricUtil.logBtnPlayTTSClicked("OCR text");
                     lang = OcrNTranslateUtils.getInstance().getTranslateFromLang();
                     ttsContent = ocrResult.getText();
                 } else {
-                    FabricUtil.logBtnPlayTTSClicked("Translated text");
                     lang = OcrNTranslateUtils.getInstance().getTranslateToLang();
                     ttsContent = ocrResult.getTranslatedText();
                 }
@@ -253,7 +248,6 @@ public class OcrResultWindow {
     };
 
     private void copyToClipboard(String label, String text) {
-        FabricUtil.logBtnCopyToClipboardClicked(label);
         ClipboardManager clipboard = (ClipboardManager)
                 context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = ClipData.newPlainText(label, text);

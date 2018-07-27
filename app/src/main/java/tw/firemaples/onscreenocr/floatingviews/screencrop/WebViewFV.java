@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
-import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
 import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.utils.UrlFormatter;
@@ -75,7 +74,6 @@ public class WebViewFV extends FloatingView {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.bt_openBrowser) {
-                FabricUtil.logBtnOpenOnOtherBrowserClicked();
                 Tool.getInstance().openBrowser(url);
                 callback.onOpenBrowserClicked();
             } else if (id == R.id.bt_close) {

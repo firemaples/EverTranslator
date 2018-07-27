@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 import tw.firemaples.onscreenocr.database.DatabaseManager;
 import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.database.ServiceModel;
-import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.utils.UrlFormatter;
 
@@ -71,7 +70,6 @@ public class GoogleWebApiTranslator {
                             GoogleTranslateResultNotFoundException exception = new GoogleTranslateResultNotFoundException(response);
                             logger.error("GoogleWebApiTranslator: error: " + Log.getStackTraceString(exception));
                             logger.error(response);
-                            FabricUtil.logGoogleTranslateResultNotFoundException(exception, response, REGEX_RESULT_MATCHER);
                             callback.onError(exception);
                         }
                     }

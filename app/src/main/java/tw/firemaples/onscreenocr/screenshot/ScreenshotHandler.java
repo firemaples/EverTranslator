@@ -30,7 +30,7 @@ import java.util.Locale;
 
 import tw.firemaples.onscreenocr.MainActivity;
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.utils.FabricUtil;
+import tw.firemaples.onscreenocr.utils.FabricUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
 
@@ -135,7 +135,6 @@ public class ScreenshotHandler {
     private void _takeScreenshot() {
         logger.info("Start screenshot");
         final long screenshotStartTime = System.currentTimeMillis();
-        FabricUtil.logStartScreenshotOperation();
 
         final MediaProjection mProjection = getMediaProjection();
         if (mProjection == null) {
@@ -226,7 +225,7 @@ public class ScreenshotHandler {
                             callback.onScreenshotFailed(ERROR_CODE_KNOWN_ERROR, e);
                         }
                     }
-                    FabricUtil.postException(e);
+                    FabricUtils.logException(e);
                 } finally {
                     if (image != null) {
                         image.close();
@@ -245,7 +244,6 @@ public class ScreenshotHandler {
                 if (realSizeBitmap != null) {
                     long spentTime = System.currentTimeMillis() - screenshotStartTime;
                     logger.info("Screenshot finished, spent: " + spentTime + " ms");
-                    FabricUtil.logFinishScreenshotOperation(spentTime);
                     if (callback != null) {
                         callback.onScreenshotFinished(realSizeBitmap);
                     }

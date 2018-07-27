@@ -24,7 +24,6 @@ import tw.firemaples.onscreenocr.ocr.OcrDownloadTask;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.translate.TranslateManager;
 import tw.firemaples.onscreenocr.utils.AppMode;
-import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
@@ -258,9 +257,7 @@ public abstract class FloatingBar extends MovableFloatingView {
                     TranslateManager.getInstance().test(getContext());
                 }
 
-                FabricUtil.logBtnSelectAreaClicked();
                 if (ScreenshotHandler.isInitialized()) {
-                    FabricUtil.logDoBtnSelectAreaAction();
                     drawAreaView = new DrawAreaView(getContext());
                     drawAreaView.setOnBackButtonPressedListener(subViewOnBackButtonPressedListener);
                     drawAreaView.setupHomeButtonWatcher(subViewOnHomePressedListener);
@@ -279,7 +276,6 @@ public abstract class FloatingBar extends MovableFloatingView {
             } else if (id == R.id.bt_translation) {
                 onTranslateBtnClicked();
             } else if (id == R.id.bt_clear) {
-                FabricUtil.logBtnClearClicked();
                 resetAll();
             }
         }
@@ -367,9 +363,7 @@ public abstract class FloatingBar extends MovableFloatingView {
     };
 
     protected void onTranslateBtnClicked() {
-        FabricUtil.logBtnTranslationClicked();
         if (OcrDownloadTask.checkOcrFiles(OcrNTranslateUtils.getInstance().getOcrLang())) {
-            FabricUtil.logDoBtnTranslationAction();
             if (drawAreaView == null) {
                 logger.error("drawAreaView is null, ignore.");
                 return;

@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.Callback;
-import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.PermissionUtil;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 
@@ -56,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(0, 0);
 
         if (getIntent() != null && getIntent().getAction() != null) {
-            FabricUtil.logAppLaunched();
             SharePreferenceUtil.getInstance().setIsAppShowing(true, this);
         }
 

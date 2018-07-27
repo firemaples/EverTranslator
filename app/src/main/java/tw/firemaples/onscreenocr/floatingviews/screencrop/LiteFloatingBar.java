@@ -11,7 +11,7 @@ import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ocr.OCRManager;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil;
-import tw.firemaples.onscreenocr.utils.FabricUtil;
+import tw.firemaples.onscreenocr.utils.FabricUtils;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 
@@ -86,7 +86,7 @@ public class LiteFloatingBar extends FloatingBar {
                     if (results.size() > 0) {
                         String text = results.get(0).getText();
                         GoogleTranslateUtil.start(getContext(), lang, text);
-                        FabricUtil.logTranslationInfo(text, lang, "GoogleTranslateApp", "Lite:FeedGoogleTranslateApp");
+                        FabricUtils.logTranslationInfo(text, lang, "GoogleTranslateApp", "Lite:FeedGoogleTranslateApp");
                     }
                     resetAll();
                 }
