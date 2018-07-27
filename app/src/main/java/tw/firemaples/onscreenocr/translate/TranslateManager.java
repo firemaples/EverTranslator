@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import tw.firemaples.onscreenocr.database.DatabaseManager;
 import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.database.ServiceModel;
-import tw.firemaples.onscreenocr.utils.FabricUtil;
+import tw.firemaples.onscreenocr.utils.FabricUtils;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 
@@ -96,7 +96,7 @@ public class TranslateManager {
                         mainThreadHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                FabricUtil.logTranslationInfo(text, translateFromLang, translateToLang, translateService.name);
+                                FabricUtils.logTranslationInfo(text, translateFromLang, translateToLang, translateService.name);
                                 callback.onTranslateFinished(translatedText);
                             }
                         });
@@ -127,7 +127,7 @@ public class TranslateManager {
                         mainThreadHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                FabricUtil.logTranslationInfo(text, translateFromLang, translateToLang, translateService.name);
+                                FabricUtils.logTranslationInfo(text, translateFromLang, translateToLang, translateService.name);
                                 callback.onTranslateFinished(translatedText);
                             }
                         });
@@ -146,7 +146,7 @@ public class TranslateManager {
                         mainThreadHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                FabricUtil.logTranslationInfo(text, translateFromLang, translateToLang, translateService.name);
+                                FabricUtils.logTranslationInfo(text, translateFromLang, translateToLang, translateService.name);
                                 callback.onTranslateFinished(translatedText);
                             }
                         });
@@ -166,7 +166,7 @@ public class TranslateManager {
                         mainThreadHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                FabricUtil.logTranslationInfo(text, translateFromLang, translateToLang, translateService.name);
+                                FabricUtils.logTranslationInfo(text, translateFromLang, translateToLang, translateService.name);
                                 callback.onTranslateFinished(translatedText);
                             }
                         });

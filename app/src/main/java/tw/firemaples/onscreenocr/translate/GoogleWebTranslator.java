@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 
 import tw.firemaples.onscreenocr.BuildConfig;
 import tw.firemaples.onscreenocr.database.ServiceHolderModel;
-import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.UrlFormatter;
 
 /**
@@ -92,7 +91,6 @@ public class GoogleWebTranslator {
 
                     if (timeout) {
                         logger.error("Google translate timeout");
-                        FabricUtil.postOnGoogleTranslateTimeout(TIMEOUT);
                         if (callback != null) {
                             callback.onTimeout();
                         }
@@ -118,7 +116,6 @@ public class GoogleWebTranslator {
         @Override
         public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
             super.onReceivedHttpError(view, request, errorResponse);
-            FabricUtil.postOnGoogleTranslateFailedException(errorResponse.getStatusCode(), errorResponse.getReasonPhrase());
 
             if (callback != null) {
                 callback.onHttpException(errorResponse.getStatusCode(), errorResponse.getReasonPhrase());
@@ -156,7 +153,6 @@ public class GoogleWebTranslator {
             logger.debug("Body content: " + body);
             if (body == null || body.trim().length() == 0) {
                 logger.error("postOnGoogleTranslateFailedWithNoneContentException");
-                FabricUtil.postOnGoogleTranslateFailedWithNoneContentException();
                 if (callback != null) {
                     callback.onNoneException();
                 }

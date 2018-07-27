@@ -10,6 +10,7 @@ import com.google.firebase.FirebaseApp;
 
 import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
+import tw.firemaples.onscreenocr.utils.FabricUtils;
 import tw.firemaples.onscreenocr.utils.SignatureUtil;
 
 /**
@@ -25,20 +26,20 @@ public class CoreApplication extends Application {
             Fabric.with(this, new Crashlytics());
         }
 
+        FabricUtils.setClientInfo(this);
+
         FirebaseApp.initializeApp(this);
 
         initFastAndroidNetworking();
-        
+
         validateSignature();
     }
 
     protected void validateSignature() {
         try {
             String sha = SignatureUtil.getCurrentSignatureSHA(this);
-            int hashCode = SignatureUtil.getCurrentSignatureHashCode(this);
             boolean result = SignatureUtil.validateSignature(this);
             Crashlytics.setString("Signature_SHA", sha);
-            Crashlytics.setInt("Signature_hashCode", hashCode);
             Crashlytics.setBool("Signature_SHA_is_correct", result);
             Crashlytics.setString("Package_name", getPackageName());
         } catch (Throwable e) {

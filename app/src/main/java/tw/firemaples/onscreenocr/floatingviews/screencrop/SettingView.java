@@ -20,7 +20,7 @@ import tw.firemaples.onscreenocr.BuildConfig;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.utils.AppMode;
-import tw.firemaples.onscreenocr.utils.FabricUtil;
+import tw.firemaples.onscreenocr.utils.FabricUtils;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -172,7 +172,7 @@ public class SettingView extends FloatingView {
                         moveFile(file, fileTo);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        FabricUtil.postException(e);
+                        FabricUtils.logException(e);
                     }
 
                 }

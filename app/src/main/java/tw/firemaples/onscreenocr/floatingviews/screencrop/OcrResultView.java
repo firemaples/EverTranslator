@@ -23,7 +23,6 @@ import tw.firemaples.onscreenocr.ocr.OcrNTranslateState;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil;
 import tw.firemaples.onscreenocr.translate.TranslateManager;
-import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.views.OcrResultWindow;
@@ -176,7 +175,6 @@ public class OcrResultView extends FloatingView {
     private void startTranslate(List<OcrResult> results) {
         if (SharePreferenceUtil.getInstance().isEnableTranslation() && results.size() > 0) {
             updateViewState(OcrNTranslateState.TRANSLATING);
-            FabricUtil.logStartTranslateOperation();
 
             translateManager.startTranslate(getContext(), results.get(0).getText(), onTranslateManagerCallback);
 
@@ -191,7 +189,6 @@ public class OcrResultView extends FloatingView {
     private TranslateManager.OnTranslateManagerCallback onTranslateManagerCallback = new TranslateManager.OnTranslateManagerCallback() {
         @Override
         public void onTranslateFinished(String translatedText) {
-            FabricUtil.logFinishTranslateOperation();
             if (ocrResultList.size() > 0) {
                 ocrResultList.get(0).setTranslatedText(translatedText);
             }

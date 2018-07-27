@@ -22,7 +22,6 @@ import tw.firemaples.onscreenocr.floatingviews.screencrop.NormalFloatingBar;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.tts.AndroidTTSManager;
 import tw.firemaples.onscreenocr.utils.AppMode;
-import tw.firemaples.onscreenocr.utils.FabricUtil;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 import tw.firemaples.onscreenocr.utils.Tool;
@@ -84,7 +83,6 @@ public class ScreenTranslatorService extends Service {
 
     public static void switchAppMode(AppMode appMode) {
         if (_instance != null && SharePreferenceUtil.getInstance().getAppMode() != appMode) {
-            FabricUtil.logSwitchMode(appMode);
             _instance._stopFloatingView(true);
             SharePreferenceUtil.getInstance().setAppMode(appMode);
             _instance._startFloatingView();
@@ -135,7 +133,6 @@ public class ScreenTranslatorService extends Service {
         }
 
         Tool.init(this);
-        FabricUtil.logClientInfo();
         spUtil = SharePreferenceUtil.getInstance();
         screenshotHandler = ScreenshotHandler.getInstance();
         OcrNTranslateUtils.init();

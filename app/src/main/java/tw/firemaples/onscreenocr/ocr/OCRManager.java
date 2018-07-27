@@ -7,8 +7,6 @@ import android.os.AsyncTask;
 
 import java.util.List;
 
-import tw.firemaples.onscreenocr.utils.FabricUtil;
-
 public class OCRManager {
     private static OCRManager _instance;
 
@@ -80,8 +78,6 @@ public class OCRManager {
         if (callback != null) {
             callback.onRecognizing();
         }
-
-        FabricUtil.logStartOCROperation();
 
         lastAsyncTask = new OcrRecognizeAsyncTask(context,
                 currentScreenshot,
