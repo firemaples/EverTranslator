@@ -8,12 +8,14 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
 
 apply from: '../../sign.gradle'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    mavenCentral()
 }
 
 
@@ -87,6 +89,7 @@ dependencies {
         exclude group: 'com.google.android'
     }
     implementation 'org.slf4j:slf4j-api:1.7.22'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 apply plugin: 'com.google.gms.google-services'
