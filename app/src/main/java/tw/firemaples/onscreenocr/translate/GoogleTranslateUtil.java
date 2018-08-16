@@ -8,13 +8,13 @@ import android.os.Build;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.DialogView;
-import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.utils.Utils;
 
 public class GoogleTranslateUtil {
     private static final String PACKAGE_NAME_GOOGLE_TRANSLATE = "com.google.android.apps.translate";
 
     public static boolean isGoogleTranslateInstalled(Context context) {
-        return Tool.isPackageInstalled(context, PACKAGE_NAME_GOOGLE_TRANSLATE);
+        return Utils.isPackageInstalled(context, PACKAGE_NAME_GOOGLE_TRANSLATE);
     }
 
     public static boolean start(Context context, String lang, String text) {
@@ -48,7 +48,7 @@ public class GoogleTranslateUtil {
             return true;
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
-            Tool.getInstance().showErrorMsg(context.getString(R.string.error_googleTranslatorNotInstalled));
+            Utils.showErrorToast(context.getString(R.string.error_googleTranslatorNotInstalled));
             return false;
         }
     }
@@ -62,9 +62,9 @@ public class GoogleTranslateUtil {
         dialogView.getOkBtn().setText("Install");
         dialogView.setCallback(new DialogView.OnDialogViewCallback() {
             @Override
-            public void OnConfirmClick(DialogView dialogView) {
-                super.OnConfirmClick(dialogView);
-                Tool.openPlayStore(context, PACKAGE_NAME_GOOGLE_TRANSLATE);
+            public void onConfirmClick(DialogView dialogView) {
+                super.onConfirmClick(dialogView);
+                Utils.openPlayStore(context, PACKAGE_NAME_GOOGLE_TRANSLATE);
             }
         });
         dialogView.attachToWindow();

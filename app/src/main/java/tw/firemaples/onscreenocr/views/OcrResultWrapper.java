@@ -19,7 +19,7 @@ import java.util.Locale;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ocr.OcrNTranslateState;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
-import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
+import tw.firemaples.onscreenocr.utils.SettingUtil;
 
 /**
  * Created by firemaples on 29/11/2016.
@@ -94,7 +94,7 @@ public class OcrResultWrapper extends RelativeLayout {
                 layoutParams.setMargins(parentRect.left, parentRect.top, 0, 0);
                 bgImage.setLayoutParams(layoutParams);
 
-                if (SharePreferenceUtil.getInstance().isDebugMode() && ocrResult.getDebugInfo() != null) {
+                if (SettingUtil.INSTANCE.isDebugMode() && ocrResult.getDebugInfo() != null) {
                     bgImage.setImageBitmap(ocrResult.getDebugInfo().getCroppedBitmap());
                 }
 

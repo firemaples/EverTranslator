@@ -23,7 +23,7 @@
                 android:id="@+id/sp_langFrom"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:entries="@array/languagenames"/>
+                android:entries="@array/ocr_langName"/>
 
             <Spinner
                 android:id="@+id/sp_langTo"
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/sp_langFrom"
                 android:layout_marginTop="6dp"
-                android:entries="@array/translationtargetlanguagenames_microsoft"/>
+                android:entries="@array/microsoft_translationLangName"/>
 
             <ImageView
                 android:id="@+id/view_menu"

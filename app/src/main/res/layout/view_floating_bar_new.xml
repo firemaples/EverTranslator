@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:theme="@style/Base.Theme.AppCompat.Light">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <LinearLayout
+                android:id="@+id/view_langSelector"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_spinner"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp">
+
+                <TextView
+                    android:id="@+id/tv_lang"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="En > "
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/iv_googleTranslate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/google_translate_dark_grey"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/bt_selectArea"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="4dp"
+                android:background="@drawable/bg_floating_bar_btn"
+                android:src="@drawable/selection" />
+
+            <ImageButton
+                android:id="@+id/bt_translation"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="4dp"
+                android:background="@drawable/bg_floating_bar_btn"
+                android:src="@drawable/translate"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/bt_clear"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="4dp"
+                android:background="@drawable/bg_floating_bar_btn"
+                android:src="@drawable/format_clear"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/pg_progress"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="4dp"
+                android:padding="0dp"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/view_menu"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="4dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="2dp"
+                android:src="@drawable/menu" />
+
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

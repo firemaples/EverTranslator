@@ -19,6 +19,7 @@ import java.util.List;
 
 import tw.firemaples.onscreenocr.MainActivity;
 import tw.firemaples.onscreenocr.ScreenTranslatorService;
+import tw.firemaples.onscreenocr.floatingviews.screencrop.RealButtonHandler;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
 import tw.firemaples.onscreenocr.utils.PermissionUtil;
 
@@ -38,6 +39,7 @@ public abstract class FloatingView {
     private HomeWatcher homeWatcher;
     private OnBackButtonPressedListener onBackButtonPressedListener;
     private List<AsyncTask> manageTask = new ArrayList<>();
+    private final static List<FloatingView> nonPrimaryViews = new ArrayList<>();
 
     public FloatingView(Context context) {
         this.context = context;
@@ -62,6 +64,10 @@ public abstract class FloatingView {
             floatingLayoutParams.flags = floatingLayoutParams.flags | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         }
         floatingLayoutParams.gravity = getLayoutGravity();
+    }
+
+    protected boolean isPrimaryView() {
+        return false;
     }
 
     protected boolean layoutFocusable() {
@@ -122,6 +128,11 @@ public abstract class FloatingView {
             if (PermissionUtil.checkDrawOverlayPermission(context)) {
                 windowManager.addView(rootView, floatingLayoutParams);
                 isAttached = true;
+                if (!isPrimaryView()) {
+                    synchronized (nonPrimaryViews) {
+                        nonPrimaryViews.add(this);
+                    }
+                }
             } else {
                 MainActivity.start(context);
                 ScreenTranslatorService.stop(true);
@@ -142,7 +153,43 @@ public abstract class FloatingView {
 
             windowManager.removeView(rootView);
             isAttached = false;
+            if (!isPrimaryView()) {
+                synchronized (nonPrimaryViews) {
+                    nonPrimaryViews.remove(this);
+                }
+            }
         }
+    }
+
+    public static void detachAllNonPrimaryViews() {
+        List<FloatingView> viewCopies;
+        synchronized (nonPrimaryViews) {
+            viewCopies = new ArrayList<>(nonPrimaryViews);
+        }
+        for (FloatingView viewCopy : viewCopies) {
+            viewCopy.detachFromWindow();
+        }
+    }
+
+    public void setRealButtonHandler(final RealButtonHandler handler) {
+        setOnBackButtonPressedListener(new OnBackButtonPressedListener() {
+            @Override
+            public boolean onBackButtonPressed(FloatingView floatingView) {
+                return handler.onBackButtonPressed();
+            }
+        });
+
+        setupHomeButtonWatcher(new HomeWatcher.OnHomePressedListener() {
+            @Override
+            public void onHomePressed() {
+                handler.onHomeButtonPressed();
+            }
+
+            @Override
+            public void onHomeLongPressed() {
+
+            }
+        });
     }
 
     public void setOnBackButtonPressedListener(OnBackButtonPressedListener onBackButtonPressedListener) {

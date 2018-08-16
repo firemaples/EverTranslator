@@ -6,6 +6,7 @@ import android.view.WindowManager;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
+import tw.firemaples.onscreenocr.utils.SettingUtil;
 import tw.firemaples.onscreenocr.views.AreaSelectionView;
 
 /**
@@ -54,6 +55,10 @@ public class DrawAreaView extends FloatingView {
     public void attachToWindow() {
         super.attachToWindow();
         view_areaSelectionView.startBorderAnimation();
+
+        if (SettingUtil.INSTANCE.isRememberLastSelection()) {
+            getAreaSelectionView().setBoxList(SettingUtil.INSTANCE.getLastSelectionArea());
+        }
     }
 
     @Override

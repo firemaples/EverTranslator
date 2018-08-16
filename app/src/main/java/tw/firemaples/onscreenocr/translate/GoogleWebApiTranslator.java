@@ -14,10 +14,10 @@ import org.slf4j.LoggerFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import tw.firemaples.onscreenocr.CoreApplication;
 import tw.firemaples.onscreenocr.database.DatabaseManager;
 import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.database.ServiceModel;
-import tw.firemaples.onscreenocr.utils.Tool;
 import tw.firemaples.onscreenocr.utils.UrlFormatter;
 
 /**
@@ -49,7 +49,7 @@ public class GoogleWebApiTranslator {
 
         logger.info("GoogleWebApiTranslator start loading url:" + url);
 
-        String userAgent = new WebView(Tool.getContext()).getSettings().getUserAgentString();
+        String userAgent = new WebView(CoreApplication.getInstance()).getSettings().getUserAgentString();
         logger.info("UserAgent: " + userAgent);
         if (userAgent == null || userAgent.trim().length() == 0) {
             userAgent = DEFAULT_USER_AGENT;

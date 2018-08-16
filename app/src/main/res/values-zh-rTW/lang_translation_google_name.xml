@@ -12,8 +12,8 @@
         <item>孟加拉語</item>
         <item>波黑文</item>
         <item>保加利亞文</item>
-        <item>加泰罗尼亚語</item>
-        <item>宿务文</item>
+        <item>加泰隆尼亞語</item>
+        <item>宿霧文</item>
         <item>中文</item>
         <item>中文 (簡體)</item>
         <item>中文 (繁體)</item>
@@ -24,7 +24,7 @@
         <item>英文</item>
         <item>愛沙尼亞文</item>
         <item>芬蘭文</item>
-        <item>法語文</item>
+        <item>法文</item>
         <item>加利西亞語</item>
         <item>格魯吉亞文</item>
         <item>德文</item>
@@ -48,7 +48,7 @@
         <item>拉脫維亞文</item>
         <item>立陶宛文</item>
         <item>馬其頓文</item>
-        <item>馬來語文</item>
+        <item>馬來語</item>
         <item>馬耳他文</item>
         <item>馬拉地語</item>
         <item>挪威文</item>
@@ -69,9 +69,9 @@
         <item>泰國文</item>
         <item>土耳其文</item>
         <item>烏克蘭文</item>
-        <item>乌尔都語</item>
+        <item>烏爾都語</item>
         <item>越南文</item>
-        <item>威尔士語</item>
+        <item>威爾斯語</item>
         <item>意第緒語</item>
     </string-array>
 </resources>

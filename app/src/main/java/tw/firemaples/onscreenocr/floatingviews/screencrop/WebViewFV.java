@@ -15,7 +15,7 @@ import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
-import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.utils.Utils;
 import tw.firemaples.onscreenocr.utils.UrlFormatter;
 
 /**
@@ -74,7 +74,7 @@ public class WebViewFV extends FloatingView {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.bt_openBrowser) {
-                Tool.getInstance().openBrowser(url);
+                Utils.openBrowser(url);
                 callback.onOpenBrowserClicked();
             } else if (id == R.id.bt_close) {
                 detachFromWindow();

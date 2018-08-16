@@ -2,10 +2,10 @@
 <resources>
     <!-- Translation target names for the Microsoft Translate API. -->
     <!-- The elements in this array must match to the translationtargetiso6391_microsoft array. -->
-    <string-array name="translationtargetlanguagenames_microsoft">
+    <string-array name="microsoft_translationLangName">
         <item>阿拉伯語</item>
         <item>保加利亞文</item>
-        <item>加泰罗尼亚語</item>
+        <item>加泰隆尼亞語</item>
         <item>中文 (簡體)</item>
         <item>中文 (繁體)</item>
         <item>捷克文</item>
@@ -17,7 +17,7 @@
         <item>法語</item>
         <item>德文</item>
         <item>希臘文</item>
-        <item>海地克里奥尔語</item>
+        <item>海地克里奧爾語</item>
         <item>希伯來語</item>
         <item>北印度語</item>
         <item>苗文</item>
@@ -43,7 +43,7 @@
         <item>泰文</item>
         <item>土耳其文</item>
         <item>烏克蘭文</item>
-        <item>乌尔都語</item>
+        <item>烏爾都語</item>
         <item>越南文</item>
     </string-array>
 </resources>

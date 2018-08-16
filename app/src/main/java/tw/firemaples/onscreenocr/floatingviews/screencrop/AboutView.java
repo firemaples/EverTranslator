@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.utils.Utils;
 
 /**
  * Created by firemaples on 08/12/2016.
@@ -71,7 +71,7 @@ public class AboutView extends InfoDialogView {
             int id = v.getId();
             if (Arrays.binarySearch(linkResArray, id) >= 0) {
                 String url = (String) v.getTag();
-                Tool.getInstance().openBrowser(url);
+                Utils.openBrowser(url);
                 AboutView.this.detachFromWindow();
             }
         }

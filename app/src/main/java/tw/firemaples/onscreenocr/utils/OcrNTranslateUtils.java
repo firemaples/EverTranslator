@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.github.firemaples.language.Language;
+import tw.firemaples.onscreenocr.CoreApplication;
 import tw.firemaples.onscreenocr.R;
 
 /**
@@ -57,7 +58,7 @@ public class OcrNTranslateUtils {
     }
 
     private SharedPreferences getSharedPreferences() {
-        return PreferenceManager.getDefaultSharedPreferences(Tool.getContext());
+        return PreferenceManager.getDefaultSharedPreferences(CoreApplication.getInstance());
     }
 
     /* OCR */
@@ -107,31 +108,25 @@ public class OcrNTranslateUtils {
     }
 
     public List<String> getOcrLangList() {
-        return Arrays.asList(Tool.getContext().getResources().getStringArray(R.array.iso6393));
+        return Arrays.asList(CoreApplication.getInstance().getResources().getStringArray(R.array.ocr_langCode_iso6393));
     }
 
     public List<String> getOcrLangDisplayNameList() {
-        return Arrays.asList(Tool.getContext().getResources().getStringArray(R.array.languagenames));
+        return Arrays.asList(CoreApplication.getInstance().getResources().getStringArray(R.array.ocr_langName));
     }
 
+    @Deprecated
     public String getOcrLang() {
         return getSharedPreferences().getString(KEY_RECOGNITION_LANGUAGE, DEFAULT_OCR_LANG);
     }
 
+    @Deprecated
     public int getOcrLangIndex() {
         return getOcrLangIndex(getOcrLang());
     }
 
     public int getOcrLangIndex(String ocrLang) {
         return getOcrLangList().indexOf(ocrLang);
-    }
-
-    public String getOcrLangDisplayName() {
-        return getOcrLangDisplayNameList().get(getOcrLangIndex());
-    }
-
-    public String getOcrLangDisplayName(String lang) {
-        return getOcrLangDisplayNameList().get(getOcrLangIndex(lang));
     }
 
     public void setOcrLang(String ocrLang) {
@@ -141,12 +136,12 @@ public class OcrNTranslateUtils {
     /* Translate */
     public List<String> getTranslateLangList() {
         return Arrays.asList(
-                Tool.getContext().getResources().getStringArray(R.array.translationtargetiso6391_microsoft));
+                CoreApplication.getInstance().getResources().getStringArray(R.array.microsoft_translationLangCode_iso6391));
     }
 
     public List<String> getTranslateLangDisplayNameList() {
         return Arrays.asList(
-                Tool.getContext().getResources().getStringArray(R.array.translationtargetlanguagenames_microsoft));
+                CoreApplication.getInstance().getResources().getStringArray(R.array.microsoft_translationLangName));
     }
 
     public String getTranslateFromLang() {
@@ -175,11 +170,11 @@ public class OcrNTranslateUtils {
     }
 
     public String getMicrosoftLang(String iso6393Lang) {
-        if (Tool.getContext() == null) {
+        if (CoreApplication.getInstance() == null) {
             return null;
         }
         if (iso6393Array == null) {
-            iso6393Array = Tool.getContext().getResources().getStringArray(R.array.iso6393);
+            iso6393Array = CoreApplication.getInstance().getResources().getStringArray(R.array.ocr_langCode_iso6393);
         }
         int index = -1;
         for (int i = 0, size = iso6393Array.length; i < size; i++) {
@@ -189,7 +184,7 @@ public class OcrNTranslateUtils {
             }
         }
         if (microsoftLangArray == null) {
-            microsoftLangArray = Tool.getContext().getResources().getStringArray(R.array.translationtargetiso6391_microsoft);
+            microsoftLangArray = CoreApplication.getInstance().getResources().getStringArray(R.array.microsoft_translationLangCode_iso6391);
         }
         if (index <= 0 || index >= microsoftLangArray.length) {
             return "en";
@@ -446,7 +441,7 @@ public class OcrNTranslateUtils {
     }
 
     public enum TessDataLocation {
-        INTERNAL_STORAGE(Tool.getContext().getFilesDir()),
+        INTERNAL_STORAGE(CoreApplication.getInstance().getFilesDir()),
         EXTERNAL_STORAGE(getRemovableFileDirOrNormalFilesDir());
 
         private File saveDir;
@@ -460,7 +455,7 @@ public class OcrNTranslateUtils {
         }
 
         private static File getRemovableFileDirOrNormalFilesDir() {
-            Context context = Tool.getContext();
+            Context context = CoreApplication.getInstance();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 File[] externalCacheDirs = context.getExternalFilesDirs(null);
                 for (File file : externalCacheDirs) {

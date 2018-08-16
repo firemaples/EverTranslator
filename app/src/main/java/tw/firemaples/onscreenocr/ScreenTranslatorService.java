@@ -15,16 +15,11 @@ import android.os.IBinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tw.firemaples.onscreenocr.database.DatabaseManager;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
-import tw.firemaples.onscreenocr.floatingviews.screencrop.LiteFloatingBar;
-import tw.firemaples.onscreenocr.floatingviews.screencrop.NormalFloatingBar;
+import tw.firemaples.onscreenocr.floatingviews.screencrop.MainBar;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
-import tw.firemaples.onscreenocr.tts.AndroidTTSManager;
-import tw.firemaples.onscreenocr.utils.AppMode;
-import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
-import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
-import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.utils.SettingUtil;
+import tw.firemaples.onscreenocr.utils.Utils;
 
 /**
  * Created by firemaples on 21/10/2016.
@@ -40,8 +35,7 @@ public class ScreenTranslatorService extends Service {
 
     private NotificationManager notificationManager;
 
-    private ScreenshotHandler screenshotHandler;
-    private SharePreferenceUtil spUtil;
+    private SettingUtil spUtil;
 
     private FloatingView mainFloatingView;
     private boolean dismissNotify = false;
@@ -57,12 +51,12 @@ public class ScreenTranslatorService extends Service {
         return null;
     }
 
-    public static boolean isRunning(Context context) {
-        return Tool.isServiceRunning(context, ScreenTranslatorService.class) && _instance != null;
+    public static boolean isRunning() {
+        return Utils.isServiceRunning(ScreenTranslatorService.class) && _instance != null;
     }
 
     public static void start(Context context, boolean fromNotify, boolean showFloatingView) {
-        if (!isRunning(context)) {
+        if (!isRunning()) {
             context.startService(new Intent(context, ScreenTranslatorService.class));
         } else if (fromNotify && _instance != null) {
             if (showFloatingView) {
@@ -78,14 +72,6 @@ public class ScreenTranslatorService extends Service {
             _instance.dismissNotify = dismissNotify;
             _instance._stopFloatingView(false);
             _instance.stopSelf();
-        }
-    }
-
-    public static void switchAppMode(AppMode appMode) {
-        if (_instance != null && SharePreferenceUtil.getInstance().getAppMode() != appMode) {
-            _instance._stopFloatingView(true);
-            SharePreferenceUtil.getInstance().setAppMode(appMode);
-            _instance._startFloatingView();
         }
     }
 
@@ -132,15 +118,11 @@ public class ScreenTranslatorService extends Service {
             _instance = this;
         }
 
-        Tool.init(this);
-        spUtil = SharePreferenceUtil.getInstance();
-        screenshotHandler = ScreenshotHandler.getInstance();
-        OcrNTranslateUtils.init();
-        AndroidTTSManager.getInstance(this).init();
-        DatabaseManager.getInstance();
+        spUtil = SettingUtil.INSTANCE;
+
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (SharePreferenceUtil.getInstance().isAppShowing()) {
+        if (SettingUtil.INSTANCE.isAppShowing()) {
             _startFloatingView();
         }
 
@@ -155,11 +137,10 @@ public class ScreenTranslatorService extends Service {
         _stopFloatingView(false);
 
         //If process was been killed by system or user
-        SharePreferenceUtil.getInstance().setIsAppShowing(true, this);
+        SettingUtil.INSTANCE.setAppShowing(true);
 
-        if (screenshotHandler != null) {
-            screenshotHandler.release();
-            screenshotHandler = null;
+        if (ScreenshotHandler.isInitialized()) {
+            ScreenshotHandler.getInstance().release();
         }
         _instance = null;
     }
@@ -216,18 +197,7 @@ public class ScreenTranslatorService extends Service {
         if (mainFloatingView != null && mainFloatingView.isAttached()) {
             return;
         }
-        switch (spUtil.getAppMode()) {
-            case Normal:
-                if (!(mainFloatingView instanceof NormalFloatingBar)) {
-                    mainFloatingView = new NormalFloatingBar(this);
-                }
-                break;
-            case Lite:
-                if (!(mainFloatingView instanceof LiteFloatingBar)) {
-                    mainFloatingView = new LiteFloatingBar(this);
-                }
-                break;
-        }
+        mainFloatingView = new MainBar(this);
         mainFloatingView.attachToWindow();
         updateNotification();
     }

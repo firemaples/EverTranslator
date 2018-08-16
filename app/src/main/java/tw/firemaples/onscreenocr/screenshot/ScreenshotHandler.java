@@ -13,6 +13,7 @@ import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
@@ -31,8 +32,8 @@ import java.util.Locale;
 import tw.firemaples.onscreenocr.MainActivity;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.utils.FabricUtils;
-import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
-import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.utils.SettingUtil;
+import tw.firemaples.onscreenocr.utils.Utils;
 
 /**
  * Created by firemaples on 2016/3/4.
@@ -92,7 +93,7 @@ public class ScreenshotHandler {
         if (isGetUserPermission) {
             return;
         }
-        Tool.getInstance().showMsg(context.getString(R.string.error_noMediaProjectionFound));
+        Utils.showToast(context.getString(R.string.error_noMediaProjectionFound));
         context.startActivity(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
@@ -116,7 +117,7 @@ public class ScreenshotHandler {
             callback.onScreenshotStart();
         }
 
-        new Handler().postDelayed(new Runnable() {
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
                 _takeScreenshot();
@@ -212,7 +213,7 @@ public class ScreenshotHandler {
 
                     realSizeBitmap = Bitmap.createBitmap(tempBmp, 0, 0, deviceWidth, tempBmp.getHeight());
 
-                    if (SharePreferenceUtil.getInstance().isDebugMode()) {
+                    if (SettingUtil.INSTANCE.isDebugMode()) {
                         saveBmpToFile(realSizeBitmap);
                     }
                 } catch (Throwable e) {
@@ -258,7 +259,7 @@ public class ScreenshotHandler {
                         .format(new Date(System.currentTimeMillis())));
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName);
         logger.info("Saving debug screenshot to " + file.getAbsolutePath());
-        Tool.getInstance().showMsg("Saving debug screenshot to " + file.getAbsolutePath());
+        Utils.showToast("Saving debug screenshot to " + file.getAbsolutePath());
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(file.getAbsolutePath());
@@ -266,7 +267,7 @@ public class ScreenshotHandler {
             // PNG is a lossless format, the compression factor (100) is ignored
         } catch (Exception e) {
             logger.error("Save debug screenshot failed");
-            Tool.getInstance().showErrorMsg("Save debug screenshot failed");
+            Utils.showErrorToast("Save debug screenshot failed");
             e.printStackTrace();
         } finally {
             try {

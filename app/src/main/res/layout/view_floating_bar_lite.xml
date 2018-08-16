@@ -24,7 +24,7 @@
                 android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/gradient_spinner"
-                android:entries="@array/languagenames"/>
+                android:entries="@array/ocr_langName"/>
 
             <ImageButton
                 android:id="@+id/bt_selectArea"

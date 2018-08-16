@@ -14,10 +14,10 @@ import java.io.File;
 import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
+import tw.firemaples.onscreenocr.CoreApplication;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.database.DatabaseManager;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
-import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
  * Created by firemaples on 2016/3/2.
@@ -48,8 +48,8 @@ public class OcrDownloadTask {
         this.callback = callback;
 
         OcrNTranslateUtils ocrNTranslateUtils = OcrNTranslateUtils.getInstance();
-        this.recognitionLang = ocrNTranslateUtils.getOcrLang();
-        this.recognitionLangName = ocrNTranslateUtils.getOcrLangDisplayName();
+        this.recognitionLang = OCRLangUtil.INSTANCE.getSelectedLangCode();
+        this.recognitionLangName = OCRLangUtil.INSTANCE.getSelectedLangName();
 
         this.tessDataDir = OcrNTranslateUtils.getInstance().getTessDataDir();
     }
@@ -123,7 +123,7 @@ public class OcrDownloadTask {
                 super.onProgress(bytesWritten, totalSize);
 
                 String msg = String.format(Locale.getDefault(),
-                        Tool.getContext().getString(R.string.dialog_content_progressingDownloadOCRFile),
+                        CoreApplication.getInstance().getString(R.string.dialog_content_progressingDownloadOCRFile),
                         recognitionLangName,
                         (float) bytesWritten / 1024f / 1024f,
                         (float) totalSize / 1024f / 1024f,
@@ -157,7 +157,7 @@ public class OcrDownloadTask {
                 callback.onError(
                         String.format(
                                 Locale.getDefault(),
-                                Tool.getContext().getString(R.string.error_makingFolderFailed),
+                                CoreApplication.getInstance().getString(R.string.error_makingFolderFailed),
                                 tessDataDir.getAbsolutePath()));
                 return false;
             }
@@ -169,7 +169,7 @@ public class OcrDownloadTask {
                     callback.onError(
                             String.format(
                                     Locale.getDefault(),
-                                    Tool.getContext().getString(R.string.error_deleteTempFileFailed),
+                                    CoreApplication.getInstance().getString(R.string.error_deleteTempFileFailed),
                                     tessDataTempFile.getAbsolutePath()));
                     return false;
                 }
@@ -187,7 +187,7 @@ public class OcrDownloadTask {
             long totalFileLength = values[1];
 
             String msg = String.format(Locale.getDefault(),
-                    Tool.getContext().getString(R.string.dialog_content_progressingDownloadOCRFile),
+                    CoreApplication.getInstance().getString(R.string.dialog_content_progressingDownloadOCRFile),
                     recognitionLangName,
                     (float) currentFileLength / 1024f / 1024f,
                     (float) totalFileLength / 1024f / 1024f,
