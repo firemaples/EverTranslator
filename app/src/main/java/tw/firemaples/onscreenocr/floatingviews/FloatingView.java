@@ -58,7 +58,9 @@ public abstract class FloatingView {
                 getLayoutSize(),
                 getLayoutSize(),
                 type,
-                layoutFocusable() ? WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL : WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                (layoutFocusable() ? WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL :
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE) |
+                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 PixelFormat.TRANSLUCENT);
         if (fullScreenMode()) {
             floatingLayoutParams.flags = floatingLayoutParams.flags | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
@@ -226,6 +228,14 @@ public abstract class FloatingView {
                 }
             }
         });
+    }
+
+    void updateViewLayout() {
+        try {
+            getWindowManager().updateViewLayout(getRootView(), getFloatingLayoutParams());
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     private class CustomLayout extends LinearLayout {

@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
-import tw.firemaples.onscreenocr.floatingviews.screencrop.MainBar;
+import tw.firemaples.onscreenocr.floatingviews.floatingpoint.FloatingPoint;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.SettingUtil;
 import tw.firemaples.onscreenocr.utils.Utils;
@@ -197,7 +197,7 @@ public class ScreenTranslatorService extends Service {
         if (mainFloatingView != null && mainFloatingView.isAttached()) {
             return;
         }
-        mainFloatingView = new MainBar(this);
+        mainFloatingView = new FloatingPoint(this);
         mainFloatingView.attachToWindow();
         updateNotification();
     }
