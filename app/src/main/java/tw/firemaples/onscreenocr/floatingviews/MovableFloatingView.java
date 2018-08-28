@@ -38,6 +38,8 @@ public abstract class MovableFloatingView extends FloatingView {
     private final TimeInterpolator mMoveEdgeInterpolator;
     private ValueAnimator mFadeOutAnimator;
 
+    private TouchInterceptor touchInterceptor;
+
     public MovableFloatingView(Context context) {
         super(context);
         mMoveEdgeInterpolator = new OvershootInterpolator(MOVE_TO_EDGE_OVERSHOOT_TENSION);
@@ -64,6 +66,13 @@ public abstract class MovableFloatingView extends FloatingView {
 
     protected boolean enableTransparentWhenMoved() {
         return false;
+    }
+
+    protected int[] getEdgeDistance() {
+        int[] edgePosition = getEdgePosition(getFloatingLayoutParams().x, getFloatingLayoutParams().y);
+
+        return new int[]{Math.abs(edgePosition[0] - getFloatingLayoutParams().x),
+                Math.abs(edgePosition[1] - getFloatingLayoutParams().y)};
     }
 
     private void moveToEdge() {
@@ -93,6 +102,30 @@ public abstract class MovableFloatingView extends FloatingView {
         }
 
         return new int[]{edgeX, currentY};
+    }
+
+    /**
+     * @return 1 when near right edge, -1 when near left edge
+     */
+    protected int isNearTo() {
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics metrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(metrics);
+
+        int viewWidth = getRootView().getWidth();
+
+        int viewCenterX = getFloatingLayoutParams().x + viewWidth / 2;
+
+        int fixCode = isAlignParentLeft() ? 1 : -1;
+
+        if (viewCenterX < metrics.widthPixels / 2) {
+            // near left
+            return -1 * fixCode;
+        } else {
+            // near right
+            //noinspection PointlessArithmeticExpression
+            return 1 * fixCode;
+        }
     }
 
     private void moveTo(int currentX, int currentY, int goalPositionX, int goalPositionY, boolean withAnimation) {
@@ -192,6 +225,10 @@ public abstract class MovableFloatingView extends FloatingView {
         return false;
     }
 
+    public void setTouchInterceptor(TouchInterceptor touchInterceptor) {
+        this.touchInterceptor = touchInterceptor;
+    }
+
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         private int initX, initY;
         private float initTouchX, initTouchY;
@@ -204,6 +241,10 @@ public abstract class MovableFloatingView extends FloatingView {
             }
             dragView.setAlpha(fromAlpha);
 
+            if (touchInterceptor != null && touchInterceptor.onTouch(v, event, hasMoved)) {
+                return true;
+            }
+
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     hasMoved = false;
@@ -214,8 +255,11 @@ public abstract class MovableFloatingView extends FloatingView {
 //                    logger.info("Action down: initX" + initX + " initY:" + initY + " initTouchX:" + initTouchX + " initTouchY:" + initTouchY);
                     break;
                 case MotionEvent.ACTION_UP:
+                    boolean temp = hasMoved;
                     hasMoved = false;
                     if (moveToEdgeOrFadeOut()) {
+                        return true;
+                    } else if (temp) {
                         return true;
                     }
                     break;
@@ -246,4 +290,8 @@ public abstract class MovableFloatingView extends FloatingView {
             return false;
         }
     };
+}
+
+interface TouchInterceptor {
+    boolean onTouch(View v, MotionEvent event, boolean hasMoved);
 }
