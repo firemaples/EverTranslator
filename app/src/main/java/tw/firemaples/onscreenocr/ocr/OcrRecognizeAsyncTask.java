@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SettingUtil;
 import tw.firemaples.onscreenocr.utils.Utils;
 
@@ -44,7 +43,7 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
         this.boxList = boxList;
         this.callback = callback;
 
-        this.baseAPI = OcrNTranslateUtils.getInstance().getBaseAPI();
+        this.baseAPI = OCRManager.INSTANCE.getTessBaseAPI();
     }
 
     @Override

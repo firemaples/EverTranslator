@@ -19,8 +19,9 @@ import java.nio.channels.FileChannel;
 import tw.firemaples.onscreenocr.BuildConfig;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
+import tw.firemaples.onscreenocr.ocr.OCRFileUtil;
+import tw.firemaples.onscreenocr.ocr.TessDataLocation;
 import tw.firemaples.onscreenocr.utils.FabricUtils;
-import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 import tw.firemaples.onscreenocr.utils.SettingUtil;
 
 /**
@@ -31,12 +32,11 @@ public class SettingView extends FloatingView {
     private static final Logger logger = LoggerFactory.getLogger(SettingView.class);
 
     private SettingUtil spUtil;
-    private OcrNTranslateUtils ocrNTranslateUtils;
+    private OCRFileUtil ocrNTranslateUtils = OCRFileUtil.INSTANCE;
 
     public SettingView(Context context) {
         super(context);
         spUtil = SettingUtil.INSTANCE;
-        ocrNTranslateUtils = OcrNTranslateUtils.getInstance();
         setViews();
     }
 
@@ -73,7 +73,7 @@ public class SettingView extends FloatingView {
 
         cb_debugMode.setChecked(spUtil.isDebugMode());
         cb_enableTranslation.setChecked(spUtil.getEnableTranslation());
-        cb_saveOcrEngineToExternalStorage.setChecked(ocrNTranslateUtils.getTessDataLocation() == OcrNTranslateUtils.TessDataLocation.EXTERNAL_STORAGE);
+        cb_saveOcrEngineToExternalStorage.setChecked(ocrNTranslateUtils.getTessDataLocation() == TessDataLocation.EXTERNAL_STORAGE);
         cb_startingWithSelectionMode.setChecked(spUtil.getStartingWithSelectionMode());
         cb_rememberLastSelection.setChecked(spUtil.isRememberLastSelection());
         cb_removeLineBreaks.setChecked(spUtil.getRemoveLineBreaks());
@@ -106,8 +106,8 @@ public class SettingView extends FloatingView {
             } else if (id == R.id.cb_removeLineBreaks) {
                 spUtil.setRemoveLineBreaks(isChecked);
             } else if (id == R.id.cb_saveOcrEngineToExternalStorageFirst) {
-                OcrNTranslateUtils.TessDataLocation currentSelectedLocation = isChecked ? OcrNTranslateUtils.TessDataLocation.EXTERNAL_STORAGE : OcrNTranslateUtils.TessDataLocation.INTERNAL_STORAGE;
-                OcrNTranslateUtils.TessDataLocation savedLocation = ocrNTranslateUtils.getTessDataLocation();
+                TessDataLocation currentSelectedLocation = isChecked ? TessDataLocation.EXTERNAL_STORAGE : TessDataLocation.INTERNAL_STORAGE;
+                TessDataLocation savedLocation = ocrNTranslateUtils.getTessDataLocation();
                 if (currentSelectedLocation != savedLocation) {
                     if (savedLocation.getSaveDir().exists()) {
                         new MovingOcrEngineFileTask().execute(savedLocation.getSaveDir(), currentSelectedLocation.getSaveDir());

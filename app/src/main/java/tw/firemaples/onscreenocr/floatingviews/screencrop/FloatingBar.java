@@ -20,8 +20,9 @@ import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ScreenTranslatorService;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.floatingviews.MovableFloatingView;
+import tw.firemaples.onscreenocr.ocr.OCRDownloadTask;
 import tw.firemaples.onscreenocr.ocr.OCRLangUtil;
-import tw.firemaples.onscreenocr.ocr.OcrDownloadTask;
+import tw.firemaples.onscreenocr.ocr.OnOCRDownloadTaskCallback;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
@@ -48,7 +49,7 @@ public abstract class FloatingBar extends MovableFloatingView {
     //OCR
     private OcrNTranslateUtils ocrNTranslateUtils;
     private OcrResultView ocrResultView;
-    private OcrDownloadTask ocrDownloadTask;
+    private OCRDownloadTask ocrDownloadTask = OCRDownloadTask.INSTANCE;
 
     public FloatingBar(Context context) {
         super(context);
@@ -158,7 +159,7 @@ public abstract class FloatingBar extends MovableFloatingView {
                 String lang = ocrNTranslateUtils.getOcrLangList().get(position);
                 ocrNTranslateUtils.setOcrLang(lang);
 
-                if (!OcrDownloadTask.checkOcrFiles(lang)) {
+                if (!OCRDownloadTask.INSTANCE.checkOCRFileExists(lang)) {
                     showDownloadOcrFileDialog(OCRLangUtil.INSTANCE.getSelectedLangName());
                 }
 
@@ -184,14 +185,13 @@ public abstract class FloatingBar extends MovableFloatingView {
             @Override
             public void onConfirmClick(DialogView dialogView) {
                 super.onConfirmClick(dialogView);
-                ocrDownloadTask = new OcrDownloadTask(getContext(), onOcrDownloadAsyncTaskCallback);
-                ocrDownloadTask.startDownload();
+                ocrDownloadTask.downloadOCRFiles(OCRLangUtil.INSTANCE.getSelectedLangCode(), onOcrDownloadAsyncTaskCallback);
             }
         });
         dialogView.attachToWindow();
     }
 
-    private OcrDownloadTask.OnOcrDownloadAsyncTaskCallback onOcrDownloadAsyncTaskCallback = new OcrDownloadTask.OnOcrDownloadAsyncTaskCallback() {
+    private OnOCRDownloadTaskCallback onOcrDownloadAsyncTaskCallback = new OnOCRDownloadTaskCallback() {
         @Override
         public void onDownloadStart() {
             dialogView.reset();
@@ -327,7 +327,7 @@ public abstract class FloatingBar extends MovableFloatingView {
     };
 
     protected void onTranslateBtnClicked() {
-        if (OcrDownloadTask.checkOcrFiles(OCRLangUtil.INSTANCE.getSelectedLangCode())) {
+        if (OCRDownloadTask.INSTANCE.checkOCRFileExists(OCRLangUtil.INSTANCE.getSelectedLangCode())) {
             if (drawAreaView == null) {
                 logger.error("drawAreaView is null, ignore.");
                 return;

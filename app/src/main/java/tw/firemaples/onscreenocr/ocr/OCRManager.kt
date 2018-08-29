@@ -3,9 +3,12 @@ package tw.firemaples.onscreenocr.ocr
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.os.AsyncTask
+import com.googlecode.tesseract.android.TessBaseAPI
 import tw.firemaples.onscreenocr.utils.Utils.Companion.context
 
 object OCRManager {
+    val tessBaseAPI: TessBaseAPI by lazy { TessBaseAPI() }
+
     private var callback: OnOCRStateChangedListener? = null
     private var lastAsyncTask: AsyncTask<*, *, *>? = null
 

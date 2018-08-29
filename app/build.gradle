@@ -81,8 +81,8 @@ dependencies {
 //    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0-rc01'
 //    implementation 'androidx.lifecycle:lifecycle-reactivestreams-ktx:2.0.0-rc01'
 
-    implementation "android.arch.lifecycle:extensions:1.1.1"
-    implementation "android.arch.lifecycle:viewmodel:1.1.1"
+//    implementation "android.arch.lifecycle:extensions:1.1.1"
+//    implementation "android.arch.lifecycle:viewmodel:1.1.1"
 
     implementation 'com.android.support:support-v4:28.0.0-rc01'
     implementation 'com.android.support:appcompat-v7:28.0.0-rc01'
@@ -93,12 +93,13 @@ dependencies {
     implementation 'com.android.support:cardview-v7:28.0.0-rc01'
     implementation 'io.github.firemaples:microsoft-translator-java-api:0.8.6'
     implementation 'com.google.android.exoplayer:exoplayer:r2.4.0'
-    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-core:16.0.3'
     implementation 'com.google.firebase:firebase-database:16.0.1'
+    implementation 'com.google.firebase:firebase-config:16.0.0'
     implementation 'com.amitshekhar.android:android-networking:1.0.0'
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
-    implementation 'com.loopj.android:android-async-http:1.4.9'
+//    implementation 'com.loopj.android:android-async-http:1.4.9'
     testImplementation 'junit:junit:4.12'
 
     //For logger

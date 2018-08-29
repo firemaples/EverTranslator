@@ -43,7 +43,7 @@ object OCRLangUtil : BaseSettingUtil() {
     val selectLangDisplayCode: String
         get() = ocrLangDisplayCodeList[selectedLangIndex]
 
-    fun checkCurrentOCRFiles(): Boolean = OcrDownloadTask.checkOcrFiles(selectedLangCode)
+    fun checkCurrentOCRFiles(): Boolean = OCRDownloadTask.checkOCRFileExists(selectedLangCode)
 
     fun showDownloadAlertDialog() {
         val dialogView = DialogView(context)
@@ -65,8 +65,8 @@ object OCRLangUtil : BaseSettingUtil() {
 
     private class OCRDownloadingDialogView(context: Context) : DialogView(context) {
 
-        val callback: OcrDownloadTask.OnOcrDownloadAsyncTaskCallback = object :
-                OcrDownloadTask.OnOcrDownloadAsyncTaskCallback {
+        val callback: OnOCRDownloadTaskCallback = object :
+                OnOCRDownloadTaskCallback {
             override fun onDownloadStart() {
                 reset()
                 setType(DialogView.Type.CANCEL_ONLY)
@@ -75,7 +75,7 @@ object OCRLangUtil : BaseSettingUtil() {
                         .getString(R.string.dialog_content_ocrFileDownloadStarting))
                 setCallback(object : DialogView.OnDialogViewCallback() {
                     override fun onCancelClicked(dialogView: DialogView) {
-                        ocrDownloadTask.cancel()
+                        OCRDownloadTask.cancel()
                         super.onCancelClicked(dialogView)
                     }
                 })
@@ -86,11 +86,11 @@ object OCRLangUtil : BaseSettingUtil() {
             }
 
             override fun downloadProgressing(currentDownloaded: Long, totalSize: Long,
-                                             msg: String?) {
+                                             msg: String) {
                 setContentMsg(msg)
             }
 
-            override fun onError(errorMessage: String?) {
+            override fun onError(errorMessage: String) {
                 rootView.post {
                     setTitle(getContext().getString(R.string.dialog_title_error))
                     setContentMsg(errorMessage)
@@ -98,16 +98,14 @@ object OCRLangUtil : BaseSettingUtil() {
             }
         }
 
-        val ocrDownloadTask: OcrDownloadTask = OcrDownloadTask(context, callback)
-
         override fun attachToWindow() {
             super.attachToWindow()
-            ocrDownloadTask.startDownload()
+            OCRDownloadTask.downloadOCRFiles(OCRLangUtil.selectedLangCode, callback)
         }
 
         override fun detachFromWindow() {
             super.detachFromWindow()
-            ocrDownloadTask.cancel()
+            OCRDownloadTask.cancel()
         }
     }
 }
