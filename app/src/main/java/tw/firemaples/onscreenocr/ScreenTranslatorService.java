@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.MainBar;
+import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.SettingUtil;
 import tw.firemaples.onscreenocr.utils.Utils;
@@ -125,6 +126,8 @@ public class ScreenTranslatorService extends Service {
         if (SettingUtil.INSTANCE.isAppShowing()) {
             _startFloatingView();
         }
+
+        RemoteConfigUtil.INSTANCE.tryFetchNew();
 
         startForeground();
     }

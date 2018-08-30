@@ -13,6 +13,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.utils.threadUI
 import java.io.File
 
@@ -99,8 +100,8 @@ object OCRDownloadTask {
             val destFile = getOCRFile(ocrLang)
 
             yield()
-            //Download trained data //TODO using config
-            val url = URL_TRAINE_DATA_DOWNLOAD_TEMPLATES.format(ocrLang)
+            //Download trained data
+            val url = RemoteConfigUtil.trainedDataUrl.format(ocrLang)
             AndroidNetworking.download(url, tempFile.parent, tempFile.name)
                     .setPriority(Priority.HIGH)
                     .setTag(DOWNLOAD_TAG)

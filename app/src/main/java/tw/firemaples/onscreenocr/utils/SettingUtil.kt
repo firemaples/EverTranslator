@@ -8,8 +8,10 @@ import android.preference.PreferenceManager
 import tw.firemaples.onscreenocr.BuildConfig
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.floatingviews.screencrop.VersionHistoryView
+import java.util.*
 
 object SettingUtil {
+    private const val KEY_DEVICE_ID = "KEY_DEVICE_ID"
     private const val KEY_DEBUG_MODE = "KEY_DEBUG_MODE"
     private const val KEY_APP_SHOWING = "KEY_APP_SHOWING"
     private const val KEY_ENABLE_TRANSLATION = "KEY_ENABLE_TRANSLATION"
@@ -30,6 +32,15 @@ object SettingUtil {
 
     private val sp: SharedPreferences
             by lazy { PreferenceManager.getDefaultSharedPreferences(context) }
+
+    val deviceId: String by lazy {
+        var deviceId = sp.getString(KEY_DEVICE_ID, null)
+        if (deviceId == null) {
+            deviceId = UUID.randomUUID().toString()
+            sp.edit().putString(KEY_DEVICE_ID, deviceId).apply()
+        }
+        deviceId
+    }
 
     var isDebugMode: Boolean
         get() {
