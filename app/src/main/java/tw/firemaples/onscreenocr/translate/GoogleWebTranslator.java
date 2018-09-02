@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tw.firemaples.onscreenocr.BuildConfig;
-import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.utils.UrlFormatter;
 
 /**
@@ -25,6 +24,8 @@ import tw.firemaples.onscreenocr.utils.UrlFormatter;
 
 public class GoogleWebTranslator {
     private static final Logger logger = LoggerFactory.getLogger(GoogleWebTranslator.class);
+
+    private static final String SERVICE_GOOGLE_WEB = "https://translate.google.com/m/translate?sl=auto&tl={TL}&ie=UTF-8&q={TEXT}";
 
     private static final long TIMEOUT = 5000;
 
@@ -66,7 +67,7 @@ public class GoogleWebTranslator {
 //            lang += "-" + Locale.getDefault().getCountry();
 //        }
 
-        String url = UrlFormatter.getFormattedUrl(ServiceHolderModel.SERVICE_GOOGLE_WEB, textToTranslate, targetLanguage);
+        String url = UrlFormatter.getFormattedUrl(SERVICE_GOOGLE_WEB, textToTranslate, targetLanguage);
 
         logger.info("Google translate WebView start loading url:" + url);
         webView.loadUrl(url);

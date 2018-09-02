@@ -8,7 +8,6 @@ import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.firebase.FirebaseApp
 import io.fabric.sdk.android.Fabric
 import okhttp3.OkHttpClient
-import tw.firemaples.onscreenocr.database.DatabaseManager
 import tw.firemaples.onscreenocr.tts.AndroidTTSManager
 import tw.firemaples.onscreenocr.utils.FabricUtils
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils
@@ -40,7 +39,6 @@ class CoreApplication : Application() {
 
         OcrNTranslateUtils.init()
         AndroidTTSManager.getInstance(this).init()
-        DatabaseManager.getInstance()
     }
 
     private fun validateSignature() {

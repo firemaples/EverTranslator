@@ -60,7 +60,8 @@ class FloatingPoint(context: Context) : MovableFloatingView(context) {
         return@Handler false
     }
 
-    private fun onTouch(v: View, event: MotionEvent, hasMoved: Boolean): Boolean {
+    private fun onTouch(@Suppress("UNUSED_PARAMETER") v: View,
+                        event: MotionEvent, hasMoved: Boolean): Boolean {
         this.hasMoved = hasMoved
 
         if (hasMoved) {
