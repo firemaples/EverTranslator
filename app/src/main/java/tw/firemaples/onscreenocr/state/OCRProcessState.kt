@@ -1,5 +1,6 @@
 package tw.firemaples.onscreenocr.state
 
+import android.graphics.Rect
 import tw.firemaples.onscreenocr.StateManager
 import tw.firemaples.onscreenocr.StateName
 import tw.firemaples.onscreenocr.ocr.OCRManager
@@ -19,15 +20,15 @@ object OCRProcessState : OverlayState() {
 
         OCRManager.setListener(callback)
 
-//        manager.ocrResultList.clear()
-//        for (rect in manager.boxList) {
-//            val ocrResult = OcrResult()
-//            ocrResult.rect = rect
-//            val rectList = ArrayList<Rect>()
-//            rectList.add(Rect(0, 0, rect.width(), rect.height()))
-//            ocrResult.boxRects = rectList
-//            manager.ocrResultList.add(ocrResult)
-//        }
+        manager.ocrResultList.clear()
+        for (rect in manager.boxList) {
+            val ocrResult = OcrResult()
+            ocrResult.rect = rect
+            val rectList = ArrayList<Rect>()
+            rectList.add(Rect(0, 0, rect.width(), rect.height()))
+            ocrResult.boxRects = rectList
+            manager.ocrResultList.add(ocrResult)
+        }
 
         OCRManager.start(manager.bitmap!!, manager.boxList)
     }

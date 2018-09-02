@@ -31,18 +31,18 @@ import java.util.*
 class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandler {
     private val logger: Logger = LoggerFactory.getLogger(MainBar::class.java)
 
-    val viewLangSelector: View = rootView.findViewById(R.id.view_langSelector)
-    val tvLang: TextView = rootView.findViewById(R.id.tv_lang)
-    val ivGoogleTranslate: View = rootView.findViewById(R.id.iv_googleTranslate)
-    val btSelectArea: View = rootView.findViewById(R.id.bt_selectArea)
-    val btTranslation: View = rootView.findViewById(R.id.bt_translation)
-    val btClear: View = rootView.findViewById(R.id.bt_clear)
-    val pgProgress: View = rootView.findViewById(R.id.pg_progress)
-    val viewMenu: View = rootView.findViewById(R.id.view_menu)
+    private val viewLangSelector: View = rootView.findViewById(R.id.view_langSelector)
+    private val tvLang: TextView = rootView.findViewById(R.id.tv_lang)
+    private val ivGoogleTranslate: View = rootView.findViewById(R.id.iv_googleTranslate)
+    private val btSelectArea: View = rootView.findViewById(R.id.bt_selectArea)
+    private val btTranslation: View = rootView.findViewById(R.id.bt_translation)
+    private val btClear: View = rootView.findViewById(R.id.bt_clear)
+    private val pgProgress: View = rootView.findViewById(R.id.pg_progress)
+    private val viewMenu: View = rootView.findViewById(R.id.view_menu)
 
-    var drawAreaView: DrawAreaView? = null
-    var ocrResultView: OcrResultView? = null
-    val dialogView: DialogView by lazy { DialogView(context) }
+    private var drawAreaView: DrawAreaView? = null
+    private var ocrResultView: OCRResultView? = null
+    private val dialogView: DialogView by lazy { DialogView(context) }
 
     init {
         setViews()
@@ -247,10 +247,9 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
             override fun startOCR() {
                 if (TranslationUtil.currentService != TranslationService.GoogleTranslatorApp) {
-                    ocrResultView = OcrResultView(getContext(), onOCRResultViewCallback).apply {
+                    ocrResultView = OCRResultView(getContext()).apply {
                         this.setRealButtonHandler(this@MainBar)
                         this.attachToWindow()
-//                    ocrResultView.setupData(screenshot, boxList)
                     }
 
                     detachFromWindow(false)
@@ -258,43 +257,23 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
                 }
             }
 
-            private val onOCRResultViewCallback = object : OcrResultView.OnOcrResultViewCallback {
-                override fun onOpenBrowserClicked() {
-                }
-
-                override fun onOpenGoogleTranslateClicked() {
-                    resetAll()
-                }
-
-                override fun onOCRTextChanged(newText: String?) {
-                    StateManager.changeOCRText(newText)
-                }
-
-            }
-
             override fun startOCRInitialization() {
-                ocrResultView?.onOCRInitializing(StateManager.ocrResultList)
             }
 
             override fun startOCRRecognition() {
-                ocrResultView?.onOCRRecognizing()
             }
 
             override fun ocrRecognized() {
                 if (TranslationUtil.currentService == TranslationService.GoogleTranslatorApp) {
                     val text = StateManager.ocrResultText
                     GoogleTranslateUtil.start(context, Locale.getDefault().language, text)
-                } else {
-                    ocrResultView?.onOCRRecognized(StateManager.ocrResultList)
                 }
             }
 
             override fun startTranslation() {
-                ocrResultView?.onStartTranslation()
             }
 
             override fun onTranslated() {
-                ocrResultView?.onTranslated()
             }
 
             override fun onTranslationFailed(t: Throwable?) {

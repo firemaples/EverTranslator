@@ -5,10 +5,12 @@ import android.graphics.Rect
 import kotlinx.coroutines.experimental.launch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import tw.firemaples.onscreenocr.event.EventUtil
 import tw.firemaples.onscreenocr.ocr.OCRLangUtil
 import tw.firemaples.onscreenocr.ocr.OcrResult
 import tw.firemaples.onscreenocr.state.InitState
 import tw.firemaples.onscreenocr.state.State
+import tw.firemaples.onscreenocr.state.event.StateChangedEvent
 import tw.firemaples.onscreenocr.translate.TranslationService
 import tw.firemaples.onscreenocr.translate.TranslationUtil
 import tw.firemaples.onscreenocr.utils.stateManagerAction
@@ -55,6 +57,7 @@ object StateManager {
         dispatch {
             listener?.onStateChanged(nextState.stateName())
         }
+        EventUtil.postSticky(StateChangedEvent(nextState))
         state.enter(this)
     }
 
@@ -78,7 +81,7 @@ object StateManager {
         state.startOCR(this@StateManager)
     }
 
-    fun changeOCRText(newText: String?) = doAction {
+    fun changeOCRText(newText: String) = doAction {
         ocrResultText = newText
         state.changeOCRText(this@StateManager)
     }
@@ -120,15 +123,15 @@ object StateManager {
     }
 
     fun dispatchStartOCRInitializing() = dispatch {
-        ocrResultList.clear()
-        for (rect in boxList) {
-            val ocrResult = OcrResult()
-            ocrResult.rect = rect
-            val rects = ArrayList<Rect>()
-            rects.add(Rect(0, 0, rect.width(), rect.height()))
-            ocrResult.boxRects = rects
-            ocrResultList.add(ocrResult)
-        }
+//        ocrResultList.clear()
+//        for (rect in boxList) {
+//            val ocrResult = OcrResult()
+//            ocrResult.rect = rect
+//            val rects = ArrayList<Rect>()
+//            rects.add(Rect(0, 0, rect.width(), rect.height()))
+//            ocrResult.boxRects = rects
+//            ocrResultList.add(ocrResult)
+//        }
 
         listener?.startOCRInitialization()
     }

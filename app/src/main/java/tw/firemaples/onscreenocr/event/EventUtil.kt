@@ -17,5 +17,9 @@ class EventUtil {
         fun post(event: BaseEvent) {
             eventBus.post(event)
         }
+
+        fun postSticky(event: BaseEvent) {
+            eventBus.postSticky(event)
+        }
     }
 }
