@@ -86,4 +86,7 @@
     <string name="toLiteMode">简易模式</string>
     <string name="toNormalMode">一般模式</string>
     <string name="error_unknownError">未知的错误</string>
+    <string name="title_translationFailed">翻譯失敗</string>
+    <string name="error_canNotChangeLangWhenTranslating">翻譯進行中不可更換語言設定</string>
+    <string name="msg_tipForChangeGoogleTranslatorLang">請在 [Google 翻譯] 中更改目標翻譯語言</string>
 </resources>

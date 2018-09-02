@@ -6,8 +6,6 @@ import android.view.View;
 import android.widget.PopupMenu;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.utils.AppMode;
-import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
 
 /**
  * Created by firemaples on 31/10/2016.
@@ -23,14 +21,6 @@ public class FloatingBarMenu {
         popupMenu = new PopupMenu(context, anchor);
         popupMenu.inflate(R.menu.menu_floating_bar);
         popupMenu.setOnMenuItemClickListener(onMenuItemClickListener);
-
-        MenuItem item_changeMode = popupMenu.getMenu().findItem(R.id.menu_changeMode);
-        AppMode currentAppMode = SharePreferenceUtil.getInstance().getAppMode();
-        if (currentAppMode == AppMode.Normal) {
-            item_changeMode.setTitle(R.string.toLiteMode);
-        } else {
-            item_changeMode.setTitle(R.string.toNormalMode);
-        }
     }
 
     public void show() {
@@ -59,14 +49,6 @@ public class FloatingBarMenu {
                 if (callback != null) {
                     callback.onAboutItemClick();
                 }
-            } else if (itemId == R.id.menu_changeMode) {
-                if (callback != null) {
-                    if (SharePreferenceUtil.getInstance().getAppMode() == AppMode.Normal) {
-                        callback.onChangeModeItemClick(AppMode.Lite);
-                    } else {
-                        callback.onChangeModeItemClick(AppMode.Normal);
-                    }
-                }
             } else if (itemId == R.id.menu_help) {
                 if (callback != null) {
                     callback.onHelpClick();
@@ -77,8 +59,6 @@ public class FloatingBarMenu {
     };
 
     public interface OnFloatingBarMenuCallback {
-        void onChangeModeItemClick(AppMode toAppMode);
-
         void onSettingItemClick();
 
         void onAboutItemClick();

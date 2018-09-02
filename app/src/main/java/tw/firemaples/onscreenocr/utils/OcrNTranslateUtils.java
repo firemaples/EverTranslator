@@ -1,18 +1,13 @@
 package tw.firemaples.onscreenocr.utils;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 
-import com.googlecode.tesseract.android.TessBaseAPI;
-
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 import io.github.firemaples.language.Language;
+import tw.firemaples.onscreenocr.CoreApplication;
 import tw.firemaples.onscreenocr.R;
 
 /**
@@ -31,9 +26,6 @@ public class OcrNTranslateUtils {
     public static String KEY_PAGE_SEGMENTATION_MODE = "preference_list_page_segmentation_mode";
     public static String KEY_TRANSLATE = "preference_switch_translate";
     public static String KEY_TRANSLATION_TO = "preference_list_translation_to";
-    public static String KEY_TESS_DATA_LOCATION = "preference_tess_data_location";
-
-    private TessBaseAPI baseAPI;
 
     private static String[] iso6393Array, microsoftLangArray;
 
@@ -49,89 +41,76 @@ public class OcrNTranslateUtils {
         return _instance;
     }
 
-    public TessBaseAPI getBaseAPI() {
-        if (baseAPI == null) {
-            baseAPI = new TessBaseAPI();
-        }
-        return baseAPI;
-    }
-
     private SharedPreferences getSharedPreferences() {
-        return PreferenceManager.getDefaultSharedPreferences(Tool.getContext());
+        return PreferenceManager.getDefaultSharedPreferences(CoreApplication.getInstance());
     }
 
     /* OCR */
-    public File getTessDataDir() {
-        return getTessDataLocation().getSaveDir();
-    }
-
-    public File getTessDataBaseDir() {
-        return getTessDataDir().getParentFile();
-    }
-
-    public TessDataLocation getTessDataLocation() {
-        String tessDataLocationString = getSharedPreferences().getString(KEY_TESS_DATA_LOCATION, null);
-        TessDataLocation tessDataLocation = null;
-        if (tessDataLocationString != null) {
-            try {
-                tessDataLocation = TessDataLocation.valueOf(tessDataLocationString);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if (tessDataLocation != null) {
-            return tessDataLocation;
-        }
-
-        if (!isExternalStorageWritable()) {
-            return TessDataLocation.INTERNAL_STORAGE;
-        }
-
-        if (TessDataLocation.INTERNAL_STORAGE.saveDir.exists()) {
-            return TessDataLocation.INTERNAL_STORAGE;
-        } else {
-            return TessDataLocation.EXTERNAL_STORAGE;
-        }
-    }
-
-    public void setTessDataLocation(TessDataLocation tessDataLocation) {
-        getSharedPreferences().edit().putString(KEY_TESS_DATA_LOCATION, tessDataLocation.name()).apply();
-    }
-
-    public boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state) && !Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            return true;
-        }
-        return false;
-    }
+//    public File getTessDataDir() {
+//        return getTessDataLocation().getSaveDir();
+//    }
+//
+//    public File getTessDataBaseDir() {
+//        return getTessDataDir().getParentFile();
+//    }
+//
+//    public TessDataLocation getTessDataLocation() {
+//        String tessDataLocationString = getSharedPreferences().getString(KEY_TESS_DATA_LOCATION, null);
+//        TessDataLocation tessDataLocation = null;
+//        if (tessDataLocationString != null) {
+//            try {
+//                tessDataLocation = TessDataLocation.valueOf(tessDataLocationString);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        if (tessDataLocation != null) {
+//            return tessDataLocation;
+//        }
+//
+//        if (!isExternalStorageWritable()) {
+//            return TessDataLocation.INTERNAL_STORAGE;
+//        }
+//
+//        if (TessDataLocation.INTERNAL_STORAGE.saveDir.exists()) {
+//            return TessDataLocation.INTERNAL_STORAGE;
+//        } else {
+//            return TessDataLocation.EXTERNAL_STORAGE;
+//        }
+//    }
+//
+//    public void setTessDataLocation(TessDataLocation tessDataLocation) {
+//        getSharedPreferences().edit().putString(KEY_TESS_DATA_LOCATION, tessDataLocation.name()).apply();
+//    }
+//
+//    public boolean isExternalStorageWritable() {
+//        String state = Environment.getExternalStorageState();
+//        if (Environment.MEDIA_MOUNTED.equals(state) && !Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+//            return true;
+//        }
+//        return false;
+//    }
 
     public List<String> getOcrLangList() {
-        return Arrays.asList(Tool.getContext().getResources().getStringArray(R.array.iso6393));
+        return Arrays.asList(CoreApplication.getInstance().getResources().getStringArray(R.array.ocr_langCode_iso6393));
     }
 
     public List<String> getOcrLangDisplayNameList() {
-        return Arrays.asList(Tool.getContext().getResources().getStringArray(R.array.languagenames));
+        return Arrays.asList(CoreApplication.getInstance().getResources().getStringArray(R.array.ocr_langName));
     }
 
+    @Deprecated
     public String getOcrLang() {
         return getSharedPreferences().getString(KEY_RECOGNITION_LANGUAGE, DEFAULT_OCR_LANG);
     }
 
+    @Deprecated
     public int getOcrLangIndex() {
         return getOcrLangIndex(getOcrLang());
     }
 
     public int getOcrLangIndex(String ocrLang) {
         return getOcrLangList().indexOf(ocrLang);
-    }
-
-    public String getOcrLangDisplayName() {
-        return getOcrLangDisplayNameList().get(getOcrLangIndex());
-    }
-
-    public String getOcrLangDisplayName(String lang) {
-        return getOcrLangDisplayNameList().get(getOcrLangIndex(lang));
     }
 
     public void setOcrLang(String ocrLang) {
@@ -141,12 +120,12 @@ public class OcrNTranslateUtils {
     /* Translate */
     public List<String> getTranslateLangList() {
         return Arrays.asList(
-                Tool.getContext().getResources().getStringArray(R.array.translationtargetiso6391_microsoft));
+                CoreApplication.getInstance().getResources().getStringArray(R.array.microsoft_translationLangCode_iso6391));
     }
 
     public List<String> getTranslateLangDisplayNameList() {
         return Arrays.asList(
-                Tool.getContext().getResources().getStringArray(R.array.translationtargetlanguagenames_microsoft));
+                CoreApplication.getInstance().getResources().getStringArray(R.array.microsoft_translationLangName));
     }
 
     public String getTranslateFromLang() {
@@ -175,11 +154,11 @@ public class OcrNTranslateUtils {
     }
 
     public String getMicrosoftLang(String iso6393Lang) {
-        if (Tool.getContext() == null) {
+        if (CoreApplication.getInstance() == null) {
             return null;
         }
         if (iso6393Array == null) {
-            iso6393Array = Tool.getContext().getResources().getStringArray(R.array.iso6393);
+            iso6393Array = CoreApplication.getInstance().getResources().getStringArray(R.array.ocr_langCode_iso6393);
         }
         int index = -1;
         for (int i = 0, size = iso6393Array.length; i < size; i++) {
@@ -189,7 +168,7 @@ public class OcrNTranslateUtils {
             }
         }
         if (microsoftLangArray == null) {
-            microsoftLangArray = Tool.getContext().getResources().getStringArray(R.array.translationtargetiso6391_microsoft);
+            microsoftLangArray = CoreApplication.getInstance().getResources().getStringArray(R.array.microsoft_translationLangCode_iso6391);
         }
         if (index <= 0 || index >= microsoftLangArray.length) {
             return "en";
@@ -445,37 +424,37 @@ public class OcrNTranslateUtils {
         }
     }
 
-    public enum TessDataLocation {
-        INTERNAL_STORAGE(Tool.getContext().getFilesDir()),
-        EXTERNAL_STORAGE(getRemovableFileDirOrNormalFilesDir());
-
-        private File saveDir;
-
-        private TessDataLocation(File baseDir) {
-            this.saveDir = new File(baseDir.getAbsolutePath() + File.separator + "tesseract" + File.separator + "tessdata");
-        }
-
-        public File getSaveDir() {
-            return saveDir;
-        }
-
-        private static File getRemovableFileDirOrNormalFilesDir() {
-            Context context = Tool.getContext();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                File[] externalCacheDirs = context.getExternalFilesDirs(null);
-                for (File file : externalCacheDirs) {
-                    if (file != null && Environment.isExternalStorageRemovable(file)) {
-                        return file;
-                    }
-                }
-            }
-
-            File externalFilesDir = context.getExternalFilesDir(null);
-            if (externalFilesDir != null) {
-                return externalFilesDir;
-            } else {
-                return context.getFilesDir();
-            }
-        }
-    }
+//    public enum TessDataLocation {
+//        INTERNAL_STORAGE(CoreApplication.getInstance().getFilesDir()),
+//        EXTERNAL_STORAGE(getRemovableFileDirOrNormalFilesDir());
+//
+//        private File saveDir;
+//
+//        private TessDataLocation(File baseDir) {
+//            this.saveDir = new File(baseDir.getAbsolutePath() + File.separator + "tesseract" + File.separator + "tessdata");
+//        }
+//
+//        public File getSaveDir() {
+//            return saveDir;
+//        }
+//
+//        private static File getRemovableFileDirOrNormalFilesDir() {
+//            Context context = CoreApplication.getInstance();
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                File[] externalCacheDirs = context.getExternalFilesDirs(null);
+//                for (File file : externalCacheDirs) {
+//                    if (file != null && Environment.isExternalStorageRemovable(file)) {
+//                        return file;
+//                    }
+//                }
+//            }
+//
+//            File externalFilesDir = context.getExternalFilesDir(null);
+//            if (externalFilesDir != null) {
+//                return externalFilesDir;
+//            } else {
+//                return context.getFilesDir();
+//            }
+//        }
+//    }
 }

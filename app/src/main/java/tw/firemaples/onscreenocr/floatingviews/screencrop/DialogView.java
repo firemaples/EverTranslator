@@ -99,7 +99,7 @@ public class DialogView extends FloatingView {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.bt_dialogOk) {
-                callback.OnConfirmClick(DialogView.this);
+                callback.onConfirmClick(DialogView.this);
             } else if (id == R.id.bt_dialogCancel) {
                 callback.onCancelClicked(DialogView.this);
             }
@@ -111,7 +111,7 @@ public class DialogView extends FloatingView {
     }
 
     public static class OnDialogViewCallback {
-        public void OnConfirmClick(DialogView dialogView) {
+        public void onConfirmClick(DialogView dialogView) {
             dialogView.detachFromWindow();
         }
 

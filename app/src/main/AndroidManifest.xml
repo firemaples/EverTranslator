@@ -1,44 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="tw.firemaples.onscreenocr"
-          android:installLocation="auto">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="tw.firemaples.onscreenocr"
+    android:installLocation="auto">
 
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".CoreApplication"
         android:allowBackup="true"
+        android:appComponentFactory="whateverString"
         android:fullBackupContent="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:appComponentFactory">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:excludeFromRecents="true"
             android:theme="@style/Theme.Transparent">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <service
             android:name=".ScreenTranslatorService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
 
         <!--android:excludeFromRecents="true"-->
         <!--android:noHistory="true"-->
         <!--android:theme="@style/AppTheme.Transparent"-->
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="034212d0a941b036105ee0ffa8473d6a0cf260af"/>
+            android:value="034212d0a941b036105ee0ffa8473d6a0cf260af" />
     </application>
 
 </manifest>

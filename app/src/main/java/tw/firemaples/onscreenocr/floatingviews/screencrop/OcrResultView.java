@@ -1,8 +1,6 @@
 package tw.firemaples.onscreenocr.floatingviews.screencrop;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +16,11 @@ import java.util.List;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
-import tw.firemaples.onscreenocr.ocr.OCRManager;
 import tw.firemaples.onscreenocr.ocr.OcrNTranslateState;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil;
-import tw.firemaples.onscreenocr.translate.TranslateManager;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
-import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
+import tw.firemaples.onscreenocr.utils.SettingUtil;
 import tw.firemaples.onscreenocr.views.OcrResultWindow;
 import tw.firemaples.onscreenocr.views.OcrResultWrapper;
 
@@ -45,17 +41,10 @@ public class OcrResultView extends FloatingView {
 
     private List<OcrResult> ocrResultList = new ArrayList<>();
 
-    private OCRManager ocrManager;
-    private TranslateManager translateManager;
-
     public OcrResultView(Context context, OnOcrResultViewCallback callback) {
         super(context);
         this.callback = callback;
         setViews(getRootView());
-
-        ocrManager = OCRManager.getInstance(context);
-        ocrManager.setListener(onOCRStateChangedListener);
-        translateManager = TranslateManager.getInstance();
     }
 
     @Override
@@ -85,21 +74,6 @@ public class OcrResultView extends FloatingView {
         ((ViewGroup) rootView).addView(view_ocrResultWrapper, 0, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
-    public void setupData(Bitmap screenshot, List<Rect> boxList) {
-        this.ocrResultList = new ArrayList<>();
-
-        for (Rect rect : boxList) {
-            OcrResult ocrResult = new OcrResult();
-            ocrResult.setRect(rect);
-            ArrayList<Rect> rects = new ArrayList<>();
-            rects.add(new Rect(0, 0, rect.width(), rect.height()));
-            ocrResult.setBoxRects(rects);
-            ocrResultList.add(ocrResult);
-        }
-
-        ocrManager.start(screenshot, boxList);
-    }
-
     private void setDebugInfo(OcrResult ocrResult) {
         TextView tv_debugInfo = (TextView) getRootView().findViewById(R.id.tv_debugInfo);
         if (ocrResult.getDebugInfo() == null) {
@@ -112,13 +86,37 @@ public class OcrResultView extends FloatingView {
         tv_debugInfo.setVisibility(View.VISIBLE);
     }
 
+    public void onOCRInitializing(List<OcrResult> results) {
+        OcrResultView.this.ocrResultList.clear();
+        OcrResultView.this.ocrResultList.addAll(results);
+        updateViewState(OcrNTranslateState.OCR_INIT);
+    }
+
+    public void onOCRRecognizing() {
+        updateViewState(OcrNTranslateState.OCR_RUNNING);
+    }
+
+    public void onOCRRecognized(List<OcrResult> results) {
+        OcrResultView.this.ocrResultList.clear();
+        OcrResultView.this.ocrResultList.addAll(results);
+        updateViewState(state = OcrNTranslateState.OCR_FINISHED);
+    }
+
+    public void onStartTranslation() {
+        updateViewState(OcrNTranslateState.TRANSLATING);
+    }
+
+    public void onTranslated() {
+        updateViewState(OcrNTranslateState.TRANSLATED);
+    }
+
     private void updateViewState(OcrNTranslateState newState) {
         this.state = newState;
         updateViewState();
     }
 
     private void updateViewState() {
-        if (SharePreferenceUtil.getInstance().isDebugMode()) {
+        if (SettingUtil.INSTANCE.isDebugMode()) {
             if (ocrResultList.size() > 0) {
                 setDebugInfo(ocrResultList.get(0));
             }
@@ -129,8 +127,6 @@ public class OcrResultView extends FloatingView {
 
 
     public void clear() {
-        ocrManager.cancelRunningTask();
-
         view_ocrResultWrapper.clear();
         if (textEditDialogView != null) {
             textEditDialogView.detachFromWindow();
@@ -146,55 +142,6 @@ public class OcrResultView extends FloatingView {
         clear();
         super.detachFromWindow();
     }
-
-    private OCRManager.OnOCRStateChangedListener onOCRStateChangedListener = new OCRManager.OnOCRStateChangedListener() {
-        @Override
-        public void onInitializing() {
-            updateViewState(OcrNTranslateState.OCR_INIT);
-        }
-
-        @Override
-        public void onInitialized() {
-
-        }
-
-        @Override
-        public void onRecognizing() {
-            updateViewState(OcrNTranslateState.OCR_RUNNING);
-        }
-
-        @Override
-        public void onRecognized(List<OcrResult> results) {
-            OcrResultView.this.ocrResultList.clear();
-            OcrResultView.this.ocrResultList.addAll(results);
-            updateViewState(state = OcrNTranslateState.OCR_FINISHED);
-            startTranslate(results);
-        }
-    };
-
-    private void startTranslate(List<OcrResult> results) {
-        if (SharePreferenceUtil.getInstance().isEnableTranslation() && results.size() > 0) {
-            updateViewState(OcrNTranslateState.TRANSLATING);
-
-            translateManager.startTranslate(getContext(), results.get(0).getText(), onTranslateManagerCallback);
-
-        } else {
-            for (OcrResult result : results) {
-                result.setTranslatedText("");
-            }
-            onTranslateManagerCallback.onTranslateFinished("");
-        }
-    }
-
-    private TranslateManager.OnTranslateManagerCallback onTranslateManagerCallback = new TranslateManager.OnTranslateManagerCallback() {
-        @Override
-        public void onTranslateFinished(String translatedText) {
-            if (ocrResultList.size() > 0) {
-                ocrResultList.get(0).setTranslatedText(translatedText);
-            }
-            updateViewState(OcrNTranslateState.TRANSLATED);
-        }
-    };
 
     private OcrResultWindow.OnOcrResultWindowCallback onOcrResultWindowCallback = new OcrResultWindow.OnOcrResultWindowCallback() {
         @Override
@@ -240,16 +187,17 @@ public class OcrResultView extends FloatingView {
                 @Override
                 public void OnConfirmClick(TextEditDialogView textEditDialogView, String text) {
                     super.OnConfirmClick(textEditDialogView, text);
-                    OcrResult ocrResult = (OcrResult) textEditDialogView.getTag();
-                    if (ocrResult != null) {
-                        if (!ocrResult.getText().trim().equals(text.trim())) {
-                            ocrResult.setText(text);
-                            ocrResult.setTranslatedText("");
-                            List<OcrResult> cloneList = new ArrayList<>();
-                            cloneList.addAll(ocrResultList);
-                            startTranslate(cloneList);
-                        }
-                    }
+                    callback.onOCRTextChanged(text);
+//                    OcrResult ocrResult = (OcrResult) textEditDialogView.getTag();
+//                    if (ocrResult != null) {
+//                        if (!ocrResult.getText().trim().equals(text.trim())) {
+//                            ocrResult.setText(text);
+//                            ocrResult.setTranslatedText("");
+//                            List<OcrResult> cloneList = new ArrayList<>();
+//                            cloneList.addAll(ocrResultList);
+////                            startTranslate(cloneList);
+//                        }
+//                    }
                 }
             };
 
@@ -268,5 +216,7 @@ public class OcrResultView extends FloatingView {
         void onOpenBrowserClicked();
 
         void onOpenGoogleTranslateClicked();
+
+        void onOCRTextChanged(String newText);
     }
 }

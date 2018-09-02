@@ -29,7 +29,7 @@ import tw.firemaples.onscreenocr.tts.TTSPlayer;
 import tw.firemaples.onscreenocr.tts.TTSRetrieverTask;
 import tw.firemaples.onscreenocr.utils.AudioFocusManager;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
-import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
+import tw.firemaples.onscreenocr.utils.SettingUtil;
 
 /**
  * Created by firemaples on 30/04/2017.
@@ -48,7 +48,7 @@ public class TTSPlayerView extends FloatingView {
     private View bt_play, bt_pause, bt_stop, bt_selectOff, bt_close;
     private SeekBar sb_speed;
 
-    private SharePreferenceUtil spUtil;
+    private SettingUtil spUtil;
     private TTSPlayer ttsPlayer;
     private PlayerState playerState = PlayerState.INIT;
 
@@ -65,7 +65,7 @@ public class TTSPlayerView extends FloatingView {
         mainHandler = new Handler(context.getMainLooper());
         audioFocusManager = new AudioFocusManager(context);
         audioFocusManager.setCallback(onAudioFocusChangedCallback);
-        spUtil = SharePreferenceUtil.getInstance();
+        spUtil = SettingUtil.INSTANCE;
         ttsPlayer = TTSPlayer.getInstance();
         ttsPlayer.setCallback(onTTSPlayCallback);
         setViews(getRootView());
@@ -110,8 +110,8 @@ public class TTSPlayerView extends FloatingView {
         bt_close.setOnClickListener(onClickListener);
         sb_speed.setMax(19);
 
-        cb_enablePlaySlowly.setChecked(spUtil.getReadSpeedEnable());
-        sb_speed.setEnabled(spUtil.getReadSpeedEnable());
+        cb_enablePlaySlowly.setChecked(spUtil.getReadSpeedEnabled());
+        sb_speed.setEnabled(spUtil.getReadSpeedEnabled());
         float readSpeed = spUtil.getReadSpeed();
         sb_speed.setProgress((int) (readSpeed * 10) - 1);
         updatePlaySpeed();
@@ -207,7 +207,7 @@ public class TTSPlayerView extends FloatingView {
     }
 
     private void updatePlaySpeed() {
-        if (spUtil.getReadSpeedEnable()) {
+        if (spUtil.getReadSpeedEnabled()) {
             ttsPlayer.setSpeed(getPlaySpeedFromSeekBar());
         } else {
             ttsPlayer.setSpeed(1);
@@ -298,7 +298,7 @@ public class TTSPlayerView extends FloatingView {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             int id = buttonView.getId();
             if (id == R.id.cb_enablePlaySlowly) {
-                spUtil.setReadSpeedEnable(isChecked);
+                spUtil.setReadSpeedEnabled(isChecked);
                 sb_speed.setEnabled(isChecked);
                 updatePlaySpeed();
             }

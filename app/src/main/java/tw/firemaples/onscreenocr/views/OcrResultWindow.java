@@ -21,8 +21,8 @@ import tw.firemaples.onscreenocr.floatingviews.screencrop.TTSPlayerView;
 import tw.firemaples.onscreenocr.ocr.OcrNTranslateState;
 import tw.firemaples.onscreenocr.ocr.OcrResult;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
-import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
-import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.utils.SettingUtil;
+import tw.firemaples.onscreenocr.utils.Utils;
 import tw.firemaples.onscreenocr.utils.ViewPreparedWaiter;
 
 /**
@@ -89,7 +89,7 @@ public class OcrResultWindow {
         bt_tts_translatedText.setOnClickListener(onClickListener);
         bt_openGoogleTranslate_translatedText.setOnClickListener(onClickListener);
 
-        view_translatedTextWrapper.setVisibility(SharePreferenceUtil.getInstance().isEnableTranslation() ? View.VISIBLE : View.GONE);
+        view_translatedTextWrapper.setVisibility(SettingUtil.INSTANCE.getEnableTranslation() ? View.VISIBLE : View.GONE);
 
         layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(MARGIN, MARGIN, MARGIN, MARGIN);
@@ -252,7 +252,7 @@ public class OcrResultWindow {
                 context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = ClipData.newPlainText(label, text);
         clipboard.setPrimaryClip(clipData);
-        Tool.getInstance().showMsg(String.format(Locale.getDefault(), context.getString(R.string.msg_textHasBeenCopied), text));
+        Utils.showToast(String.format(Locale.getDefault(), context.getString(R.string.msg_textHasBeenCopied), text));
     }
 
     public interface OnOcrResultWindowCallback {

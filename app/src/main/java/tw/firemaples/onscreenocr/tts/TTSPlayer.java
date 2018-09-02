@@ -30,8 +30,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
+import tw.firemaples.onscreenocr.CoreApplication;
 import tw.firemaples.onscreenocr.utils.Callback;
-import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
  * Created by firemaples on 30/04/2017.
@@ -57,7 +57,7 @@ public class TTSPlayer {
     private PlaySpeedSettingTask playSpeedSettingTask;
 
     private TTSPlayer() {
-        setupPlayer(Tool.getContext());
+        setupPlayer(CoreApplication.getInstance());
     }
 
     public static TTSPlayer getInstance() {

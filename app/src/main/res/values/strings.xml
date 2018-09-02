@@ -87,4 +87,13 @@
     <string name="error_googleTranslatorNotInstalled">Sorry, Google translator not installed</string>
     <string name="toLiteMode">Lite Mode</string>
     <string name="toNormalMode">Normal Mode</string>
+    <string name="title_translationFailed">Translation failed</string>
+    <string name="error_canNotChangeLangWhenTranslating">Can not change languages when translation running</string>
+    <string name="msg_tipForChangeGoogleTranslatorLang">Please change the target translation language in [Google Translator] result window</string>
+
+    <string-array name="translation_services">
+        <item>Microsoft</item>
+        <item>Yandex</item>
+        <item>Google app</item>
+    </string-array>
 </resources>

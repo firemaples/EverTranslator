@@ -20,13 +20,13 @@ import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.ScreenTranslatorService;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.floatingviews.MovableFloatingView;
-import tw.firemaples.onscreenocr.ocr.OcrDownloadTask;
+import tw.firemaples.onscreenocr.ocr.OCRDownloadTask;
+import tw.firemaples.onscreenocr.ocr.OCRLangUtil;
+import tw.firemaples.onscreenocr.ocr.OnOCRDownloadTaskCallback;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
-import tw.firemaples.onscreenocr.translate.TranslateManager;
-import tw.firemaples.onscreenocr.utils.AppMode;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
 import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
-import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
+import tw.firemaples.onscreenocr.utils.SettingUtil;
 import tw.firemaples.onscreenocr.views.AreaSelectionView;
 import tw.firemaples.onscreenocr.views.FloatingBarMenu;
 
@@ -44,13 +44,12 @@ public abstract class FloatingBar extends MovableFloatingView {
 
     private DialogView dialogView;
     private DrawAreaView drawAreaView;
-    private ProgressView progressView;
     private List<Rect> currentBoxList = new ArrayList<>();
 
     //OCR
     private OcrNTranslateUtils ocrNTranslateUtils;
     private OcrResultView ocrResultView;
-    private OcrDownloadTask ocrDownloadTask;
+    private OCRDownloadTask ocrDownloadTask = OCRDownloadTask.INSTANCE;
 
     public FloatingBar(Context context) {
         super(context);
@@ -61,15 +60,15 @@ public abstract class FloatingBar extends MovableFloatingView {
     @Override
     public void attachToWindow() {
         super.attachToWindow();
-        SharePreferenceUtil.getInstance().setIsAppShowing(true);
+        SettingUtil.INSTANCE.setAppShowing(true);
 
-        if (!SharePreferenceUtil.getInstance().isVersionHistoryAlreadyShown(getContext())) {
+        if (!SettingUtil.INSTANCE.isVersionHistoryAlreadyShown()) {
             new VersionHistoryView(getContext()).attachToWindow();
         }
     }
 
     private void detachFromWindow(boolean reset) {
-        SharePreferenceUtil.getInstance().setIsAppShowing(false);
+        SettingUtil.INSTANCE.setAppShowing(false);
         if (reset) {
             detachFromWindow();
         } else {
@@ -107,7 +106,7 @@ public abstract class FloatingBar extends MovableFloatingView {
 
     @Override
     public void detachFromWindow() {
-        SharePreferenceUtil.getInstance().setIsAppShowing(false);
+        SettingUtil.INSTANCE.setAppShowing(false);
         resetAll();
         super.detachFromWindow();
         ScreenTranslatorService.resetForeground();
@@ -135,14 +134,11 @@ public abstract class FloatingBar extends MovableFloatingView {
 
         nextBtnState(BtnState.Normal);
 
-        progressView = new ProgressView(getContext());
-        progressView.setCallback(onProgressViewCallback);
-
-        sp_langFrom.setSelection(ocrNTranslateUtils.getOcrLangIndex());
+        sp_langFrom.setSelection(OCRLangUtil.INSTANCE.getSelectedLangIndex());
         sp_langFrom.setOnItemSelectedListener(onItemSelectedListener);
         if (sp_langTo != null) {
             sp_langTo.setSelection(ocrNTranslateUtils.getTranslateToIndex());
-            sp_langTo.setEnabled(SharePreferenceUtil.getInstance().isEnableTranslation());
+            sp_langTo.setEnabled(SettingUtil.INSTANCE.getEnableTranslation());
             sp_langTo.setOnItemSelectedListener(onItemSelectedListener);
         }
 
@@ -150,7 +146,7 @@ public abstract class FloatingBar extends MovableFloatingView {
 
         setDragView(view_menu);
 
-        if (SharePreferenceUtil.getInstance().startingWithSelectionMode()) {
+        if (SettingUtil.INSTANCE.getStartingWithSelectionMode()) {
             onClickListener.onClick(bt_selectArea);
         }
     }
@@ -163,8 +159,8 @@ public abstract class FloatingBar extends MovableFloatingView {
                 String lang = ocrNTranslateUtils.getOcrLangList().get(position);
                 ocrNTranslateUtils.setOcrLang(lang);
 
-                if (!OcrDownloadTask.checkOcrFiles(lang)) {
-                    showDownloadOcrFileDialog(OcrNTranslateUtils.getInstance().getOcrLangDisplayName(lang));
+                if (!OCRDownloadTask.INSTANCE.checkOCRFileExists(lang)) {
+                    showDownloadOcrFileDialog(OCRLangUtil.INSTANCE.getSelectedLangName());
                 }
 
             } else if (parentId == R.id.sp_langTo) {
@@ -187,16 +183,15 @@ public abstract class FloatingBar extends MovableFloatingView {
         dialogView.getOkBtn().setText(R.string.btn_download);
         dialogView.setCallback(new DialogView.OnDialogViewCallback() {
             @Override
-            public void OnConfirmClick(DialogView dialogView) {
-                super.OnConfirmClick(dialogView);
-                ocrDownloadTask = new OcrDownloadTask(getContext(), onOcrDownloadAsyncTaskCallback);
-                ocrDownloadTask.startDownload();
+            public void onConfirmClick(DialogView dialogView) {
+                super.onConfirmClick(dialogView);
+                ocrDownloadTask.downloadOCRFiles(OCRLangUtil.INSTANCE.getSelectedLangCode(), onOcrDownloadAsyncTaskCallback);
             }
         });
         dialogView.attachToWindow();
     }
 
-    private OcrDownloadTask.OnOcrDownloadAsyncTaskCallback onOcrDownloadAsyncTaskCallback = new OcrDownloadTask.OnOcrDownloadAsyncTaskCallback() {
+    private OnOCRDownloadTaskCallback onOcrDownloadAsyncTaskCallback = new OnOCRDownloadTaskCallback() {
         @Override
         public void onDownloadStart() {
             dialogView.reset();
@@ -253,10 +248,6 @@ public abstract class FloatingBar extends MovableFloatingView {
             if (id == R.id.view_menu) {
                 new FloatingBarMenu(getContext(), view_menu, onFloatingBarMenuCallback).show();
             } else if (id == R.id.bt_selectArea) {
-                if (SharePreferenceUtil.getInstance().isDebugMode()) {
-                    TranslateManager.getInstance().test(getContext());
-                }
-
                 if (ScreenshotHandler.isInitialized()) {
                     drawAreaView = new DrawAreaView(getContext());
                     drawAreaView.setOnBackButtonPressedListener(subViewOnBackButtonPressedListener);
@@ -266,8 +257,8 @@ public abstract class FloatingBar extends MovableFloatingView {
                     FloatingBar.this.attachToWindow();
                     nextBtnState(BtnState.AreaSelecting);
                     drawAreaView.getAreaSelectionView().setCallback(onAreaSelectionViewCallback);
-                    if (SharePreferenceUtil.getInstance().isRememberLastSelection()) {
-                        drawAreaView.getAreaSelectionView().setBoxList(SharePreferenceUtil.getInstance().getLastSelectionArea());
+                    if (SettingUtil.INSTANCE.isRememberLastSelection()) {
+                        drawAreaView.getAreaSelectionView().setBoxList(SettingUtil.INSTANCE.getLastSelectionArea());
                     }
                 } else {
                     MainActivity.start(getContext());
@@ -282,14 +273,10 @@ public abstract class FloatingBar extends MovableFloatingView {
     };
 
     private FloatingBarMenu.OnFloatingBarMenuCallback onFloatingBarMenuCallback = new FloatingBarMenu.OnFloatingBarMenuCallback() {
-        @Override
-        public void onChangeModeItemClick(AppMode toAppMode) {
-            ScreenTranslatorService.switchAppMode(toAppMode);
-        }
 
         @Override
         public void onSettingItemClick() {
-            new SettingView(getContext(), onSettingChangedCallback).attachToWindow();
+            new SettingView(getContext()).attachToWindow();
         }
 
         @Override
@@ -308,31 +295,12 @@ public abstract class FloatingBar extends MovableFloatingView {
         public void onCloseItemClick() {
             resetAll();
 
-            progressView = null;
-
             ScreenTranslatorService.stop(true);
         }
 
         @Override
         public void onHelpClick() {
-            AppMode appMode = SharePreferenceUtil.getInstance().getAppMode();
-            switch (appMode){
-                case Normal:
-                    new HelpView(getContext()).attachToWindow();
-                    break;
-                case Lite:
-                    new HelpLiteView(getContext()).attachToWindow();
-                    break;
-            }
-        }
-    };
-
-    private SettingView.OnSettingChangedCallback onSettingChangedCallback = new SettingView.OnSettingChangedCallback() {
-        @Override
-        public void onEnableTranslationChanged(boolean enableTranslation) {
-            if (sp_langTo != null) {
-                sp_langTo.setEnabled(enableTranslation);
-            }
+            new HelpView(getContext()).attachToWindow();
         }
     };
 
@@ -340,10 +308,6 @@ public abstract class FloatingBar extends MovableFloatingView {
         if (drawAreaView != null) {
             drawAreaView.detachFromWindow();
 //            drawAreaView = null;
-        }
-
-        if (progressView != null) {
-            progressView.detachFromWindow();
         }
 
         if (ocrResultView != null) {
@@ -363,14 +327,14 @@ public abstract class FloatingBar extends MovableFloatingView {
     };
 
     protected void onTranslateBtnClicked() {
-        if (OcrDownloadTask.checkOcrFiles(OcrNTranslateUtils.getInstance().getOcrLang())) {
+        if (OCRDownloadTask.INSTANCE.checkOCRFileExists(OCRLangUtil.INSTANCE.getSelectedLangCode())) {
             if (drawAreaView == null) {
                 logger.error("drawAreaView is null, ignore.");
                 return;
             }
             currentBoxList.addAll(drawAreaView.getAreaSelectionView().getBoxList());
-            if (SharePreferenceUtil.getInstance().isRememberLastSelection()) {
-                SharePreferenceUtil.getInstance().setLastSelectionArea(currentBoxList);
+            if (SettingUtil.INSTANCE.isRememberLastSelection()) {
+                SettingUtil.INSTANCE.setLastSelectionArea(currentBoxList);
             }
             drawAreaView.getAreaSelectionView().clear();
             drawAreaView.detachFromWindow();
@@ -380,7 +344,7 @@ public abstract class FloatingBar extends MovableFloatingView {
                 nextBtnState(BtnState.Translating);
             }
         } else {
-            showDownloadOcrFileDialog(OcrNTranslateUtils.getInstance().getOcrLangDisplayName());
+            showDownloadOcrFileDialog(OCRLangUtil.INSTANCE.getSelectedLangName());
         }
     }
 
@@ -440,7 +404,7 @@ public abstract class FloatingBar extends MovableFloatingView {
         ocrResultView.setOnBackButtonPressedListener(subViewOnBackButtonPressedListener);
         ocrResultView.setupHomeButtonWatcher(subViewOnHomePressedListener);
         ocrResultView.attachToWindow();
-        ocrResultView.setupData(screenshot, boxList);
+//        ocrResultView.setupData(screenshot, boxList);
         FloatingBar.this.detachFromWindow(false);
         FloatingBar.this.attachToWindow();
     }
@@ -454,6 +418,10 @@ public abstract class FloatingBar extends MovableFloatingView {
         @Override
         public void onOpenGoogleTranslateClicked() {
             resetAll();
+        }
+
+        @Override
+        public void onOCRTextChanged(String newText) {
         }
     };
 

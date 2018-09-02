@@ -12,10 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.database.ServiceHolderModel;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
-import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.utils.Utils;
 import tw.firemaples.onscreenocr.utils.UrlFormatter;
 
 /**
@@ -24,6 +23,8 @@ import tw.firemaples.onscreenocr.utils.UrlFormatter;
 
 public class WebViewFV extends FloatingView {
     private static final Logger logger = LoggerFactory.getLogger(WebViewFV.class);
+
+    private static final String SERVICE_GOOGLE_WEB = "https://translate.google.com/m/translate?sl=auto&tl={TL}&ie=UTF-8&q={TEXT}";
 
     private WebView wv_webView;
     private String url;
@@ -74,7 +75,7 @@ public class WebViewFV extends FloatingView {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.bt_openBrowser) {
-                Tool.getInstance().openBrowser(url);
+                Utils.openBrowser(url);
                 callback.onOpenBrowserClicked();
             } else if (id == R.id.bt_close) {
                 detachFromWindow();
@@ -95,7 +96,7 @@ public class WebViewFV extends FloatingView {
     };
 
     public void setContent(String text, String targetLanguage) {
-        url = UrlFormatter.getFormattedUrl(ServiceHolderModel.SERVICE_GOOGLE_WEB, text, targetLanguage);
+        url = UrlFormatter.getFormattedUrl(SERVICE_GOOGLE_WEB, text, targetLanguage);
         logger.info("Start loading google web: " + url);
         wv_webView.loadUrl(url);
     }

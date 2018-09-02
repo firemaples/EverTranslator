@@ -36,10 +36,10 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
         this.callback = callback;
 
         OcrNTranslateUtils ocrNTranslateUtils = OcrNTranslateUtils.getInstance();
-        this.baseAPI = ocrNTranslateUtils.getBaseAPI();
-        this.recognitionLang = ocrNTranslateUtils.getOcrLang();
+        this.baseAPI = OCRManager.INSTANCE.getTessBaseAPI();
+        this.recognitionLang = OCRLangUtil.INSTANCE.getSelectedLangCode();
 
-        this.tessRootDir = ocrNTranslateUtils.getTessDataBaseDir();
+        this.tessRootDir = OCRFileUtil.INSTANCE.getTessDataBaseDir();
     }
 
     @Override

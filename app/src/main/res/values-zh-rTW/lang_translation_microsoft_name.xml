@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Translation target names for the Microsoft Translate API. -->
+    <!-- The elements in this array must match to the translationtargetiso6391_microsoft array. -->
+    <string-array name="microsoft_translationLangName">
+        <item>阿拉伯語</item>
+        <item>保加利亞文</item>
+        <item>加泰隆尼亞語</item>
+        <item>中文 (簡體)</item>
+        <item>中文 (繁體)</item>
+        <item>捷克文</item>
+        <item>丹麥文</item>
+        <item>荷蘭文</item>
+        <item>英文</item>
+        <item>愛沙尼亞文</item>
+        <item>芬蘭文</item>
+        <item>法語</item>
+        <item>德文</item>
+        <item>希臘文</item>
+        <item>海地克里奧爾語</item>
+        <item>希伯來語</item>
+        <item>北印度語</item>
+        <item>苗文</item>
+        <item>匈牙利文</item>
+        <item>印度尼西亞文</item>
+        <item>意大利文</item>
+        <item>日文</item>
+        <item>韓文</item>
+        <item>拉脫維亞文</item>
+        <item>立陶宛文</item>
+        <item>馬來語</item>
+        <item>馬耳他文</item>
+        <item>挪威文</item>
+        <item>波斯文</item>
+        <item>波蘭文</item>
+        <item>葡萄牙語</item>
+        <item>羅馬尼亞文</item>
+        <item>俄羅斯文</item>
+        <item>斯洛伐克文</item>
+        <item>斯洛文尼亞語</item>
+        <item>西班牙文</item>
+        <item>瑞典文</item>
+        <item>泰文</item>
+        <item>土耳其文</item>
+        <item>烏克蘭文</item>
+        <item>烏爾都語</item>
+        <item>越南文</item>
+    </string-array>
+</resources>

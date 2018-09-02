@@ -14,10 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tw.firemaples.onscreenocr.database.DatabaseManager;
-import tw.firemaples.onscreenocr.database.ServiceHolderModel;
-import tw.firemaples.onscreenocr.database.ServiceModel;
-import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.CoreApplication;
 import tw.firemaples.onscreenocr.utils.UrlFormatter;
 
 /**
@@ -27,29 +24,24 @@ import tw.firemaples.onscreenocr.utils.UrlFormatter;
 public class GoogleWebApiTranslator {
     private static final Logger logger = LoggerFactory.getLogger(GoogleWebApiTranslator.class);
 
+    private static String SERVICE_GOOGLE_WEB_API = "https://translate.google.com/translate_a/single?client=t&sl=auto&tl={TL}&hl={TL}&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&ie=UTF-8&oe=UTF-8&otf=1&ssel=0&tsel=0&kc=7&q={TEXT}";
+
     private static String REGEX_RESULT_MATCHER = "TRANSLATED_TEXT='(.[^\\']*)'";
+    private static String REGEX_RESULT_MATCHER2 = "\\[\\[\\[\"([^\"]*)\",";
     private static String DEFAULT_USER_AGENT = "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Mobile Safari/537.36";
 
     public static void startTranslate(String textToTranslate, String targetLanguage, final OnGoogleTranslateTaskCallback callback) {
-        ServiceHolderModel translateService = DatabaseManager.getInstance().getTranslateServiceHolder();
-        ServiceModel serviceModel = translateService.getService(ServiceHolderModel.SERVICE_GOOGLE_WEB_API);
-        if (serviceModel.regexResultMatcher != null && serviceModel.regexResultMatcher.trim().length() > 0) {
-            REGEX_RESULT_MATCHER = serviceModel.regexResultMatcher;
-        }
-        if (serviceModel.defaultUserAgent != null && serviceModel.defaultUserAgent.trim().length() > 0) {
-            DEFAULT_USER_AGENT = serviceModel.defaultUserAgent;
-        }
 
 //        String lang = Locale.forLanguageTag(targetLanguage).getLanguage();
 //        if (lang.equals(Locale.CHINESE.getLanguage())) {
 //            lang += "-" + Locale.getDefault().getCountry();
 //        }
 
-        String url = UrlFormatter.getFormattedUrl(ServiceHolderModel.SERVICE_GOOGLE_WEB_API, textToTranslate, targetLanguage);
+        String url = UrlFormatter.getFormattedUrl(SERVICE_GOOGLE_WEB_API, textToTranslate, targetLanguage);
 
         logger.info("GoogleWebApiTranslator start loading url:" + url);
 
-        String userAgent = new WebView(Tool.getContext()).getSettings().getUserAgentString();
+        String userAgent = new WebView(CoreApplication.getInstance()).getSettings().getUserAgentString();
         logger.info("UserAgent: " + userAgent);
         if (userAgent == null || userAgent.trim().length() == 0) {
             userAgent = DEFAULT_USER_AGENT;

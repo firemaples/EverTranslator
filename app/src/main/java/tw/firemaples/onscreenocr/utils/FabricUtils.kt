@@ -18,6 +18,7 @@ class FabricUtils {
             val configLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 config.locales[0]
             } else {
+                @Suppress("DEPRECATION")
                 config.locale
             }
             Crashlytics.setString("CountryCode", configLocale.country)

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>version</key>
+        <value>local</value>
+    </entry>
+    <entry>
+        <key>fetch_interval</key>
+        <value>43200</value>
+    </entry>
+    <entry>
+        <key>microsoft_key_1</key>
+        <value>d0fdbac3cc9c404bb643faf98af01458</value>
+    </entry>
+    <entry>
+        <key>microsoft_key_2</key>
+        <value>0732d026c432493bb31292959ae7f608</value>
+    </entry>
+    <entry>
+        <key>microsoft_key_3</key>
+        <value>ab7319b3e6344b10bd8333ab2e1e4478</value>
+    </entry>
+    <entry>
+        <key>trained_data_url</key>
+        <value>https://github.com/firemaples/tessdata/raw/master/%s.traineddata</value>
+    </entry>
+</defaultsMap>

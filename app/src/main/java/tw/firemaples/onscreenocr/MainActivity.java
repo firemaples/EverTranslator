@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.Callback;
 import tw.firemaples.onscreenocr.utils.PermissionUtil;
-import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
+import tw.firemaples.onscreenocr.utils.SettingUtil;
 
 public class MainActivity extends AppCompatActivity {
     private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(0, 0);
 
         if (getIntent() != null && getIntent().getAction() != null) {
-            SharePreferenceUtil.getInstance().setIsAppShowing(true, this);
+            SettingUtil.INSTANCE.setAppShowing(true);
         }
 
         startApp();

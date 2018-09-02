@@ -19,11 +19,10 @@ import java.nio.channels.FileChannel;
 import tw.firemaples.onscreenocr.BuildConfig;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
-import tw.firemaples.onscreenocr.utils.AppMode;
+import tw.firemaples.onscreenocr.ocr.OCRFileUtil;
+import tw.firemaples.onscreenocr.ocr.TessDataLocation;
 import tw.firemaples.onscreenocr.utils.FabricUtils;
-import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
-import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
-import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.utils.SettingUtil;
 
 /**
  * Created by firemaples on 04/11/2016.
@@ -32,17 +31,12 @@ import tw.firemaples.onscreenocr.utils.Tool;
 public class SettingView extends FloatingView {
     private static final Logger logger = LoggerFactory.getLogger(SettingView.class);
 
-    private Tool tool;
-    private SharePreferenceUtil spUtil;
-    private OcrNTranslateUtils ocrNTranslateUtils;
-    private OnSettingChangedCallback callback;
+    private SettingUtil spUtil;
+    private OCRFileUtil ocrNTranslateUtils = OCRFileUtil.INSTANCE;
 
-    public SettingView(Context context, OnSettingChangedCallback callback) {
+    public SettingView(Context context) {
         super(context);
-        this.callback = callback;
-        tool = Tool.getInstance();
-        spUtil = SharePreferenceUtil.getInstance();
-        ocrNTranslateUtils = OcrNTranslateUtils.getInstance();
+        spUtil = SettingUtil.INSTANCE;
         setViews();
     }
 
@@ -78,18 +72,14 @@ public class SettingView extends FloatingView {
         cb_removeLineBreaks.setOnCheckedChangeListener(onCheckChangeListener);
 
         cb_debugMode.setChecked(spUtil.isDebugMode());
-        cb_enableTranslation.setChecked(spUtil.isEnableTranslation());
-        cb_saveOcrEngineToExternalStorage.setChecked(ocrNTranslateUtils.getTessDataLocation() == OcrNTranslateUtils.TessDataLocation.EXTERNAL_STORAGE);
-        cb_startingWithSelectionMode.setChecked(spUtil.startingWithSelectionMode());
+        cb_enableTranslation.setChecked(spUtil.getEnableTranslation());
+        cb_saveOcrEngineToExternalStorage.setChecked(ocrNTranslateUtils.getTessDataLocation() == TessDataLocation.EXTERNAL_STORAGE);
+        cb_startingWithSelectionMode.setChecked(spUtil.getStartingWithSelectionMode());
         cb_rememberLastSelection.setChecked(spUtil.isRememberLastSelection());
-        cb_removeLineBreaks.setChecked(spUtil.removeLineBreaks());
+        cb_removeLineBreaks.setChecked(spUtil.getRemoveLineBreaks());
 
         if (!ocrNTranslateUtils.isExternalStorageWritable()) {
             cb_saveOcrEngineToExternalStorage.setEnabled(false);
-        }
-
-        if (SharePreferenceUtil.getInstance().getAppMode() != AppMode.Normal) {
-            cb_enableTranslation.setVisibility(View.GONE);
         }
 
         if (!BuildConfig.DEBUG) {
@@ -111,16 +101,13 @@ public class SettingView extends FloatingView {
                 spUtil.setDebugMode(isChecked);
             } else if (id == R.id.cb_enableTranslation) {
                 spUtil.setEnableTranslation(isChecked);
-                if (callback != null) {
-                    callback.onEnableTranslationChanged(isChecked);
-                }
             } else if (id == R.id.cb_startingWithSelectionMode) {
                 spUtil.setStartingWithSelectionMode(isChecked);
             } else if (id == R.id.cb_removeLineBreaks) {
                 spUtil.setRemoveLineBreaks(isChecked);
             } else if (id == R.id.cb_saveOcrEngineToExternalStorageFirst) {
-                OcrNTranslateUtils.TessDataLocation currentSelectedLocation = isChecked ? OcrNTranslateUtils.TessDataLocation.EXTERNAL_STORAGE : OcrNTranslateUtils.TessDataLocation.INTERNAL_STORAGE;
-                OcrNTranslateUtils.TessDataLocation savedLocation = ocrNTranslateUtils.getTessDataLocation();
+                TessDataLocation currentSelectedLocation = isChecked ? TessDataLocation.EXTERNAL_STORAGE : TessDataLocation.INTERNAL_STORAGE;
+                TessDataLocation savedLocation = ocrNTranslateUtils.getTessDataLocation();
                 if (currentSelectedLocation != savedLocation) {
                     if (savedLocation.getSaveDir().exists()) {
                         new MovingOcrEngineFileTask().execute(savedLocation.getSaveDir(), currentSelectedLocation.getSaveDir());
@@ -215,9 +202,5 @@ public class SettingView extends FloatingView {
                 }
             }
         }
-    }
-
-    public interface OnSettingChangedCallback {
-        void onEnableTranslationChanged(boolean enableTranslation);
     }
 }

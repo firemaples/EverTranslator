@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- The elements in this array must match to the languagenames array. -->
-    <string-array name="iso6393" translatable="false">
+    <string-array name="ocr_langCode_iso6393" translatable="false">
         <item>afr</item> <!-- Afrikaans -->
         <item>sqi</item> <!-- Albanian -->
         <item>ara</item> <!-- Arabic -->
@@ -10,8 +10,7 @@
         <item>bel</item> <!-- Belarusian -->
         <item>ben</item> <!-- Bengali -->
         <item>bul</item> <!-- Bulgarian -->
-        <item>cat</item> <!-- Catalan -->
-        <!-- <item>chr</item> --> <!-- Cherokee -->
+        <item>cat</item> <!-- Catalan --> <!-- <item>chr</item> --> <!-- Cherokee -->
         <item>chi_sim</item> <!-- Chinese (Simplified) -->
         <item>chi_tra</item> <!-- Chinese (Traditional) -->
         <item>hrv</item> <!-- Croatian -->
