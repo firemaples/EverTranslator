@@ -12,7 +12,7 @@
 
     <color name="captureAreaSelectionViewProgressBackground">#77000000</color>
 
-    <color name="orcResultBorder_color">#303F9F</color>
+    <color name="orcResultBorder_color">@color/md_light_green_500</color>
     <color name="ocrResultCover_color">#8800FF00</color>
 
     <color name="quickWindow_borderColor1">#FF4081</color>

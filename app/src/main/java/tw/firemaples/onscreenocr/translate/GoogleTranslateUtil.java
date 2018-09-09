@@ -17,7 +17,7 @@ public class GoogleTranslateUtil {
         return Utils.isPackageInstalled(context, PACKAGE_NAME_GOOGLE_TRANSLATE);
     }
 
-    public static boolean start(Context context, String lang, String text) {
+    public static boolean start(Context context, String langTo, String text) {
         Intent intent = new Intent();
         intent.setType("text/plain");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -25,7 +25,7 @@ public class GoogleTranslateUtil {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             intent.setAction(Intent.ACTION_PROCESS_TEXT);
             intent.putExtra(Intent.EXTRA_PROCESS_TEXT, text);
-            intent.putExtra("key_language_to", lang);
+            intent.putExtra("key_language_to", langTo);
             intent.setPackage("com.google.android.apps.translate");
         } else {
             intent.setAction(Intent.ACTION_SEND);
@@ -33,7 +33,7 @@ public class GoogleTranslateUtil {
             intent.putExtra("key_text_input", text);
             intent.putExtra("key_text_output", "");
             intent.putExtra("key_language_from", "auto");
-            intent.putExtra("key_language_to", lang);
+            intent.putExtra("key_language_to", langTo);
             intent.putExtra("key_suggest_translation", "");
             intent.putExtra("key_from_floating_window", false);
             intent.setComponent(new ComponentName(

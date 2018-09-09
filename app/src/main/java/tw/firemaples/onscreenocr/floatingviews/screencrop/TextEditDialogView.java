@@ -83,7 +83,7 @@ public class TextEditDialogView extends FloatingView {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.bt_dialogOk) {
-                callback.OnConfirmClick(TextEditDialogView.this, et_text_edit.getText().toString());
+                callback.onConfirmClick(TextEditDialogView.this, et_text_edit.getText().toString());
             } else if (id == R.id.bt_dialogCancel) {
                 callback.onCancelClicked(TextEditDialogView.this);
             }
@@ -91,7 +91,7 @@ public class TextEditDialogView extends FloatingView {
     };
 
     public static class OnTextEditDialogViewCallback {
-        public void OnConfirmClick(TextEditDialogView textEditDialogView, String text) {
+        public void onConfirmClick(TextEditDialogView textEditDialogView, String text) {
             textEditDialogView.detachFromWindow();
         }
 

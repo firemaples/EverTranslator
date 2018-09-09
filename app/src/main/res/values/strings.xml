@@ -52,7 +52,7 @@
     <string name="btn_close">Close</string>
     <string name="btn_requestAgain">Request Again</string>
     <string name="btn_openAppsPage">Open [Apps] page</string>
-    <string name="ocr_text">OCR text:</string>
+    <string name="ocr_text">OCR text</string>
     <string name="notification_contentText_show">Click to show floating bar</string>
     <string name="translated_text">Translated text</string>
     <string name="debug_mode">Debug Mode</string>
@@ -90,6 +90,7 @@
     <string name="title_translationFailed">Translation failed</string>
     <string name="error_canNotChangeLangWhenTranslating">Can not change languages when translation running</string>
     <string name="msg_tipForChangeGoogleTranslatorLang">Please change the target translation language in [Google Translator] result window</string>
+    <string name="translatedBy" translatable="false">by %s</string>
 
     <string-array name="translation_services">
         <item>Microsoft</item>

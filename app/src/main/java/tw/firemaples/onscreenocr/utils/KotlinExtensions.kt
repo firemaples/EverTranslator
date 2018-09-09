@@ -1,7 +1,9 @@
 package tw.firemaples.onscreenocr.utils
 
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ListView
+import android.widget.TextView
 import tw.firemaples.onscreenocr.R
 
 fun ListView.select(position: Int) {
@@ -33,3 +35,10 @@ fun View.setVisible(visible: Boolean) {
 
 fun Any?.equalsAny(vararg others: Any): Boolean =
         others.any { it == this@equalsAny }
+
+fun View.getView(id: Int): View = this.findViewById(id)
+fun View.getTextView(id: Int): TextView = this.findViewById(id)
+fun View.removeFromParent() = (this.parent as? ViewGroup)?.removeView(this)
+fun View.onViewPrepared(callback: (View) -> Unit) {
+    ViewPreparedWaiter().waitView(this, callback)
+}

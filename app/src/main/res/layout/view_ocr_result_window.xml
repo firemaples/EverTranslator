@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:theme="@style/Base.Theme.AppCompat.Light">
+    android:theme="@style/Base.Theme.AppCompat.Light"
+    tools:ignore="RtlHardcoded">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -23,25 +23,24 @@
                 android:layout_height="wrap_content"
                 android:text="@string/ocr_text"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <ImageButton
                 android:id="@+id/bt_tts_ocrText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="12dp"
                 android:background="@null"
-                android:src="@drawable/play_icon"/>
+                android:src="@drawable/play_icon" />
 
             <ImageButton
                 android:id="@+id/bt_edit_ocrText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginLeft="8dp"
                 android:background="@null"
-                android:src="@drawable/edit_icon"/>
+                android:paddingTop="6dp"
+                android:src="@drawable/edit_icon" />
 
             <ImageButton
                 android:id="@+id/bt_copy_ocrText"
@@ -49,16 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:background="@null"
-                android:src="@drawable/copy_icon"/>
-
-            <ImageButton
-                android:id="@+id/bt_openInBrowser_ocrText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:background="@null"
-                android:src="@drawable/open_web_view_icon"
-                android:visibility="gone"/>
+                android:src="@drawable/copy_icon" />
 
             <ImageButton
                 android:id="@+id/bt_openGoogleTranslate_ocrText"
@@ -66,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:background="@null"
-                android:src="@drawable/google_translate_icon"/>
+                android:src="@drawable/google_translate_icon" />
         </LinearLayout>
 
         <LinearLayout
@@ -78,20 +68,19 @@
                 android:id="@+id/pb_origin"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_weight="1"/>
+                android:layout_height="20dp" />
 
             <TextView
                 android:id="@+id/tv_originText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="false"
-                tools:text="Origin Text Origin Text Origin"/>
+                tools:text="Origin Text Origin Text Origin" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/view_translatedTextWrapper"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -106,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/translated_text"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <ImageButton
                     android:id="@+id/bt_tts_translatedText"
@@ -115,7 +104,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="12dp"
                     android:background="@null"
-                    android:src="@drawable/play_icon"/>
+                    android:src="@drawable/play_icon" />
 
                 <ImageButton
                     android:id="@+id/bt_copy_translatedText"
@@ -123,16 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:background="@null"
-                    android:src="@drawable/copy_icon"/>
-
-                <ImageButton
-                    android:id="@+id/bt_openInBrowser_translatedText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:background="@null"
-                    android:src="@drawable/open_web_view_icon"
-                    android:visibility="gone"/>
+                    android:src="@drawable/copy_icon" />
 
                 <ImageButton
                     android:id="@+id/bt_openGoogleTranslate_translatedText"
@@ -140,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:background="@null"
-                    android:src="@drawable/google_translate_icon"/>
+                    android:src="@drawable/google_translate_icon" />
             </LinearLayout>
 
             <LinearLayout
@@ -152,17 +132,29 @@
                     android:id="@+id/pb_translated"
                     style="?android:attr/progressBarStyle"
                     android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="1"/>
+                    android:layout_height="20dp" />
 
                 <TextView
                     android:id="@+id/tv_translatedText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="false"
-                    tools:text="Translated Text"/>
+                    tools:text="Translated Text" />
             </LinearLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_translationService"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/md_blue_grey_300"
+                    android:textStyle="bold"
+                    tools:text="by Microsoft" />
+            </RelativeLayout>
         </LinearLayout>
 
     </LinearLayout>
