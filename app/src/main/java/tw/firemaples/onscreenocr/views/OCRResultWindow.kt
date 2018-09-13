@@ -26,10 +26,12 @@ import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
 import tw.firemaples.onscreenocr.translate.TranslationUtil
 import tw.firemaples.onscreenocr.utils.*
 
-internal const val MARGIN: Int = 10
+internal const val MARGIN_PX = 4f
 
 class OCRResultWindow(context: Context) : FrameLayout(context) {
     private val logger = LoggerFactory.getLogger(OCRResultWindow::class.java)
+
+    private val layoutMargin by lazy { UIUtil.dpToPx(context, MARGIN_PX) }
 
     private val view: View by lazy { View.inflate(context, R.layout.view_ocr_result_window, null) }
 
@@ -52,7 +54,7 @@ class OCRResultWindow(context: Context) : FrameLayout(context) {
     private val layoutParams by lazy {
         RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-            setMargins(MARGIN, MARGIN, MARGIN, MARGIN)
+            setMargins(layoutMargin, layoutMargin, layoutMargin, layoutMargin)
         }
     }
 
@@ -96,7 +98,7 @@ class OCRResultWindow(context: Context) : FrameLayout(context) {
     init {
         isClickable = true
         isFocusable = true
-        
+
         addView(view)
         btCopyOT.setOnClickListener(onClickListener)
         btEditOT.setOnClickListener(onClickListener)
@@ -172,7 +174,7 @@ class OCRResultWindow(context: Context) : FrameLayout(context) {
 
         val parentHeight = parent.height
 
-        val needHeight = height + MARGIN * 2
+        val needHeight = height + layoutMargin * 2
 
         if (anchorView.top > needHeight) {
             //Gravity = TOP
@@ -181,13 +183,13 @@ class OCRResultWindow(context: Context) : FrameLayout(context) {
             //Gravity = BOTTOM
             layoutParams.topMargin = anchorView.top + anchorView.height
         } else {
-            layoutParams.topMargin = MARGIN
+            layoutParams.topMargin = layoutMargin
             layoutParams.addRule(RelativeLayout.CENTER_VERTICAL)
         }
 
-        if (anchorView.left + width + MARGIN > displayMetrics.widthPixels) {
+        if (anchorView.left + width + layoutMargin > displayMetrics.widthPixels) {
             // Match screen right
-            layoutParams.leftMargin = displayMetrics.widthPixels - (width + MARGIN)
+            layoutParams.leftMargin = displayMetrics.widthPixels - (width - layoutMargin)
         } else {
             // Match anchorView left
             layoutParams.leftMargin = anchorView.left
