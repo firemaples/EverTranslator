@@ -60,12 +60,16 @@ public abstract class FloatingView {
                 type,
                 (layoutFocusable() ? WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL :
                         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE) |
-                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                        (canMoveOutside() ? WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS : 0),
                 PixelFormat.TRANSLUCENT);
         if (fullScreenMode()) {
             floatingLayoutParams.flags = floatingLayoutParams.flags | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         }
         floatingLayoutParams.gravity = getLayoutGravity();
+    }
+
+    protected boolean canMoveOutside() {
+        return false;
     }
 
     protected boolean isPrimaryView() {

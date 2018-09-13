@@ -30,7 +30,7 @@ public abstract class MovableFloatingView extends FloatingView {
     private float fromAlpha = 1.0f;
     private static final float DESTINATION_ALPHA = 0.2f;
     private static final long FADE_OUT_ANIM_DURATION = 800L;
-    private static final long FADE_OUT_ANIM_DELAY = 450L;
+    private static final long FADE_OUT_ANIM_DELAY = 1000L;
 
     private View dragView;
 
@@ -58,6 +58,11 @@ public abstract class MovableFloatingView extends FloatingView {
     public void attachToWindow() {
         super.attachToWindow();
         moveToEdgeOrFadeOut();
+    }
+
+    @Override
+    protected boolean canMoveOutside() {
+        return enableAutoMoveToEdge();
     }
 
     protected boolean enableAutoMoveToEdge() {
@@ -202,11 +207,14 @@ public abstract class MovableFloatingView extends FloatingView {
     }
 
     private void fadeOut() {
+        if (mFadeOutAnimator != null) {
+            mFadeOutAnimator.cancel();
+        }
         mFadeOutAnimator = ValueAnimator.ofFloat(fromAlpha, DESTINATION_ALPHA);
         mFadeOutAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                dragView.setAlpha((Float) animation.getAnimatedValue());
+                getRootView().setAlpha((Float) animation.getAnimatedValue());
             }
         });
         mFadeOutAnimator.setDuration(FADE_OUT_ANIM_DURATION);
@@ -225,6 +233,16 @@ public abstract class MovableFloatingView extends FloatingView {
         return false;
     }
 
+    protected void rescheduleFadeOut() {
+        if (mFadeOutAnimator != null) {
+            mFadeOutAnimator.cancel();
+        }
+        getRootView().setAlpha(fromAlpha);
+        if (enableTransparentWhenMoved()) {
+            fadeOut();
+        }
+    }
+
     public void setTouchInterceptor(TouchInterceptor touchInterceptor) {
         this.touchInterceptor = touchInterceptor;
     }
@@ -239,7 +257,9 @@ public abstract class MovableFloatingView extends FloatingView {
             if (mFadeOutAnimator != null && mFadeOutAnimator.isRunning()) {
                 mFadeOutAnimator.cancel();
             }
-            dragView.setAlpha(fromAlpha);
+            if (enableTransparentWhenMoved()) {
+                getRootView().setAlpha(fromAlpha);
+            }
 
             if (touchInterceptor != null && touchInterceptor.onTouch(v, event, hasMoved)) {
                 return true;
@@ -257,9 +277,8 @@ public abstract class MovableFloatingView extends FloatingView {
                 case MotionEvent.ACTION_UP:
                     boolean temp = hasMoved;
                     hasMoved = false;
-                    if (moveToEdgeOrFadeOut()) {
-                        return true;
-                    } else if (temp) {
+                    moveToEdgeOrFadeOut();
+                    if (temp) {
                         return true;
                     }
                     break;
