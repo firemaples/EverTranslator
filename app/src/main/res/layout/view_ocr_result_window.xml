@@ -9,13 +9,16 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="4dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="bottom"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
@@ -29,24 +32,23 @@
                 android:id="@+id/bt_tts_ocrText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
+                android:layout_marginLeft="@dimen/resultWindow_tool_marginLeft"
                 android:background="@null"
                 android:src="@drawable/play_icon" />
 
             <ImageButton
                 android:id="@+id/bt_edit_ocrText"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginLeft="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/resultWindow_tool_marginBetween"
                 android:background="@null"
-                android:paddingTop="6dp"
                 android:src="@drawable/edit_icon" />
 
             <ImageButton
                 android:id="@+id/bt_copy_ocrText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="@dimen/resultWindow_tool_marginBetween"
                 android:background="@null"
                 android:src="@drawable/copy_icon" />
 
@@ -54,7 +56,7 @@
                 android:id="@+id/bt_openGoogleTranslate_ocrText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="@dimen/resultWindow_tool_marginBetween"
                 android:background="@null"
                 android:src="@drawable/google_translate_icon" />
         </LinearLayout>
@@ -82,12 +84,13 @@
             android:id="@+id/view_translatedTextWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="bottom"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
@@ -102,7 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="12dp"
+                    android:layout_marginLeft="@dimen/resultWindow_tool_marginLeft"
                     android:background="@null"
                     android:src="@drawable/play_icon" />
 
@@ -110,7 +113,7 @@
                     android:id="@+id/bt_copy_translatedText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginLeft="@dimen/resultWindow_tool_marginBetween"
                     android:background="@null"
                     android:src="@drawable/copy_icon" />
 
@@ -118,7 +121,7 @@
                     android:id="@+id/bt_openGoogleTranslate_translatedText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginLeft="@dimen/resultWindow_tool_marginBetween"
                     android:background="@null"
                     android:src="@drawable/google_translate_icon" />
             </LinearLayout>
@@ -152,6 +155,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:textColor="@color/md_blue_grey_300"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     tools:text="by Microsoft" />
             </RelativeLayout>
