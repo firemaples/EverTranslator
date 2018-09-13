@@ -17,6 +17,7 @@ import tw.firemaples.onscreenocr.ocr.OCRLangUtil
 import tw.firemaples.onscreenocr.ocr.OCRManager
 import tw.firemaples.onscreenocr.ocr.event.OCRLangChangedEvent
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler
+import tw.firemaples.onscreenocr.state.InitState
 import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
 import tw.firemaples.onscreenocr.translate.TranslationService
 import tw.firemaples.onscreenocr.translate.TranslationUtil
@@ -59,6 +60,9 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
     override fun getLayoutId(): Int = R.layout.view_floating_bar_new
 
+    override fun enableTransparentWhenMoved(): Boolean =
+            StateManager.state is InitState
+
     override fun attachToWindow() {
         super.attachToWindow()
         SettingUtil.isAppShowing = true
@@ -98,6 +102,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
     override fun onBackButtonPressed(): Boolean {
         StateManager.onBackButtonPressed()
+        rescheduleFadeOut()
         return super.onBackButtonPressed()
     }
 
@@ -106,6 +111,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
     private fun setViews() {
         viewLangSelector.setOnClickListener {
+            rescheduleFadeOut()
             if (StateManager.state.stateName() in
                     arrayOf(StateName.ScreenshotTake,
                             StateName.OCRProcess, StateName.Translating)) {
@@ -116,15 +122,19 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
             }
         }
         btSelectArea.setOnClickListener {
+            rescheduleFadeOut()
             StateManager.startSelection()
         }
         btTranslation.setOnClickListener {
+            rescheduleFadeOut()
             StateManager.startOCR()
         }
         btClear.setOnClickListener {
+            rescheduleFadeOut()
             resetAll()
         }
         viewMenu.setOnClickListener {
+            rescheduleFadeOut()
             FloatingBarMenu(context, viewMenu, onFloatingBarMenuCallback).show()
         }
 
@@ -166,8 +176,9 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
         StateManager.listener = object : OnStateChangedListener {
 
             override fun onStateChanged(state: StateName) {
-                // Set up buttons
+                rescheduleFadeOut()
 
+                // Set up buttons
                 btSelectArea.setVisible(state.equalsAny(StateName.Init, StateName.AreaSelecting))
                 btSelectArea.isEnabled = state == StateName.Init
 
@@ -225,6 +236,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
             override fun screenshotFailed(errorCode: Int, e: Throwable) {
                 attachToWindow()
                 resetAll()
+                rescheduleFadeOut()
 
                 val msg = when (errorCode) {
                     ScreenshotHandler.ERROR_CODE_TIMEOUT ->
@@ -288,6 +300,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
             override fun clearOverlay() {
                 resetAll()
+                rescheduleFadeOut()
             }
         }
     }
