@@ -84,13 +84,16 @@
     <string name="drawAnAreaForTranslation">Tap and drag here to create a translation area</string>
     <string name="redrawAnAreaForTranslation">Tap and drag here to re-draw a translation area</string>
     <string name="foregroundNotification">Foreground notification</string>
-    <string name="error_googleTranslatorNotInstalled">Sorry, Google translator not installed</string>
+    <string name="error_googleTranslatorNotInstalled">Sorry, [Google translate] not installed or version is too old, please install or upgrade your [Google translate]</string>
     <string name="toLiteMode">Lite Mode</string>
     <string name="toNormalMode">Normal Mode</string>
     <string name="title_translationFailed">Translation failed</string>
     <string name="error_canNotChangeLangWhenTranslating">Can not change languages when translation running</string>
     <string name="msg_tipForChangeGoogleTranslatorLang">Please change the target translation language in [Google Translator] result window</string>
     <string name="translatedBy" translatable="false">by %s</string>
+    <string name="install">Install</string>
+    <string name="title_googleTranslateAppNotInstalled">Google Translate not installed</string>
+    <string name="msg_googleTranslteAppNotInstalled">Please install [Google Translate] for translation</string>
 
     <string-array name="translation_services">
         <item>Microsoft</item>

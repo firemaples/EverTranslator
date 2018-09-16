@@ -32,8 +32,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="En > "
-                    android:textStyle="bold" />
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:text="En>" />
 
                 <ImageView
                     android:id="@+id/iv_googleTranslate"

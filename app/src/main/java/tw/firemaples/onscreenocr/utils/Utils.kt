@@ -3,12 +3,16 @@ package tw.firemaples.onscreenocr.utils
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.widget.Toast
 import com.muddzdev.styleabletoastlibrary.StyleableToast
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.CoreApplication
+import tw.firemaples.onscreenocr.floatingviews.screencrop.DialogView
 
 class Utils {
     companion object {
@@ -16,6 +20,7 @@ class Utils {
             get() {
                 return CoreApplication.instance
             }
+        val logger: Logger = LoggerFactory.getLogger(Utils::class.java)
 
         private val baseToast: StyleableToast.Builder
             get() {
@@ -32,12 +37,26 @@ class Utils {
                         ?.any { serviceClass.name == it.service.className } == true
 
         @JvmStatic
-        fun showToast(msg: String) =
-                baseToast.text(msg).show()
+        fun showToast(stringRes: Int) = showToast(context.getString(stringRes))
 
         @JvmStatic
-        fun showErrorToast(msg: String) =
-                baseToast.text(msg).backgroundColor(Color.RED).show()
+        fun showToast(msg: String) = baseToast.text(msg).show()
+
+        @JvmStatic
+        fun showErrorToast(stringRes: Int) = showErrorToast(context.getString(stringRes))
+
+        @JvmStatic
+        fun showErrorToast(msg: String) = baseToast.text(msg).backgroundColor(Color.RED).show()
+
+        @JvmStatic
+        fun showSimpleDialog(title: String, msg: String) {
+            DialogView(context).apply {
+                reset()
+                setType(DialogView.Type.CONFIRM_ONLY)
+                setTitle(title)
+                setContentMsg(msg)
+            }.attachToWindow()
+        }
 
         @JvmStatic
         fun replaceAllLineBreaks(str: String?, replaceWith: String): String? =
@@ -57,23 +76,29 @@ class Utils {
         }
 
         @JvmStatic
-        fun openPlayStore(context: Context, packageName: String) {
+        fun openPlayStore(packageName: String): Boolean {
             val intent = Intent(Intent.ACTION_VIEW).apply {
                 data = Uri.parse("market://details?id=$packageName")
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
-            intent.resolveActivity(context.packageManager)?.let {
+            return intent.resolveActivity(context.packageManager)?.let {
                 context.startActivity(intent)
-            }
+                true
+            } ?: false
         }
 
         @JvmStatic
-        fun isPackageInstalled(context: Context, packageName: String): Boolean =
+        fun isPackageInstalled(packageName: String): Boolean =
+                getPackageInfo(packageName) != null
+
+        @JvmStatic
+        fun getPackageInfo(packageName: String): PackageInfo? =
                 try {
                     context.packageManager.getPackageInfo(packageName, 0)
-                    true
                 } catch (e: PackageManager.NameNotFoundException) {
-                    false
+                    logger.warn("Package not found", e)
+                    null
                 }
+
     }
 }

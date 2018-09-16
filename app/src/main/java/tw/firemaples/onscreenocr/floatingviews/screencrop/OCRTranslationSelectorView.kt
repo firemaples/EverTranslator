@@ -11,6 +11,7 @@ import tw.firemaples.onscreenocr.StateManager
 import tw.firemaples.onscreenocr.event.EventUtil
 import tw.firemaples.onscreenocr.floatingviews.FloatingView
 import tw.firemaples.onscreenocr.ocr.OCRLangUtil
+import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
 import tw.firemaples.onscreenocr.translate.TranslationService
 import tw.firemaples.onscreenocr.translate.TranslationUtil
 import tw.firemaples.onscreenocr.translate.event.TranslationServiceChangedEvent
@@ -93,6 +94,9 @@ class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (parent?.isSkipNextSelect(true) == true) return
                 TranslationUtil.currentService = TranslationUtil.serviceList.first { it.sort == position }
+                if (TranslationUtil.currentService == TranslationService.GoogleTranslatorApp) {
+                    GoogleTranslateUtil.checkInstalled(context)
+                }
             }
         }
 
