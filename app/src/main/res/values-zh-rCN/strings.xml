@@ -82,11 +82,11 @@
     <string name="title_version_history">版本信息</string>
     <string name="redrawAnAreaForTranslation">再次拖曳可以重新圈选欲翻译的区域</string>
     <string name="foregroundNotification">常驻通知</string>
-    <string name="error_googleTranslatorNotInstalled">您尚未安装 Google 翻译 app</string>
+    <string name="error_googleTranslatorNotInstalled">您尚未安装 [Google 翻译] 或版本太旧，请尝试安装或更新版本</string>
     <string name="toLiteMode">简易模式</string>
     <string name="toNormalMode">一般模式</string>
     <string name="error_unknownError">未知的错误</string>
-    <string name="title_translationFailed">翻譯失敗</string>
-    <string name="error_canNotChangeLangWhenTranslating">翻譯進行中不可更換語言設定</string>
-    <string name="msg_tipForChangeGoogleTranslatorLang">請在 [Google 翻譯] 中更改目標翻譯語言</string>
+    <string name="msg_tipForChangeGoogleTranslatorLang">请在 [Google 翻译] 中更改目标翻译语言</string>
+    <string name="error_canNotChangeLangWhenTranslating">翻译进行中不可更换语言设定</string>
+    <string name="title_translationFailed">翻译失败</string>
 </resources>

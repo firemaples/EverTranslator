@@ -21,6 +21,7 @@ import tw.firemaples.onscreenocr.state.InitState
 import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
 import tw.firemaples.onscreenocr.translate.TranslationService
 import tw.firemaples.onscreenocr.translate.TranslationUtil
+import tw.firemaples.onscreenocr.translate.event.InstallGoogleTranslatorEvent
 import tw.firemaples.onscreenocr.translate.event.TranslationLangChangedEvent
 import tw.firemaples.onscreenocr.utils.SettingUtil
 import tw.firemaples.onscreenocr.utils.Utils
@@ -41,6 +42,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
     private val pgProgress: View = rootView.findViewById(R.id.pg_progress)
     private val viewMenu: View = rootView.findViewById(R.id.view_menu)
 
+    private var ocrTranslationSelectorView: OCRTranslationSelectorView? = null
     private var drawAreaView: DrawAreaView? = null
     private var ocrResultView: OCRResultView? = null
     private val dialogView: DialogView by lazy { DialogView(context) }
@@ -94,6 +96,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
     private fun resetAll() {
         StateManager.resetState()
+        ocrTranslationSelectorView?.detachFromWindow()
         FloatingView.detachAllNonPrimaryViews()
         OCRManager.cancelRunningTask()
         drawAreaView = null
@@ -118,7 +121,9 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
                 Utils.showErrorToast(context
                         .getString(R.string.error_canNotChangeLangWhenTranslating))
             } else {
-                OCRTranslationSelectorView(context).attachToWindow()
+                ocrTranslationSelectorView = OCRTranslationSelectorView(context).apply {
+                    attachToWindow()
+                }
             }
         }
         btSelectArea.setOnClickListener {
@@ -126,6 +131,13 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
             StateManager.startSelection()
         }
         btTranslation.setOnClickListener {
+            if (SettingUtil.isRememberLastSelection) {
+                SettingUtil.lastSelectionArea = StateManager.boxList
+            }
+            if (TranslationUtil.currentService == TranslationService.GoogleTranslatorApp &&
+                    !GoogleTranslateUtil.checkInstalled(context)) {
+                return@setOnClickListener
+            }
             rescheduleFadeOut()
             StateManager.startOCR()
         }
@@ -154,7 +166,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
             else -> transLang
         }
 
-        val text = "$ocrLang > $targetName"
+        val text = "$ocrLang>$targetName"
         tvLang.text = text
 
         ivGoogleTranslate.setVisible(TranslationService.GoogleTranslatorApp.isCurrent)
@@ -170,6 +182,12 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onTranslationLangChanged(event: TranslationLangChangedEvent) {
         setupLang(transLang = event.langCode)
+    }
+
+    @Suppress("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onInstallGoogleTranslate(event: InstallGoogleTranslatorEvent) {
+        resetAll()
     }
 
     init {
@@ -210,10 +228,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
                 }
             }
 
-            private fun clearAreaSelectionViewAndSaveArea() {
-                if (SettingUtil.isRememberLastSelection) {
-                    SettingUtil.lastSelectionArea = StateManager.boxList
-                }
+            private fun clearAreaSelectionView() {
                 drawAreaView?.apply {
                     areaSelectionView?.clear()
                     detachFromWindow()
@@ -225,7 +240,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
             }
 
             override fun beforeScreenshot() {
-                clearAreaSelectionViewAndSaveArea()
+                clearAreaSelectionView()
                 detachFromWindow(false)
             }
 
@@ -277,8 +292,9 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
             override fun ocrRecognized() {
                 if (TranslationUtil.currentService == TranslationService.GoogleTranslatorApp) {
-                    val text = StateManager.ocrResultText
-                    GoogleTranslateUtil.start(context, Locale.getDefault().language, text)
+                    StateManager.ocrResultText?.let {
+                        GoogleTranslateUtil.start(context, Locale.getDefault().language, it)
+                    }
                 }
             }
 

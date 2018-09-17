@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.TextView
+import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.R
 
 fun ListView.select(position: Int) {
@@ -42,3 +43,5 @@ fun View.removeFromParent() = (this.parent as? ViewGroup)?.removeView(this)
 fun View.onViewPrepared(callback: (View) -> Unit) {
     ViewPreparedWaiter().waitView(this, callback)
 }
+
+fun Int.asStringRes(): String = CoreApplication.instance.getString(this)

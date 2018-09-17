@@ -5,7 +5,11 @@ import android.os.Build
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.answers.CustomEvent
+import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
 import java.util.*
+
+private const val EVENT_TRANSLATE_TEXT = "Translate Text"
+private const val EVENT_GOOGLE_TRANSLATE_NOT_FOUND = "Google Translate not found"
 
 class FabricUtils {
     companion object {
@@ -28,7 +32,7 @@ class FabricUtils {
         @JvmStatic
         fun logTranslationInfo(text: String, translateFromLang: String, translateToLang: String, serviceName: String) {
             Answers.getInstance().logCustom(
-                    CustomEvent("Translate Text")
+                    CustomEvent(EVENT_TRANSLATE_TEXT)
                             .putCustomAttribute("Text length", text.length)
                             .putCustomAttribute("Translate from", translateFromLang)
                             .putCustomAttribute("Translate to", translateToLang)
@@ -36,6 +40,20 @@ class FabricUtils {
                             .putCustomAttribute("System language", Locale.getDefault().language)
                             .putCustomAttribute("Translate service", serviceName)
             )
+        }
+
+        @JvmStatic
+        fun logGoogleTranslateNotFoundWhenResult() {
+            val info = GoogleTranslateUtil.getGoogleTranslateInfo()
+            logException(IllegalStateException("Google translate not found or version is too old: $info"))
+            logEvent(CustomEvent(EVENT_GOOGLE_TRANSLATE_NOT_FOUND)
+                    .putCustomAttribute("PackageInfoExists", (info != null).toString())
+                    .putCustomAttribute("VersionCode", info?.versionCode ?: -1)
+                    .putCustomAttribute("VersionName", info?.versionName ?: "Not found"))
+        }
+
+        private fun logEvent(event: CustomEvent) {
+            Answers.getInstance().logCustom(event)
         }
 
         @JvmStatic
