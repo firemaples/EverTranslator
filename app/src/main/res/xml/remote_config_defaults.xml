@@ -9,19 +9,15 @@
         <value>43200</value>
     </entry>
     <entry>
-        <key>microsoft_key_1</key>
+        <key>microsoft_key_group_id</key>
+        <value>local</value>
+    </entry>
+    <entry>
+        <key>microsoft_key</key>
         <value>d0fdbac3cc9c404bb643faf98af01458</value>
     </entry>
     <entry>
-        <key>microsoft_key_2</key>
-        <value>0732d026c432493bb31292959ae7f608</value>
-    </entry>
-    <entry>
-        <key>microsoft_key_3</key>
-        <value>ab7319b3e6344b10bd8333ab2e1e4478</value>
-    </entry>
-    <entry>
-        <key>trained_data_url</key>
-        <value>https://github.com/firemaples/tessdata/raw/master/%s.traineddata</value>
+        <key>trained_data_url_data</key>
+        <value>[{"name":"Github","key":"github","url":"https://github.com/firemaples/tessdata/raw/master/%s.traineddata"},{"name":"RawGit CDN","key":"rawgit","url":"https://cdn.rawgit.com/firemaples/tessdata/6c965771/%s.traineddata"},{"name":"GitHack CDN","key":"githack","url":"https://rawcdn.githack.com/firemaples/tessdata/master/%s.traineddata"},{"name":"Gitlab","key":"gitlab","url":"https://gitlab.com/firemaples/tessdata/raw/master/%s.traineddata"}]</value>
     </entry>
 </defaultsMap>

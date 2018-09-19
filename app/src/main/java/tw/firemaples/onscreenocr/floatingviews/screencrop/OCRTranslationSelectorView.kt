@@ -10,6 +10,7 @@ import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.StateManager
 import tw.firemaples.onscreenocr.event.EventUtil
 import tw.firemaples.onscreenocr.floatingviews.FloatingView
+import tw.firemaples.onscreenocr.ocr.OCRFileUtil
 import tw.firemaples.onscreenocr.ocr.OCRLangUtil
 import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
 import tw.firemaples.onscreenocr.translate.TranslationService
@@ -21,6 +22,7 @@ import tw.firemaples.onscreenocr.utils.select
 import tw.firemaples.onscreenocr.utils.skipNextSelect
 
 class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
+    private val spTrainedDataSite: Spinner = rootView.findViewById(R.id.sp_trainedDataSite)
     private val lvOcrLang: ListView = rootView.findViewById(R.id.lv_ocrLang)
     private val spTranslationService: Spinner = rootView.findViewById(R.id.sp_translationService)
     private val lvTranslationLang: ListView = rootView.findViewById(R.id.lv_translationLang)
@@ -68,6 +70,24 @@ class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
 
     private fun setViews() {
         btClose.setOnClickListener { detachFromWindow() }
+
+        spTrainedDataSite.adapter = ArrayAdapter<String>(context,
+                R.layout.item_spinner,
+                android.R.id.text1,
+                OCRFileUtil.trainedDataSites.map { it.name }).apply {
+            setDropDownViewResource(R.layout.item_spinner_dropdown)
+        }
+        spTrainedDataSite.skipNextSelect()
+        spTrainedDataSite.setSelection(OCRFileUtil.trainedDataDownloadSiteIndex)
+        spTrainedDataSite.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (parent?.isSkipNextSelect(true) == true) return
+                OCRFileUtil.trainedDataDownloadSiteIndex = position
+            }
+        }
 
         lvOcrLang.choiceMode = ListView.CHOICE_MODE_SINGLE
         lvOcrLang.adapter = ArrayAdapter<String>(context, R.layout.item_lang, android.R.id.text1, ocrLangNameList)
