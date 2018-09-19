@@ -4,12 +4,38 @@ import android.os.Build
 import android.os.Environment
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.ocr.OCRFileUtil.removableFileDirOrNormalFilesDir
+import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
+import tw.firemaples.onscreenocr.remoteconfig.TrainedDataSite
 import tw.firemaples.onscreenocr.utils.BaseSettingUtil
 import java.io.File
+
+private const val KEY_TRAINED_DATA_SITE_KEY = "KEY_TRAINED_DATA_SITE_KEY"
+private const val DEFAULT_TRAINED_DATA_SITE_KEY = "github"
 
 private const val KEY_TESS_DATA_LOCATION = "preference_tess_data_location"
 
 object OCRFileUtil : BaseSettingUtil() {
+    var trainedDataDownloadSiteKey: String
+        get() = sp.getString(KEY_TRAINED_DATA_SITE_KEY, null)
+                ?: DEFAULT_TRAINED_DATA_SITE_KEY
+        set(value) {
+            if (RemoteConfigUtil.trainedDataSites.any { value == it.key }) {
+                sp.edit().putString(KEY_TRAINED_DATA_SITE_KEY, value).apply()
+            }
+        }
+
+    var trainedDataDownloadSiteIndex: Int
+        get() = trainedDataSites.indexOfFirst { it.key == trainedDataDownloadSiteKey }
+                .let { if (it < 0) 0 else it }
+        set(value) {
+            trainedDataDownloadSiteKey = trainedDataSites[value].key
+        }
+
+    val trainedDataDownloadSite: TrainedDataSite
+        get() = trainedDataSites.first { it.key == trainedDataDownloadSiteKey }
+
+    val trainedDataSites: List<TrainedDataSite>
+        get() = RemoteConfigUtil.trainedDataSites
 
     val tessDataDir: File = tessDataLocation.saveDir
 

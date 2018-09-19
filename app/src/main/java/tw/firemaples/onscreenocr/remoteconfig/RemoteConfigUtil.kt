@@ -6,12 +6,14 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.BuildConfig
 import tw.firemaples.onscreenocr.R
-import tw.firemaples.onscreenocr.utils.SettingUtil
+import tw.firemaples.onscreenocr.utils.JsonUtil
+import tw.firemaples.onscreenocr.utils.TypeReference
 
-internal const val keyVersion = "version"
-internal const val keyFetchInterval = "fetch_interval"
-internal const val prefixMicrosoftKey = "microsoft_key_"
-internal const val keyTrainedDataUrl = "trained_data_url"
+internal const val KEY_VERSION = "version"
+internal const val KEY_FETCH_INTERVAL = "fetch_interval"
+internal const val KEY_MICROSOFT_KEY = "microsoft_key"
+internal const val KEY_MICROSOFT_KEY_GROUP_ID = "microsoft_key_group_id"
+internal const val KEY_TRAINED_DATA_URL = "trained_data_url_data"
 
 object RemoteConfigUtil {
     private val logger: Logger = LoggerFactory.getLogger(RemoteConfigUtil::class.java)
@@ -29,12 +31,12 @@ object RemoteConfigUtil {
         logger.info("fetchTimeMillis: ${remoteConfig.info.fetchTimeMillis}")
         logger.info("lastFetchStatus: ${getLastFetchState()}")
 
-        logger.info("Version before fetch: $versionString")
+        logger.info("Version before fetch: $versionString, keyGroup: $microsoftTranslationKeyGroupId")
         remoteConfig.fetch(fetchInterval).addOnSuccessListener {
             logger.info("Remote config fetch successfully")
             remoteConfig.activateFetched()
 
-            logger.info("Version after fetch: $versionString")
+            logger.info("Version after fetch: $versionString, keyGroup: $microsoftTranslationKeyGroupId")
         }.addOnFailureListener {
             logger.error("Remote config fetch failed", it)
         }
@@ -56,25 +58,21 @@ object RemoteConfigUtil {
             remoteConfig.getKeysByPrefix(prefix)
 
     private val versionString: String
-        get() = getString(keyVersion)
+        get() = getString(KEY_VERSION)
 
     private val fetchInterval: Long
-        get() = remoteConfig.getLong(keyFetchInterval)
+        get() = remoteConfig.getLong(KEY_FETCH_INTERVAL)
 
-    private val microsoftKeys: Array<String>
-        get() = getStringsByPrefix(prefixMicrosoftKey).toTypedArray()
+    val microsoftTranslationKeyGroupId: String
+        get() = getString(KEY_MICROSOFT_KEY_GROUP_ID)
 
     val microsoftTranslationKey: String
-        get() =
-            if (microsoftKeys.isNotEmpty()) {
-                val keys = microsoftKeys
-                val index = Math.abs(SettingUtil.deviceId.hashCode()) % keys.size
-                val key = keys[index]
-                val msKey = getString(key)
-                logger.info("Using Microsoft translator key: ${msKey.substring(0, 5)}($index)")
-                msKey
-            } else ""
+        get() = getString(KEY_MICROSOFT_KEY)
 
-    val trainedDataUrl: String
-        get() = getString(keyTrainedDataUrl)
+    val trainedDataSites: List<TrainedDataSite>
+        get() = JsonUtil<List<TrainedDataSite>>()
+                .parseJson(getString(KEY_TRAINED_DATA_URL),
+                        object : TypeReference<List<TrainedDataSite>>() {}) ?: listOf()
 }
+
+data class TrainedDataSite(val name: String, val key: String, val url: String)

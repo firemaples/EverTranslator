@@ -24,6 +24,32 @@
             android:layout_height="1dp"
             android:background="@color/md_grey_700" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/bg_lang_selector_sub_title"
+            android:text="Download site:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+        <Spinner
+            android:id="@+id/sp_trainedDataSite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_spinner"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            tools:entries="@array/microsoft_translationLangName" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/bg_lang_selector_sub_title"
+            android:text="Language:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
         <ListView
             android:id="@+id/lv_ocrLang"
             android:layout_width="match_parent"
@@ -55,9 +81,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="Provider:"
             android:layout_marginBottom="2dp"
             android:background="@drawable/bg_lang_selector_sub_title"
+            android:text="Provider:"
             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         <Spinner
@@ -72,9 +98,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="Language:"
-            android:background="@drawable/bg_lang_selector_sub_title"
             android:layout_marginBottom="2dp"
+            android:background="@drawable/bg_lang_selector_sub_title"
+            android:text="Language:"
             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         <FrameLayout
