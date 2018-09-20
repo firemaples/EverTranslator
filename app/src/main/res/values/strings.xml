@@ -94,6 +94,7 @@
     <string name="install">Install</string>
     <string name="title_googleTranslateAppNotInstalled">Google Translate not installed</string>
     <string name="msg_googleTranslteAppNotInstalled">Please install [Google Translate] for translation</string>
+    <string name="menu_privacy_policy">Privacy Policy</string>
 
     <string-array name="translation_services">
         <item>Microsoft</item>

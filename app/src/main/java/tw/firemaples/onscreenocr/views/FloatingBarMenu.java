@@ -53,6 +53,10 @@ public class FloatingBarMenu {
                 if (callback != null) {
                     callback.onHelpClick();
                 }
+            } else if (itemId == R.id.menu_privacy) {
+                if (callback != null) {
+                    callback.onPrivacyPolicyClick();
+                }
             }
             return false;
         }
@@ -60,6 +64,8 @@ public class FloatingBarMenu {
 
     public interface OnFloatingBarMenuCallback {
         void onSettingItemClick();
+
+        void onPrivacyPolicyClick();
 
         void onAboutItemClick();
 
