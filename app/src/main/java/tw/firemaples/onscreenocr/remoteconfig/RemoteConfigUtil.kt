@@ -14,6 +14,7 @@ internal const val KEY_FETCH_INTERVAL = "fetch_interval"
 internal const val KEY_MICROSOFT_KEY = "microsoft_key"
 internal const val KEY_MICROSOFT_KEY_GROUP_ID = "microsoft_key_group_id"
 internal const val KEY_TRAINED_DATA_URL = "trained_data_url_data"
+internal const val KEY_PRIVACY_POLICY_URL = "privacy_policy_url"
 
 object RemoteConfigUtil {
     private val logger: Logger = LoggerFactory.getLogger(RemoteConfigUtil::class.java)
@@ -73,6 +74,9 @@ object RemoteConfigUtil {
         get() = JsonUtil<List<TrainedDataSite>>()
                 .parseJson(getString(KEY_TRAINED_DATA_URL),
                         object : TypeReference<List<TrainedDataSite>>() {}) ?: listOf()
+
+    val privacyPolicyUrl: String
+        get() = getString(KEY_PRIVACY_POLICY_URL)
 }
 
 data class TrainedDataSite(val name: String, val key: String, val url: String)

@@ -16,6 +16,7 @@ import tw.firemaples.onscreenocr.floatingviews.MovableFloatingView
 import tw.firemaples.onscreenocr.ocr.OCRLangUtil
 import tw.firemaples.onscreenocr.ocr.OCRManager
 import tw.firemaples.onscreenocr.ocr.event.OCRLangChangedEvent
+import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler
 import tw.firemaples.onscreenocr.state.InitState
 import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
@@ -341,6 +342,10 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
 
     private val onFloatingBarMenuCallback = object : FloatingBarMenu.OnFloatingBarMenuCallback {
+        override fun onPrivacyPolicyClick() {
+            resetAll()
+            Utils.openBrowser(RemoteConfigUtil.privacyPolicyUrl)
+        }
 
         override fun onSettingItemClick() {
             SettingView(context).attachToWindow()
