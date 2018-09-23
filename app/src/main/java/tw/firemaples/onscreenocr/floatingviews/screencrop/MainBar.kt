@@ -24,10 +24,7 @@ import tw.firemaples.onscreenocr.translate.TranslationService
 import tw.firemaples.onscreenocr.translate.TranslationUtil
 import tw.firemaples.onscreenocr.translate.event.InstallGoogleTranslatorEvent
 import tw.firemaples.onscreenocr.translate.event.TranslationLangChangedEvent
-import tw.firemaples.onscreenocr.utils.SettingUtil
-import tw.firemaples.onscreenocr.utils.Utils
-import tw.firemaples.onscreenocr.utils.equalsAny
-import tw.firemaples.onscreenocr.utils.setVisible
+import tw.firemaples.onscreenocr.utils.*
 import tw.firemaples.onscreenocr.views.FloatingBarMenu
 import java.util.*
 
@@ -293,8 +290,11 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
             override fun ocrRecognized() {
                 if (TranslationUtil.currentService == TranslationService.GoogleTranslatorApp) {
-                    StateManager.ocrResultText?.let {
-                        GoogleTranslateUtil.start(context, Locale.getDefault().language, it)
+                    StateManager.ocrResultText?.let { textToTranslate ->
+                        FabricUtils.logTranslationInfo(textToTranslate, "",
+                                TranslationService.GoogleTranslatorApp)
+                        GoogleTranslateUtil.start(context, Locale.getDefault().language,
+                                textToTranslate)
                     }
                 }
             }

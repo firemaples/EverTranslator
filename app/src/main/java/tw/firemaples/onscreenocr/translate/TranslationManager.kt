@@ -1,5 +1,7 @@
 package tw.firemaples.onscreenocr.translate
 
+import tw.firemaples.onscreenocr.ocr.OCRLangUtil
+import tw.firemaples.onscreenocr.utils.FabricUtils
 import tw.firemaples.onscreenocr.utils.SettingUtil
 
 object TranslationManager {
@@ -9,7 +11,11 @@ object TranslationManager {
             return
         }
 
-        //TODO Check from & to is same
+        if (lang == OCRLangUtil.selectLangDisplayCode) {
+            FabricUtils.logTranslationInfo(text, lang, null)
+            callback(true, text, null)
+            return
+        }
 
         val translator: Translator = when (TranslationUtil.currentService) {
             TranslationService.MicrosoftAzure -> {
@@ -22,6 +28,8 @@ object TranslationManager {
                 return
             }
         }
+
+        FabricUtils.logTranslationInfo(text, lang, TranslationUtil.currentService)
 
         translator.translate(text, lang, callback)
     }

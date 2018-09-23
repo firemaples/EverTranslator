@@ -5,10 +5,13 @@ import android.os.Build
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.answers.CustomEvent
+import tw.firemaples.onscreenocr.ocr.OCRLangUtil
+import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
+import tw.firemaples.onscreenocr.translate.TranslationService
 import java.util.*
 
-private const val EVENT_TRANSLATE_TEXT = "Translate Text"
+private const val EVENT_TRANSLATE_TEXT = "Translation"
 private const val EVENT_GOOGLE_TRANSLATE_NOT_FOUND = "Google Translate not found"
 
 class FabricUtils {
@@ -30,16 +33,38 @@ class FabricUtils {
         }
 
         @JvmStatic
-        fun logTranslationInfo(text: String, translateFromLang: String, translateToLang: String, serviceName: String) {
-            Answers.getInstance().logCustom(
-                    CustomEvent(EVENT_TRANSLATE_TEXT)
-                            .putCustomAttribute("Text length", text.length)
-                            .putCustomAttribute("Translate from", translateFromLang)
-                            .putCustomAttribute("Translate to", translateToLang)
-                            .putCustomAttribute("From > to", "$translateFromLang > $translateToLang")
-                            .putCustomAttribute("System language", Locale.getDefault().language)
-                            .putCustomAttribute("Translate service", serviceName)
-            )
+        fun logTranslationInfo(text: String, _translateToLang: String, service: TranslationService?) {
+            val translateFromLang = OCRLangUtil.selectedLangCode
+            val textLength = text.length
+            val translateToLang = when (service) {
+                TranslationService.GoogleTranslatorApp -> "Google Translation APP"
+                else -> _translateToLang
+            }
+            val serviceName = service?.fullName ?: "From = To"
+
+            val event = CustomEvent(EVENT_TRANSLATE_TEXT)
+                    .putCustomAttribute("Text length", textLength)
+                    .putCustomAttribute("Translate from", translateFromLang)
+                    .putCustomAttribute("Translate to", translateToLang)
+                    .putCustomAttribute("From > to", "$translateFromLang > $translateToLang")
+                    .putCustomAttribute("System language", Locale.getDefault().language)
+                    .putCustomAttribute("Translate service", serviceName)
+            when (service) {
+                TranslationService.MicrosoftAzure -> {
+                    event.putCustomAttribute("Microsoft translation length", textLength)
+                    val groupId = RemoteConfigUtil.microsoftTranslationKeyGroupId
+                    event.putCustomAttribute("Microsoft translation group id", groupId)
+                    event.putCustomAttribute("Microsoft translation group [$groupId] length",
+                            textLength)
+                }
+                TranslationService.Yandex -> {
+                    event.putCustomAttribute("Yandex translation length", textLength)
+                }
+                TranslationService.GoogleTranslatorApp -> {
+                    event.putCustomAttribute("Google translation APP length", textLength)
+                }
+            }
+            logEvent(event)
         }
 
         @JvmStatic
