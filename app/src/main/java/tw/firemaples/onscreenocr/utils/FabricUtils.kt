@@ -5,6 +5,7 @@ import android.os.Build
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.answers.CustomEvent
+import com.google.android.gms.common.GoogleApiAvailability
 import tw.firemaples.onscreenocr.ocr.OCRLangUtil
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
@@ -30,6 +31,31 @@ class FabricUtils {
             }
             Crashlytics.setString("CountryCode", configLocale.country)
             Crashlytics.setString("DisplayCountry", configLocale.displayCountry)
+
+            Crashlytics.setInt("isPlayServiceAvailable",
+                    GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context))
+
+            var playServiceVersionName = ""
+            var playServiceVersionCode = -1L
+            try {
+                context.packageManager.getPackageInfo(
+                        GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE, 0)
+                        .also { info ->
+                            playServiceVersionName = info?.versionName ?: "NoFound"
+                            playServiceVersionCode =
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                                        info.longVersionCode
+                                    } else {
+                                        @Suppress("DEPRECATION")
+                                        info.versionCode.toLong()
+                                    }
+                        }
+
+            } catch (e: Throwable) {
+                playServiceVersionName = e.message ?: "Unknown exception"
+            }
+            Crashlytics.setLong("PlayServiceVersionCode", playServiceVersionCode)
+            Crashlytics.setString("PlayServiceVersionName", playServiceVersionName)
         }
 
         @JvmStatic
