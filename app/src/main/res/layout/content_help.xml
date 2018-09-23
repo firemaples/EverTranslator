@@ -16,7 +16,15 @@
 
         <ImageView
             style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_step1_select_language"/>
+            android:src="@drawable/guide_1_select_lang"/>
+
+        <TextView
+            style="@style/helpPage.stepText"
+            android:text="@string/guide_lang_selector"/>
+
+        <ImageView
+            style="@style/helpPage.stepPicture"
+            android:src="@drawable/guide_2_lang_selector"/>
 
         <TextView
             style="@style/helpPage.stepText"
@@ -24,7 +32,7 @@
 
         <ImageView
             style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_step2_click_selection_button"/>
+            android:src="@drawable/guide_3_click_to_start_selection"/>
 
         <TextView
             style="@style/helpPage.stepText"
@@ -36,7 +44,7 @@
 
         <ImageView
             style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_step4_click_translation_button"/>
+            android:src="@drawable/guide_5_click_to_translate"/>
 
         <TextView
             style="@style/helpPage.stepText"
@@ -44,15 +52,11 @@
 
         <ImageView
             style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_step5_get_the_result"/>
+            android:src="@drawable/guide_6_result_window"/>
 
         <TextView
             style="@style/helpPage.stepText"
             android:text="@string/guide_clear_result"/>
-
-        <ImageView
-            style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_step6_clear_result"/>
 
         <TextView
             style="@style/helpPage.stepText"
@@ -61,7 +65,7 @@
         <ImageView
             style="@style/helpPage.stepPicture"
             android:layout_height="200dp"
-            android:src="@drawable/guide_step7_menu"/>
+            android:src="@drawable/guide_ext_menu"/>
 
     </LinearLayout>
 

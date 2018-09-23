@@ -7,6 +7,7 @@ import android.graphics.Rect
 import android.preference.PreferenceManager
 import tw.firemaples.onscreenocr.BuildConfig
 import tw.firemaples.onscreenocr.CoreApplication
+import tw.firemaples.onscreenocr.floatingviews.screencrop.HelpView
 import tw.firemaples.onscreenocr.floatingviews.screencrop.VersionHistoryView
 import java.util.*
 
@@ -23,7 +24,6 @@ object SettingUtil {
     private const val KEY_LAST_SELECTION_AREA = "KEY_LAST_SELECTION_AREA"
     private const val KEY_VERSION_HISTORY_SHOWN_VERSION = "KEY_VERSION_HISTORY_SHOWN_VERSION"
     private const val KEY_HOW_TO_USE_SHOWN_VERSION = "KEY_HOW_TO_USE_SHOWN_VERSION"
-    private const val KEY_LITE_HOW_TO_USE_SHOWN_VERSION = "KEY_LITE_HOW_TO_USE_SHOWN_VERSION"
 
     private val context: Context
         get() {
@@ -122,14 +122,24 @@ object SettingUtil {
         }
 
     val isVersionHistoryAlreadyShown: Boolean
-        @SuppressLint("ApplySharedPref")
         get() {
             val versionName = VersionHistoryView.getLastHistoryVersion(context)
 
             val shownVersion = sp.getString(KEY_VERSION_HISTORY_SHOWN_VERSION, null)
             val result = shownVersion?.equals(versionName, ignoreCase = true) == true
             if (!result) {
-                sp.edit().putString(KEY_VERSION_HISTORY_SHOWN_VERSION, versionName).commit()
+                sp.edit().putString(KEY_VERSION_HISTORY_SHOWN_VERSION, versionName).apply()
+            }
+            return result
+        }
+
+    val isReadmeAlreadyShown: Boolean
+        get() {
+            val currentVersion = HelpView.VERSION
+
+            val result = sp.getString(KEY_HOW_TO_USE_SHOWN_VERSION, null) == currentVersion
+            if (!result) {
+                sp.edit().putString(KEY_HOW_TO_USE_SHOWN_VERSION, currentVersion).apply()
             }
             return result
         }
