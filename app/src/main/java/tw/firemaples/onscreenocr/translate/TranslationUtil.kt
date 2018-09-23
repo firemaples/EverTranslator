@@ -73,7 +73,7 @@ enum class TranslationService(val id: Int, val sort: Int,
                               val defaultLangCode: String) {
     MicrosoftAzure(0, 0, "Microsoft", defaultLangCode = "en"),
     Yandex(1, 1, "Yandex", defaultLangCode = "en"),
-    GoogleTranslatorApp(2, 2, "Google app", "", defaultLangCode = "Google");
+    GoogleTranslatorApp(2, 2, "Google translate APP", "", defaultLangCode = "Google");
 
     val isCurrent: Boolean
         get() = TranslationUtil.currentService == this
