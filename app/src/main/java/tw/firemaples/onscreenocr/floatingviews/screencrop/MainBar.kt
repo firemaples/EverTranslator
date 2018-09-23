@@ -101,6 +101,8 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
         ocrResultView = null
     }
 
+    private fun showView(show: Boolean) = rootView.setVisible(show)
+
     override fun onBackButtonPressed(): Boolean {
         StateManager.onBackButtonPressed()
         rescheduleFadeOut()
@@ -193,6 +195,15 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
             override fun onStateChanged(state: StateName) {
                 rescheduleFadeOut()
+
+                when (state) {
+                    StateName.Translating, StateName.Translated -> {
+                        showView(false)
+                    }
+                    else -> {
+                        showView(true)
+                    }
+                }
 
                 // Set up buttons
                 btSelectArea.setVisible(state.equalsAny(StateName.Init, StateName.AreaSelecting))
