@@ -14,6 +14,7 @@ import android.media.projection.MediaProjectionManager;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
@@ -285,6 +286,6 @@ public class ScreenshotHandler {
 
         void onScreenshotFinished(Bitmap bitmap);
 
-        void onScreenshotFailed(int errorCode, Throwable e);
+        void onScreenshotFailed(int errorCode, @Nullable Throwable e);
     }
 }

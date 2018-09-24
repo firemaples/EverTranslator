@@ -261,7 +261,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
                 attachToWindow()
             }
 
-            override fun screenshotFailed(errorCode: Int, e: Throwable) {
+            override fun screenshotFailed(errorCode: Int, e: Throwable?) {
                 attachToWindow()
                 resetAll()
                 rescheduleFadeOut()
@@ -273,12 +273,12 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
                         String.format(Locale.getDefault(),
                                 getContext().getString(
                                         R.string.dialog_content_screenshotWithImageFormatError),
-                                e.message)
+                                e?.message ?: "Unknown")
                     else ->
                         String.format(Locale.getDefault(),
                                 getContext().getString(
                                         R.string.dialog_content_screenshotWithUnknownError),
-                                e.message)
+                                e?.message ?: "Unknown")
                 }
 
                 showErrorDialog(DialogView.Type.CONFIRM_ONLY,
