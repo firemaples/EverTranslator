@@ -39,7 +39,7 @@ class GoogleTranslateUtil {
                 reset()
                 setType(DialogView.Type.CONFIRM_CANCEL)
                 setTitle(context.getString(R.string.title_googleTranslateAppNotInstalled))
-                setContentMsg(context.getString(R.string.msg_googleTranslteAppNotInstalled))
+                setContentMsg(context.getString(R.string.msg_googleTranslateAppNotInstalled))
                 okBtn.text = context.getString(R.string.install)
                 setCallback(object : DialogView.OnDialogViewCallback() {
                     override fun onConfirmClick(dialogView: DialogView) {

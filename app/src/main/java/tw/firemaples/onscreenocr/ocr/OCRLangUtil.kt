@@ -93,7 +93,9 @@ object OCRLangUtil : BaseSettingUtil() {
             override fun onError(errorMessage: String) {
                 rootView.post {
                     setTitle(getContext().getString(R.string.dialog_title_error))
-                    setContentMsg(errorMessage)
+                    val text = context.getString(
+                            R.string.error_ocrFilesDownloadFailed, errorMessage)
+                    setContentMsg(text)
                 }
             }
         }
