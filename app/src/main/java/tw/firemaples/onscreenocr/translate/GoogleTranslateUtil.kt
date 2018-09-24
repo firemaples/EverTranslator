@@ -1,10 +1,10 @@
 package tw.firemaples.onscreenocr.translate
 
-import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.event.EventUtil
 import tw.firemaples.onscreenocr.floatingviews.screencrop.DialogView
@@ -17,6 +17,8 @@ private const val PACKAGE_NAME_GOOGLE_TRANSLATE = "com.google.android.apps.trans
 
 class GoogleTranslateUtil {
     companion object {
+        private val logger = LoggerFactory.getLogger(GoogleTranslateUtil::class.java)
+
         @JvmStatic
         fun isInstalled(): Boolean =
                 Utils.isPackageInstalled(PACKAGE_NAME_GOOGLE_TRANSLATE)
@@ -35,11 +37,17 @@ class GoogleTranslateUtil {
         @JvmStatic
         fun checkInstalled(context: Context): Boolean {
             if (isInstalled()) return true
+            showNotInstalledDialog(context)
+
+            return false
+        }
+
+        private fun showNotInstalledDialog(context: Context) {
             DialogView(context).apply {
                 reset()
                 setType(DialogView.Type.CONFIRM_CANCEL)
-                setTitle(context.getString(R.string.title_googleTranslateAppNotInstalled))
-                setContentMsg(context.getString(R.string.msg_googleTranslateAppNotInstalled))
+                setTitle(R.string.dialog_title_error.asStringRes())
+                setContentMsg(R.string.error_googleTranslatorNotInstalled.asStringRes())
                 okBtn.text = context.getString(R.string.install)
                 setCallback(object : DialogView.OnDialogViewCallback() {
                     override fun onConfirmClick(dialogView: DialogView) {
@@ -50,8 +58,6 @@ class GoogleTranslateUtil {
                     }
                 })
             }.attachToWindow()
-
-            return false
         }
 
         @JvmStatic
@@ -82,11 +88,10 @@ class GoogleTranslateUtil {
                                 "com.google.android.apps.translate.TranslateActivity")
                     }
                 })
-            } catch (e: ActivityNotFoundException) {
-                e.printStackTrace()
-                FabricUtils.logGoogleTranslateNotFoundWhenResult()
-                Utils.showSimpleDialog(R.string.dialog_title_error.asStringRes(),
-                        R.string.error_googleTranslatorNotInstalled.asStringRes())
+            } catch (e: Throwable) {
+                logger.error("Start [Google Translate] failed", e)
+                FabricUtils.logGoogleTranslateNotFoundWhenResult(context, e)
+                showNotInstalledDialog(context)
             }
         }
     }
