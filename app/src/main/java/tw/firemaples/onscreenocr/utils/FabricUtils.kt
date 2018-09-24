@@ -12,7 +12,7 @@ import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
 import tw.firemaples.onscreenocr.translate.TranslationService
 import java.util.*
 
-private const val EVENT_TRANSLATE_TEXT = "Translation"
+private const val EVENT_TRANSLATE_TEXT = "Translate Text"
 private const val EVENT_GOOGLE_TRANSLATE_NOT_FOUND = "Google Translate not found"
 
 class FabricUtils {
