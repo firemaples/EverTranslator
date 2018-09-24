@@ -67,6 +67,10 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
         super.attachToWindow()
         SettingUtil.isAppShowing = true
 
+        if (!SettingUtil.isReadmeAlreadyShown) {
+            HelpView(context).attachToWindow()
+        }
+
         if (!SettingUtil.isVersionHistoryAlreadyShown) {
             VersionHistoryView(context).attachToWindow()
         }
