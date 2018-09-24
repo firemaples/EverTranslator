@@ -90,4 +90,9 @@
     <string name="error_canNotChangeLangWhenTranslating">翻譯進行中不可更換語言設定</string>
     <string name="title_translationFailed">翻譯失敗</string>
     <string name="guide_lang_selector">2. (1)檔案下載來源, (2)來源語言, (3)翻譯服務, (4)翻譯目標語言</string>
+    <string name="install">安裝</string>
+    <string name="title_googleTranslateAppNotInstalled">未安裝 [Google 翻譯]</string>
+    <string name="msg_googleTranslteAppNotInstalled">請安裝 [Google 翻譯] 來使用此服務或更換其他翻譯引擎</string>
+    <string name="menu_privacy_policy">隱私權政策</string>
+    <string name="translatedBy">由 %s 提供</string>
 </resources>
