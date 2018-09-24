@@ -144,22 +144,21 @@
                     android:singleLine="false"
                     tools:text="Translated Text" />
             </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/tv_translationService"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:textColor="@color/md_blue_grey_300"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    tools:text="by Microsoft" />
-            </RelativeLayout>
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_translationService"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/md_blue_grey_300"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="by Microsoft" />
+        </RelativeLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

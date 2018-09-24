@@ -71,7 +71,7 @@ object TranslationUtil : BaseSettingUtil() {
 enum class TranslationService(val id: Int, val sort: Int,
                               val fullName: String, val shortName: String = fullName,
                               val defaultLangCode: String) {
-    MicrosoftAzure(0, 0, "Microsoft", defaultLangCode = "en"),
+    MicrosoftAzure(0, 0, "Microsoft Azure", defaultLangCode = "en"),
     Yandex(1, 1, "Yandex", defaultLangCode = "en"),
     GoogleTranslatorApp(2, 2, "Google translate APP", "", defaultLangCode = "Google");
 

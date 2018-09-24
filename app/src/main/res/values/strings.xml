@@ -91,10 +91,10 @@
     <string name="title_translationFailed">Translation failed</string>
     <string name="error_canNotChangeLangWhenTranslating">Can not change languages when translation running</string>
     <string name="msg_tipForChangeGoogleTranslatorLang">Please change the target translation language in [Google Translate APP] result window</string>
-    <string name="translatedBy" translatable="false">by %s</string>
+    <string name="translatedBy">by %s</string>
     <string name="install">Install</string>
-    <string name="title_googleTranslateAppNotInstalled">Google Translate not installed</string>
-    <string name="msg_googleTranslteAppNotInstalled">Please install [Google Translate] for translation</string>
+    <string name="title_googleTranslateAppNotInstalled">Google Translate APP is not installed</string>
+    <string name="msg_googleTranslteAppNotInstalled">Please install [Google Translate] for translation or change the translation service</string>
     <string name="menu_privacy_policy">Privacy Policy</string>
 
     <string-array name="translation_services">
