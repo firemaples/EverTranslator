@@ -114,7 +114,7 @@ object StateManager {
         listener?.screenshotSuccess()
     }
 
-    fun dispatchScreenshotFailed(errorCode: Int, e: Throwable) = dispatch {
+    fun dispatchScreenshotFailed(errorCode: Int, e: Throwable?) = dispatch {
         listener?.screenshotFailed(errorCode, e)
     }
 
@@ -180,7 +180,7 @@ interface OnStateChangedListener {
     fun ocrFileNotFound()
     fun beforeScreenshot()
     fun screenshotSuccess()
-    fun screenshotFailed(errorCode: Int, e: Throwable)
+    fun screenshotFailed(errorCode: Int, e: Throwable?)
     fun startOCR()
     fun startOCRInitialization()
     fun startOCRRecognition()

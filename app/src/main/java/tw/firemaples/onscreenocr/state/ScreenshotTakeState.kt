@@ -36,7 +36,7 @@ object ScreenshotTakeState : BaseState() {
             }
         }
 
-        override fun onScreenshotFailed(errorCode: Int, e: Throwable) {
+        override fun onScreenshotFailed(errorCode: Int, e: Throwable?) {
             manager?.dispatchScreenshotFailed(errorCode, e)
         }
     }
