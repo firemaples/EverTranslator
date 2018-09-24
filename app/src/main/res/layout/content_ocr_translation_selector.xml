@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OCR language"
+            android:text="@string/ocr_language"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textStyle="bold" />
 
@@ -30,7 +30,7 @@
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
             android:background="@drawable/bg_lang_selector_sub_title"
-            android:text="Download site:"
+            android:text="@string/download_site"
             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         <Spinner
@@ -47,14 +47,13 @@
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
             android:background="@drawable/bg_lang_selector_sub_title"
-            android:text="Language:"
+            android:text="@string/language"
             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         <ListView
             android:id="@+id/lv_ocrLang"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="4dp"
             android:fadeScrollbars="false" />
 
     </LinearLayout>
@@ -68,7 +67,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Translation"
+            android:text="@string/translation"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textStyle="bold" />
 
@@ -83,7 +82,7 @@
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
             android:background="@drawable/bg_lang_selector_sub_title"
-            android:text="Provider:"
+            android:text="@string/provider"
             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         <Spinner
@@ -100,7 +99,7 @@
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
             android:background="@drawable/bg_lang_selector_sub_title"
-            android:text="Language:"
+            android:text="@string/language"
             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         <FrameLayout
