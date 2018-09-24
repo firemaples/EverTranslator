@@ -32,6 +32,10 @@ class FabricUtils {
             Crashlytics.setString("CountryCode", configLocale.country)
             Crashlytics.setString("DisplayCountry", configLocale.displayCountry)
 
+            updatePlayServiceInfo(context)
+        }
+
+        private fun updatePlayServiceInfo(context: Context) {
             Crashlytics.setInt("isPlayServiceAvailable",
                     GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context))
 
@@ -94,9 +98,12 @@ class FabricUtils {
         }
 
         @JvmStatic
-        fun logGoogleTranslateNotFoundWhenResult() {
+        fun logGoogleTranslateNotFoundWhenResult(context: Context, e: Throwable) {
             val info = GoogleTranslateUtil.getGoogleTranslateInfo()
-            logException(IllegalStateException("Google translate not found or version is too old: $info"))
+            updatePlayServiceInfo(context)
+
+            logException(IllegalStateException("Google translate not found or version is too old: $info", e))
+
             logEvent(CustomEvent(EVENT_GOOGLE_TRANSLATE_NOT_FOUND)
                     .putCustomAttribute("PackageInfoExists", (info != null).toString())
                     .putCustomAttribute("VersionCode", info?.versionCode ?: -1)
