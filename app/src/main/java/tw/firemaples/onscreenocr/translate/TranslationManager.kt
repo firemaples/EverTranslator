@@ -2,11 +2,10 @@ package tw.firemaples.onscreenocr.translate
 
 import tw.firemaples.onscreenocr.ocr.OCRLangUtil
 import tw.firemaples.onscreenocr.utils.FabricUtils
-import tw.firemaples.onscreenocr.utils.SettingUtil
 
 object TranslationManager {
     fun startTranslation(text: String, lang: String, callback: (Boolean, String, Throwable?) -> Unit) {
-        if (text.isBlank() || !SettingUtil.enableTranslation) {
+        if (text.isBlank() || !TranslationUtil.isEnableTranslation) {
             callback(true, "", null)
             return
         }

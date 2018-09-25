@@ -122,8 +122,7 @@ class OCRResultWindow(context: Context) : FrameLayout(context) {
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     fun onStateChanged(event: StateChangedEvent) {
-        wrapperTranslatedArea.visibility =
-                if (SettingUtil.enableTranslation) View.VISIBLE else View.GONE
+        wrapperTranslatedArea.setVisible(TranslationUtil.isEnableTranslation)
 
         val ocrFinished = event.state in arrayOf(TranslatingState, TranslatedState)
         val translated = event.state == TranslatedState
@@ -150,9 +149,11 @@ class OCRResultWindow(context: Context) : FrameLayout(context) {
         btTtsTT.isEnabled = translated
         btOpenGtTT.isEnabled = translated
 
-        val translatedBy = context.getString(R.string.translatedBy,
-                TranslationUtil.currentService.fullName)
+
+        val translatedBy = context.getString(
+                R.string.translatedBy, TranslationUtil.currentService.fullName)
         tvTranslationService.text = translatedBy
+        tvTranslationService.setVisible(TranslationUtil.isEnableTranslation)
     }
 
     private var anchorView: View? = null

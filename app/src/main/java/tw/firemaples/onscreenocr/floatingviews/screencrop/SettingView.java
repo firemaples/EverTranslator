@@ -57,7 +57,6 @@ public class SettingView extends FloatingView {
 
     private void setViews() {
         CheckBox cb_debugMode = getRootView().findViewById(R.id.cb_debugMode);
-        CheckBox cb_enableTranslation = getRootView().findViewById(R.id.cb_enableTranslation);
         CheckBox cb_saveOcrEngineToExternalStorage = getRootView().findViewById(R.id.cb_saveOcrEngineToExternalStorageFirst);
         CheckBox cb_startingWithSelectionMode = getRootView().findViewById(R.id.cb_startingWithSelectionMode);
         CheckBox cb_rememberLastSelection = getRootView().findViewById(R.id.cb_rememberLastSelection);
@@ -65,14 +64,12 @@ public class SettingView extends FloatingView {
         getRootView().findViewById(R.id.bt_close).setOnClickListener(onClickListener);
 
         cb_debugMode.setOnCheckedChangeListener(onCheckChangeListener);
-        cb_enableTranslation.setOnCheckedChangeListener(onCheckChangeListener);
         cb_saveOcrEngineToExternalStorage.setOnCheckedChangeListener(onCheckChangeListener);
         cb_startingWithSelectionMode.setOnCheckedChangeListener(onCheckChangeListener);
         cb_rememberLastSelection.setOnCheckedChangeListener(onCheckChangeListener);
         cb_removeLineBreaks.setOnCheckedChangeListener(onCheckChangeListener);
 
         cb_debugMode.setChecked(spUtil.isDebugMode());
-        cb_enableTranslation.setChecked(spUtil.getEnableTranslation());
         cb_saveOcrEngineToExternalStorage.setChecked(ocrNTranslateUtils.getTessDataLocation() == TessDataLocation.EXTERNAL_STORAGE);
         cb_startingWithSelectionMode.setChecked(spUtil.getStartingWithSelectionMode());
         cb_rememberLastSelection.setChecked(spUtil.isRememberLastSelection());
@@ -99,8 +96,6 @@ public class SettingView extends FloatingView {
             int id = buttonView.getId();
             if (id == R.id.cb_debugMode) {
                 spUtil.setDebugMode(isChecked);
-            } else if (id == R.id.cb_enableTranslation) {
-                spUtil.setEnableTranslation(isChecked);
             } else if (id == R.id.cb_startingWithSelectionMode) {
                 spUtil.setStartingWithSelectionMode(isChecked);
             } else if (id == R.id.cb_removeLineBreaks) {

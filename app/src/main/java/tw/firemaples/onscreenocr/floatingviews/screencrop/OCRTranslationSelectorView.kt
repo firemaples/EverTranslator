@@ -102,7 +102,8 @@ class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
         spTranslationService.adapter = ArrayAdapter<String>(context,
                 R.layout.item_spinner,
                 android.R.id.text1,
-                TranslationUtil.serviceList.map { it.fullName }).apply {
+                TranslationUtil.serviceList.asSequence()
+                        .sortedBy { it.sort }.map { it.fullName }.toList()).apply {
             setDropDownViewResource(R.layout.item_spinner_dropdown)
         }
         spTranslationService.skipNextSelect()
@@ -113,7 +114,7 @@ class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (parent?.isSkipNextSelect(true) == true) return
-                TranslationUtil.currentService = TranslationUtil.serviceList.first { it.sort == position }
+                TranslationUtil.currentService = TranslationUtil.serviceList.sortedBy { it.sort }[position]
                 if (TranslationUtil.currentService == TranslationService.GoogleTranslatorApp) {
                     GoogleTranslateUtil.checkInstalled(context)
                 }
@@ -161,11 +162,13 @@ class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
     }
 
     private fun updateLangEmptyTip(translationService: TranslationService) {
-        when (translationService) {
+        tvLangEmptyTip.text = when (translationService) {
             TranslationService.GoogleTranslatorApp ->
-                tvLangEmptyTip.text = context.getString(R.string.msg_tipForChangeGoogleTranslatorLang)
+                context.getString(R.string.msg_tipForChangeGoogleTranslatorLang)
+            TranslationService.DisableTranslation ->
+                context.getString(R.string.translation_disabled)
             else ->
-                tvLangEmptyTip.text = null
+                ""
         }
     }
 }

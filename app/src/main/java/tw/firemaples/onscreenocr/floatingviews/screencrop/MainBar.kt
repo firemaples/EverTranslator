@@ -24,6 +24,7 @@ import tw.firemaples.onscreenocr.translate.TranslationService
 import tw.firemaples.onscreenocr.translate.TranslationUtil
 import tw.firemaples.onscreenocr.translate.event.InstallGoogleTranslatorEvent
 import tw.firemaples.onscreenocr.translate.event.TranslationLangChangedEvent
+import tw.firemaples.onscreenocr.translate.event.TranslationServiceChangedEvent
 import tw.firemaples.onscreenocr.utils.*
 import tw.firemaples.onscreenocr.views.FloatingBarMenu
 import java.util.*
@@ -170,14 +171,11 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
     private fun setupLang(ocrLang: String = OCRLangUtil.selectLangDisplayCode,
                           transLang: String = TranslationUtil.currentTranslationLangCode) {
 
-        val targetName = when (TranslationUtil.currentService) {
-            TranslationService.GoogleTranslatorApp ->
-                TranslationService.GoogleTranslatorApp.shortName
-            else -> transLang
+        tvLang.text = when (TranslationUtil.currentService) {
+            TranslationService.GoogleTranslatorApp -> "$ocrLang>"
+            TranslationService.DisableTranslation -> "$ocrLang>X"
+            else -> "$ocrLang>$transLang"
         }
-
-        val text = "$ocrLang>$targetName"
-        tvLang.text = text
 
         ivGoogleTranslate.setVisible(TranslationService.GoogleTranslatorApp.isCurrent)
     }
@@ -186,6 +184,12 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onOCRLangChanged(event: OCRLangChangedEvent) {
         setupLang(ocrLang = event.langDisplayCode)
+    }
+
+    @Suppress("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onTranslationServiceChanged(event: TranslationServiceChangedEvent) {
+        setupLang(transLang = event.translationService.defaultLangCode)
     }
 
     @Suppress("unused")
