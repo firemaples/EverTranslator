@@ -101,4 +101,8 @@
     <string name="language">語言:</string>
     <string name="translation">翻譯語言</string>
     <string name="provider">翻譯引擎:</string>
+    <string name="translation_disabled">已停用翻譯服務</string>
+    <string name="service_microsoft_azure">微軟 Azure 翻譯</string>
+    <string name="service_google_translate_app">Google 翻譯 APP</string>
+    <string name="service_disable_translation">停用翻譯</string>
 </resources>

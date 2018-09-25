@@ -58,14 +58,6 @@ object SettingUtil {
             sp.edit().putBoolean(KEY_APP_SHOWING, value).apply()
         }
 
-    var enableTranslation: Boolean
-        get() {
-            return sp.getBoolean(KEY_ENABLE_TRANSLATION, true)
-        }
-        set(value) {
-            sp.edit().putBoolean(KEY_ENABLE_TRANSLATION, value).apply()
-        }
-
     var startingWithSelectionMode: Boolean
         get() {
             return sp.getBoolean(KEY_STARTING_WITH_SELECTION_MODE, true)

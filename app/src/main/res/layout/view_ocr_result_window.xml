@@ -155,6 +155,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:singleLine="true"
                 android:textColor="@color/md_blue_grey_300"
                 android:textSize="12sp"
                 android:textStyle="bold"
