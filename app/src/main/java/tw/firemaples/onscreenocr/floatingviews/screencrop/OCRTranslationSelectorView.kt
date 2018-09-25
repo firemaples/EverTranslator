@@ -12,6 +12,7 @@ import tw.firemaples.onscreenocr.event.EventUtil
 import tw.firemaples.onscreenocr.floatingviews.FloatingView
 import tw.firemaples.onscreenocr.ocr.OCRFileUtil
 import tw.firemaples.onscreenocr.ocr.OCRLangUtil
+import tw.firemaples.onscreenocr.ocr.event.TrainedDataDownloadSiteChangedEvent
 import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
 import tw.firemaples.onscreenocr.translate.TranslationService
 import tw.firemaples.onscreenocr.translate.TranslationUtil
@@ -140,6 +141,13 @@ class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
         super.detachFromWindow()
         EventUtil.unregister(this)
         StateManager.onLangChanged()
+    }
+
+    @Suppress("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onTrainedDataDownloadSiteChanged(event: TrainedDataDownloadSiteChangedEvent) {
+        spTrainedDataSite.skipNextSelect()
+        spTrainedDataSite.setSelection(event.index)
     }
 
     @Suppress("unused")

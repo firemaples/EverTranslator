@@ -109,7 +109,7 @@ object OCRDownloadTask {
                     .setDownloadProgressListener { bytesDownloaded, totalBytes ->
                         val msg = context.getString(
                                 R.string.dialog_content_progressingDownloadOCRFile,
-                                ocrLang,
+                                OCRLangUtil.getLangName(ocrLang),
                                 bytesDownloaded.toFloat() / 1024f / 1024f,
                                 totalBytes.toFloat() / 1024f / 1024f,
                                 (bytesDownloaded * 100 / totalBytes).toInt())
