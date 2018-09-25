@@ -96,7 +96,7 @@
     <string name="title_googleTranslateAppNotInstalled">Google Translate APP is not installed</string>
     <string name="msg_googleTranslateAppNotInstalled">Please install [Google Translate] for translation or change the translation service</string>
     <string name="menu_privacy_policy">Privacy Policy</string>
-    <string name="error_ocrFilesDownloadFailed">Fail to Download OCR file, please change the download site or change to another network then downloading again.\n\nError message: %s</string>
+    <string name="error_ocrFilesDownloadFailed">Fail to Download OCR file, please change the download site or change to another network then downloading again.\n\nError message: \n%s</string>
     <string name="ocr_language">OCR language</string>
     <string name="download_site">Download site:</string>
     <string name="language">Language:</string>
@@ -107,6 +107,8 @@
     <string name="service_yandex" translatable="false">Yandex</string>
     <string name="service_google_translate_app">Google translate APP</string>
     <string name="service_disable_translation">Disable translation</string>
+    <string name="change">Change</string>
+    <string name="select_download_site">Select download site</string>
 
     <string-array name="translation_services">
         <item>Microsoft</item>

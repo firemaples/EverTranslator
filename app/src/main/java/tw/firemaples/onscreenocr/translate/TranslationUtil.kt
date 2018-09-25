@@ -27,24 +27,33 @@ object TranslationUtil : BaseSettingUtil() {
     val currentServiceIndex: Int
         get() = serviceList.indexOf(currentService)
 
+    private val translationLangCodeListMicrosoft: Array<String> by lazy {
+        context.resources.getStringArray(R.array.microsoft_translationLangCode_iso6391)
+    }
+    private val translationLangCodeListYandex: Array<String> by lazy {
+        context.resources.getStringArray(R.array.yandex_translationLangCode)
+    }
     val translationLangCodeList: Array<String>
         get() = when (currentService) {
-            TranslationService.MicrosoftAzure ->
-                context.resources.getStringArray(R.array.microsoft_translationLangCode_iso6391)
-            TranslationService.Yandex ->
-                context.resources.getStringArray(R.array.yandex_translationLangCode)
+            TranslationService.MicrosoftAzure -> translationLangCodeListMicrosoft
+            TranslationService.Yandex -> translationLangCodeListYandex
             TranslationService.GoogleTranslatorApp, TranslationService.DisableTranslation ->
                 arrayOf()
         }
 
+    private val getTranslationLangNameListMicrosoft: Array<String> by lazy {
+        context.resources.getStringArray(
+                R.array.microsoft_translationLangName)
+    }
+    private val getTranslationLangNameListYandex: Array<String> by lazy {
+        context.resources.getStringArray(
+                R.array.yandex_translationLangName)
+    }
+
     fun getTranslationLangNameList(service: TranslationService = currentService): Array<String> =
             when (service) {
-                TranslationService.MicrosoftAzure ->
-                    context.resources.getStringArray(
-                            R.array.microsoft_translationLangName)
-                TranslationService.Yandex ->
-                    context.resources.getStringArray(
-                            R.array.yandex_translationLangName)
+                TranslationService.MicrosoftAzure -> getTranslationLangNameListMicrosoft
+                TranslationService.Yandex -> getTranslationLangNameListYandex
                 TranslationService.GoogleTranslatorApp, TranslationService.DisableTranslation ->
                     arrayOf()
             }

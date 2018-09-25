@@ -95,7 +95,7 @@
     <string name="msg_googleTranslateAppNotInstalled">請安裝 [Google 翻譯] 來使用此服務或更換其他翻譯引擎</string>
     <string name="menu_privacy_policy">隱私權政策</string>
     <string name="translatedBy">由 %s 提供</string>
-    <string name="error_ocrFilesDownloadFailed">下載文字辨識檔案失敗，請更換下載網站或網路後，再次進行下載\\n\\n錯誤訊息: %s</string>
+    <string name="error_ocrFilesDownloadFailed">下載文字辨識檔案失敗，請更換下載來源或網路後，再次進行下載\n\n錯誤訊息: \n%s</string>
     <string name="ocr_language">識別語言</string>
     <string name="download_site">下載來源:</string>
     <string name="language">語言:</string>
@@ -105,4 +105,6 @@
     <string name="service_microsoft_azure">微軟 Azure 翻譯</string>
     <string name="service_google_translate_app">Google 翻譯 APP</string>
     <string name="service_disable_translation">停用翻譯</string>
+    <string name="change">變更</string>
+    <string name="select_download_site">選擇下載來源</string>
 </resources>
