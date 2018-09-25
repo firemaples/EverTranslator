@@ -45,13 +45,11 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
     private var ocrResultView: OCRResultView? = null
     private val dialogView: DialogView by lazy { DialogView(context) }
 
+    private val tempDisableAutoAreaSelecting = Once(false)
+
     init {
         setViews()
         setDragView(viewMenu)
-
-        if (SettingUtil.startingWithSelectionMode) {
-            StateManager.startSelection()
-        }
     }
 
     override fun isPrimaryView(): Boolean {
@@ -69,10 +67,18 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
         if (!SettingUtil.isReadmeAlreadyShown) {
             HelpView(context).attachToWindow()
+            tempDisableAutoAreaSelecting.setValue(true)
         }
 
         if (!SettingUtil.isVersionHistoryAlreadyShown) {
             VersionHistoryView(context).attachToWindow()
+            tempDisableAutoAreaSelecting.setValue(true)
+        }
+
+        tempDisableAutoAreaSelecting.whenNotValue(true) {
+            if (SettingUtil.startingWithSelectionMode && StateManager.state == InitState) {
+                StateManager.startSelection()
+            }
         }
 
         EventUtil.register(this)
