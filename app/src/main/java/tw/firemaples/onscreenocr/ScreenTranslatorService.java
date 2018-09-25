@@ -155,10 +155,11 @@ public class ScreenTranslatorService extends Service {
     private Notification getForegroundNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (notificationManager.getNotificationChannel(getPackageName()) == null) {
-                notificationManager.createNotificationChannel(
-                        new NotificationChannel(getPackageName(),
-                                getString(R.string.foregroundNotification),
-                                NotificationManager.IMPORTANCE_LOW));
+                NotificationChannel channel = new NotificationChannel(getPackageName(),
+                        getString(R.string.foregroundNotification),
+                        NotificationManager.IMPORTANCE_LOW);
+                channel.setShowBadge(false);
+                notificationManager.createNotificationChannel(channel);
             }
         }
 
