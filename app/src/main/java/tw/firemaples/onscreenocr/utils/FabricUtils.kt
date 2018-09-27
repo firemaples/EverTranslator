@@ -70,7 +70,7 @@ class FabricUtils {
                 TranslationService.GoogleTranslatorApp -> "Google Translation APP"
                 else -> _translateToLang
             }
-            val serviceName = service?.fullName ?: "From = To"
+            val serviceName = service?.name ?: "From = To"
 
             val event = CustomEvent(EVENT_TRANSLATE_TEXT)
                     .putCustomAttribute("Text length", textLength)
