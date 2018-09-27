@@ -72,7 +72,7 @@ object StateManager {
         state.startSelection(this@StateManager)
     }
 
-    fun areaSelected(boxList: MutableList<Rect>) = doAction {
+    fun areaSelected(boxList: List<Rect>) = doAction {
         this@StateManager.boxList = boxList.toMutableList()
         state.areaSelected(this@StateManager)
     }
