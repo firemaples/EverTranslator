@@ -26,7 +26,9 @@ import tw.firemaples.onscreenocr.translate.event.InstallGoogleTranslatorEvent
 import tw.firemaples.onscreenocr.translate.event.TranslationLangChangedEvent
 import tw.firemaples.onscreenocr.translate.event.TranslationServiceChangedEvent
 import tw.firemaples.onscreenocr.utils.*
+import tw.firemaples.onscreenocr.views.AreaSelectionView
 import tw.firemaples.onscreenocr.views.FloatingBarMenu
+import tw.firemaples.onscreenocr.views.OnAreaSelectionViewCallback
 import java.util.*
 
 class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandler {
@@ -238,9 +240,18 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
                     drawAreaView = DrawAreaView(context).apply {
                         setRealButtonHandler(this@MainBar)
 
-                        areaSelectionView.setCallback { areaSelectionView ->
-                            areaSelectionView.boxList?.let {
-                                StateManager.areaSelected(it)
+                        areaSelectionView.callback = object : OnAreaSelectionViewCallback {
+                            override fun onAreaSelected(areaSelectionView: AreaSelectionView) {
+
+                            }
+
+                        }
+
+                        areaSelectionView.callback = object : OnAreaSelectionViewCallback {
+                            override fun onAreaSelected(areaSelectionView: AreaSelectionView) {
+                                areaSelectionView.getBoxList().let {
+                                    StateManager.areaSelected(it)
+                                }
                             }
                         }
 
@@ -253,7 +264,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
             private fun clearAreaSelectionView() {
                 drawAreaView?.apply {
-                    areaSelectionView?.clear()
+                    areaSelectionView.clear()
                     detachFromWindow()
                 }
             }
