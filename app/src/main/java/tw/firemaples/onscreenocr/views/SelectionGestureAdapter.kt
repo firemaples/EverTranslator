@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory
 import kotlin.math.absoluteValue
 
 private const val THRESHOLD_DETERMINE_FINGERS = 20
+private const val THRESHOLD_MIN_MOVE = 20
 
 class SelectionGestureAdapter(view: View, val callback: OnGesture) {
     private val logger: Logger = LoggerFactory.getLogger(SelectionGestureAdapter::class.java)
@@ -70,9 +71,10 @@ class SelectionGestureAdapter(view: View, val callback: OnGesture) {
         endPlaceForOne = null
     }
 
-    private fun determineFingers(point1: Point, point2: Point): Boolean =
-            (point1.x - point2.x).absoluteValue > THRESHOLD_DETERMINE_FINGERS ||
-                    (point1.y - point2.y).absoluteValue > THRESHOLD_DETERMINE_FINGERS
+    private fun overThreshold(point1: Point, point2: Point,
+                              threshold: Int = THRESHOLD_DETERMINE_FINGERS): Boolean =
+            (point1.x - point2.x).absoluteValue > threshold ||
+                    (point1.y - point2.y).absoluteValue > threshold
 
     private fun handleOneFingerTouch(event: MotionEvent): Boolean {
         if (isTwoFingers) return true
@@ -87,7 +89,7 @@ class SelectionGestureAdapter(view: View, val callback: OnGesture) {
                 }
 
                 firstPlaceForOne?.also { firstPlace ->
-                    if (isOneFinger || determineFingers(point, firstPlace)) {
+                    if (isOneFinger || overThreshold(point, firstPlace)) {
                         if (!isOneFinger) {
                             logger.debug("onAreaCreationStart()")
                             callback.onAreaCreationStart(firstPlace)
@@ -110,6 +112,7 @@ class SelectionGestureAdapter(view: View, val callback: OnGesture) {
     var rightIndex: Int = -1
     var topIndex: Int = -1
     var bottomIndex: Int = -1
+    var fingerMoved: MutableMap<Int, Boolean> = mutableMapOf(0 to false, 1 to false)
     private fun handleTwoFingersTouch(event: MotionEvent): Boolean {
         if (isOneFinger) return true
 
@@ -135,12 +138,13 @@ class SelectionGestureAdapter(view: View, val callback: OnGesture) {
                         bottomIndex = 1
                         topIndex = 0
                     }
+                    fingerMoved.keys.forEach { fingerMoved[it] = false }
                     return true
                 }
 
-                firstPlaceForTwo?.also {
+                firstPlaceForTwo?.also { firstPlace ->
                     if (isTwoFingers ||
-                            determineFingers(point1, it[0]) || determineFingers(point2, it[1])) {
+                            overThreshold(point1, firstPlace[0]) || overThreshold(point2, firstPlace[1])) {
                         if (!isTwoFingers) {
                             logger.debug("onAreaResizeStart()")
                             callback.onAreaResizeStart()
@@ -148,16 +152,30 @@ class SelectionGestureAdapter(view: View, val callback: OnGesture) {
 
                         isTwoFingers = true
 
-                        firstPlaceForTwo?.also { firstPlace ->
-                            logger.debug("onAreaResizing()")
-                            val endPlace = arrayOf(point1, point2)
-                            val leftDiff = endPlace[leftIndex].x - firstPlace[leftIndex].x
-                            val rightDiff = endPlace[rightIndex].x - firstPlace[rightIndex].x
-                            val topDiff = endPlace[topIndex].y - firstPlace[topIndex].y
-                            val bottomDiff = endPlace[bottomIndex].y - firstPlace[bottomIndex].y
-
-                            callback.onAreaResizing(leftDiff, rightDiff, topDiff, bottomDiff)
+                        logger.debug("onAreaResizing()")
+                        fingerMoved.filterValues { !it }.forEach { entry ->
+                            val i = entry.key
+                            val point = if (i == 0) point1 else point2
+                            if (overThreshold(point, firstPlace[i], THRESHOLD_MIN_MOVE)) {
+                                fingerMoved[i] = true
+                            }
                         }
+
+                        val endPlace = arrayOf(point1, point2)
+
+                        val leftDiff = if (fingerMoved[leftIndex] == true)
+                            endPlace[leftIndex].x - firstPlace[leftIndex].x else 0
+
+                        val rightDiff = if (fingerMoved[rightIndex] == true)
+                            endPlace[rightIndex].x - firstPlace[rightIndex].x else 0
+
+                        val topDiff = if (fingerMoved[topIndex] == true)
+                            endPlace[topIndex].y - firstPlace[topIndex].y else 0
+
+                        val bottomDiff = if (fingerMoved[bottomIndex] == true)
+                            endPlace[bottomIndex].y - firstPlace[bottomIndex].y else 0
+
+                        callback.onAreaResizing(leftDiff, rightDiff, topDiff, bottomDiff)
                     }
                 }
             }
