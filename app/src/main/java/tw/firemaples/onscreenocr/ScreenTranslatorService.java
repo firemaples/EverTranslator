@@ -11,9 +11,13 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.MainBar;
@@ -153,9 +157,17 @@ public class ScreenTranslatorService extends Service {
     }
 
     private Notification getForegroundNotification() {
+        String channelId = getPackageName() + "_v1";
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (notificationManager.getNotificationChannel(getPackageName()) == null) {
-                NotificationChannel channel = new NotificationChannel(getPackageName(),
+            List<NotificationChannel> channels = notificationManager.getNotificationChannels();
+            for (NotificationChannel channel : channels) {
+                if (!channel.getId().equals(channelId)) {
+                    notificationManager.deleteNotificationChannel(channel.getId());
+                }
+            }
+            if (notificationManager.getNotificationChannel(channelId) == null) {
+                NotificationChannel channel = new NotificationChannel(channelId,
                         getString(R.string.foregroundNotification),
                         NotificationManager.IMPORTANCE_LOW);
                 channel.setShowBadge(false);
@@ -163,9 +175,12 @@ public class ScreenTranslatorService extends Service {
             }
         }
 
-        Notification.Builder builder = new Notification.Builder(this);
-        builder.setSmallIcon(R.mipmap.notify_icon);
-        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.icon));
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this, channelId);
+        builder.setColor(ContextCompat.getColor(this, R.color.appIconColor));
+        builder.setSmallIcon(R.drawable.ic_for_notify);
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),
+                R.drawable.ic_launcher_shadow));
         builder.setTicker(getString(R.string.app_name));
         builder.setContentTitle(getString(R.string.app_name));
         boolean toShow = mainFloatingView == null || !mainFloatingView.isAttached();
@@ -181,9 +196,6 @@ public class ScreenTranslatorService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
         builder.setAutoCancel(false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setChannelId(getPackageName());
-        }
         return builder.build();
     }
 
