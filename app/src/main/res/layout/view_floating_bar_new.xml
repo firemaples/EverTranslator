@@ -89,7 +89,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="2dp"
-                android:src="@drawable/menu" />
+                android:src="@drawable/menu_move" />
 
 
         </LinearLayout>
