@@ -202,7 +202,8 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onInstallGoogleTranslate(event: InstallGoogleTranslatorEvent) {
+    fun onInstallGoogleTranslate(
+            @Suppress("UNUSED_PARAMETER") event: InstallGoogleTranslatorEvent) {
         resetAll()
     }
 
