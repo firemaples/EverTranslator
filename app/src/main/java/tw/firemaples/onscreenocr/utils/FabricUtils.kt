@@ -93,6 +93,8 @@ class FabricUtils {
                 TranslationService.GoogleTranslatorApp -> {
                     event.putCustomAttribute("Google translation APP length", textLength)
                 }
+                else -> {
+                }
             }
             logEvent(event)
         }
