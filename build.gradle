@@ -10,6 +10,7 @@ buildscript {
         maven {
             url 'https://maven.google.com'
         }
+        mavenCentral()
         google()
     }
     dependencies {
@@ -32,6 +33,7 @@ allprojects {
         maven {
             url 'https://maven.google.com'
         }
+        mavenCentral()
     }
 }
 

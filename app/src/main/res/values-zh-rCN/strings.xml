@@ -73,11 +73,11 @@
     <string name="title_help_lite">操作说明\n(简易模式)</string>
     <string name="guide_select_source_language_and_translation_destination_language">1. 选择识别语言及要翻译的目标语言</string>
     <string name="guide_click_selection_button">3. 点击[选择]按钮</string>
-    <string name="guide_tap_and_drag_on_screen_to_create_selection_area_for_translation">4. 在画面上拖曳圈选翻译区域 (再次拖曳可以重新圈选翻译区域)</string>
+    <string name="guide_tap_and_drag_on_screen_to_create_selection_area_for_translation">4. 在画面上单指拖曳圈选翻译区域, 双指拖曳移动圈选区域及改变大小</string>
     <string name="guide_click_translation_button">5. 点击[翻译]按钮</string>
     <string name="guide_get_the_result">6. 获得结果</string>
     <string name="guide_clear_result">7. 点击结果视窗外或返回键清除结果</string>
-    <string name="guide_menu">** 点击[选单]按钮来取得更多设定或拖曳[选单]按钮来拖曳 **</string>
+    <string name="guide_menu">** 拖曳[选单]按钮移动主视窗或点击[选单]按钮开启选单 **</string>
     <string name="menu_version_history">版本信息</string>
     <string name="title_version_history">版本信息</string>
     <string name="redrawAnAreaForTranslation">再次拖曳可以重新圈选欲翻译的区域</string>
