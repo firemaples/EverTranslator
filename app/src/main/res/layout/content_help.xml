@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:theme="@style/Base.Theme.AppCompat.Light">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Base.Theme.AppCompat.Light">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,60 +12,63 @@
         <TextView
             style="@style/helpPage.stepText"
             android:layout_marginTop="0dp"
-            android:text="@string/guide_select_source_language_and_translation_destination_language"/>
+            android:text="@string/guide_select_source_language_and_translation_destination_language" />
 
         <ImageView
             style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_1_select_lang"/>
+            android:src="@drawable/guide_1_select_lang" />
 
         <TextView
             style="@style/helpPage.stepText"
-            android:text="@string/guide_lang_selector"/>
+            android:text="@string/guide_lang_selector" />
 
         <ImageView
             style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_2_lang_selector"/>
+            android:src="@drawable/guide_2_lang_selector" />
 
         <TextView
             style="@style/helpPage.stepText"
-            android:text="@string/guide_click_selection_button"/>
+            android:text="@string/guide_click_selection_button" />
 
         <ImageView
             style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_3_click_to_start_selection"/>
+            android:src="@drawable/guide_3_click_to_start_selection" />
 
         <TextView
             style="@style/helpPage.stepText"
-            android:text="@string/guide_tap_and_drag_on_screen_to_create_selection_area_for_translation"/>
+            android:text="@string/guide_tap_and_drag_on_screen_to_create_selection_area_for_translation" />
+
+        <pl.droidsonroids.gif.GifImageView
+            style="@style/helpPage.stepPicture"
+            android:src="@drawable/guide_4_select_area" />
 
         <TextView
             style="@style/helpPage.stepText"
-            android:text="@string/guide_click_translation_button"/>
+            android:text="@string/guide_click_translation_button" />
 
         <ImageView
             style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_5_click_to_translate"/>
+            android:src="@drawable/guide_5_click_to_translate" />
 
         <TextView
             style="@style/helpPage.stepText"
-            android:text="@string/guide_get_the_result"/>
+            android:text="@string/guide_get_the_result" />
 
         <ImageView
             style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_6_result_window"/>
+            android:src="@drawable/guide_6_result_window" />
 
         <TextView
             style="@style/helpPage.stepText"
-            android:text="@string/guide_clear_result"/>
+            android:text="@string/guide_clear_result" />
 
         <TextView
             style="@style/helpPage.stepText"
-            android:text="@string/guide_menu"/>
+            android:text="@string/guide_menu" />
 
-        <ImageView
+        <pl.droidsonroids.gif.GifImageView
             style="@style/helpPage.stepPicture"
-            android:layout_height="200dp"
-            android:src="@drawable/guide_ext_menu"/>
+            android:src="@drawable/guide_n_move_main_bar_and_open_menu" />
 
     </LinearLayout>
 

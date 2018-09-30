@@ -40,11 +40,11 @@
     <string name="guide_select_source_language_and_translation_destination_language">1. Click to select source language and translation destination language</string>
     <string name="guide_lang_selector">2. (1)Site to download files, (2)Source language, (3)Translation service, (4)Target language</string>
     <string name="guide_click_selection_button">3. Click selection button</string>
-    <string name="guide_tap_and_drag_on_screen_to_create_selection_area_for_translation">4. Tap and drag on screen to create a translation area (You can tap and drag again to re-draw once)</string>
+    <string name="guide_tap_and_drag_on_screen_to_create_selection_area_for_translation">4. Drag on screen with one finger to create a translation area, then drag with two fingers to move and resize</string>
     <string name="guide_click_translation_button">5. Click translation button</string>
     <string name="guide_get_the_result">6. Get the result</string>
     <string name="guide_clear_result">7. Tap outside of result window or click back button to clear result</string>
-    <string name="guide_menu">** Click menu button to find more settings or drag menu button to move the main bar **</string>
+    <string name="guide_menu">** Drag menu button to move or click menu button to open menu **</string>
 
     <!-- Strings for UI -->
     <string name="msg_textHasBeenCopied">Text [%s] has been copied.</string>
