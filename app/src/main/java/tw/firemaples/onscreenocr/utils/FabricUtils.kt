@@ -37,6 +37,8 @@ class FabricUtils {
             Crashlytics.setString("CountryCode", configLocale.country)
             Crashlytics.setString("DisplayCountry", configLocale.displayCountry)
 
+            updateClientSettings()
+
             updatePlayServiceInfo(context)
         }
 
