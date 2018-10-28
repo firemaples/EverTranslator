@@ -46,7 +46,7 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... params) {
-        baseAPI.init(tessRootDir.getAbsolutePath(), recognitionLang, TessBaseAPI.OEM_TESSERACT_ONLY);
+        baseAPI.init(tessRootDir.getAbsolutePath(), recognitionLang, TessBaseAPI.OEM_DEFAULT);
         baseAPI.setPageSegMode(pageSegmentationMode);
 
         return true;

@@ -13,13 +13,12 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.utils.threadUI
 import java.io.File
 
 internal const val EXT_TRAINED_DATA = ".traineddata"
 internal const val EXT_TMP_FILE = ".tmp"
-internal const val URL_TRAINE_DATA_DOWNLOAD_TEMPLATES =
-        "https://github.com/firemaples/tessdata/raw/master/%s.traineddata"
 
 internal val downloadThread = newSingleThreadContext("downloadThread")
 internal val moveFileThread = newSingleThreadContext("moveFileThread")
@@ -32,29 +31,22 @@ object OCRDownloadTask {
 
     private var latestJob: Job? = null
 
-    private fun getOCRFile(ocrLang: String): File =
-            File(OCRFileUtil.tessDataDir, ocrLang + EXT_TRAINED_DATA)
+    private fun getBaseFolder(): File = OCRFileUtil.tessDataDir
 
-    public fun checkOCRFileExists(ocrLang: String): Boolean {
-//        val tessDataDir = OCRFileUtil.tessDataDir
-//        if (!tessDataDir.exists()) {
-//            logger.warn("checkOcrFiles(): tess dir not found")
-//            return false
-//        }
-//
-//        val dataFile = File(tessDataDir, ocrLang + EXT_TRAINED_DATA)
-        if (!getOCRFile(ocrLang).exists()) {
-//            logger.warn("checkOcrFiles(): target OCR file not found")
-            return false
-        }
+    private fun notExistOCRFiles(ocrLang: String): List<String> =
+            RemoteConfigUtil.trainedDataFileSubs(ocrLang).map {
+                ocrLang + it
+            }.filter { !File(getBaseFolder().absolutePath, it).exists() }
 
-        return true
-    }
+    fun checkOCRFileExists(ocrLang: String): Boolean = notExistOCRFiles(ocrLang).isEmpty()
 
     public fun cancel() {
         latestJob?.cancel()
         AndroidNetworking.cancel(DOWNLOAD_TAG)
     }
+
+    fun genTempFilePath(ocrFilePath: String): File = File(getBaseFolder(),
+            ocrFilePath + EXT_TMP_FILE)
 
     public fun downloadOCRFiles(ocrLang: String,
                                 callback: OnOCRDownloadTaskCallback) {
@@ -63,17 +55,9 @@ object OCRDownloadTask {
                 callback.onDownloadStart()
             }
 
-            //Double check file existing
-            if (checkOCRFileExists(ocrLang)) {
-                threadUI {
-                    callback.onDownloadFinished()
-                }
-                return@launch
-            }
-
             yield()
             //Make folders
-            val dataDir = OCRFileUtil.tessDataDir
+            val dataDir = getBaseFolder()
             if (!dataDir.exists() && !dataDir.mkdirs()) {
                 val msg = context.getString(R.string.error_makingFolderFailed, dataDir.absolutePath)
                 logger.error(msg)
@@ -84,8 +68,21 @@ object OCRDownloadTask {
             }
 
             yield()
+            val ocrFilePaths = notExistOCRFiles(ocrLang)
+            if (ocrFilePaths.isEmpty()) {
+                threadUI {
+                    callback.onDownloadFinished()
+                }
+                return@launch
+            }
+
+            val fileName = ocrFilePaths[0]
+
+            val url = OCRFileUtil.trainedDataDownloadSite.url.format(fileName)
+            val destFile = File(getBaseFolder().absolutePath, fileName)
+
             //Delete temp file
-            val tempFile = File(dataDir, ocrLang + EXT_TMP_FILE)
+            val tempFile = genTempFilePath(fileName)
             if (tempFile.exists() && !tempFile.delete()) {
                 val msg = context.getString(R.string.error_deleteTempFileFailed,
                         tempFile.absolutePath)
@@ -96,20 +93,18 @@ object OCRDownloadTask {
                 return@launch
             }
 
-            val destFile = getOCRFile(ocrLang)
-
-            yield()
             //Download trained data
-            val url = OCRFileUtil.trainedDataDownloadSite.url.format(ocrLang)
             logger.info("Start download ocr file from: $url")
             AndroidNetworking.download(url, tempFile.parent, tempFile.name)
                     .setPriority(Priority.HIGH)
                     .setTag(DOWNLOAD_TAG)
                     .build()
-                    .setDownloadProgressListener { bytesDownloaded, totalBytes ->
+                    .setDownloadProgressListener { bytesDownloaded, _totalBytes ->
+                        val totalBytes = Math.max(_totalBytes, bytesDownloaded)
                         val msg = context.getString(
                                 R.string.dialog_content_progressingDownloadOCRFile,
                                 OCRLangUtil.getLangName(ocrLang),
+                                fileName,
                                 bytesDownloaded.toFloat() / 1024f / 1024f,
                                 totalBytes.toFloat() / 1024f / 1024f,
                                 (bytesDownloaded * 100 / totalBytes).toInt())
@@ -123,7 +118,7 @@ object OCRDownloadTask {
                             launch(moveFileThread) {
                                 if (tempFile.renameTo(destFile)) {
                                     threadUI {
-                                        callback.onDownloadFinished()
+                                        downloadOCRFiles(ocrLang, callback)
                                     }
                                 } else {
                                     val msg = "Move file failed, from: ${tempFile.absolutePath}, " +
@@ -147,8 +142,6 @@ object OCRDownloadTask {
                     })
         }
     }
-
-
 }
 
 interface OnOCRDownloadTaskCallback {
