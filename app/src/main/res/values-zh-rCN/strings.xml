@@ -8,7 +8,7 @@
     <string name="dialog_content_ocrFileNotFound">[%s] 语言的文字辨识档案尚未下载，您要现在下载吗？</string>
     <string name="dialog_title_ocrFileDownloading">档案下载</string>
     <string name="dialog_content_ocrFileDownloadStarting">正在启动文字辨识档案下载...</string>
-    <string name="dialog_content_progressingDownloadOCRFile" formatted="false">正在下载 [%s] 文字辨识档案 (%.2fMB/%.2fMB)(%d%%)</string>
+    <string name="dialog_content_progressingDownloadOCRFile" formatted="false">正在下载 [%s] 文字辨识档案 (%s) (%.2fMB/%.2fMB)(%d%%)</string>
     <string name="dialog_title_needPermission">权限需求</string>
     <string name="dialog_content_needPermission_drawOverlay">请允许 [允许在其他应用程式上绘製内容] 功能来使用本程式</string>
     <string name="dialog_content_needPermission_rwExternalStorage">请允许 [读写外部储存空间] 功能来使用本程式</string>

@@ -29,6 +29,7 @@ class CoreApplication : Application() {
         }
 
         FabricUtils.setClientInfo(this)
+        FabricUtils.updateClientSettings()
 
         FirebaseApp.initializeApp(this)
 

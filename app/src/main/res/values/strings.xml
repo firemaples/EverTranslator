@@ -7,7 +7,7 @@
     <string name="dialog_content_ocrFileNotFound">The OCR file of [%s] has not been downloaded, do you want to download it now?</string>
     <string name="dialog_title_ocrFileDownloading">File download</string>
     <string name="dialog_content_ocrFileDownloadStarting">Starting OCR file download task</string>
-    <string name="dialog_content_progressingDownloadOCRFile" formatted="false">Downloading OCR file for Language %s (%.2fMB/%.2fMB)(%d%%)</string>
+    <string name="dialog_content_progressingDownloadOCRFile" formatted="false">Downloading OCR file for Language %s (%s) (%.2fMB/%.2fMB)(%d%%)</string>
     <string name="dialog_title_needPermission">Need permission</string>
     <string name="dialog_content_needPermission_drawOverlay">This app needs [DrawOverlay] permission for running!</string>
     <string name="dialog_content_needPermission_rwExternalStorage">This app needs [Read/Write External Storage] Permission for running!</string>
