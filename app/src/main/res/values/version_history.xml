@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="versionCodes" translatable="false">
+        <item>2.2.0</item>
         <item>2.1.0</item>
         <item>2.0.0</item>
         <item>1.9.1</item>
@@ -8,6 +9,7 @@
         <item>1.7.1</item>
     </string-array>
 
+    <string name="versionMessage_2_2_0">● Resizable selection area\n● Update readme\n● Add round icon\n● Fix crash for Arabic and Hindi</string>
     <string name="versionMessage_2_1_0">● Update UI/UX\n● Add OCR source site selector\n● Add translation site selector</string>
     <string name="versionMessage_2_0_0">● Add Lite Mode for quickly usage and more convenient! (Use Google translate app, so you can translate anything without network)</string>
     <string name="versionMessage_1_9_1">● Fix translation issues for Android 8.0\n● Fix screen capturing failed when device is landscape in some device\n● You can feed OCR result into installed Google Translate</string>
