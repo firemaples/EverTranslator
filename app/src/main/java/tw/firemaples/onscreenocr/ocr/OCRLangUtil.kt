@@ -7,11 +7,24 @@ import tw.firemaples.onscreenocr.floatingviews.screencrop.DialogView
 import tw.firemaples.onscreenocr.floatingviews.screencrop.SingleSelectDialogView
 import tw.firemaples.onscreenocr.ocr.event.OCRLangChangedEvent
 import tw.firemaples.onscreenocr.utils.BaseSettingUtil
+import tw.firemaples.onscreenocr.utils.FabricUtils
 import java.util.*
 
 object OCRLangUtil : BaseSettingUtil() {
     private const val DEFAULT_LANG = "eng"
     private const val KEY_RECOGNITION_LANGUAGE = "preference_list_recognition_language"
+    private const val KEY_PAGE_SEGMENTATION_MODE = "preference_list_page_segmentation_mode"
+
+    val pageSegmentationModeList: Array<String> by lazy {
+        context.resources.getStringArray(R.array.pagesegmentationmodes)
+    }
+
+    val pageSegmentationMode: String
+        get() = sp.getString(KEY_PAGE_SEGMENTATION_MODE, pageSegmentationModeList[0])
+                ?: pageSegmentationModeList[0]
+
+    val pageSegmentationModeIndex: Int
+        get() = pageSegmentationModeList.indexOf(pageSegmentationMode)
 
     val ocrLangCodeList: Array<String> by lazy {
         context.resources.getStringArray(R.array.ocr_langCode_iso6393)
@@ -32,6 +45,7 @@ object OCRLangUtil : BaseSettingUtil() {
             sp.edit().putString(KEY_RECOGNITION_LANGUAGE, value).apply()
             val displayCode = ocrLangDisplayCodeList[ocrLangCodeList.indexOf(value)]
             EventUtil.post(OCRLangChangedEvent(value, displayCode))
+            FabricUtils.updateClientSettings()
         }
 
     val selectedLangName: String

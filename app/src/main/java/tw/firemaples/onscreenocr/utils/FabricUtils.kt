@@ -6,10 +6,13 @@ import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.answers.CustomEvent
 import com.google.android.gms.common.GoogleApiAvailability
+import tw.firemaples.onscreenocr.CoreApplication
+import tw.firemaples.onscreenocr.ocr.OCRFileUtil
 import tw.firemaples.onscreenocr.ocr.OCRLangUtil
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
 import tw.firemaples.onscreenocr.translate.TranslationService
+import tw.firemaples.onscreenocr.translate.TranslationUtil
 import java.util.*
 
 private const val EVENT_TRANSLATE_TEXT = "Translate Text"
@@ -17,6 +20,8 @@ private const val EVENT_GOOGLE_TRANSLATE_NOT_FOUND = "Google Translate not found
 
 class FabricUtils {
     companion object {
+        private val context: Context by lazy { CoreApplication.instance }
+
         @JvmStatic
         fun setClientInfo(context: Context) {
             val locale = Locale.getDefault()
@@ -33,6 +38,15 @@ class FabricUtils {
             Crashlytics.setString("DisplayCountry", configLocale.displayCountry)
 
             updatePlayServiceInfo(context)
+        }
+
+        fun updateClientSettings() {
+            val trainedDataDownloadSite = OCRFileUtil.trainedDataDownloadSite
+            Crashlytics.setString("OCR_Site", trainedDataDownloadSite.key)
+            Crashlytics.setString("OCR_Site_Url", trainedDataDownloadSite.url)
+            Crashlytics.setString("OCR_Lang_Code", OCRLangUtil.selectedLangCode)
+            Crashlytics.setString("OCR_Page_Seg_Mode", OCRLangUtil.pageSegmentationMode)
+            Crashlytics.setString("Tran_Lang_Code", TranslationUtil.currentTranslationLangCode)
         }
 
         private fun updatePlayServiceInfo(context: Context) {

@@ -10,6 +10,7 @@ import tw.firemaples.onscreenocr.ocr.event.TrainedDataDownloadSiteChangedEvent
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.remoteconfig.TrainedDataSite
 import tw.firemaples.onscreenocr.utils.BaseSettingUtil
+import tw.firemaples.onscreenocr.utils.FabricUtils
 import java.io.File
 
 private const val KEY_TRAINED_DATA_SITE_KEY = "KEY_TRAINED_DATA_SITE_KEY"
@@ -27,6 +28,7 @@ object OCRFileUtil : BaseSettingUtil() {
                 sp.edit().putString(KEY_TRAINED_DATA_SITE_KEY, value).commit()
                 EventUtil.post(TrainedDataDownloadSiteChangedEvent(trainedDataDownloadSiteIndex))
             }
+            FabricUtils.updateClientSettings()
         }
 
     var trainedDataDownloadSiteIndex: Int
