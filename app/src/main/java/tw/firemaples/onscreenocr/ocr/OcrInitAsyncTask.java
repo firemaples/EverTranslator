@@ -1,9 +1,7 @@
 package tw.firemaples.onscreenocr.ocr;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 
@@ -11,10 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.Arrays;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
 
 /**
  * Created by firemaples on 2016/3/2.
@@ -32,10 +28,9 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
     private OnOcrInitAsyncTaskCallback callback;
 
     public OcrInitAsyncTask(Context context, OnOcrInitAsyncTaskCallback callback) {
-        this.context = context;
+        this.context = context.getApplicationContext();
         this.callback = callback;
 
-        OcrNTranslateUtils ocrNTranslateUtils = OcrNTranslateUtils.getInstance();
         this.baseAPI = OCRManager.INSTANCE.getTessBaseAPI();
         this.recognitionLang = OCRLangUtil.INSTANCE.getSelectedLangCode();
 
@@ -80,11 +75,7 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
     }
 
     private void getPreferences() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        // Retrieve from preferences, and set in this Activity, the page segmentation mode preference
-        String[] pageSegmentationModes = context.getResources().getStringArray(R.array.pagesegmentationmodes);
-        String pageSegmentationModeName = preferences.getString(OcrNTranslateUtils.KEY_PAGE_SEGMENTATION_MODE, pageSegmentationModes[0]);
-        int searchIndex = Arrays.asList(pageSegmentationModes).indexOf(pageSegmentationModeName);
+        int searchIndex = OCRLangUtil.INSTANCE.getSelectedLangIndex();
         switch (searchIndex) {
             case 0:
                 pageSegmentationMode = TessBaseAPI.PageSegMode.PSM_AUTO_OSD;

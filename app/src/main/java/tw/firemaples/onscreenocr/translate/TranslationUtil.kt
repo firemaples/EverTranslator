@@ -5,6 +5,7 @@ import tw.firemaples.onscreenocr.event.EventUtil
 import tw.firemaples.onscreenocr.translate.event.TranslationLangChangedEvent
 import tw.firemaples.onscreenocr.translate.event.TranslationServiceChangedEvent
 import tw.firemaples.onscreenocr.utils.BaseSettingUtil
+import tw.firemaples.onscreenocr.utils.FabricUtils
 import tw.firemaples.onscreenocr.utils.Utils.Companion.context
 
 object TranslationUtil : BaseSettingUtil() {
@@ -71,6 +72,7 @@ object TranslationUtil : BaseSettingUtil() {
             if (currentTranslationLangCode == value) return
             sp.edit().putString(KEY_CURRENT_TRANSLATE_LANG_CODE, value).apply()
             EventUtil.post(TranslationLangChangedEvent(value))
+            FabricUtils.updateClientSettings()
         }
 
     private fun getTranslationLangCode(index: Int) =

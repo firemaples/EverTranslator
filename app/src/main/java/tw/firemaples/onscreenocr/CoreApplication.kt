@@ -10,7 +10,6 @@ import io.fabric.sdk.android.Fabric
 import okhttp3.OkHttpClient
 import tw.firemaples.onscreenocr.tts.AndroidTTSManager
 import tw.firemaples.onscreenocr.utils.FabricUtils
-import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils
 import tw.firemaples.onscreenocr.utils.SignatureUtil
 
 class CoreApplication : Application() {
@@ -37,7 +36,6 @@ class CoreApplication : Application() {
 
         validateSignature()
 
-        OcrNTranslateUtils.init()
         AndroidTTSManager.getInstance(this).init()
     }
 
