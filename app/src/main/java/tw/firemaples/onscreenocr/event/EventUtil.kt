@@ -7,7 +7,11 @@ class EventUtil {
         private val eventBus: EventBus = EventBus.getDefault()
 
         fun register(clazz: Any) {
-            eventBus.register(clazz)
+            try {
+                eventBus.register(clazz)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
         fun unregister(clazz: Any) {
