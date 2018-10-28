@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.M)
     private void checkDrawOverlayPermission() {
-        if (!PermissionUtil.checkDrawOverlayPermission(this)) {
+        if (!PermissionUtil.canDrawOverlays(this)) {
             logger.info("Requesting draw overlay permission");
             AlertDialog.Builder ab = new AlertDialog.Builder(this);
             ab.setTitle(getString(R.string.dialog_title_needPermission));
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.M)
     private void onCheckDrawOverlayPermissionResult() {
-        if (Settings.canDrawOverlays(this)) {
+        if (PermissionUtil.canDrawOverlays(this)) {
             logger.info("Got draw overlay permission");
             checkExternalStorageReadWritePermission();
         } else {

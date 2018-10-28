@@ -131,7 +131,7 @@ public abstract class FloatingView {
 
     public void attachToWindow() {
         if (!isAttached) {
-            if (PermissionUtil.checkDrawOverlayPermission(context)) {
+            if (PermissionUtil.canDrawOverlays(context)) {
                 windowManager.addView(rootView, floatingLayoutParams);
                 isAttached = true;
                 if (!isPrimaryView()) {
