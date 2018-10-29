@@ -22,6 +22,7 @@ import tw.firemaples.onscreenocr.ScreenTranslatorService;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.RealButtonHandler;
 import tw.firemaples.onscreenocr.utils.HomeWatcher;
 import tw.firemaples.onscreenocr.utils.PermissionUtil;
+import tw.firemaples.onscreenocr.utils.SettingUtil;
 
 import static android.content.Context.WINDOW_SERVICE;
 
@@ -55,8 +56,7 @@ public abstract class FloatingView {
             type = WindowManager.LayoutParams.TYPE_PHONE;
         }
         floatingLayoutParams = new WindowManager.LayoutParams(
-                getLayoutSize(),
-                getLayoutSize(),
+                getLayoutSize(), getLayoutSize(),
                 type,
                 (layoutFocusable() ? WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL :
                         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE) |
@@ -66,6 +66,16 @@ public abstract class FloatingView {
             floatingLayoutParams.flags = floatingLayoutParams.flags | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         }
         floatingLayoutParams.gravity = getLayoutGravity();
+
+        if (isPrimaryView()) {
+            Integer[] lastPosition = SettingUtil.INSTANCE.getLastMainBarPosition();
+            if (lastPosition[0] != null && lastPosition[0] != -1) {
+                floatingLayoutParams.x = lastPosition[0];
+            }
+            if (lastPosition[1] != null && lastPosition[1] != -1) {
+                floatingLayoutParams.y = lastPosition[1];
+            }
+        }
     }
 
     protected boolean canMoveOutside() {
@@ -156,6 +166,11 @@ public abstract class FloatingView {
                 }
             }
             manageTask.clear();
+
+            if (isPrimaryView()) {
+                SettingUtil.INSTANCE.setLastMainBarPosition(
+                        new Integer[]{floatingLayoutParams.x, floatingLayoutParams.y});
+            }
 
             windowManager.removeView(rootView);
             isAttached = false;
