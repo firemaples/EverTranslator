@@ -24,6 +24,8 @@ object SettingUtil {
     private const val KEY_LAST_SELECTION_AREA = "KEY_LAST_SELECTION_AREA"
     private const val KEY_VERSION_HISTORY_SHOWN_VERSION = "KEY_VERSION_HISTORY_SHOWN_VERSION"
     private const val KEY_HOW_TO_USE_SHOWN_VERSION = "KEY_HOW_TO_USE_SHOWN_VERSION"
+    private const val KEY_LAST_MAIN_BAR_POSITION_X = "KEY_LAST_MAIN_BAR_POSITION_X"
+    private const val KEY_LAST_MAIN_BAR_POSITION_Y = "KEY_LAST_MAIN_BAR_POSITION_Y"
 
     private val context: Context
         get() {
@@ -134,5 +136,14 @@ object SettingUtil {
                 sp.edit().putString(KEY_HOW_TO_USE_SHOWN_VERSION, currentVersion).apply()
             }
             return result
+        }
+
+    var lastMainBarPosition: Array<Int>
+        get() = arrayOf(
+                sp.getInt(KEY_LAST_MAIN_BAR_POSITION_X, -1),
+                sp.getInt(KEY_LAST_MAIN_BAR_POSITION_Y, -1))
+        set(value) {
+            sp.edit().putInt(KEY_LAST_MAIN_BAR_POSITION_X, value[0])
+                    .putInt(KEY_LAST_MAIN_BAR_POSITION_Y, value[1]).apply()
         }
 }
