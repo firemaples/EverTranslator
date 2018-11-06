@@ -31,8 +31,8 @@ android {
         applicationId "tw.firemaples.onscreenocr"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 54
-        versionName "2.2.2"
+        versionCode 55
+        versionName "2.2.3"
     }
     buildTypes {
         release {
