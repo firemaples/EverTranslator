@@ -96,7 +96,7 @@ public abstract class MovableFloatingView extends FloatingView {
 
         int viewCenterX = currentX + viewWidth / 2;
 
-        int margin = (int) UIUtil.dpToPx(getContext(), MOVE_TO_EDGE_MARGIN_DP);
+        int margin = (int) UIUtil.INSTANCE.dpToPx(getContext(), MOVE_TO_EDGE_MARGIN_DP);
         int edgeX;
         if (viewCenterX < metrics.widthPixels / 2) {
             // near left

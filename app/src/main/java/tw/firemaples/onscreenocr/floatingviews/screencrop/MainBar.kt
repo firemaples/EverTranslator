@@ -2,6 +2,7 @@ package tw.firemaples.onscreenocr.floatingviews.screencrop
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Rect
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
@@ -27,7 +28,7 @@ import tw.firemaples.onscreenocr.translate.event.TranslationLangChangedEvent
 import tw.firemaples.onscreenocr.translate.event.TranslationServiceChangedEvent
 import tw.firemaples.onscreenocr.utils.*
 import tw.firemaples.onscreenocr.views.AreaSelectionView
-import tw.firemaples.onscreenocr.views.FloatingBarMenu
+import tw.firemaples.onscreenocr.views.MenuView
 import tw.firemaples.onscreenocr.views.OnAreaSelectionViewCallback
 import java.util.*
 
@@ -42,11 +43,20 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
     private val btClear: View = rootView.findViewById(R.id.bt_clear)
     private val pgProgress: View = rootView.findViewById(R.id.pg_progress)
     private val viewMenu: View = rootView.findViewById(R.id.view_menu)
+    private val card_container: View = rootView.findViewById(R.id.card_container)
 
     private var ocrTranslationSelectorView: OCRTranslationSelectorView? = null
     private var drawAreaView: DrawAreaView? = null
     private var ocrResultView: OCRResultView? = null
     private val dialogView: DialogView by lazy { DialogView(context) }
+    private val menuView: MenuView by lazy {
+        MenuView(context, listOf(R.string.menu_setting,
+                R.string.menu_privacy_policy,
+                R.string.menu_about,
+                R.string.menu_help,
+                R.string.menu_hide,
+                R.string.menu_exit), onMenuItemClickedListener)
+    }
 
     private val tempDisableAutoAreaSelecting = Once(false)
 
@@ -160,7 +170,12 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
         }
         viewMenu.setOnClickListener {
             rescheduleFadeOut()
-            FloatingBarMenu(context, viewMenu, onFloatingBarMenuCallback).show()
+
+            val rect = Rect()
+            rect.left = UIUtil.getScreenWidth() - floatingLayoutParams.x - viewMenu.width
+            rect.top = floatingLayoutParams.y
+            rect.bottom = rect.top + rootView.height
+            menuView.attachToWindow(rect)
         }
 
         setupLang()
@@ -233,7 +248,8 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
                                 StateName.OCRProcess,
                                 StateName.Translating))
 
-                btClear.setVisible(state == StateName.Translated)
+                btClear.setVisible(state.equalsAny(StateName.AreaSelecting,
+                        StateName.AreaSelected, StateName.Translated))
             }
 
             override fun startSelection() {
@@ -377,32 +393,19 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
                 false
             }
 
-
-    private val onFloatingBarMenuCallback = object : FloatingBarMenu.OnFloatingBarMenuCallback {
-        override fun onPrivacyPolicyClick() {
-            resetAll()
-            Utils.openBrowser(RemoteConfigUtil.privacyPolicyUrl)
+    private val onMenuItemClickedListener = object : MenuView.OnMenuItemClickedListener {
+        override fun onMenuItemClicked(position: Int, item: Int) {
+            when (item) {
+                R.string.menu_setting -> SettingView(context).attachToWindow()
+                R.string.menu_privacy_policy -> {
+                    resetAll()
+                    Utils.openBrowser(RemoteConfigUtil.privacyPolicyUrl)
+                }
+                R.string.menu_about -> AboutView(context).attachToWindow()
+                R.string.menu_help -> HelpView(context).attachToWindow()
+                R.string.menu_hide -> this@MainBar.detachFromWindow()
+                R.string.menu_exit -> ScreenTranslatorService.stop(true)
+            }
         }
-
-        override fun onSettingItemClick() {
-            SettingView(context).attachToWindow()
-        }
-
-        override fun onAboutItemClick() {
-            AboutView(context).attachToWindow()
-        }
-
-        override fun onHideItemClick() {
-            this@MainBar.detachFromWindow()
-        }
-
-        override fun onCloseItemClick() {
-            ScreenTranslatorService.stop(true)
-        }
-
-        override fun onHelpClick() {
-            HelpView(context).attachToWindow()
-        }
-
     }
 }

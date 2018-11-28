@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +34,8 @@ import static android.content.Context.WINDOW_SERVICE;
  */
 
 public abstract class FloatingView {
+    private Logger logger = LoggerFactory.getLogger(FloatingView.class);
+
     private Context context;
     private WindowManager windowManager;
     private WindowManager.LayoutParams floatingLayoutParams;
@@ -58,7 +63,7 @@ public abstract class FloatingView {
         floatingLayoutParams = new WindowManager.LayoutParams(
                 getLayoutSize(), getLayoutSize(),
                 type,
-                (layoutFocusable() ? WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL :
+                (WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL|
                         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE) |
                         (canMoveOutside() ? WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS : 0),
                 PixelFormat.TRANSLUCENT);
