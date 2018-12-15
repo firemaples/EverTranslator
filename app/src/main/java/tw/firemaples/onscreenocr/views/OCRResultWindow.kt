@@ -3,6 +3,7 @@ package tw.firemaples.onscreenocr.views
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.graphics.Rect
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.View.OnClickListener
@@ -26,11 +27,10 @@ import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
 import tw.firemaples.onscreenocr.translate.TranslationUtil
 import tw.firemaples.onscreenocr.utils.*
 
-internal const val MARGIN_PX = 4f
-
 class OCRResultWindow(context: Context) : FrameLayout(context) {
     private val logger = LoggerFactory.getLogger(OCRResultWindow::class.java)
 
+    private val MARGIN_PX = 4f
     private val layoutMargin by lazy { UIUtil.dpToPx(context, MARGIN_PX) }
 
     private val view: View by lazy { View.inflate(context, R.layout.view_ocr_result_window, null) }
@@ -166,7 +166,7 @@ class OCRResultWindow(context: Context) : FrameLayout(context) {
         }
     }
 
-    private fun adjustViewPosition() {
+    private fun adjustViewPosition1() {
         val anchorView = this.anchorView ?: return
         val parent = this.parent as ViewGroup
 
@@ -194,6 +194,31 @@ class OCRResultWindow(context: Context) : FrameLayout(context) {
         } else {
             // Match anchorView left
             layoutParams.leftMargin = anchorView.left
+        }
+
+        parent.updateViewLayout(this, layoutParams)
+    }
+
+    private fun adjustViewPosition() {
+        val anchorView = this.anchorView ?: return
+        val parent = this.parent as ViewGroup
+
+        val width = this.width
+        val height = this.height
+
+        val parentHeight = parent.height
+
+        val rect = Rect()
+        anchorView.getGlobalVisibleRect(rect)
+
+        val margins = UIUtil.countViewPosition(rect, width, height, layoutMargin, parentHeight)
+
+        layoutParams.leftMargin = margins[0]
+        layoutParams.topMargin = margins[1]
+
+        if (layoutParams.topMargin == -1) {
+            layoutParams.topMargin = layoutMargin
+            layoutParams.addRule(RelativeLayout.CENTER_VERTICAL)
         }
 
         parent.updateViewLayout(this, layoutParams)
