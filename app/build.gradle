@@ -85,12 +85,6 @@ android {
     }
 }
 
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
-}
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
@@ -130,8 +124,8 @@ dependencies {
     }
     implementation 'org.slf4j:slf4j-api:1.7.22'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.23.2'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.23.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.27.0-eap13'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.27.0-eap13'
     implementation 'org.greenrobot:eventbus:3.1.1'
 
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.15'

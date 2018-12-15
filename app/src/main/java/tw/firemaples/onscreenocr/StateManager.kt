@@ -2,7 +2,8 @@ package tw.firemaples.onscreenocr
 
 import android.graphics.Bitmap
 import android.graphics.Rect
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.event.EventUtil
@@ -94,7 +95,7 @@ object StateManager {
         state.clear(this@StateManager)
     }
 
-    private fun doAction(action: () -> Unit) = launch(stateManagerAction) {
+    private fun doAction(action: () -> Unit) = GlobalScope.launch(stateManagerAction) {
         action()
     }
 

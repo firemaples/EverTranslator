@@ -5,10 +5,7 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.DownloadListener
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.newSingleThreadContext
-import kotlinx.coroutines.experimental.yield
+import kotlinx.coroutines.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.CoreApplication
@@ -50,7 +47,7 @@ object OCRDownloadTask {
 
     public fun downloadOCRFiles(ocrLang: String,
                                 callback: OnOCRDownloadTaskCallback) {
-        latestJob = launch(downloadThread) {
+        latestJob = GlobalScope.launch(downloadThread) {
             threadUI {
                 callback.onDownloadStart()
             }
@@ -115,7 +112,7 @@ object OCRDownloadTask {
                     }
                     .startDownload(object : DownloadListener {
                         override fun onDownloadComplete() {
-                            launch(moveFileThread) {
+                            GlobalScope.launch(moveFileThread) {
                                 if (tempFile.renameTo(destFile)) {
                                     threadUI {
                                         downloadOCRFiles(ocrLang, callback)

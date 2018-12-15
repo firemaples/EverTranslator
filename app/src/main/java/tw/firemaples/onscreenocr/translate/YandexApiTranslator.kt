@@ -4,7 +4,8 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.ParsedRequestListener
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.utils.KeyId
@@ -16,7 +17,7 @@ object YandexApiTranslator : Translator {
 
     override fun translate(text: String, lang: String,
                            callback: (Boolean, String, Throwable?) -> Unit
-    ) = launch(threadTranslation) {
+    ) = GlobalScope.launch(threadTranslation) {
         val key = KeyId.YANDEX_TRANSLATE_KEY
 
         val url = "https://translate.yandex.net/api/v1.5/tr.json/translate?" +
