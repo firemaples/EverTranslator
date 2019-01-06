@@ -20,7 +20,7 @@ buildscript {
         // in the individual module build.gradle files
         classpath 'com.google.gms:google-services:4.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        // google-services plugin
+        classpath 'com.google.firebase:firebase-plugins:1.1.5'
     }
 }
 

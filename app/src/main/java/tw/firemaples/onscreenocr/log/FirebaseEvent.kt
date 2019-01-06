@@ -82,10 +82,12 @@ object FirebaseEvent {
     }
 
     fun logStartCaptureScreen() {
+        PerformanceTracer.startTracing(TRACE_CAPTURE_SCREENSHOT)
         logEvent(EVENT_START_CAPTURE_SCREEN)
     }
 
     fun logCaptureScreenFinished() {
+        PerformanceTracer.stopTracing(TRACE_CAPTURE_SCREENSHOT, true)
         logEvent(EVENT_CAPTURE_SCREEN_FINISHED)
     }
 
@@ -102,29 +104,39 @@ object FirebaseEvent {
             it.localizedMessage
         }
 
+        PerformanceTracer.putAttr(TRACE_CAPTURE_SCREENSHOT, "error_type", errorType)
+        msg?.also { PerformanceTracer.putAttr(TRACE_CAPTURE_SCREENSHOT, "error_msg", msg) }
+        PerformanceTracer.stopTracing(TRACE_CAPTURE_SCREENSHOT, false)
+
         logEvent(EVENT_CAPTURE_SCREEN_FAILED, Bundle().apply {
             putString("error_type", errorType)
-            putString("msg", msg)
+            putString("error_msg", msg)
         })
     }
 
     fun logStartOCRInitializing() {
+        PerformanceTracer.startTracing(TRACE_OCR_INITIALIZE)
         logEvent(EVENT_START_OCR_INITIALIZING)
     }
 
     fun logOCRInitialized() {
+        PerformanceTracer.stopTracing(TRACE_OCR_INITIALIZE)
         logEvent(EVENT_OCR_INITIALIZED)
     }
 
     fun logStartOCR() {
+        PerformanceTracer.startTracing(TRACE_OCR_PROCESS)
         logEvent(EVENT_START_OCR)
     }
 
     fun logOCRFinished() {
+        PerformanceTracer.stopTracing(TRACE_OCR_PROCESS)
         logEvent(EVENT_OCR_FINISHED)
     }
 
     fun logStartTranslationText(text: String, _translateToLang: String, service: TranslationService?) {
+        PerformanceTracer.startTracing(TRACE_TRANSLATE_TEXT)
+
         val translateFromLang = OCRLangUtil.selectedLangCode
         val textLength = text.length
         val translateToLang = when (service) {
@@ -132,6 +144,8 @@ object FirebaseEvent {
             else -> _translateToLang
         }
         val serviceName = service?.name ?: "from_equals_to"
+
+        PerformanceTracer.putAttr(TRACE_TRANSLATE_TEXT, "service_name", serviceName)
 
         val params = Bundle().apply {
             putInt("text_length", textLength)
@@ -151,10 +165,12 @@ object FirebaseEvent {
     }
 
     fun logTranslationTextFinished() {
+        PerformanceTracer.stopTracing(TRACE_TRANSLATE_TEXT, true)
         logEvent(EVENT_TRANSLATION_TEXT_FINISHED)
     }
 
     fun logTranslationTextFailed() {
+        PerformanceTracer.stopTracing(TRACE_TRANSLATE_TEXT, false)
         logEvent(EVENT_TRANSLATION_TEXT_FAILED)
     }
 
