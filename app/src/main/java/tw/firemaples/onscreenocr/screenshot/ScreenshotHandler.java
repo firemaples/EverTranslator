@@ -32,7 +32,7 @@ import java.util.Locale;
 
 import tw.firemaples.onscreenocr.MainActivity;
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.utils.FabricUtils;
+import tw.firemaples.onscreenocr.log.FirebaseEvent;
 import tw.firemaples.onscreenocr.utils.SettingUtil;
 import tw.firemaples.onscreenocr.utils.Utils;
 
@@ -43,7 +43,7 @@ public class ScreenshotHandler {
     private static final Logger logger = LoggerFactory.getLogger(ScreenshotHandler.class);
 
     private static ScreenshotHandler _instance;
-    private final static int TIMEOUT = 5000;
+    public final static int TIMEOUT = 5000;
 
     public final static int ERROR_CODE_KNOWN_ERROR = 0;
     public final static int ERROR_CODE_TIMEOUT = 1;
@@ -227,7 +227,7 @@ public class ScreenshotHandler {
                             callback.onScreenshotFailed(ERROR_CODE_KNOWN_ERROR, e);
                         }
                     }
-                    FabricUtils.logException(e);
+                    FirebaseEvent.INSTANCE.logException(new Exception("Screenshot failed", e));
                 } finally {
                     if (image != null) {
                         image.close();

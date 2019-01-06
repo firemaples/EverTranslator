@@ -8,12 +8,11 @@ import android.view.View
 import android.widget.TextView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.*
 import tw.firemaples.onscreenocr.event.EventUtil
 import tw.firemaples.onscreenocr.floatingviews.FloatingView
 import tw.firemaples.onscreenocr.floatingviews.MovableFloatingView
+import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.ocr.OCRLangUtil
 import tw.firemaples.onscreenocr.ocr.OCRManager
 import tw.firemaples.onscreenocr.ocr.event.OCRLangChangedEvent
@@ -33,7 +32,7 @@ import tw.firemaples.onscreenocr.views.OnAreaSelectionViewCallback
 import java.util.*
 
 class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandler {
-    private val logger: Logger = LoggerFactory.getLogger(MainBar::class.java)
+//    private val logger: Logger = LoggerFactory.getLogger(MainBar::class.java)
 
     private val viewLangSelector: View = rootView.findViewById(R.id.view_langSelector)
     private val tvLang: TextView = rootView.findViewById(R.id.tv_lang)
@@ -43,7 +42,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
     private val btClear: View = rootView.findViewById(R.id.bt_clear)
     private val pgProgress: View = rootView.findViewById(R.id.pg_progress)
     private val viewMenu: View = rootView.findViewById(R.id.view_menu)
-    private val card_container: View = rootView.findViewById(R.id.card_container)
+//    private val card_container: View = rootView.findViewById(R.id.card_container)
 
     private var ocrTranslationSelectorView: OCRTranslationSelectorView? = null
     private var drawAreaView: DrawAreaView? = null
@@ -154,6 +153,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
             StateManager.startSelection()
         }
         btTranslation.setOnClickListener {
+            FirebaseEvent.logClickTranslationStartButton()
             if (SettingUtil.isRememberLastSelection) {
                 SettingUtil.lastSelectionArea = StateManager.boxList
             }
@@ -254,6 +254,8 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
             override fun startSelection() {
                 if (checkScreenshotPermission()) {
+                    FirebaseEvent.logStartAreaSelection()
+
                     drawAreaView = DrawAreaView(context).apply {
                         setRealButtonHandler(this@MainBar)
 
@@ -344,7 +346,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
             override fun ocrRecognized() {
                 if (TranslationUtil.currentService == TranslationService.GoogleTranslatorApp) {
                     StateManager.ocrResultText?.let { textToTranslate ->
-                        FabricUtils.logTranslationInfo(textToTranslate, "",
+                        FirebaseEvent.logStartTranslationText(textToTranslate, "",
                                 TranslationService.GoogleTranslatorApp)
                         GoogleTranslateUtil.start(context, Locale.getDefault().language,
                                 textToTranslate)

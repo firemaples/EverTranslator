@@ -1,7 +1,7 @@
 package tw.firemaples.onscreenocr.translate
 
+import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.ocr.OCRLangUtil
-import tw.firemaples.onscreenocr.utils.FabricUtils
 
 object TranslationManager {
     fun startTranslation(text: String, lang: String, callback: (Boolean, String, Throwable?) -> Unit) {
@@ -11,7 +11,7 @@ object TranslationManager {
         }
 
         if (lang == OCRLangUtil.selectLangDisplayCode) {
-            FabricUtils.logTranslationInfo(text, lang, null)
+            FirebaseEvent.logStartTranslationText(text, lang, null)
             callback(true, text, null)
             return
         }
@@ -28,7 +28,7 @@ object TranslationManager {
             }
         }
 
-        FabricUtils.logTranslationInfo(text, lang, TranslationUtil.currentService)
+        FirebaseEvent.logStartTranslationText(text, lang, TranslationUtil.currentService)
 
         translator.translate(text, lang, callback)
     }

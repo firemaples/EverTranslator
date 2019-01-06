@@ -10,9 +10,11 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.utils.threadUI
 import java.io.File
+import java.io.IOException
 
 internal const val EXT_TRAINED_DATA = ".traineddata"
 internal const val EXT_TMP_FILE = ".tmp"
@@ -75,6 +77,7 @@ object OCRDownloadTask {
 
             val fileName = ocrFilePaths[0]
 
+            val site = OCRFileUtil.trainedDataDownloadSiteKey
             val url = OCRFileUtil.trainedDataDownloadSite.url.format(fileName)
             val destFile = File(getBaseFolder().absolutePath, fileName)
 
@@ -92,6 +95,7 @@ object OCRDownloadTask {
 
             //Download trained data
             logger.info("Start download ocr file from: $url")
+            FirebaseEvent.logStartDownloadOCRFile(fileName, site)
             AndroidNetworking.download(url, tempFile.parent, tempFile.name)
                     .setPriority(Priority.HIGH)
                     .setTag(DOWNLOAD_TAG)
@@ -114,6 +118,7 @@ object OCRDownloadTask {
                         override fun onDownloadComplete() {
                             GlobalScope.launch(moveFileThread) {
                                 if (tempFile.renameTo(destFile)) {
+                                    FirebaseEvent.logOCRFileDownloadFinished()
                                     threadUI {
                                         downloadOCRFiles(ocrLang, callback)
                                     }
@@ -121,6 +126,8 @@ object OCRDownloadTask {
                                     val msg = "Move file failed, from: ${tempFile.absolutePath}, " +
                                             "to: ${destFile.absolutePath}"
                                     logger.error(msg)
+                                    FirebaseEvent.logException(IOException(msg))
+                                    FirebaseEvent.logOCRFileDownloadFailed(fileName, site, msg)
                                     threadUI {
                                         callback.onError(msg)
                                     }
@@ -129,7 +136,19 @@ object OCRDownloadTask {
                         }
 
                         override fun onError(anError: ANError?) {
-                            anError?.printStackTrace()
+                            if (anError != null) {
+                                anError.printStackTrace()
+                                FirebaseEvent.logException(anError)
+                                FirebaseEvent.logOCRFileDownloadFailed(fileName, site,
+                                        anError.localizedMessage)
+                            } else {
+                                val msg = "An unknown download failed found"
+                                Exception(msg).also {
+                                    it.printStackTrace()
+                                    FirebaseEvent.logException(it)
+                                }
+                                FirebaseEvent.logOCRFileDownloadFailed(fileName, site, msg)
+                            }
                             threadUI {
                                 callback.onError(
                                         "Download OCR file failed: ${anError?.message}")

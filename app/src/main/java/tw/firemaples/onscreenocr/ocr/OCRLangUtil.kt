@@ -5,9 +5,10 @@ import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.event.EventUtil
 import tw.firemaples.onscreenocr.floatingviews.screencrop.DialogView
 import tw.firemaples.onscreenocr.floatingviews.screencrop.SingleSelectDialogView
+import tw.firemaples.onscreenocr.log.FirebaseEvent
+import tw.firemaples.onscreenocr.log.UserInfoUtils
 import tw.firemaples.onscreenocr.ocr.event.OCRLangChangedEvent
 import tw.firemaples.onscreenocr.utils.BaseSettingUtil
-import tw.firemaples.onscreenocr.utils.FabricUtils
 import java.util.*
 
 object OCRLangUtil : BaseSettingUtil() {
@@ -45,7 +46,7 @@ object OCRLangUtil : BaseSettingUtil() {
             sp.edit().putString(KEY_RECOGNITION_LANGUAGE, value).apply()
             val displayCode = ocrLangDisplayCodeList[ocrLangCodeList.indexOf(value)]
             EventUtil.post(OCRLangChangedEvent(value, displayCode))
-            FabricUtils.updateClientSettings()
+            UserInfoUtils.updateClientSettings()
         }
 
     val selectedLangName: String
@@ -66,6 +67,8 @@ object OCRLangUtil : BaseSettingUtil() {
     fun checkCurrentOCRFiles(): Boolean = OCRDownloadTask.checkOCRFileExists(selectedLangCode)
 
     fun showDownloadAlertDialog() {
+        FirebaseEvent.logShowOCRFilesNotFoundAlert()
+
         val dialogView = DialogView(context)
         dialogView.reset()
         dialogView.setTitle(context.getString(R.string.dialog_title_ocrFileNotFound))
