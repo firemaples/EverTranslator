@@ -3,6 +3,7 @@ package tw.firemaples.onscreenocr.state
 import android.graphics.Bitmap
 import tw.firemaples.onscreenocr.StateManager
 import tw.firemaples.onscreenocr.StateName
+import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler
 
 object ScreenshotTakeState : BaseState() {
@@ -25,10 +26,12 @@ object ScreenshotTakeState : BaseState() {
 
     private val onScreenshotHandlerCallback = object : ScreenshotHandler.OnScreenshotHandlerCallback {
         override fun onScreenshotStart() {
+            FirebaseEvent.logStartCaptureScreen()
             manager?.dispatchBeforeScreenshot()
         }
 
         override fun onScreenshotFinished(bitmap: Bitmap) {
+            FirebaseEvent.logCaptureScreenFinished()
             manager?.apply {
                 this.bitmap = bitmap
                 dispatchScreenshotSuccess()
@@ -37,6 +40,7 @@ object ScreenshotTakeState : BaseState() {
         }
 
         override fun onScreenshotFailed(errorCode: Int, e: Throwable?) {
+            FirebaseEvent.logCaptureScreenFailed(errorCode, e)
             manager?.dispatchScreenshotFailed(errorCode, e)
         }
     }

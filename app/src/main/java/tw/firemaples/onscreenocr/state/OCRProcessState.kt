@@ -3,6 +3,7 @@ package tw.firemaples.onscreenocr.state
 import android.graphics.Rect
 import tw.firemaples.onscreenocr.StateManager
 import tw.firemaples.onscreenocr.StateName
+import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.ocr.OCRManager
 import tw.firemaples.onscreenocr.ocr.OcrResult
 import tw.firemaples.onscreenocr.translate.TranslationService
@@ -35,18 +36,21 @@ object OCRProcessState : OverlayState() {
 
     val callback = object : OCRManager.OnOCRStateChangedListener {
         override fun onInitializing() {
+            FirebaseEvent.logStartOCRInitializing()
             manager?.dispatchStartOCRInitializing()
         }
 
         override fun onInitialized() {
-
+            FirebaseEvent.logOCRInitialized()
         }
 
         override fun onRecognizing() {
+            FirebaseEvent.logStartOCR()
             manager?.dispatchStartOCRRecognizing()
         }
 
         override fun onRecognized(results: List<OcrResult>) {
+            FirebaseEvent.logOCRFinished()
             this@OCRProcessState.onRecognized(results)
         }
     }

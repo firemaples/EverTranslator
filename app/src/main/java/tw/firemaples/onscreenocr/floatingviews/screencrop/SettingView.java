@@ -21,7 +21,7 @@ import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.ocr.OCRFileUtil;
 import tw.firemaples.onscreenocr.ocr.TessDataLocation;
-import tw.firemaples.onscreenocr.utils.FabricUtils;
+import tw.firemaples.onscreenocr.log.FirebaseEvent;
 import tw.firemaples.onscreenocr.utils.SettingUtil;
 
 /**
@@ -154,7 +154,7 @@ public class SettingView extends FloatingView {
                         moveFile(file, fileTo);
                     } catch (IOException e) {
                         e.printStackTrace();
-                        FabricUtils.logException(e);
+                        FirebaseEvent.INSTANCE.logException(new Exception("Move OCR files from settings failed", e));
                     }
 
                 }

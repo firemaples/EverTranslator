@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.event.EventUtil
 import tw.firemaples.onscreenocr.floatingviews.screencrop.DialogView
+import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.translate.event.InstallGoogleTranslatorEvent
-import tw.firemaples.onscreenocr.utils.FabricUtils
 import tw.firemaples.onscreenocr.utils.Utils
 import tw.firemaples.onscreenocr.utils.asStringRes
 
@@ -88,9 +88,10 @@ class GoogleTranslateUtil {
                                 "com.google.android.apps.translate.TranslateActivity")
                     }
                 })
+                FirebaseEvent.logShowGoogleTranslateWindow()
             } catch (e: Throwable) {
                 logger.error("Start [Google Translate] failed", e)
-                FabricUtils.logGoogleTranslateNotFoundWhenResult(context, e)
+                FirebaseEvent.logShowGoogleTranslateWindowFailed(e)
                 showNotInstalledDialog(context)
             }
         }

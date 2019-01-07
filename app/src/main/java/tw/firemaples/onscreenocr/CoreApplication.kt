@@ -8,8 +8,8 @@ import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.firebase.FirebaseApp
 import io.fabric.sdk.android.Fabric
 import okhttp3.OkHttpClient
+import tw.firemaples.onscreenocr.log.UserInfoUtils
 import tw.firemaples.onscreenocr.tts.AndroidTTSManager
-import tw.firemaples.onscreenocr.utils.FabricUtils
 import tw.firemaples.onscreenocr.utils.SignatureUtil
 
 class CoreApplication : Application() {
@@ -28,8 +28,7 @@ class CoreApplication : Application() {
             Fabric.with(this, Crashlytics())
         }
 
-        FabricUtils.setClientInfo(this)
-        FabricUtils.updateClientSettings()
+        UserInfoUtils.setClientInfo()
 
         FirebaseApp.initializeApp(this)
 

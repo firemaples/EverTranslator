@@ -11,6 +11,7 @@ import android.util.AttributeSet
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.log.FirebaseEvent
 
 /**
  * Created by Firemaples on 2016/3/1.
@@ -45,6 +46,8 @@ class AreaSelectionView(context: Context, attrs: AttributeSet) : AppCompatImageV
 
     private val onGesture = object : OnGesture {
         override fun onAreaCreationStart(startPoint: Point) {
+            FirebaseEvent.logDragSelectionArea()
+
             box = null
             helpTextView?.hasBox = false
 
@@ -71,6 +74,8 @@ class AreaSelectionView(context: Context, attrs: AttributeSet) : AppCompatImageV
         }
 
         override fun onAreaResizeStart() {
+            FirebaseEvent.logResizeSelectionArea()
+
             box?.also {
                 resizeBase = Rect(it)
             }

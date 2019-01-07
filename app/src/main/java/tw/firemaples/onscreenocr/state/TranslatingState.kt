@@ -2,6 +2,7 @@ package tw.firemaples.onscreenocr.state
 
 import tw.firemaples.onscreenocr.StateManager
 import tw.firemaples.onscreenocr.StateName
+import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.translate.TranslationManager
 import tw.firemaples.onscreenocr.translate.TranslationUtil
 
@@ -26,12 +27,14 @@ object TranslatingState : OverlayState() {
     }
 
     private fun onTranslated(manager: StateManager, text: String) {
+        FirebaseEvent.logTranslationTextFinished()
         manager.translatedText = text
         manager.dispatchOnTranslated()
         manager.enterState(TranslatedState)
     }
 
     private fun onTranslationFailed(manager: StateManager, t: Throwable?) {
+        FirebaseEvent.logTranslationTextFailed()
         manager.translatedText = ""
         manager.dispatchTranslationFailed(t)
         manager.enterState(TranslatedState)

@@ -14,13 +14,13 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0-rc02'
+        classpath 'com.android.tools.build:gradle:3.3.0-rc03'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
         classpath 'com.google.gms:google-services:4.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        // google-services plugin
+        classpath 'com.google.firebase:firebase-plugins:1.1.5'
     }
 }
 
