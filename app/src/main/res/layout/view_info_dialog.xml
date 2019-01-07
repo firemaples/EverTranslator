@@ -34,7 +34,7 @@
                 <FrameLayout
                     android:id="@+id/wrapper_infoDialogContent"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="@dimen/dialog_content_height"
                     android:layout_marginTop="20dp">
 
 
