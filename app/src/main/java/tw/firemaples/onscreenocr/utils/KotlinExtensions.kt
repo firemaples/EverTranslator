@@ -2,6 +2,7 @@ package tw.firemaples.onscreenocr.utils
 
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.ListView
 import android.widget.TextView
 import tw.firemaples.onscreenocr.CoreApplication
@@ -41,7 +42,16 @@ fun View.getView(id: Int): View = this.findViewById(id)
 fun View.getTextView(id: Int): TextView = this.findViewById(id)
 fun View.removeFromParent() = (this.parent as? ViewGroup)?.removeView(this)
 fun View.onViewPrepared(callback: (View) -> Unit) {
-    ViewPreparedWaiter().waitView(this, callback)
+    val view = this
+    this.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            if (view.width == 0 || view.height == 0) {
+                return
+            }
+            view.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            callback(view)
+        }
+    })
 }
 
 fun Int.asStringRes(): String = CoreApplication.instance.getString(this)

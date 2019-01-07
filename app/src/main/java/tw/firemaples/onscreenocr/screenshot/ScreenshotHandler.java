@@ -33,6 +33,7 @@ import java.util.Locale;
 import tw.firemaples.onscreenocr.MainActivity;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.log.FirebaseEvent;
+import tw.firemaples.onscreenocr.utils.NotchUtil;
 import tw.firemaples.onscreenocr.utils.SettingUtil;
 import tw.firemaples.onscreenocr.utils.Utils;
 
@@ -203,16 +204,31 @@ public class ScreenshotHandler {
                         deviceHeight = metrics.widthPixels;
                     }
 
+                    //The real size with the notch
+                    int notchWidthDiff = 0;
+                    int notchHeightDiff = 0;
+                    NotchUtil notchUtil = NotchUtil.INSTANCE;
+                    if (notchUtil.getHasNotch()) {
+                        if (isPortrait) {
+                            notchHeightDiff = notchUtil.getStatusBarHeight();
+                        } else {
+                            notchWidthDiff = notchUtil.getNotchHeight();
+                        }
+                    }
+
                     final Image.Plane[] planes = image.getPlanes();
                     final ByteBuffer buffer = planes[0].getBuffer();
                     int pixelStride = planes[0].getPixelStride();
                     int rowStride = planes[0].getRowStride();
                     int rowPadding = rowStride - pixelStride * deviceWidth;
                     // create bitmap
-                    tempBmp = Bitmap.createBitmap(deviceWidth + (int) ((float) rowPadding / (float) pixelStride), deviceHeight, Bitmap.Config.ARGB_8888);
+                    tempBmp = Bitmap.createBitmap(
+                            deviceWidth + (int) ((float) rowPadding / (float) pixelStride),
+                            deviceHeight + notchHeightDiff, Bitmap.Config.ARGB_8888);
                     tempBmp.copyPixelsFromBuffer(buffer);
 
-                    realSizeBitmap = Bitmap.createBitmap(tempBmp, 0, 0, deviceWidth, tempBmp.getHeight());
+                    realSizeBitmap = Bitmap.createBitmap(tempBmp, notchWidthDiff, notchHeightDiff,
+                            deviceWidth, tempBmp.getHeight() - notchHeightDiff);
 
                     if (SettingUtil.INSTANCE.isDebugMode()) {
                         saveBmpToFile(realSizeBitmap);

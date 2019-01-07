@@ -8,6 +8,8 @@ import android.view.View
 import android.widget.TextView
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.*
 import tw.firemaples.onscreenocr.event.EventUtil
 import tw.firemaples.onscreenocr.floatingviews.FloatingView
@@ -32,7 +34,7 @@ import tw.firemaples.onscreenocr.views.OnAreaSelectionViewCallback
 import java.util.*
 
 class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandler {
-//    private val logger: Logger = LoggerFactory.getLogger(MainBar::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(MainBar::class.java)
 
     private val viewLangSelector: View = rootView.findViewById(R.id.view_langSelector)
     private val tvLang: TextView = rootView.findViewById(R.id.tv_lang)
@@ -171,10 +173,16 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
         viewMenu.setOnClickListener {
             rescheduleFadeOut()
 
+            val location = IntArray(2)
+            viewMenu.getLocationOnScreen(location)
+
             val rect = Rect()
-            rect.left = UIUtil.getScreenWidth() - floatingLayoutParams.x - viewMenu.width
-            rect.top = floatingLayoutParams.y
-            rect.bottom = rect.top + rootView.height
+            rect.left = location[0]
+            rect.top = location[1]
+            rect.bottom = rect.top
+            rect.right = rect.left
+
+            logger.info("Menu view rect: $rect")
             menuView.attachToWindow(rect)
         }
 
@@ -258,13 +266,6 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
                     drawAreaView = DrawAreaView(context).apply {
                         setRealButtonHandler(this@MainBar)
-
-                        areaSelectionView.callback = object : OnAreaSelectionViewCallback {
-                            override fun onAreaSelected(areaSelectionView: AreaSelectionView) {
-
-                            }
-
-                        }
 
                         areaSelectionView.callback = object : OnAreaSelectionViewCallback {
                             override fun onAreaSelected(areaSelectionView: AreaSelectionView) {

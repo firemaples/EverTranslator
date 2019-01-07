@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.utils
 
 import android.content.Context
+import android.graphics.Point
 import android.graphics.Rect
 import android.util.DisplayMetrics
 import android.util.TypedValue
@@ -12,6 +13,8 @@ import tw.firemaples.onscreenocr.CoreApplication
  */
 
 object UIUtil {
+    private val context by lazy { CoreApplication.instance }
+
     private val displayMetrics by lazy {
         val metrics = DisplayMetrics()
         (CoreApplication.instance.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
@@ -19,9 +22,28 @@ object UIUtil {
         metrics
     }
 
-    fun getScreenWidth(): Int = displayMetrics.widthPixels
+    fun getScreenSize(): IntArray {
+        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display = wm.defaultDisplay
+        val metrics = DisplayMetrics()
+        display.getMetrics(metrics)
+        val size = Point()
+        display.getRealSize(size)
+        val mWidth = size.x
+        val mHeight = size.y
+//        val mDensity = metrics.densityDpi
+        val isPortrait = mHeight > mWidth
 
-    fun getScreenHeight(): Int = displayMetrics.heightPixels
+        var deviceWidth = metrics.widthPixels
+        var deviceHeight = metrics.heightPixels
+        if (deviceHeight > deviceWidth != isPortrait) {
+            deviceWidth = metrics.heightPixels
+
+            deviceHeight = metrics.widthPixels
+        }
+
+        return intArrayOf(deviceWidth, deviceHeight)
+    }
 
     fun dpToPx(context: Context, dp: Float): Int {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics).toInt()
@@ -32,7 +54,7 @@ object UIUtil {
     }
 
     fun countViewPosition(anchorRect: Rect, itemWidth: Int, itemHeight: Int, layoutMargin: Int,
-                          parentHeight: Int = displayMetrics.widthPixels): Array<Int> {
+                          parentHeight: Int = UIUtil.getScreenSize()[1]): Array<Int> {
 
         val needHeight = itemHeight + layoutMargin * 2
 
@@ -44,9 +66,9 @@ object UIUtil {
             else -> -1
         }
 
-        val leftMargin: Int = if (anchorRect.left + itemWidth + layoutMargin > displayMetrics.widthPixels) {
+        val leftMargin: Int = if (anchorRect.left + itemWidth + layoutMargin > UIUtil.getScreenSize()[0]) {
             // Match screen right
-            displayMetrics.widthPixels - (itemWidth - layoutMargin)
+            UIUtil.getScreenSize()[0] - (itemWidth - layoutMargin)
         } else {
             // Match anchorView left
             anchorRect.left

@@ -60,10 +60,10 @@ public class ScreenTranslatorService extends Service {
         return Utils.isServiceRunning(ScreenTranslatorService.class) && _instance != null;
     }
 
-    public static void start(Context context, boolean fromNotify, boolean showFloatingView) {
+    public static void start(Context context, boolean showFloatingView) {
         if (!isRunning()) {
             context.startService(new Intent(context, ScreenTranslatorService.class));
-        } else if (fromNotify && _instance != null) {
+        } else if (_instance != null) {
             if (showFloatingView) {
                 _instance._startFloatingView();
             } else {
@@ -191,7 +191,7 @@ public class ScreenTranslatorService extends Service {
         }
         Intent notificationIntent = new Intent(this, MainActivity.class);
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        notificationIntent.putExtra(MainActivity.INTENT_START_FROM_NOTIFY, true);
+        notificationIntent.setAction(MainActivity.ACTION_START_FROM_NOTIFY);
         notificationIntent.putExtra(MainActivity.INTENT_SHOW_FLOATING_VIEW, toShow);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
