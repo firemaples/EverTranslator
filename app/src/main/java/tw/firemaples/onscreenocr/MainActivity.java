@@ -31,7 +31,7 @@ import tw.firemaples.onscreenocr.utils.SettingUtil;
 public class MainActivity extends AppCompatActivity {
     private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
 
-    public static final String INTENT_START_FROM_NOTIFY = "INTENT_START_FROM_NOTIFY";
+    public static final String ACTION_START_FROM_NOTIFY = "ACTION_START_FROM_NOTIFY";
     public static final String INTENT_SHOW_FLOATING_VIEW = "INTENT_SHOW_FLOATING_VIEW";
 
     private final int REQUEST_CODE_CHECK_DRAW_OVERLAY_PERM = 101;
@@ -265,13 +265,19 @@ public class MainActivity extends AppCompatActivity {
         NotchUtil.INSTANCE.check(getWindow());
 
         boolean showFloatingView = true;
-        if (getIntent() != null && getIntent().hasExtra(INTENT_START_FROM_NOTIFY)) {
-            fromNotify = getIntent().getBooleanExtra(INTENT_START_FROM_NOTIFY, false);
-            if (getIntent().hasExtra(INTENT_SHOW_FLOATING_VIEW)) {
-                showFloatingView = getIntent().getBooleanExtra(INTENT_SHOW_FLOATING_VIEW, true);
+        if (getIntent() != null && getIntent().getAction() != null) {
+            switch (getIntent().getAction()) {
+                case Intent.ACTION_MAIN:
+                    showFloatingView = true;
+                    break;
+                case ACTION_START_FROM_NOTIFY:
+                    if (getIntent().hasExtra(INTENT_SHOW_FLOATING_VIEW)) {
+                        showFloatingView = getIntent().getBooleanExtra(INTENT_SHOW_FLOATING_VIEW, true);
+                    }
+                    break;
             }
         }
-        ScreenTranslatorService.start(this, fromNotify, showFloatingView);
+        ScreenTranslatorService.start(this, showFloatingView);
         overridePendingTransition(0, 0);
         finish();
     }
