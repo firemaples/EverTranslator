@@ -261,13 +261,6 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
                         areaSelectionView.callback = object : OnAreaSelectionViewCallback {
                             override fun onAreaSelected(areaSelectionView: AreaSelectionView) {
-
-                            }
-
-                        }
-
-                        areaSelectionView.callback = object : OnAreaSelectionViewCallback {
-                            override fun onAreaSelected(areaSelectionView: AreaSelectionView) {
                                 areaSelectionView.getBoxList().let {
                                     StateManager.areaSelected(it)
                                 }

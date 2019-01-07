@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.Callback;
+import tw.firemaples.onscreenocr.utils.NotchUtil;
 import tw.firemaples.onscreenocr.utils.PermissionUtil;
 import tw.firemaples.onscreenocr.utils.SettingUtil;
 
@@ -261,7 +262,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startService() {
-        boolean fromNotify = false;
+        NotchUtil.INSTANCE.check(getWindow());
+
         boolean showFloatingView = true;
         if (getIntent() != null && getIntent().hasExtra(INTENT_START_FROM_NOTIFY)) {
             fromNotify = getIntent().getBooleanExtra(INTENT_START_FROM_NOTIFY, false);
