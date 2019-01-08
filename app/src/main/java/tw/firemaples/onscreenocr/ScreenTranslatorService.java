@@ -211,7 +211,7 @@ public class ScreenTranslatorService extends Service {
 
     private void _startFloatingView() {
         if (mainFloatingView != null && mainFloatingView.isAttached()) {
-            return;
+            mainFloatingView.detachFromWindow();
         }
 //        mainFloatingView = new FloatingPoint(this);
         mainFloatingView = new MainBar(this);
