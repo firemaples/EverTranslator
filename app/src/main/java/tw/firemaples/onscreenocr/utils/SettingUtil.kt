@@ -9,6 +9,7 @@ import tw.firemaples.onscreenocr.BuildConfig
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.floatingviews.screencrop.HelpView
 import tw.firemaples.onscreenocr.floatingviews.screencrop.VersionHistoryView
+import tw.firemaples.onscreenocr.receivers.SamsungSpenInsertedReceiver
 import java.util.*
 
 object SettingUtil {
@@ -19,6 +20,7 @@ object SettingUtil {
     private const val KEY_STARTING_WITH_SELECTION_MODE = "KEY_STARTING_WITH_SELECTION_MODE"
     private const val KEY_REMOVE_LINE_BREAKS = "KEY_REMOVE_LINE_BREAKS"
     private const val KEY_AUTO_COPY_OCR_RESULT = "KEY_AUTO_COPY_OCR_RESULT"
+    private const val KEY_AUTO_CLOSE_APP_WHEN_SPEN_INSERTED = "KEY_AUTO_CLOSE_APP_WHEN_SPEN_INSERTED"
     private const val KEY_READ_SPEED_ENABLE = "KEY_READ_SPEED_ENABLE"
     private const val KEY_READ_SPEED = "KEY_READ_SPEED"
     private const val KEY_REMEMBER_LAST_SELECTION = "KEY_REMEMBER_LAST_SELECTION"
@@ -83,6 +85,19 @@ object SettingUtil {
         }
         set(value) {
             sp.edit().putBoolean(KEY_AUTO_COPY_OCR_RESULT, value).apply()
+        }
+
+    var autoCloseAppWhenSpenInserted: Boolean
+        get() {
+            return sp.getBoolean(KEY_AUTO_CLOSE_APP_WHEN_SPEN_INSERTED, true)
+        }
+        set(value) {
+            sp.edit().putBoolean(KEY_AUTO_CLOSE_APP_WHEN_SPEN_INSERTED, value).apply()
+            if (value) {
+                SamsungSpenInsertedReceiver.start()
+            } else {
+                SamsungSpenInsertedReceiver.stop()
+            }
         }
 
     var readSpeedEnabled: Boolean

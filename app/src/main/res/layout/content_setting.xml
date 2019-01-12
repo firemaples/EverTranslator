@@ -51,6 +51,15 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <CheckBox
+        android:id="@+id/cb_autoCloseAppWhenSpenInserted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:checked="false"
+        android:text="@string/auto_close_app_when_spen_inserted_samsung_note_series_only"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <CheckBox
         android:id="@+id/cb_debugMode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
