@@ -21,6 +21,7 @@ import java.util.List;
 
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.MainBar;
+import tw.firemaples.onscreenocr.receivers.SamsungSpenInsertedReceiver;
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
 import tw.firemaples.onscreenocr.utils.SettingUtil;
@@ -134,6 +135,10 @@ public class ScreenTranslatorService extends Service {
         RemoteConfigUtil.INSTANCE.tryFetchNew();
 
         startForeground();
+
+        if (SettingUtil.INSTANCE.getAutoCloseAppWhenSpenInserted()) {
+            SamsungSpenInsertedReceiver.start();
+        }
     }
 
     @Override
@@ -150,6 +155,8 @@ public class ScreenTranslatorService extends Service {
             ScreenshotHandler.getInstance().release();
         }
         _instance = null;
+
+        SamsungSpenInsertedReceiver.stop();
     }
 
     private void startForeground() {

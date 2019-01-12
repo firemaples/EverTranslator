@@ -110,6 +110,7 @@
     <string name="change">Change</string>
     <string name="select_download_site">Select download site</string>
     <string name="autoCopyOCRResult">Auto copy OCR result</string>
+    <string name="auto_close_app_when_spen_inserted_samsung_note_series_only">Auto close APP when inserting Spen back (Samsung Note series ONLY)</string>
 
     <string-array name="translation_services">
         <item>Microsoft</item>
