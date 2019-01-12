@@ -42,6 +42,15 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <CheckBox
+        android:id="@+id/cb_autoCopyOCRResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:checked="false"
+        android:text="@string/autoCopyOCRResult"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <CheckBox
         android:id="@+id/cb_debugMode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

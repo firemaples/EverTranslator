@@ -1,6 +1,8 @@
 package tw.firemaples.onscreenocr.utils
 
 import android.app.ActivityManager
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
@@ -12,10 +14,13 @@ import com.muddzdev.styleabletoastlibrary.StyleableToast
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.CoreApplication
+import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatingviews.screencrop.DialogView
 
 class Utils {
     companion object {
+        const val LABEL_OCR_RESULT = "OCR result"
+        const val LABEL_TRANSLATED_TEXT = "Translated text"
         val context: Context
             get() {
                 return CoreApplication.instance
@@ -27,7 +32,7 @@ class Utils {
                 return StyleableToast.Builder(context)
                         .textColor(Color.WHITE)
                         .backgroundColor(Color.BLACK)
-                        .length(Toast.LENGTH_LONG)
+                        .length(Toast.LENGTH_SHORT)
             }
 
         @JvmStatic
@@ -100,5 +105,11 @@ class Utils {
                     null
                 }
 
+        fun copyToClipboard(label: String, text: String) {
+            (context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager)?.let {
+                it.primaryClip = ClipData.newPlainText(label, text)
+                Utils.showToast(String.format(context.getString(R.string.msg_textHasBeenCopied), text))
+            }
+        }
     }
 }

@@ -18,6 +18,7 @@ object SettingUtil {
     private const val KEY_ENABLE_TRANSLATION = "KEY_ENABLE_TRANSLATION"
     private const val KEY_STARTING_WITH_SELECTION_MODE = "KEY_STARTING_WITH_SELECTION_MODE"
     private const val KEY_REMOVE_LINE_BREAKS = "KEY_REMOVE_LINE_BREAKS"
+    private const val KEY_AUTO_COPY_OCR_RESULT = "KEY_AUTO_COPY_OCR_RESULT"
     private const val KEY_READ_SPEED_ENABLE = "KEY_READ_SPEED_ENABLE"
     private const val KEY_READ_SPEED = "KEY_READ_SPEED"
     private const val KEY_REMEMBER_LAST_SELECTION = "KEY_REMEMBER_LAST_SELECTION"
@@ -74,6 +75,14 @@ object SettingUtil {
         }
         set(value) {
             sp.edit().putBoolean(KEY_REMOVE_LINE_BREAKS, value).apply()
+        }
+
+    var autoCopyOCRResult: Boolean
+        get() {
+            return sp.getBoolean(KEY_AUTO_COPY_OCR_RESULT, false)
+        }
+        set(value) {
+            sp.edit().putBoolean(KEY_AUTO_COPY_OCR_RESULT, value).apply()
         }
 
     var readSpeedEnabled: Boolean

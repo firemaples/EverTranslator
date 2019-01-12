@@ -76,10 +76,10 @@ class OCRResultWindow(context: Context) : FrameLayout(context) {
                         tvTranslated.text.toString())
             }
             btCopyOT -> {
-                copyToClipboard("OCR text", tvOriText.text.toString())
+                Utils.copyToClipboard(Utils.LABEL_OCR_RESULT, tvOriText.text.toString())
             }
             btCopyTT -> {
-                copyToClipboard("Translated text", tvTranslated.text.toString())
+                Utils.copyToClipboard(Utils.LABEL_TRANSLATED_TEXT, tvTranslated.text.toString())
             }
             btEditOT -> {
                 changeOCRText()
@@ -228,13 +228,6 @@ class OCRResultWindow(context: Context) : FrameLayout(context) {
         TTSPlayerView(context).apply {
             setTTSContent(lang, text)
             attachToWindow()
-        }
-    }
-
-    private fun copyToClipboard(label: String, text: String) {
-        (context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager)?.let {
-            it.primaryClip = ClipData.newPlainText(label, text)
-            Utils.showToast(String.format(context.getString(R.string.msg_textHasBeenCopied), text))
         }
     }
 

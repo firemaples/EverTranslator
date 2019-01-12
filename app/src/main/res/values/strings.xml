@@ -109,6 +109,7 @@
     <string name="service_disable_translation">Disable translation</string>
     <string name="change">Change</string>
     <string name="select_download_site">Select download site</string>
+    <string name="autoCopyOCRResult">Auto copy OCR result</string>
 
     <string-array name="translation_services">
         <item>Microsoft</item>
