@@ -61,6 +61,7 @@ public class SettingView extends FloatingView {
         CheckBox cb_startingWithSelectionMode = getRootView().findViewById(R.id.cb_startingWithSelectionMode);
         CheckBox cb_rememberLastSelection = getRootView().findViewById(R.id.cb_rememberLastSelection);
         CheckBox cb_removeLineBreaks = getRootView().findViewById(R.id.cb_removeLineBreaks);
+        CheckBox cb_autoCopyOCRResult = getRootView().findViewById(R.id.cb_autoCopyOCRResult);
         getRootView().findViewById(R.id.bt_close).setOnClickListener(onClickListener);
 
         cb_debugMode.setOnCheckedChangeListener(onCheckChangeListener);
@@ -68,12 +69,14 @@ public class SettingView extends FloatingView {
         cb_startingWithSelectionMode.setOnCheckedChangeListener(onCheckChangeListener);
         cb_rememberLastSelection.setOnCheckedChangeListener(onCheckChangeListener);
         cb_removeLineBreaks.setOnCheckedChangeListener(onCheckChangeListener);
+        cb_autoCopyOCRResult.setOnCheckedChangeListener(onCheckChangeListener);
 
         cb_debugMode.setChecked(spUtil.isDebugMode());
         cb_saveOcrEngineToExternalStorage.setChecked(ocrNTranslateUtils.getTessDataLocation() == TessDataLocation.EXTERNAL_STORAGE);
         cb_startingWithSelectionMode.setChecked(spUtil.getStartingWithSelectionMode());
         cb_rememberLastSelection.setChecked(spUtil.isRememberLastSelection());
         cb_removeLineBreaks.setChecked(spUtil.getRemoveLineBreaks());
+        cb_autoCopyOCRResult.setChecked(spUtil.getAutoCopyOCRResult());
 
         if (!ocrNTranslateUtils.isExternalStorageWritable()) {
             cb_saveOcrEngineToExternalStorage.setEnabled(false);
@@ -113,6 +116,8 @@ public class SettingView extends FloatingView {
                 }
             } else if (id == R.id.cb_rememberLastSelection) {
                 spUtil.setRememberLastSelection(isChecked);
+            } else if (id == R.id.cb_autoCopyOCRResult) {
+                spUtil.setAutoCopyOCRResult(isChecked);
             }
         }
     };

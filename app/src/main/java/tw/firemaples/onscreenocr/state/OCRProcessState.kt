@@ -8,6 +8,8 @@ import tw.firemaples.onscreenocr.ocr.OCRManager
 import tw.firemaples.onscreenocr.ocr.OcrResult
 import tw.firemaples.onscreenocr.translate.TranslationService
 import tw.firemaples.onscreenocr.translate.TranslationUtil
+import tw.firemaples.onscreenocr.utils.SettingUtil
+import tw.firemaples.onscreenocr.utils.Utils
 
 object OCRProcessState : OverlayState() {
     var manager: StateManager? = null
@@ -59,6 +61,11 @@ object OCRProcessState : OverlayState() {
         manager?.ocrResultList?.apply {
             clear()
             addAll(results)
+
+            if (results.any { !it.text.isNullOrBlank() } && SettingUtil.autoCopyOCRResult) {
+                Utils.copyToClipboard(Utils.LABEL_OCR_RESULT,
+                        results.first { !it.text.isNullOrBlank() }.text)
+            }
 
             manager?.apply {
                 dispatchOCRRecognized()

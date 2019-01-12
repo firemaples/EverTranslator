@@ -107,4 +107,5 @@
     <string name="service_disable_translation">停用翻译</string>
     <string name="change">变更</string>
     <string name="select_download_site">选择下载来源</string>
+    <string name="autoCopyOCRResult">自动複製文字辨识结果至剪贴簿</string>
 </resources>
