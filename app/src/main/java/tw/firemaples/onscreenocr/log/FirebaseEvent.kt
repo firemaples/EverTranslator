@@ -164,14 +164,22 @@ object FirebaseEvent {
         logEvent(EVENT_START_TRANSLATION_TEXT, params)
     }
 
-    fun logTranslationTextFinished() {
+    fun logTranslationTextFinished(service: TranslationService?) {
         PerformanceTracer.stopTracing(TRACE_TRANSLATE_TEXT, true)
-        logEvent(EVENT_TRANSLATION_TEXT_FINISHED)
+
+        val serviceName = service?.name
+        logEvent(EVENT_TRANSLATION_TEXT_FINISHED, Bundle().apply {
+            putString("translate_service", serviceName)
+        })
     }
 
-    fun logTranslationTextFailed() {
+    fun logTranslationTextFailed(service: TranslationService?) {
         PerformanceTracer.stopTracing(TRACE_TRANSLATE_TEXT, false)
-        logEvent(EVENT_TRANSLATION_TEXT_FAILED)
+
+        val serviceName = service?.name
+        logEvent(EVENT_TRANSLATION_TEXT_FAILED, Bundle().apply {
+            putString("translate_service", serviceName)
+        })
     }
 
     fun logShowGoogleTranslateWindow() {
