@@ -169,8 +169,12 @@ public class ScreenTranslatorService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             List<NotificationChannel> channels = notificationManager.getNotificationChannels();
             for (NotificationChannel channel : channels) {
-                if (!channel.getId().equals(channelId)) {
-                    notificationManager.deleteNotificationChannel(channel.getId());
+                String id = channel.getId();
+                if (NotificationChannel.DEFAULT_CHANNEL_ID.equals(id)) {
+                    continue;
+                }
+                if (!id.equals(channelId)) {
+                    notificationManager.deleteNotificationChannel(id);
                 }
             }
             if (notificationManager.getNotificationChannel(channelId) == null) {
