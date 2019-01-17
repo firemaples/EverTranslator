@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -27,14 +26,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/dialog_title_setting"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
                 <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="20dp"
+                    android:fadeScrollbars="false">
 
-                    <include layout="@layout/content_setting"/>
+                    <include layout="@layout/content_setting" />
                 </ScrollView>
 
             </LinearLayout>
@@ -55,7 +55,7 @@
                     android:minWidth="64dp"
                     android:padding="8dp"
                     android:text="@string/btn_close"
-                    android:textColor="#2196F3"/>
+                    android:textColor="#2196F3" />
             </LinearLayout>
 
         </LinearLayout>
