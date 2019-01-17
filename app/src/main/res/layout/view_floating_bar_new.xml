@@ -78,8 +78,9 @@
                 android:layout_height="32dp"
                 android:layout_marginLeft="4dp"
                 android:background="@drawable/bg_floating_bar_btn"
-                android:src="@drawable/format_clear"
-                android:visibility="gone" />
+                android:src="@drawable/close_white"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <ProgressBar
                 android:id="@+id/pg_progress"
