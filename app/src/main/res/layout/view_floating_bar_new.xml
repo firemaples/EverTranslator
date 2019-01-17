@@ -63,6 +63,16 @@
                 android:visibility="gone" />
 
             <ImageButton
+                android:id="@+id/bt_ocrOnly"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="4dp"
+                android:background="@drawable/bg_floating_bar_btn"
+                android:src="@drawable/ocr_only"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <ImageButton
                 android:id="@+id/bt_clear"
                 android:layout_width="32dp"
                 android:layout_height="32dp"

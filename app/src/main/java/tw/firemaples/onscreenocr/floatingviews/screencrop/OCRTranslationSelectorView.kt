@@ -173,8 +173,8 @@ class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
         tvLangEmptyTip.text = when (translationService) {
             TranslationService.GoogleTranslatorApp ->
                 context.getString(R.string.msg_tipForChangeGoogleTranslatorLang)
-            TranslationService.DisableTranslation ->
-                context.getString(R.string.translation_disabled)
+            TranslationService.OCROnly ->
+                context.getString(R.string.ocr_only)
             else ->
                 ""
         }

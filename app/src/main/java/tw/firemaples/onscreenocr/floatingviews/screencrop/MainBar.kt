@@ -41,6 +41,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
     private val ivGoogleTranslate: View = rootView.findViewById(R.id.iv_googleTranslate)
     private val btSelectArea: View = rootView.findViewById(R.id.bt_selectArea)
     private val btTranslation: View = rootView.findViewById(R.id.bt_translation)
+    private val btOcrOnly: View = rootView.findViewById(R.id.bt_ocrOnly)
     private val btClear: View = rootView.findViewById(R.id.bt_clear)
     private val pgProgress: View = rootView.findViewById(R.id.pg_progress)
     private val viewMenu: View = rootView.findViewById(R.id.view_menu)
@@ -154,18 +155,20 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
             rescheduleFadeOut()
             StateManager.startSelection()
         }
-        btTranslation.setOnClickListener {
+        fun doTranslation() {
             FirebaseEvent.logClickTranslationStartButton()
             if (SettingUtil.isRememberLastSelection) {
                 SettingUtil.lastSelectionArea = StateManager.boxList
             }
             if (TranslationUtil.currentService == TranslationService.GoogleTranslatorApp &&
                     !GoogleTranslateUtil.checkInstalled(context)) {
-                return@setOnClickListener
+                return
             }
             rescheduleFadeOut()
             StateManager.startOCR()
         }
+        btTranslation.setOnClickListener { doTranslation() }
+        btOcrOnly.setOnClickListener { doTranslation() }
         btClear.setOnClickListener {
             rescheduleFadeOut()
             resetAll()
@@ -198,7 +201,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
         tvLang.text = when (TranslationUtil.currentService) {
             TranslationService.GoogleTranslatorApp -> "$ocrLang>"
-            TranslationService.DisableTranslation -> "$ocrLang>X"
+            TranslationService.OCROnly -> " $ocrLang "
             else -> "$ocrLang>$transLang"
         }
 
@@ -215,6 +218,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onTranslationServiceChanged(event: TranslationServiceChangedEvent) {
         setupLang(transLang = event.translationService.defaultLangCode)
+        updateButtonsState()
     }
 
     @Suppress("unused")
@@ -228,6 +232,24 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
     fun onInstallGoogleTranslate(
             @Suppress("UNUSED_PARAMETER") event: InstallGoogleTranslatorEvent) {
         resetAll()
+    }
+
+    fun updateButtonsState(state: StateName = StateManager.state.stateName()) = threadUI {
+        // Set up buttons
+        btSelectArea.setVisible(state.equalsAny(StateName.Init, StateName.AreaSelecting))
+        btSelectArea.isEnabled = state == StateName.Init
+
+        val ocrOnly = TranslationUtil.currentService == TranslationService.OCROnly
+        btTranslation.setVisible(state == StateName.AreaSelected && !ocrOnly)
+        btOcrOnly.setVisible(state == StateName.AreaSelected && ocrOnly)
+
+        pgProgress.setVisible(
+                state.equalsAny(StateName.ScreenshotTake,
+                        StateName.OCRProcess,
+                        StateName.Translating))
+
+        btClear.setVisible(state.equalsAny(StateName.AreaSelecting,
+                StateName.AreaSelected, StateName.Translated))
     }
 
     init {
@@ -245,19 +267,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
                     }
                 }
 
-                // Set up buttons
-                btSelectArea.setVisible(state.equalsAny(StateName.Init, StateName.AreaSelecting))
-                btSelectArea.isEnabled = state == StateName.Init
-
-                btTranslation.setVisible(state == StateName.AreaSelected)
-
-                pgProgress.setVisible(
-                        state.equalsAny(StateName.ScreenshotTake,
-                                StateName.OCRProcess,
-                                StateName.Translating))
-
-                btClear.setVisible(state.equalsAny(StateName.AreaSelecting,
-                        StateName.AreaSelected, StateName.Translated))
+                updateButtonsState(state)
             }
 
             override fun startSelection() {

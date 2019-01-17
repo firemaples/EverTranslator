@@ -102,11 +102,10 @@
     <string name="language">Language:</string>
     <string name="translation">Translation</string>
     <string name="provider">Provider:</string>
-    <string name="translation_disabled">Translation disabled</string>
     <string name="service_microsoft_azure">Microsoft Azure</string>
     <string name="service_yandex" translatable="false">Yandex</string>
     <string name="service_google_translate_app">Google translate APP</string>
-    <string name="service_disable_translation">Disable translation</string>
+    <string name="service_ocr_only">OCR only</string>
     <string name="change">Change</string>
     <string name="select_download_site">Select download site</string>
     <string name="autoCopyOCRResult">Auto copy OCR result</string>
@@ -117,4 +116,5 @@
         <item>Yandex</item>
         <item>Google app</item>
     </string-array>
+    <string name="ocr_only">OCR only, without any translation</string>
 </resources>
