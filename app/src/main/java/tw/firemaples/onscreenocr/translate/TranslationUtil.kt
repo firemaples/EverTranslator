@@ -38,7 +38,7 @@ object TranslationUtil : BaseSettingUtil() {
         get() = when (currentService) {
             TranslationService.MicrosoftAzure -> translationLangCodeListMicrosoft
             TranslationService.Yandex -> translationLangCodeListYandex
-            TranslationService.GoogleTranslatorApp, TranslationService.DisableTranslation ->
+            TranslationService.GoogleTranslatorApp, TranslationService.OCROnly ->
                 arrayOf()
         }
 
@@ -55,7 +55,7 @@ object TranslationUtil : BaseSettingUtil() {
             when (service) {
                 TranslationService.MicrosoftAzure -> getTranslationLangNameListMicrosoft
                 TranslationService.Yandex -> getTranslationLangNameListYandex
-                TranslationService.GoogleTranslatorApp, TranslationService.DisableTranslation ->
+                TranslationService.GoogleTranslatorApp, TranslationService.OCROnly ->
                     arrayOf()
             }
 
@@ -82,7 +82,7 @@ object TranslationUtil : BaseSettingUtil() {
                 currentService.fullName
 
     val isEnableTranslation: Boolean
-        get() = currentService != TranslationService.DisableTranslation
+        get() = currentService != TranslationService.OCROnly
 }
 
 enum class TranslationService(val id: Int, val sort: Int,
@@ -91,7 +91,7 @@ enum class TranslationService(val id: Int, val sort: Int,
     MicrosoftAzure(0, 0, context.getString(R.string.service_microsoft_azure), defaultLangCode = "en"),
     Yandex(1, 1, context.getString(R.string.service_yandex), defaultLangCode = "en"),
     GoogleTranslatorApp(2, 2, context.getString(R.string.service_google_translate_app), defaultLangCode = "Google"),
-    DisableTranslation(999, 999, context.getString(R.string.service_disable_translation), defaultLangCode = "None");
+    OCROnly(999, 999, context.getString(R.string.service_ocr_only), defaultLangCode = "None");
 
     val isCurrent: Boolean
         get() = TranslationUtil.currentService == this

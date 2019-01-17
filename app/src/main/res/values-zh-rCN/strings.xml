@@ -101,10 +101,10 @@
     <string name="language">语言:</string>
     <string name="translation">翻译语言</string>
     <string name="provider">翻译引擎:</string>
-    <string name="translation_disabled">已停用翻译服务</string>
+    <string name="ocr_only">仅文字辨识，不做任何翻译</string>
     <string name="service_microsoft_azure">微软 Azure 翻译</string>
     <string name="service_google_translate_app">谷歌翻译 APP</string>
-    <string name="service_disable_translation">停用翻译</string>
+    <string name="service_ocr_only">仅文字辨识</string>
     <string name="change">变更</string>
     <string name="select_download_site">选择下载来源</string>
     <string name="autoCopyOCRResult">自动複製文字辨识结果至剪贴簿</string>
