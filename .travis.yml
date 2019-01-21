@@ -36,6 +36,9 @@ android:
     - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
     - sys-img-armeabi-v7a-addon-google_apis-google-$EMULATOR_API_LEVEL
 before_script:
+  - echo y | android update sdk -a --no-ui --filter android-21
+  - echo y | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-21
+  - android list target | grep -E '^id:' | awk -F '"' '{$1=""; print $2}' # list all targets
   - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
