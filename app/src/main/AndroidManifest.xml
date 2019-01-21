@@ -1,58 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright 2016-2017 Louis Chen [firemaples@gmail.com].
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~    http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="tw.firemaples.onscreenocr"
-          android:installLocation="auto">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="tw.firemaples.onscreenocr"
+    android:installLocation="auto">
 
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".CoreApplication"
         android:allowBackup="true"
+        android:appComponentFactory="whateverString"
         android:fullBackupContent="true"
-        android:icon="@mipmap/icon"
+        android:icon="@drawable/ic_launcher_shadow"
+        android:roundIcon="@mipmap/ic_round"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:appComponentFactory">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Transparent">
+            android:excludeFromRecents="true"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <service
             android:name=".ScreenTranslatorService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
 
         <!--android:excludeFromRecents="true"-->
         <!--android:noHistory="true"-->
         <!--android:theme="@style/AppTheme.Transparent"-->
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="034212d0a941b036105ee0ffa8473d6a0cf260af"/>
+            android:value="034212d0a941b036105ee0ffa8473d6a0cf260af" />
     </application>
 
 </manifest>

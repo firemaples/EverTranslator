@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:bottom="-1dp"
+        android:left="-1dp"
+        android:right="-1dp"
+        android:top="-1dp">
+        <selector>
+            <item
+                android:drawable="@drawable/google_translate_grey"
+                android:state_enabled="false" />
+            <item
+                android:drawable="@drawable/google_translate"
+                android:state_pressed="false" /> <!-- pressed -->
+            <item
+                android:drawable="@drawable/google_translate"
+                android:state_pressed="true" /> <!-- focused -->
+            <item
+                android:drawable="@drawable/google_translate"
+                android:state_enabled="true" /> <!-- idle state -->
+        </selector>
+    </item>
+</layer-list>

@@ -1,19 +1,3 @@
-/*
- * Copyright 2016-2017 Louis Chen [firemaples@gmail.com].
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package tw.firemaples.onscreenocr.floatingviews.screencrop;
 
 import android.annotation.SuppressLint;
@@ -24,21 +8,24 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
-
-import java.util.Locale;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
-import tw.firemaples.onscreenocr.utils.Tool;
-import tw.firemaples.onscreenocr.utils.WebViewUtil;
+import tw.firemaples.onscreenocr.utils.HomeWatcher;
+import tw.firemaples.onscreenocr.utils.Utils;
+import tw.firemaples.onscreenocr.utils.UrlFormatter;
 
 /**
  * Created by firemaples on 01/12/2016.
  */
 
 public class WebViewFV extends FloatingView {
+    private static final Logger logger = LoggerFactory.getLogger(WebViewFV.class);
+
+    private static final String SERVICE_GOOGLE_WEB = "https://translate.google.com/m/translate?sl=auto&tl={TL}&ie=UTF-8&q={TEXT}";
+
     private WebView wv_webView;
     private String url;
     private OnWebViewFVCallback callback;
@@ -47,6 +34,11 @@ public class WebViewFV extends FloatingView {
         super(context);
         this.callback = callback;
         initViews(getRootView());
+    }
+
+    @Override
+    protected boolean layoutFocusable() {
+        return true;
     }
 
     @Override
@@ -68,6 +60,14 @@ public class WebViewFV extends FloatingView {
         wv_webView.setWebViewClient(new WebViewClient());
         WebSettings settings = wv_webView.getSettings();
         settings.setJavaScriptEnabled(true);
+
+        setupHomeButtonWatcher(onHomePressedListener);
+    }
+
+    @Override
+    public boolean onBackButtonPressed() {
+        detachFromWindow();
+        return true;
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -75,8 +75,7 @@ public class WebViewFV extends FloatingView {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.bt_openBrowser) {
-                Answers.getInstance().logCustom(new CustomEvent("Btn open on other browser"));
-                Tool.getInstance().openBrowser(url);
+                Utils.openBrowser(url);
                 callback.onOpenBrowserClicked();
             } else if (id == R.id.bt_close) {
                 detachFromWindow();
@@ -84,22 +83,22 @@ public class WebViewFV extends FloatingView {
         }
     };
 
-    public void setContent(String text) {
-        String lang = Locale.getDefault().getLanguage();
-        if (lang.equals(Locale.CHINESE.getLanguage())) {
-            lang += "-" + Locale.getDefault().getCountry();
+    private HomeWatcher.OnHomePressedListener onHomePressedListener = new HomeWatcher.OnHomePressedListener() {
+        @Override
+        public void onHomePressed() {
+            WebViewFV.this.detachFromWindow();
         }
-        setContent(text, lang);
-    }
+
+        @Override
+        public void onHomeLongPressed() {
+
+        }
+    };
 
     public void setContent(String text, String targetLanguage) {
-        WebViewUtil.Type type = getServiceType();
-        url = type.getFormattedUrl(text, targetLanguage);
+        url = UrlFormatter.getFormattedUrl(SERVICE_GOOGLE_WEB, text, targetLanguage);
+        logger.info("Start loading google web: " + url);
         wv_webView.loadUrl(url);
-    }
-
-    private WebViewUtil.Type getServiceType() {
-        return WebViewUtil.Type.Google;
     }
 
     public interface OnWebViewFVCallback {

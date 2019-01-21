@@ -1,37 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright 2016-2017 Louis Chen [firemaples@gmail.com].
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~    http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:theme="@style/Base.Theme.AppCompat.Light">
+    android:theme="@style/Base.Theme.AppCompat.Light"
+    tools:ignore="RtlHardcoded">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="4dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="bottom"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
@@ -39,39 +26,71 @@
                 android:layout_height="wrap_content"
                 android:text="@string/ocr_text"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
-            <ImageView
+            <ImageButton
+                android:id="@+id/bt_tts_ocrText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/resultWindow_tool_marginLeft"
+                android:background="@null"
+                android:src="@drawable/play_icon" />
+
+            <ImageButton
+                android:id="@+id/bt_edit_ocrText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/resultWindow_tool_marginBetween"
+                android:background="@null"
+                android:src="@drawable/edit_icon" />
+
+            <ImageButton
                 android:id="@+id/bt_copy_ocrText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:src="@drawable/content_copy"/>
+                android:layout_marginLeft="@dimen/resultWindow_tool_marginBetween"
+                android:background="@null"
+                android:src="@drawable/copy_icon" />
 
-            <ImageView
-                android:id="@+id/bt_openInBrowser_ocrText"
+            <ImageButton
+                android:id="@+id/bt_openGoogleTranslate_ocrText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:src="@drawable/earth"/>
+                android:layout_marginLeft="@dimen/resultWindow_tool_marginBetween"
+                android:background="@null"
+                android:src="@drawable/google_translate_icon" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_originText"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Origin Text"/>
+            android:orientation="horizontal">
+
+            <ProgressBar
+                android:id="@+id/pb_origin"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:id="@+id/tv_originText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="false"
+                tools:text="Origin Text Origin Text Origin" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/view_translatedTextWrapper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="bottom"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
@@ -79,29 +98,68 @@
                     android:layout_height="wrap_content"
                     android:text="@string/translated_text"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
-                <ImageView
+                <ImageButton
+                    android:id="@+id/bt_tts_translatedText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/resultWindow_tool_marginLeft"
+                    android:background="@null"
+                    android:src="@drawable/play_icon" />
+
+                <ImageButton
                     android:id="@+id/bt_copy_translatedText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:src="@drawable/content_copy"/>
+                    android:layout_marginLeft="@dimen/resultWindow_tool_marginBetween"
+                    android:background="@null"
+                    android:src="@drawable/copy_icon" />
 
-                <ImageView
-                    android:id="@+id/bt_openInBrowser_translatedText"
+                <ImageButton
+                    android:id="@+id/bt_openGoogleTranslate_translatedText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:src="@drawable/earth"/>
+                    android:layout_marginLeft="@dimen/resultWindow_tool_marginBetween"
+                    android:background="@null"
+                    android:src="@drawable/google_translate_icon" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_translatedText"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Translated Text"/>
+                android:orientation="horizontal">
+
+                <ProgressBar
+                    android:id="@+id/pb_translated"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+
+                <TextView
+                    android:id="@+id/tv_translatedText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="false"
+                    tools:text="Translated Text" />
+            </LinearLayout>
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_translationService"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:singleLine="true"
+                android:textColor="@color/md_blue_grey_300"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="by Microsoft" />
+        </RelativeLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

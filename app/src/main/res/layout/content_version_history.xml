@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          android:id="@+id/lv_versionHistory"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:theme="@style/Base.Theme.AppCompat.Light"
+          tools:ignore="HardcodedText"
+          tools:listitem="@layout/item_version_history"/>

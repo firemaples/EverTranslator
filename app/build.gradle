@@ -8,24 +8,29 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
-apply plugin: 'android-apt'
+apply plugin: 'com.google.firebase.firebase-perf'
+
+apply from: '../../sign.gradle'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    mavenCentral()
 }
 
-
 android {
-    compileSdkVersion 23
-    buildToolsVersion '25.0.0'
-
+    packagingOptions {
+        exclude 'META-INF/main.kotlin_module'
+    }
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "tw.firemaples.onscreenocr"
         minSdkVersion 21
-        targetSdkVersion 23
-        versionCode 21
-        versionName "1.5.0"
+        targetSdkVersion 28
+        versionCode 60
+        versionName "2.3.2"
     }
     buildTypes {
         release {
@@ -33,29 +38,97 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     //https://gist.github.com/keyboardsurfer/a6a5bcf2b62f9aa41ae2
-    applicationVariants.all { variant ->
-        if (variant.buildType.isDebuggable()) {
-            def flavor = variant.mergedFlavor
-            def name = flavor.getVersionName()
-            def versionName = name + '-debug'
-            flavor.versionName = versionName;
+//    applicationVariants.all { variant ->
+//        if (variant.buildType.isDebuggable()) {
+//            def flavor = variant.mergedFlavor
+//            def name = flavor.getVersionName()
+//            def versionName = name + '-debug'
+//            flavor.versionName = versionName;
+//            flavor.applicationId = 'tw.firemaples.onscreenocr_debug'
+//        }
+//    }
+    flavorDimensions "tier"
+    productFlavors {
+        dev {
+            dimension "tier"
+            applicationId "tw.firemaples.onscreenocr_debug"
+            versionCode 100
+            versionName "10.0.0"
+        }
+        prod {
+            dimension "tier"
+            signingConfig signingConfigs.SignConfig
+        }
+    }
+
+    // Instead, use the bundle block to control which types of configuration APKs
+    // you want your app bundle to support.
+    bundle {
+        language {
+            // Specifies that the app bundle should not support
+            // configuration APKs for language resources. These
+            // resources are instead packaged with each base and
+            // dynamic feature APK.
+            enableSplit = false
+        }
+        density {
+            // This property is set to true by default.
+            enableSplit = true
+        }
+        abi {
+            // This property is set to true by default.
+            enableSplit = true
         }
     }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:support-v4:23.2.1'
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.android.support:design:23.2.1'
-    compile 'com.rmtheis:tess-two:6.1.1'
-    compile 'com.github.johnpersano:supertoasts:1.3.4@aar'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
-        transitive = true;
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.7@aar') {
+        transitive = true
     }
-    compile 'com.android.support:cardview-v7:23.0.0'
-    compile 'io.github.firemaples:microsoft-translator-java-api:0.8.3'
+
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support:support-annotations:28.0.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+
+    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.google.firebase:firebase-config:16.1.2'
+    implementation 'com.google.firebase:firebase-perf:16.2.3'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.27.0-eap13'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.27.0-eap13'
+
+    implementation 'com.rmtheis:tess-two:9.0.0'
+
+    implementation 'com.muddzdev:styleabletoast:2.1.2'
+    implementation 'io.github.firemaples:microsoft-translator-java-api:0.8.6'
+    implementation 'com.google.android.exoplayer:exoplayer:r2.4.0'
+    implementation 'com.amitshekhar.android:android-networking:1.0.0'
+
+    implementation 'com.facebook.stetho:stetho:1.5.0'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+
+//    implementation 'com.loopj.android:android-async-http:1.4.9'
+    testImplementation 'junit:junit:4.12'
+
+    //For logger
+    implementation 'com.github.tony19:logback-android-core:1.1.1-4'
+    implementation('com.github.tony19:logback-android-classic:1.1.1-4') {
+        exclude(group: 'xpp3', module: 'xpp3')
+        exclude group: 'com.google.android'
+    }
+    implementation 'org.slf4j:slf4j-api:1.7.22'
+
+    implementation 'org.greenrobot:eventbus:3.1.1'
+
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.15'
 }
+
+apply plugin: 'com.google.gms.google-services'

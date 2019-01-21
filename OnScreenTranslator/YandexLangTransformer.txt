@@ -1,0 +1,24 @@
+// https://tech.yandex.com/translate/doc/dg/reference/getLangs-docpage/#codes
+
+code:
+
+<Item key="
+<item>
+
+" value="
+</item><!--
+
+" />
+ -->
+
+
+ name:
+
+<Item key="
+<!--
+
+" value="
+ --><item>
+
+ " />
+ </item>

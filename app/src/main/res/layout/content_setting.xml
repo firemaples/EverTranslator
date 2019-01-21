@@ -1,42 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright 2016-2017 Louis Chen [firemaples@gmail.com].
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~    http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              tools:showIn="@layout/view_setting">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dialog_content_height"
+    android:orientation="vertical"
+    tools:showIn="@layout/view_setting">
 
     <CheckBox
-        android:id="@+id/cb_enableTranslation"
+        android:id="@+id/cb_saveOcrEngineToExternalStorageFirst"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="false"
-        android:text="@string/enable_translation"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
-
-    <CheckBox
-        android:id="@+id/cb_saveOcrEngineToExternalStorage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="false"
-        android:text="@string/saveOcrEngineToExternalStorage"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+        android:text="@string/saveOcrEngineToExternalStorageFirst"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <CheckBox
         android:id="@+id/cb_startingWithSelectionMode"
@@ -45,7 +21,16 @@
         android:layout_marginTop="8dp"
         android:checked="false"
         android:text="@string/startingWithSelectionMode"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <CheckBox
+        android:id="@+id/cb_rememberLastSelection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:checked="false"
+        android:text="@string/rememberLastSelection"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <CheckBox
         android:id="@+id/cb_removeLineBreaks"
@@ -54,7 +39,25 @@
         android:layout_marginTop="8dp"
         android:checked="false"
         android:text="@string/removeLineBreaks"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <CheckBox
+        android:id="@+id/cb_autoCopyOCRResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:checked="false"
+        android:text="@string/autoCopyOCRResult"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <CheckBox
+        android:id="@+id/cb_autoCloseAppWhenSpenInserted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:checked="false"
+        android:text="@string/auto_close_app_when_spen_inserted_samsung_note_series_only"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     <CheckBox
         android:id="@+id/cb_debugMode"
@@ -63,5 +66,5 @@
         android:layout_marginTop="8dp"
         android:checked="false"
         android:text="@string/debug_mode"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 </LinearLayout>

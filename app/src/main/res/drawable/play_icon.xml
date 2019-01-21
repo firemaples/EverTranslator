@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:bottom="-4dp"
+        android:left="-4dp"
+        android:right="-4dp"
+        android:top="-4dp">
+        <selector>
+            <item
+                android:drawable="@drawable/play_grey"
+                android:state_enabled="false" />
+            <item
+                android:drawable="@drawable/play"
+                android:state_pressed="false" /> <!-- pressed -->
+            <item
+                android:drawable="@drawable/play"
+                android:state_pressed="true" /> <!-- focused -->
+            <item
+                android:drawable="@drawable/play"
+                android:state_enabled="true" /> <!-- idle state -->
+        </selector>
+    </item>
+</layer-list>

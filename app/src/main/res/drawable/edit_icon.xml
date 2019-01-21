@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:bottom="-6dp"
+        android:right="-2dp"
+        android:left="-2dp">
+        <selector>
+            <item
+                android:drawable="@drawable/edit_grey"
+                android:state_enabled="false" />
+            <item
+                android:drawable="@drawable/edit"
+                android:state_pressed="false" /> <!-- pressed -->
+            <item
+                android:drawable="@drawable/edit"
+                android:state_pressed="true" /> <!-- focused -->
+            <item
+                android:drawable="@drawable/edit"
+                android:state_enabled="true" /> <!-- idle state -->
+        </selector>
+    </item>
+</layer-list>

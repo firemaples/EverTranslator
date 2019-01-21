@@ -1,33 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright 2016-2017 Louis Chen [firemaples@gmail.com].
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~    http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">@color/md_teal_800</color>
+    <color name="colorPrimaryDark">@color/md_teal_900</color>
+    <color name="colorAccent">@color/md_yellow_800</color>
+
+    <color name="appIconColor">#00695c</color>
 
     <color name="captureAreaSelectionViewBackground_enable">#66000000</color>
-    <color name="captureAreaSelectionViewPaint_drawingLinePaint">#664527A0</color>
-    <color name="captureAreaSelectionViewPaint_boxPaint">#FF006064</color>
+    <color name="captureAreaSelectionViewPaint_drawingLinePaint">#6629B6F6</color>
+    <color name="captureAreaSelectionViewPaint_boxPaint">#8800FF00</color>
+    <color name="captureAreaSelectionViewPaint_borderPaint">#FF4081</color>
+    <color name="captureAreaSelectionViewPaint_helpTextPaint">#FFF</color>
 
     <color name="captureAreaSelectionViewProgressBackground">#77000000</color>
 
+    <color name="orcResultBorder_color">@color/md_light_green_500</color>
     <color name="ocrResultCover_color">#8800FF00</color>
 
     <color name="quickWindow_borderColor1">#FF4081</color>
     <color name="quickWindow_borderColor2">#FF006064</color>
+
+    <color name="tts_backgroundColor">#EE000000</color>
+
+    <color name="spinnerBorderColor">@color/md_grey_700</color>
 </resources>

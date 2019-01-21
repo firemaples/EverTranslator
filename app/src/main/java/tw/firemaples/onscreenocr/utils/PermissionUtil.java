@@ -1,35 +1,47 @@
-/*
- * Copyright 2016-2017 Louis Chen [firemaples@gmail.com].
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package tw.firemaples.onscreenocr.utils;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.os.Build;
 import android.provider.Settings;
+import android.view.View;
+import android.view.WindowManager;
 
 /**
  * Created by firemaples on 22/01/2017.
  */
 
 public class PermissionUtil {
-    public static boolean checkDrawOverlayPermission(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    /**
+     * Reference: <a href="https://stackoverflow.com/a/46174872/2906153">https://stackoverflow.com/a/46174872/2906153</a><br/>
+     * Update >= to > because XiaoMi 8 (MIUI 10.0.2.0 Android 8.1) has the same issue
+     */
+    public static boolean canDrawOverlays(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        } else if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) { //Update >= to > because XiaoMi 8 (MIUI 10.0.2.0 Android 8.1) has the same issue
             return Settings.canDrawOverlays(context);
         } else {
-            return true;
+            if (Settings.canDrawOverlays(context)) {
+                return true;
+            }
+            try {
+                WindowManager mgr = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+                if (mgr == null) {
+                    return false; //getSystemService might return null
+                }
+                View viewToAdd = new View(context);
+                WindowManager.LayoutParams params = new WindowManager.LayoutParams(0, 0, android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O ?
+                        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY : WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSPARENT);
+                viewToAdd.setLayoutParams(params);
+                mgr.addView(viewToAdd, params);
+                mgr.removeView(viewToAdd);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return false;
         }
     }
 }
