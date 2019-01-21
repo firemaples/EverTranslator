@@ -1,5 +1,5 @@
 
-# Ever Translator
+# Ever Translator [![Build Status](https://travis-ci.org/firemaples/EverTranslator.svg?branch=master)](https://travis-ci.org/firemaples/EverTranslator)
 <img src="OnScreenTranslator/mipmap-hdpi/icon.png"></img>
 [![Get it on google play](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=tw.firemaples.onscreenocr)
 
