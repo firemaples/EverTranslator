@@ -43,3 +43,5 @@ app/debug_config/*
 app/release_config/*
 keys.xml
 google-services.json
+!app/src/dev/google-services.json
+!app/src/main/res/values/keys.xml
