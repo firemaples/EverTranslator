@@ -47,7 +47,9 @@ before_script:
 script:
         - ./gradlew clean
         # Run unit tests
-        - ./gradlew testDevDebugUnitTest
+        #- ./gradlew testDevDebugUnitTest
+        # Run codecov tests
+        - ./gradlew jacocoTestDevDebugUnitTest
         #- ./gradlew connectedAndroidTest
         #- ./gradlew connectedDevDebugAndroidTest
         - ./gradlew assembleDevDebug
