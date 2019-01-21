@@ -13,13 +13,14 @@ import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,15 +32,19 @@ import java.util.Locale;
 
 import tw.firemaples.onscreenocr.MainActivity;
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
-import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.log.FirebaseEvent;
+import tw.firemaples.onscreenocr.utils.NotchUtil;
+import tw.firemaples.onscreenocr.utils.SettingUtil;
+import tw.firemaples.onscreenocr.utils.Utils;
 
 /**
  * Created by firemaples on 2016/3/4.
  */
 public class ScreenshotHandler {
+    private static final Logger logger = LoggerFactory.getLogger(ScreenshotHandler.class);
+
     private static ScreenshotHandler _instance;
-    private final static int TIMEOUT = 5000;
+    public final static int TIMEOUT = 5000;
 
     public final static int ERROR_CODE_KNOWN_ERROR = 0;
     public final static int ERROR_CODE_TIMEOUT = 1;
@@ -90,7 +95,7 @@ public class ScreenshotHandler {
         if (isGetUserPermission) {
             return;
         }
-        Tool.getInstance().showMsg(context.getString(R.string.error_noMediaProjectionFound));
+        Utils.showToast(context.getString(R.string.error_noMediaProjectionFound));
         context.startActivity(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
@@ -114,7 +119,7 @@ public class ScreenshotHandler {
             callback.onScreenshotStart();
         }
 
-        new Handler().postDelayed(new Runnable() {
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
                 _takeScreenshot();
@@ -131,13 +136,12 @@ public class ScreenshotHandler {
     }
 
     private void _takeScreenshot() {
-        Tool.logInfo("Start screenshot");
+        logger.info("Start screenshot");
         final long screenshotStartTime = System.currentTimeMillis();
-        Answers.getInstance().logCustom(new CustomEvent("Take screenshot"));
 
         final MediaProjection mProjection = getMediaProjection();
         if (mProjection == null) {
-            Tool.logError("MediaProjection is null");
+            logger.error("MediaProjection is null");
             return;
         }
         // http://binwaheed.blogspot.tw/2015/03/how-to-correctly-take-screenshot-using.html
@@ -151,6 +155,7 @@ public class ScreenshotHandler {
         final int mWidth = size.x;
         final int mHeight = size.y;
         int mDensity = metrics.densityDpi;
+        final boolean isPortrait = mHeight > mWidth;
 
         //Create a imageReader for catch result
         final ImageReader mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
@@ -162,7 +167,7 @@ public class ScreenshotHandler {
         mProjection.createVirtualDisplay("screen-mirror", mWidth, mHeight, mDensity, flags, mImageReader.getSurface(), null, handler);
 
         //convert result into image
-        Tool.logInfo("add setOnImageAvailableListener");
+        logger.info("add setOnImageAvailableListener");
         timeoutRunnable = new Runnable() {
             @Override
             public void run() {
@@ -170,7 +175,7 @@ public class ScreenshotHandler {
                 mImageReader.close();
                 mProjection.stop();
 
-                Tool.logError("Screenshot timeout");
+                logger.error("Screenshot timeout");
                 if (callback != null) {
                     callback.onScreenshotFailed(ERROR_CODE_TIMEOUT, null);
                 }
@@ -181,30 +186,55 @@ public class ScreenshotHandler {
             @Override
             public void onImageAvailable(ImageReader reader) {
                 reader.setOnImageAvailableListener(null, handler);
-                Tool.logInfo("onImageAvailable");
+                logger.info("onImageAvailable");
                 Image image = null;
                 Bitmap tempBmp = null;
                 Bitmap realSizeBitmap = null;
                 try {
                     image = reader.acquireLatestImage();
 //                    throw new UnsupportedOperationException("The producer output buffer format 0x5 doesn't match the ImageReader's configured buffer format 0x1.");
-                    Tool.logInfo("screenshot image info: width:" + image.getWidth() + " height:" + image.getHeight());
+                    logger.info("screenshot image info: width:" + image.getWidth() + " height:" + image.getHeight());
+                    int deviceWidth = metrics.widthPixels;
+                    int deviceHeight = metrics.heightPixels;
+                    if (deviceHeight > deviceWidth != isPortrait) {
+                        logger.warn("Height & width ratio is not match orientation, swap height & width");
+                        //noinspection SuspiciousNameCombination
+                        deviceWidth = metrics.heightPixels;
+                        //noinspection SuspiciousNameCombination
+                        deviceHeight = metrics.widthPixels;
+                    }
+
+                    //The real size with the notch
+                    int notchWidthDiff = 0;
+                    int notchHeightDiff = 0;
+                    NotchUtil notchUtil = NotchUtil.INSTANCE;
+                    if (notchUtil.getHasNotch()) {
+                        if (isPortrait) {
+                            notchHeightDiff = notchUtil.getStatusBarHeight();
+                        } else {
+                            notchWidthDiff = notchUtil.getNotchHeight();
+                        }
+                    }
+
                     final Image.Plane[] planes = image.getPlanes();
                     final ByteBuffer buffer = planes[0].getBuffer();
                     int pixelStride = planes[0].getPixelStride();
                     int rowStride = planes[0].getRowStride();
-                    int rowPadding = rowStride - pixelStride * metrics.widthPixels;
+                    int rowPadding = rowStride - pixelStride * deviceWidth;
                     // create bitmap
-                    tempBmp = Bitmap.createBitmap(metrics.widthPixels + (int) ((float) rowPadding / (float) pixelStride), metrics.heightPixels, Bitmap.Config.ARGB_8888);
+                    tempBmp = Bitmap.createBitmap(
+                            deviceWidth + (int) ((float) rowPadding / (float) pixelStride),
+                            deviceHeight + notchHeightDiff, Bitmap.Config.ARGB_8888);
                     tempBmp.copyPixelsFromBuffer(buffer);
 
-                    realSizeBitmap = Bitmap.createBitmap(tempBmp, 0, 0, metrics.widthPixels, tempBmp.getHeight());
+                    realSizeBitmap = Bitmap.createBitmap(tempBmp, notchWidthDiff, notchHeightDiff,
+                            deviceWidth, tempBmp.getHeight() - notchHeightDiff);
 
-                    if (SharePreferenceUtil.getInstance().isDebugMode()) {
+                    if (SettingUtil.INSTANCE.isDebugMode()) {
                         saveBmpToFile(realSizeBitmap);
                     }
                 } catch (Throwable e) {
-                    Tool.logError("Screenshot failed");
+                    logger.error("Screenshot failed");
                     e.printStackTrace();
                     if (callback != null) {
                         if (e instanceof UnsupportedOperationException) {
@@ -213,7 +243,7 @@ public class ScreenshotHandler {
                             callback.onScreenshotFailed(ERROR_CODE_KNOWN_ERROR, e);
                         }
                     }
-                    Crashlytics.logException(e);
+                    FirebaseEvent.INSTANCE.logException(e);
                 } finally {
                     if (image != null) {
                         image.close();
@@ -231,8 +261,7 @@ public class ScreenshotHandler {
                 }
                 if (realSizeBitmap != null) {
                     long spentTime = System.currentTimeMillis() - screenshotStartTime;
-                    Tool.logInfo("Screenshot finished, spent: " + spentTime + " ms");
-                    Answers.getInstance().logCustom(new CustomEvent("Screenshot").putCustomAttribute("Spent", spentTime));
+                    logger.info("Screenshot finished, spent: " + spentTime + " ms");
                     if (callback != null) {
                         callback.onScreenshotFinished(realSizeBitmap);
                     }
@@ -246,16 +275,16 @@ public class ScreenshotHandler {
                 new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.getDefault())
                         .format(new Date(System.currentTimeMillis())));
         File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName);
-        Tool.logInfo("Saving debug screenshot to " + file.getAbsolutePath());
-        Tool.getInstance().showMsg("Saving debug screenshot to " + file.getAbsolutePath());
+        logger.info("Saving debug screenshot to " + file.getAbsolutePath());
+        Utils.showToast("Saving debug screenshot to " + file.getAbsolutePath());
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(file.getAbsolutePath());
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
             // PNG is a lossless format, the compression factor (100) is ignored
         } catch (Exception e) {
-            Tool.logError("Save debug screenshot failed");
-            Tool.getInstance().showErrorMsg("Save debug screenshot failed");
+            logger.error("Save debug screenshot failed");
+            Utils.showErrorToast("Save debug screenshot failed");
             e.printStackTrace();
         } finally {
             try {
@@ -273,6 +302,6 @@ public class ScreenshotHandler {
 
         void onScreenshotFinished(Bitmap bitmap);
 
-        void onScreenshotFailed(int errorCode, Throwable e);
+        void onScreenshotFailed(int errorCode, @Nullable Throwable e);
     }
 }

@@ -7,7 +7,8 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
-import com.crashlytics.android.Crashlytics;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,28 +16,27 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+import tw.firemaples.onscreenocr.BuildConfig;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
-import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
-import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
-import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.ocr.OCRFileUtil;
+import tw.firemaples.onscreenocr.ocr.TessDataLocation;
+import tw.firemaples.onscreenocr.log.FirebaseEvent;
+import tw.firemaples.onscreenocr.utils.SettingUtil;
 
 /**
  * Created by firemaples on 04/11/2016.
  */
 
 public class SettingView extends FloatingView {
-    private Tool tool;
-    private SharePreferenceUtil spUtil;
-    private OcrNTranslateUtils ocrNTranslateUtils;
-    private OnSettingChangedCallback callback;
+    private static final Logger logger = LoggerFactory.getLogger(SettingView.class);
 
-    public SettingView(Context context, OnSettingChangedCallback callback) {
+    private SettingUtil spUtil;
+    private OCRFileUtil ocrNTranslateUtils = OCRFileUtil.INSTANCE;
+
+    public SettingView(Context context) {
         super(context);
-        this.callback = callback;
-        tool = Tool.getInstance();
-        spUtil = SharePreferenceUtil.getInstance();
-        ocrNTranslateUtils = OcrNTranslateUtils.getInstance();
+        spUtil = SettingUtil.INSTANCE;
         setViews();
     }
 
@@ -50,29 +50,50 @@ public class SettingView extends FloatingView {
         return WindowManager.LayoutParams.MATCH_PARENT;
     }
 
+    @Override
+    protected boolean layoutFocusable() {
+        return true;
+    }
+
     private void setViews() {
-        CheckBox cb_debugMode = (CheckBox) getRootView().findViewById(R.id.cb_debugMode);
-        CheckBox cb_enableTranslation = (CheckBox) getRootView().findViewById(R.id.cb_enableTranslation);
-        CheckBox cb_saveOcrEngineToExternalStorage = (CheckBox) getRootView().findViewById(R.id.cb_saveOcrEngineToExternalStorage);
-        CheckBox cb_startingWithSelectionMode = (CheckBox) getRootView().findViewById(R.id.cb_startingWithSelectionMode);
-        CheckBox cb_removeLineBreaks = (CheckBox) getRootView().findViewById(R.id.cb_removeLineBreaks);
+        CheckBox cb_debugMode = getRootView().findViewById(R.id.cb_debugMode);
+        CheckBox cb_saveOcrEngineToExternalStorage = getRootView().findViewById(R.id.cb_saveOcrEngineToExternalStorageFirst);
+        CheckBox cb_startingWithSelectionMode = getRootView().findViewById(R.id.cb_startingWithSelectionMode);
+        CheckBox cb_rememberLastSelection = getRootView().findViewById(R.id.cb_rememberLastSelection);
+        CheckBox cb_removeLineBreaks = getRootView().findViewById(R.id.cb_removeLineBreaks);
+        CheckBox cb_autoCopyOCRResult = getRootView().findViewById(R.id.cb_autoCopyOCRResult);
+        CheckBox cb_autoCloseAppWhenSpenInserted = getRootView().findViewById(R.id.cb_autoCloseAppWhenSpenInserted);
         getRootView().findViewById(R.id.bt_close).setOnClickListener(onClickListener);
 
         cb_debugMode.setOnCheckedChangeListener(onCheckChangeListener);
-        cb_enableTranslation.setOnCheckedChangeListener(onCheckChangeListener);
         cb_saveOcrEngineToExternalStorage.setOnCheckedChangeListener(onCheckChangeListener);
         cb_startingWithSelectionMode.setOnCheckedChangeListener(onCheckChangeListener);
+        cb_rememberLastSelection.setOnCheckedChangeListener(onCheckChangeListener);
         cb_removeLineBreaks.setOnCheckedChangeListener(onCheckChangeListener);
+        cb_autoCopyOCRResult.setOnCheckedChangeListener(onCheckChangeListener);
+        cb_autoCloseAppWhenSpenInserted.setOnCheckedChangeListener(onCheckChangeListener);
 
         cb_debugMode.setChecked(spUtil.isDebugMode());
-        cb_enableTranslation.setChecked(spUtil.isEnableTranslation());
-        cb_saveOcrEngineToExternalStorage.setChecked(ocrNTranslateUtils.getTessDataLocation() == OcrNTranslateUtils.TessDataLocation.EXTERNAL_STORAGE);
-        cb_startingWithSelectionMode.setChecked(spUtil.startingWithSelectionMode());
-        cb_removeLineBreaks.setChecked(spUtil.removeLineBreaks());
+        cb_saveOcrEngineToExternalStorage.setChecked(ocrNTranslateUtils.getTessDataLocation() == TessDataLocation.EXTERNAL_STORAGE);
+        cb_startingWithSelectionMode.setChecked(spUtil.getStartingWithSelectionMode());
+        cb_rememberLastSelection.setChecked(spUtil.isRememberLastSelection());
+        cb_removeLineBreaks.setChecked(spUtil.getRemoveLineBreaks());
+        cb_autoCopyOCRResult.setChecked(spUtil.getAutoCopyOCRResult());
+        cb_autoCloseAppWhenSpenInserted.setChecked(spUtil.getAutoCloseAppWhenSpenInserted());
 
         if (!ocrNTranslateUtils.isExternalStorageWritable()) {
             cb_saveOcrEngineToExternalStorage.setEnabled(false);
         }
+
+        if (!BuildConfig.DEBUG) {
+            cb_debugMode.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public boolean onBackButtonPressed() {
+        detachFromWindow();
+        return true;
     }
 
     private CompoundButton.OnCheckedChangeListener onCheckChangeListener = new CompoundButton.OnCheckedChangeListener() {
@@ -81,18 +102,13 @@ public class SettingView extends FloatingView {
             int id = buttonView.getId();
             if (id == R.id.cb_debugMode) {
                 spUtil.setDebugMode(isChecked);
-            } else if (id == R.id.cb_enableTranslation) {
-                spUtil.setEnableTranslation(isChecked);
-                if (callback != null) {
-                    callback.onEnableTranslationChanged(isChecked);
-                }
             } else if (id == R.id.cb_startingWithSelectionMode) {
                 spUtil.setStartingWithSelectionMode(isChecked);
             } else if (id == R.id.cb_removeLineBreaks) {
                 spUtil.setRemoveLineBreaks(isChecked);
-            } else if (id == R.id.cb_saveOcrEngineToExternalStorage) {
-                OcrNTranslateUtils.TessDataLocation currentSelectedLocation = isChecked ? OcrNTranslateUtils.TessDataLocation.EXTERNAL_STORAGE : OcrNTranslateUtils.TessDataLocation.INTERNAL_STORAGE;
-                OcrNTranslateUtils.TessDataLocation savedLocation = ocrNTranslateUtils.getTessDataLocation();
+            } else if (id == R.id.cb_saveOcrEngineToExternalStorageFirst) {
+                TessDataLocation currentSelectedLocation = isChecked ? TessDataLocation.EXTERNAL_STORAGE : TessDataLocation.INTERNAL_STORAGE;
+                TessDataLocation savedLocation = ocrNTranslateUtils.getTessDataLocation();
                 if (currentSelectedLocation != savedLocation) {
                     if (savedLocation.getSaveDir().exists()) {
                         new MovingOcrEngineFileTask().execute(savedLocation.getSaveDir(), currentSelectedLocation.getSaveDir());
@@ -101,6 +117,12 @@ public class SettingView extends FloatingView {
                         ocrNTranslateUtils.setTessDataLocation(currentSelectedLocation);
                     }
                 }
+            } else if (id == R.id.cb_rememberLastSelection) {
+                spUtil.setRememberLastSelection(isChecked);
+            } else if (id == R.id.cb_autoCopyOCRResult) {
+                spUtil.setAutoCopyOCRResult(isChecked);
+            } else if (id == R.id.cb_autoCloseAppWhenSpenInserted) {
+                spUtil.setAutoCloseAppWhenSpenInserted(isChecked);
             }
         }
     };
@@ -133,16 +155,19 @@ public class SettingView extends FloatingView {
             if (!fileTo.exists()) {
                 fileTo.mkdirs();
             }
-            for (File file : fileFrom.listFiles()) {
-                try {
-                    Tool.logInfo("Start move ocr file from:" + file.getAbsolutePath() + " to:" + fileTo.getAbsolutePath());
-                    publishProgress(getContext().getString(R.string.progress_movingFile) + file.getName());
-                    moveFile(file, fileTo);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Crashlytics.logException(e);
-                }
+            File[] fromFiles = fileFrom.listFiles();
+            if (fromFiles != null) {
+                for (File file : fromFiles) {
+                    try {
+                        logger.info("Start move ocr file from:" + file.getAbsolutePath() + " to:" + fileTo.getAbsolutePath());
+                        publishProgress(getContext().getString(R.string.progress_movingFile) + file.getName());
+                        moveFile(file, fileTo);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        FirebaseEvent.INSTANCE.logException(new Exception("Move OCR files from settings failed", e));
+                    }
 
+                }
             }
             return null;
         }
@@ -182,9 +207,5 @@ public class SettingView extends FloatingView {
                 }
             }
         }
-    }
-
-    public interface OnSettingChangedCallback {
-        void onEnableTranslationChanged(boolean enableTranslation);
     }
 }

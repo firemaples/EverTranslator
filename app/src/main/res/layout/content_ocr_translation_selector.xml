@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/dialog_content_height"
+    android:orientation="horizontal"
+    tools:showIn="@layout/view_ocr_translation_selector">
+
+    <LinearLayout
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="4dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ocr_language"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/md_grey_700" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/bg_lang_selector_sub_title"
+            android:text="@string/download_site"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+        <Spinner
+            android:id="@+id/sp_trainedDataSite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_spinner"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            tools:entries="@array/microsoft_translationLangName" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/bg_lang_selector_sub_title"
+            android:text="@string/language"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+        <ListView
+            android:id="@+id/lv_ocrLang"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadeScrollbars="false" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="4dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/translation"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/md_grey_700" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/bg_lang_selector_sub_title"
+            android:text="@string/provider"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+        <Spinner
+            android:id="@+id/sp_translationService"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_spinner"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            tools:entries="@array/microsoft_translationLangName" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/bg_lang_selector_sub_title"
+            android:text="@string/language"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_langEmptyTip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/md_red_400" />
+
+            <ListView
+                android:id="@+id/lv_translationLang"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadeScrollbars="false" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

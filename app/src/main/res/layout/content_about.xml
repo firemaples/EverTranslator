@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-       xmlns:tools="http://schemas.android.com/tools"
-       tools:showIn="@layout/view_about"
-       tools:ignore="HardcodedText">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:theme="@style/Base.Theme.AppCompat.Light"
+            tools:ignore="HardcodedText">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,12 +47,12 @@
         <TextView
             style="@style/thanksPage.itemTitle"
             android:layout_marginTop="12dp"
-            android:text="JohnPersano/SuperToasts"/>
+            android:text="Muddz/StyleableToast"/>
 
         <TextView
             android:id="@+id/tv_link2"
             style="@style/thanksPage.itemLink"
-            android:text="https://github.com/JohnPersano/SuperToasts"/>
+            android:text="https://github.com/Muddz/StyleableToast"/>
 
         <TextView
             style="@style/thanksPage.itemTitle"
@@ -70,4 +72,4 @@
 
     </LinearLayout>
 
-</merge>
+</ScrollView>

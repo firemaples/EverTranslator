@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingBottom="4dp"
+              android:paddingLeft="6dp"
+              android:paddingRight="6dp"
+              android:paddingTop="4dp"
+              android:theme="@style/Base.Theme.AppCompat.Light">
+
+    <TextView
+        android:id="@+id/tv_versionCode"
+        style="@style/versionHistoryPage.versionCode"
+        tools:text="1.7.2"/>
+
+    <TextView
+        android:id="@+id/tv_versionMessage"
+        style="@style/versionHistoryPage.versionMessage"
+        tools:text="New setting [Remember last selection area]\nAdd readme page\nAdd history page"/>
+
+</LinearLayout>

@@ -8,4 +8,11 @@
     <dimen name="quickWindow_OCRArea_minHeight">40dp</dimen>
     <dimen name="quickWindow_OCRArea_margin">8dp</dimen>
     <dimen name="quickWindow_roundBtn_size">16dp</dimen>
+
+    <dimen name="areaSelectionView_helpTextSize">16sp</dimen>
+
+    <dimen name="resultWindow_tool_marginBetween">4dp</dimen>
+    <dimen name="resultWindow_tool_marginLeft">4dp</dimen>
+
+    <dimen name="dialog_content_height">300dp</dimen>
 </resources>

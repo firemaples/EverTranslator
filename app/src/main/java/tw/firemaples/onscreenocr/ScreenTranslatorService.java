@@ -2,25 +2,30 @@ package tw.firemaples.onscreenocr;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 
-import com.crashlytics.android.Crashlytics;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import io.fabric.sdk.android.Fabric;
+import java.util.List;
+
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
-import tw.firemaples.onscreenocr.floatingviews.quicktrans.QuickWindow;
-import tw.firemaples.onscreenocr.floatingviews.screencrop.FloatingBar;
+import tw.firemaples.onscreenocr.floatingviews.screencrop.MainBar;
+import tw.firemaples.onscreenocr.receivers.SamsungSpenInsertedReceiver;
+import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;
-import tw.firemaples.onscreenocr.utils.AppMode;
-import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
-import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
-import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.utils.SettingUtil;
+import tw.firemaples.onscreenocr.utils.Utils;
 
 /**
  * Created by firemaples on 21/10/2016.
@@ -29,11 +34,14 @@ import tw.firemaples.onscreenocr.utils.Tool;
 public class ScreenTranslatorService extends Service {
     private static final int ONGOING_NOTIFICATION_ID = 12345;
 
+    private static final Logger logger = LoggerFactory.getLogger(ScreenTranslatorService.class);
+
     @SuppressLint("StaticFieldLeak")
     private static ScreenTranslatorService _instance;
 
-    private ScreenshotHandler screenshotHandler;
-    private SharePreferenceUtil spUtil;
+    private NotificationManager notificationManager;
+
+    private SettingUtil spUtil;
 
     private FloatingView mainFloatingView;
     private boolean dismissNotify = false;
@@ -49,14 +57,14 @@ public class ScreenTranslatorService extends Service {
         return null;
     }
 
-    public static boolean isRunning(Context context) {
-        return Tool.isServiceRunning(context, ScreenTranslatorService.class) && _instance != null;
+    public static boolean isRunning() {
+        return Utils.isServiceRunning(ScreenTranslatorService.class) && _instance != null;
     }
 
-    public static void start(Context context, boolean fromNotify, boolean showFloatingView) {
-        if (!isRunning(context)) {
+    public static void start(Context context, boolean showFloatingView) {
+        if (!isRunning()) {
             context.startService(new Intent(context, ScreenTranslatorService.class));
-        } else if (fromNotify && _instance != null) {
+        } else if (_instance != null) {
             if (showFloatingView) {
                 _instance._startFloatingView();
             } else {
@@ -68,15 +76,8 @@ public class ScreenTranslatorService extends Service {
     public static void stop(boolean dismissNotify) {
         if (_instance != null) {
             _instance.dismissNotify = dismissNotify;
+            _instance._stopFloatingView(false);
             _instance.stopSelf();
-        }
-    }
-
-    public static void switchAppMode(AppMode appMode) {
-        if (_instance != null && SharePreferenceUtil.getInstance().getAppMode() != appMode) {
-            _instance._stopFloatingView(true);
-            SharePreferenceUtil.getInstance().setAppMode(appMode);
-            _instance._startFloatingView();
         }
     }
 
@@ -122,20 +123,22 @@ public class ScreenTranslatorService extends Service {
         if (_instance == null) {
             _instance = this;
         }
-        if (!Fabric.isInitialized()) {
-            Fabric.with(this, new Crashlytics());
-        }
 
-        Tool.init(this);
-        spUtil = SharePreferenceUtil.getInstance();
-        screenshotHandler = ScreenshotHandler.getInstance();
-        OcrNTranslateUtils.init();
+        spUtil = SettingUtil.INSTANCE;
 
-        if (SharePreferenceUtil.getInstance().isAppShowing()) {
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (SettingUtil.INSTANCE.isAppShowing()) {
             _startFloatingView();
         }
 
+        RemoteConfigUtil.INSTANCE.tryFetchNew();
+
         startForeground();
+
+        if (SettingUtil.INSTANCE.getAutoCloseAppWhenSpenInserted()) {
+            SamsungSpenInsertedReceiver.start();
+        }
     }
 
     @Override
@@ -146,13 +149,14 @@ public class ScreenTranslatorService extends Service {
         _stopFloatingView(false);
 
         //If process was been killed by system or user
-        SharePreferenceUtil.getInstance().setIsAppShowing(true, this);
+        SettingUtil.INSTANCE.setAppShowing(true);
 
-        if (screenshotHandler != null) {
-            screenshotHandler.release();
-            screenshotHandler = null;
+        if (ScreenshotHandler.isInitialized()) {
+            ScreenshotHandler.getInstance().release();
         }
         _instance = null;
+
+        SamsungSpenInsertedReceiver.stop();
     }
 
     private void startForeground() {
@@ -160,9 +164,34 @@ public class ScreenTranslatorService extends Service {
     }
 
     private Notification getForegroundNotification() {
-        Notification.Builder builder = new Notification.Builder(this);
-        builder.setSmallIcon(R.mipmap.notify_icon);
-        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.icon));
+        String channelId = getPackageName() + "_v1";
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            List<NotificationChannel> channels = notificationManager.getNotificationChannels();
+            for (NotificationChannel channel : channels) {
+                String id = channel.getId();
+                if (NotificationChannel.DEFAULT_CHANNEL_ID.equals(id)) {
+                    continue;
+                }
+                if (!id.equals(channelId)) {
+                    notificationManager.deleteNotificationChannel(id);
+                }
+            }
+            if (notificationManager.getNotificationChannel(channelId) == null) {
+                NotificationChannel channel = new NotificationChannel(channelId,
+                        getString(R.string.foregroundNotification),
+                        NotificationManager.IMPORTANCE_LOW);
+                channel.setShowBadge(false);
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this, channelId);
+        builder.setColor(ContextCompat.getColor(this, R.color.appIconColor));
+        builder.setSmallIcon(R.drawable.ic_for_notify);
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),
+                R.drawable.ic_launcher_shadow));
         builder.setTicker(getString(R.string.app_name));
         builder.setContentTitle(getString(R.string.app_name));
         boolean toShow = mainFloatingView == null || !mainFloatingView.isAttached();
@@ -173,7 +202,7 @@ public class ScreenTranslatorService extends Service {
         }
         Intent notificationIntent = new Intent(this, MainActivity.class);
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        notificationIntent.putExtra(MainActivity.INTENT_START_FROM_NOTIFY, true);
+        notificationIntent.setAction(MainActivity.ACTION_START_FROM_NOTIFY);
         notificationIntent.putExtra(MainActivity.INTENT_SHOW_FLOATING_VIEW, toShow);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
@@ -187,27 +216,16 @@ public class ScreenTranslatorService extends Service {
 
     private void updateNotification() {
         if (!dismissNotify) {
-            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.notify(ONGOING_NOTIFICATION_ID, getForegroundNotification());
+            notificationManager.notify(ONGOING_NOTIFICATION_ID, getForegroundNotification());
         }
     }
 
     private void _startFloatingView() {
         if (mainFloatingView != null && mainFloatingView.isAttached()) {
-            return;
+            mainFloatingView.detachFromWindow();
         }
-        switch (spUtil.getAppMode()) {
-            case ScreenCrop:
-                if (!(mainFloatingView instanceof FloatingBar)) {
-                    mainFloatingView = new FloatingBar(this);
-                }
-                break;
-            case QuickWindow:
-                if (!(mainFloatingView instanceof QuickWindow)) {
-                    mainFloatingView = new QuickWindow(this);
-                }
-                break;
-        }
+//        mainFloatingView = new FloatingPoint(this);
+        mainFloatingView = new MainBar(this);
         mainFloatingView.attachToWindow();
         updateNotification();
     }

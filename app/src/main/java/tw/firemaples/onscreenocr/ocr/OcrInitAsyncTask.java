@@ -1,23 +1,22 @@
 package tw.firemaples.onscreenocr.ocr;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
-import java.util.Arrays;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
-import tw.firemaples.onscreenocr.utils.Tool;
 
 /**
  * Created by firemaples on 2016/3/2.
  */
 public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
+    private static final Logger logger = LoggerFactory.getLogger(OcrInitAsyncTask.class);
 
     private final Context context;
     private final TessBaseAPI baseAPI;
@@ -29,14 +28,13 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
     private OnOcrInitAsyncTaskCallback callback;
 
     public OcrInitAsyncTask(Context context, OnOcrInitAsyncTaskCallback callback) {
-        this.context = context;
+        this.context = context.getApplicationContext();
         this.callback = callback;
 
-        OcrNTranslateUtils ocrNTranslateUtils = OcrNTranslateUtils.getInstance();
-        this.baseAPI = ocrNTranslateUtils.getBaseAPI();
-        this.recognitionLang = ocrNTranslateUtils.getOcrLang();
+        this.baseAPI = OCRManager.INSTANCE.getTessBaseAPI();
+        this.recognitionLang = OCRLangUtil.INSTANCE.getSelectedLangCode();
 
-        this.tessRootDir = ocrNTranslateUtils.getTessDataBaseDir();
+        this.tessRootDir = OCRFileUtil.INSTANCE.getTessDataBaseDir();
     }
 
     @Override
@@ -48,7 +46,7 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... params) {
-        baseAPI.init(tessRootDir.getAbsolutePath(), recognitionLang, TessBaseAPI.OEM_TESSERACT_ONLY);
+        baseAPI.init(tessRootDir.getAbsolutePath(), recognitionLang, TessBaseAPI.OEM_DEFAULT);
         baseAPI.setPageSegMode(pageSegmentationMode);
 
         return true;
@@ -57,7 +55,7 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
     @Override
     protected void onProgressUpdate(String... values) {
         super.onProgressUpdate(values);
-        Tool.logInfo(values[0]);
+        logger.info(values[0]);
         if (callback != null) {
             callback.showMessage(values[0]);
         }
@@ -77,11 +75,7 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
     }
 
     private void getPreferences() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        // Retrieve from preferences, and set in this Activity, the page segmentation mode preference
-        String[] pageSegmentationModes = context.getResources().getStringArray(R.array.pagesegmentationmodes);
-        String pageSegmentationModeName = preferences.getString(OcrNTranslateUtils.KEY_PAGE_SEGMENTATION_MODE, pageSegmentationModes[0]);
-        int searchIndex = Arrays.asList(pageSegmentationModes).indexOf(pageSegmentationModeName);
+        int searchIndex = OCRLangUtil.INSTANCE.getSelectedLangIndex();
         switch (searchIndex) {
             case 0:
                 pageSegmentationMode = TessBaseAPI.PageSegMode.PSM_AUTO_OSD;

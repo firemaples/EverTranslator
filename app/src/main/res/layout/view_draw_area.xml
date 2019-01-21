@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tw.firemaples.onscreenocr.views.AreaSelectionView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/view_areaSelectionView"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/captureAreaSelectionViewBackground_enable"/>
+    android:layout_height="match_parent">
+
+    <tw.firemaples.onscreenocr.views.AreaSelectionView
+        android:id="@+id/view_areaSelectionView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/captureAreaSelectionViewBackground_enable" />
+
+    <tw.firemaples.onscreenocr.views.ProgressBorderView
+        android:id="@+id/view_progressBorder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <tw.firemaples.onscreenocr.views.FadeOutHelpTextView
+        android:id="@+id/view_helpText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</FrameLayout>

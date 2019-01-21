@@ -11,19 +11,22 @@ import android.view.WindowManager;
 import com.googlecode.leptonica.android.ReadFile;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.utils.OcrNTranslateUtils;
-import tw.firemaples.onscreenocr.utils.SharePreferenceUtil;
-import tw.firemaples.onscreenocr.utils.Tool;
+import tw.firemaples.onscreenocr.utils.SettingUtil;
+import tw.firemaples.onscreenocr.utils.Utils;
 
 /**
  * Created by firemaples on 2016/3/2.
  */
 public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResult>> {
+    private static final Logger logger = LoggerFactory.getLogger(OcrRecognizeAsyncTask.class);
 
     private final Context context;
     private final TessBaseAPI baseAPI;
@@ -40,7 +43,7 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
         this.boxList = boxList;
         this.callback = callback;
 
-        this.baseAPI = OcrNTranslateUtils.getInstance().getBaseAPI();
+        this.baseAPI = OCRManager.INSTANCE.getTessBaseAPI();
     }
 
     @Override
@@ -71,8 +74,8 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
             OcrResult ocrResult = new OcrResult();
             ocrResult.setRect(rect);
             String resultText = baseAPI.getUTF8Text();
-            if (SharePreferenceUtil.getInstance().removeLineBreaks()) {
-                resultText = Tool.replaceAllLineBreaks(resultText, " ");
+            if (SettingUtil.INSTANCE.getRemoveLineBreaks()) {
+                resultText = Utils.replaceAllLineBreaks(resultText, " ");
             }
             ocrResult.setText(resultText);
             ocrResult.setBoxRects(baseAPI.getRegions().getBoxRects());
@@ -88,7 +91,7 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
                 ocrResult.setSubRect(subRect);
             }
 
-            if (SharePreferenceUtil.getInstance().isDebugMode()) {
+            if (SettingUtil.INSTANCE.isDebugMode()) {
                 OcrResult.DebugInfo debugInfo = new OcrResult.DebugInfo();
                 Bitmap cropped = Bitmap.createBitmap(screenshot, rect.left, rect.top, rect.width(), rect.height());
                 debugInfo.setCroppedBitmap(cropped);
@@ -116,12 +119,12 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
     @Override
     protected void onPostExecute(List<OcrResult> results) {
         super.onPostExecute(results);
-        Tool.logInfo("OCR result size:" + results.size());
+        logger.info("OCR result size:" + results.size());
         if (results.size() > 0) {
-            Tool.logInfo("First OCR result:" + results.get(0).getText());
+            logger.info("First OCR result:" + results.get(0).getText());
         } else {
-            Tool.logInfo("No OCR result found");
-            Tool.getInstance().showErrorMsg(context.getString(R.string.error_noOCRResultFound));
+            logger.info("No OCR result found");
+            Utils.showErrorToast(context.getString(R.string.error_noOCRResultFound));
         }
         if (callback != null) {
             callback.hideMessage();

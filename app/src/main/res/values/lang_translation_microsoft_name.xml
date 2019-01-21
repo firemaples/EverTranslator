@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Translation target names for the Microsoft Translate API. -->
+    <!-- The elements in this array must match to the translationtargetiso6391_microsoft array. -->
+    <string-array name="microsoft_translationLangName">
+        <item>Arabic</item>
+        <item>Bulgarian</item>
+        <item>Catalan</item>
+        <item>Chinese (Simplified)</item>
+        <item>Chinese (Traditional)</item>
+        <item>Czech</item>
+        <item>Danish</item>
+        <item>Dutch</item>
+        <item>English</item>
+        <item>Estonian</item>
+        <item>Finnish</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Greek</item>
+        <item>Haitian Creole</item>
+        <item>Hebrew</item>
+        <item>Hindi</item>
+        <item>Hmong</item>
+        <item>Hungarian</item>
+        <item>Indonesian</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Korean</item>
+        <item>Latvian</item>
+        <item>Lithuanian</item>
+        <item>Malay</item>
+        <item>Maltese</item>
+        <item>Norwegian</item>
+        <item>Persian</item>
+        <item>Polish</item>
+        <item>Portuguese</item>
+        <item>Romanian</item>
+        <item>Russian</item>
+        <item>Slovak</item>
+        <item>Slovenian</item>
+        <item>Spanish</item>
+        <item>Swedish</item>
+        <item>Thai</item>
+        <item>Turkish</item>
+        <item>Ukrainian</item>
+        <item>Urdu</item>
+        <item>Vietnamese</item>
+    </string-array>
+</resources>

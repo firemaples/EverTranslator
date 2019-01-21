@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Ever Translator</string>
+    <string name="app_name">EverTranslator</string>
 
     <!-- Strings for dialog -->
     <string name="dialog_title_error">ERROR</string>
@@ -7,7 +7,7 @@
     <string name="dialog_content_ocrFileNotFound">The OCR file of [%s] has not been downloaded, do you want to download it now?</string>
     <string name="dialog_title_ocrFileDownloading">File download</string>
     <string name="dialog_content_ocrFileDownloadStarting">Starting OCR file download task</string>
-    <string name="dialog_content_progressingDownloadOCRFile" formatted="false">Downloading OCR file for Language %s (%.2fMB/%.2fMB)(%d%%)</string>
+    <string name="dialog_content_progressingDownloadOCRFile" formatted="false">Downloading OCR file for Language %s (%s) (%.2fMB/%.2fMB)(%d%%)</string>
     <string name="dialog_title_needPermission">Need permission</string>
     <string name="dialog_content_needPermission_drawOverlay">This app needs [DrawOverlay] permission for running!</string>
     <string name="dialog_content_needPermission_rwExternalStorage">This app needs [Read/Write External Storage] Permission for running!</string>
@@ -19,7 +19,7 @@
     <string name="error_makingFolderFailed">Making folder failed: %s</string>
     <string name="error_deleteTempFileFailed">Delete temp file failed: %s</string>
     <string name="error_downloadOCRFileFailed">Download OCR file failed, please try again later or change another network. message: %s</string>
-    <string name="error_unknownError" translatable="false">Unknown error</string>
+    <string name="error_unknownError">Unknown error</string>
     <string name="error_noOCRResultFound">No OCR result found</string>
     <string name="error_noMediaProjectionFound">Please submit media projection for using this service!</string>
     <string name="dialog_content_screenshotTimeout">Screenshot timeout, please try again later.</string>
@@ -36,6 +36,16 @@
     <string name="progress_startMovingOcrEngineFiles">Moving downloaded ocr engine files</string>
     <string name="progress_movingFile">Moving file: </string>
 
+    <!-- Guide text -->
+    <string name="guide_select_source_language_and_translation_destination_language">1. Click to select source language and translation destination language</string>
+    <string name="guide_lang_selector">2. (1)Site to download files, (2)Source language, (3)Translation service, (4)Target language</string>
+    <string name="guide_click_selection_button">3. Click selection button</string>
+    <string name="guide_tap_and_drag_on_screen_to_create_selection_area_for_translation">4. Drag on screen with one finger to create a translation area, then drag with two fingers to move and resize</string>
+    <string name="guide_click_translation_button">5. Click translation button</string>
+    <string name="guide_get_the_result">6. Get the result</string>
+    <string name="guide_clear_result">7. Tap outside of result window or click back button to clear result</string>
+    <string name="guide_menu">** Drag menu button to move or click menu button to open menu **</string>
+
     <!-- Strings for UI -->
     <string name="msg_textHasBeenCopied">Text [%s] has been copied.</string>
     <string name="btn_download">Download</string>
@@ -43,7 +53,7 @@
     <string name="btn_close">Close</string>
     <string name="btn_requestAgain">Request Again</string>
     <string name="btn_openAppsPage">Open [Apps] page</string>
-    <string name="ocr_text">OCR text:</string>
+    <string name="ocr_text">OCR text</string>
     <string name="notification_contentText_show">Click to show floating bar</string>
     <string name="translated_text">Translated text</string>
     <string name="debug_mode">Debug Mode</string>
@@ -54,9 +64,15 @@
     <string name="menu_exit">Exit</string>
     <string name="menu_about">About</string>
     <string name="title_about">About</string>
+    <string name="menu_help">Readme</string>
+    <string name="title_help">How to use</string>
+    <string name="title_help_lite">How to use\n(Lite Mode)</string>
+    <string name="menu_version_history">Version history</string>
+    <string name="title_version_history">Version history</string>
     <string name="startingWithSelectionMode">Starting with selection mode</string>
+    <string name="rememberLastSelection">Remember last selection area</string>
     <string name="removeLineBreaks">Remove line breaks</string>
-    <string name="saveOcrEngineToExternalStorage">Save OCR files into external storage</string>
+    <string name="saveOcrEngineToExternalStorageFirst">Save OCR files into external storage first</string>
     <string name="canceledByUser">Download task canceled by user</string>
     <string name="error_mediaProjectionNotFound_need5UpperVersion">, you should run this app on 5.0 or upper version of Android.</string>
     <string name="error_unknownErrorWhenRequestMediaProjection">A error occurred when trying to request [MediaProjection] permission, is your device support this feature?</string>
@@ -64,4 +80,41 @@
     <string name="error_connectToServerFailed">Connect to server failed, please check your network connection.</string>
     <string name="menu_changeMode">Change Mode</string>
     <string name="notification_contentText_hide">Click to hide floating bar</string>
+    <string name="title_editOCRText">Edit OCR text</string>
+    <string name="msg_ttsEngineInitFailed">TTS engine init failed, the TTS feature will not working</string>
+    <string name="drawAnAreaForTranslation">Tap and drag here to create a translation area</string>
+    <string name="redrawAnAreaForTranslation">Tap and drag here to re-draw a translation area</string>
+    <string name="foregroundNotification">Foreground notification</string>
+    <string name="error_googleTranslatorNotInstalled">Sorry, [Google translate] not installed or version is too old, please install or upgrade your [Google translate]</string>
+    <string name="toLiteMode">Lite Mode</string>
+    <string name="toNormalMode">Normal Mode</string>
+    <string name="title_translationFailed">Translation failed</string>
+    <string name="error_canNotChangeLangWhenTranslating">Can not change languages when translation running</string>
+    <string name="msg_tipForChangeGoogleTranslatorLang">Please change the target translation language in [Google Translate APP] result window</string>
+    <string name="translatedBy">by %s</string>
+    <string name="install">Install</string>
+    <string name="title_googleTranslateAppNotInstalled">Google Translate APP is not installed</string>
+    <string name="msg_googleTranslateAppNotInstalled">Please install [Google Translate] for translation or change the translation service</string>
+    <string name="menu_privacy_policy">Privacy Policy</string>
+    <string name="error_ocrFilesDownloadFailed">Fail to Download OCR file, please change the download site or change to another network then downloading again.\n\nError message: \n%s</string>
+    <string name="ocr_language">OCR language</string>
+    <string name="download_site">Download site:</string>
+    <string name="language">Language:</string>
+    <string name="translation">Translation</string>
+    <string name="provider">Provider:</string>
+    <string name="service_microsoft_azure">Microsoft Azure</string>
+    <string name="service_yandex" translatable="false">Yandex</string>
+    <string name="service_google_translate_app">Google translate APP</string>
+    <string name="service_ocr_only">OCR only</string>
+    <string name="change">Change</string>
+    <string name="select_download_site">Select download site</string>
+    <string name="autoCopyOCRResult">Auto copy OCR result</string>
+    <string name="auto_close_app_when_spen_inserted_samsung_note_series_only">Auto close APP when inserting Spen back (Samsung Note series ONLY)</string>
+
+    <string-array name="translation_services">
+        <item>Microsoft</item>
+        <item>Yandex</item>
+        <item>Google app</item>
+    </string-array>
+    <string name="ocr_only">OCR only, without any translation</string>
 </resources>

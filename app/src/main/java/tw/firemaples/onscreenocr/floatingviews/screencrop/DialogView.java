@@ -34,6 +34,11 @@ public class DialogView extends FloatingView {
         return WindowManager.LayoutParams.MATCH_PARENT;
     }
 
+    @Override
+    protected boolean layoutFocusable() {
+        return true;
+    }
+
     private void setViews(View rootView) {
         tv_dialogTitle = (TextView) rootView.findViewById(R.id.tv_dialogTitle);
         tv_dialogContent = (TextView) rootView.findViewById(R.id.tv_dialogContent);
@@ -68,6 +73,12 @@ public class DialogView extends FloatingView {
         bt_dialogCancel.setText(android.R.string.cancel);
     }
 
+    @Override
+    public boolean onBackButtonPressed() {
+        callback.onCancelClicked(this);
+        return true;
+    }
+
     public void setCallback(OnDialogViewCallback callback) {
         this.callback = callback;
     }
@@ -93,7 +104,7 @@ public class DialogView extends FloatingView {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.bt_dialogOk) {
-                callback.OnConfirmClick(DialogView.this);
+                callback.onConfirmClick(DialogView.this);
             } else if (id == R.id.bt_dialogCancel) {
                 callback.onCancelClicked(DialogView.this);
             }
@@ -105,7 +116,7 @@ public class DialogView extends FloatingView {
     }
 
     public static class OnDialogViewCallback {
-        public void OnConfirmClick(DialogView dialogView) {
+        public void onConfirmClick(DialogView dialogView) {
             dialogView.detachFromWindow();
         }
 

@@ -38,4 +38,8 @@ build/
 obj/
 
 #Custom
-KeyId.java
+#KeyId.java
+app/debug_config/*
+app/release_config/*
+keys.xml
+google-services.json
