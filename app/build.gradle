@@ -12,8 +12,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.firebase.firebase-perf'
 
-apply from: '../../sign.gradle'
-
 repositories {
     maven { url 'https://maven.fabric.io/public' }
     mavenCentral()
@@ -58,7 +56,7 @@ android {
         }
         prod {
             dimension "tier"
-            signingConfig signingConfigs.SignConfig
+            signingConfig null
         }
     }
 
