@@ -16,6 +16,7 @@ env:
    - ANDROID_BUILD_TOOLS_VERSION=28.0.3
    - ANDROID_ABI=google_apis/armeabi-v7a
    - ADB_INSTALL_TIMEOUT=20 # minutes (2 minutes by default)
+   - CODECOV_TOKEN="8bfcc8c2-69d0-4df4-933b-cefbcf44e8fc" # For codecov.io
 
 android:
   components:
