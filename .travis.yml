@@ -45,9 +45,10 @@ before_script:
   - adb shell input keyevent 82 &
 script:
         - ./gradlew clean
-        - ./gradlew test
-        - ./gradlew connectedAndroidTest
-        - ./gradlew connectedDevDebugAndroidTest
+        # Run unit tests
+        - ./gradlew testDevDebugUnitTest
+        #- ./gradlew connectedAndroidTest
+        #- ./gradlew connectedDevDebugAndroidTest
         - ./gradlew assembleDevDebug
         - ./gradlew assembleDevDebugAndroidTest
 before_install:
