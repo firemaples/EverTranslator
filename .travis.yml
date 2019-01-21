@@ -56,4 +56,4 @@ before_install:
 
 branches:
         only:
-                - fix-6-use-travis-ci
+                - master
