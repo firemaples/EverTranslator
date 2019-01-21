@@ -16,6 +16,7 @@ env:
    - ANDROID_BUILD_TOOLS_VERSION=28.0.3
    - ANDROID_ABI=google_apis/armeabi-v7a
    - ADB_INSTALL_TIMEOUT=20 # minutes (2 minutes by default)
+   - CODECOV_TOKEN="8bfcc8c2-69d0-4df4-933b-cefbcf44e8fc" # For codecov.io
 
 android:
   components:
@@ -45,6 +46,12 @@ before_script:
   - adb shell input keyevent 82 &
 script:
         - ./gradlew clean
+        # Run unit tests
+        #- ./gradlew testDevDebugUnitTest
+        # Run codecov tests
+        - ./gradlew jacocoTestDevDebugUnitTest
+        #- ./gradlew connectedAndroidTest
+        #- ./gradlew connectedDevDebugAndroidTest
         - ./gradlew assembleDevDebug
         - ./gradlew assembleDevDebugAndroidTest
 before_install:
@@ -52,8 +59,9 @@ before_install:
           - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
           - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
           - chmod +x gradlew
+after_success:
+- bash <(curl -s https://codecov.io/bash)
 
-
-branches:
-        only:
-                - master
+#branches:
+#        only:
+#                - master
