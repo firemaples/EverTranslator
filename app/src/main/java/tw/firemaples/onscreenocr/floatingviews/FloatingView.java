@@ -60,13 +60,15 @@ public abstract class FloatingView {
         } else {
             type = WindowManager.LayoutParams.TYPE_PHONE;
         }
+        int flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+        if (!layoutFocusable()) {
+            flags = flags | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        }
+        if (canMoveOutside()) {
+            flags = flags | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+        }
         floatingLayoutParams = new WindowManager.LayoutParams(
-                getLayoutSize(), getLayoutSize(),
-                type,
-                (WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL|
-                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE) |
-                        (canMoveOutside() ? WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS : 0),
-                PixelFormat.TRANSLUCENT);
+                getLayoutSize(), getLayoutSize(), type, flags, PixelFormat.TRANSLUCENT);
         if (fullScreenMode()) {
             floatingLayoutParams.flags = floatingLayoutParams.flags | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         }

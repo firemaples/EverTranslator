@@ -31,11 +31,6 @@ public abstract class InfoDialogView extends FloatingView {
     }
 
     @Override
-    protected boolean layoutFocusable() {
-        return true;
-    }
-
-    @Override
     protected final int getLayoutId() {
         return R.layout.view_info_dialog;
     }

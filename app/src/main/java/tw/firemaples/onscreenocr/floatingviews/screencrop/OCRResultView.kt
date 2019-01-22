@@ -35,7 +35,6 @@ class OCRResultView(context: Context) : FloatingView(context) {
     private val ivDebugImage by lazy { ImageView(getContext()) }
 
     override fun getLayoutId(): Int = R.layout.view_result_view
-    override fun layoutFocusable(): Boolean = true
     override fun getLayoutSize(): Int = WindowManager.LayoutParams.MATCH_PARENT
     override fun fullScreenMode(): Boolean = true
 

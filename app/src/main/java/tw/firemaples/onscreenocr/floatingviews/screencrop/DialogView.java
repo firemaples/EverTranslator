@@ -34,11 +34,6 @@ public class DialogView extends FloatingView {
         return WindowManager.LayoutParams.MATCH_PARENT;
     }
 
-    @Override
-    protected boolean layoutFocusable() {
-        return true;
-    }
-
     private void setViews(View rootView) {
         tv_dialogTitle = (TextView) rootView.findViewById(R.id.tv_dialogTitle);
         tv_dialogContent = (TextView) rootView.findViewById(R.id.tv_dialogContent);

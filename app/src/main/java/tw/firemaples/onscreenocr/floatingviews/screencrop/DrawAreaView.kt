@@ -28,8 +28,6 @@ class DrawAreaView(context: Context) : FloatingView(context) {
 
     override fun fullScreenMode(): Boolean = true
 
-    override fun layoutFocusable(): Boolean = true
-
     override fun getLayoutSize(): Int = WindowManager.LayoutParams.MATCH_PARENT
 
     override fun attachToWindow() {
