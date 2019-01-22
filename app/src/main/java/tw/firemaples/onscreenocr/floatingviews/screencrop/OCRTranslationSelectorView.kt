@@ -56,10 +56,6 @@ class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
         })
     }
 
-    override fun layoutFocusable(): Boolean {
-        return true
-    }
-
     override fun onBackButtonPressed(): Boolean {
         detachFromWindow()
         return true
