@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Translation target names for Google Translate. -->
-    <!-- The elements in this array must match to the translationtargetiso6391_google array. -->
-    <string-array name="translationtargetlanguagenames_google">
+    <!-- The elements in this array must match to the google_translationLangCode_iso6391 array. -->
+    <string-array name="google_translationLangName">
         <item>南非荷兰语</item>
         <item>阿尔巴尼亚文</item>
         <item>阿拉伯语</item>

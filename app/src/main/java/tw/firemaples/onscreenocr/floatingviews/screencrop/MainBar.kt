@@ -22,6 +22,7 @@ import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler
 import tw.firemaples.onscreenocr.state.InitState
 import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
+import tw.firemaples.onscreenocr.translate.GoogleWebViewTranslator
 import tw.firemaples.onscreenocr.translate.TranslationService
 import tw.firemaples.onscreenocr.translate.TranslationUtil
 import tw.firemaples.onscreenocr.translate.event.InstallGoogleTranslatorEvent
@@ -341,6 +342,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
                     ocrResultView = OCRResultView(getContext()).apply {
                         this.setRealButtonHandler(this@MainBar)
                         this.attachToWindow()
+                        GoogleWebViewTranslator.translator.setup(this.getGoogleWebTranslatorWrapper())
                     }
 
                     detachFromWindow(false)

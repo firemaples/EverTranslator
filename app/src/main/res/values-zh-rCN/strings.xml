@@ -109,4 +109,5 @@
     <string name="select_download_site">选择下载来源</string>
     <string name="autoCopyOCRResult">自动複製文字辨识结果至剪贴簿</string>
     <string name="auto_close_app_when_spen_inserted_samsung_note_series_only">插入 Spen 后自动关闭 APP (仅支援三星 Note 系列)</string>
+    <string name="service_google_translate">谷歌翻译</string>
 </resources>

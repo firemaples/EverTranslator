@@ -10,6 +10,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.utils.KeyId
 import tw.firemaples.onscreenocr.utils.threadTranslation
+import java.io.IOException
 
 object YandexApiTranslator : Translator {
     private val logger: Logger = LoggerFactory.getLogger(YandexApiTranslator::class.java)
@@ -53,7 +54,7 @@ object YandexApiTranslator : Translator {
             override fun onError(anError: ANError?) {
                 logger.error("onError", anError)
 
-                callback(false, "", Exception("Call Yandex translation API failed", anError))
+                callback(false, "", anError)
             }
 
         })
