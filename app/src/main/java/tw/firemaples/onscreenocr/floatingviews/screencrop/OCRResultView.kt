@@ -3,6 +3,7 @@ package tw.firemaples.onscreenocr.floatingviews.screencrop
 import android.content.Context
 import android.support.v4.content.res.ResourcesCompat
 import android.view.WindowManager
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import org.greenrobot.eventbus.Subscribe
@@ -57,6 +58,9 @@ class OCRResultView(context: Context) : FloatingView(context) {
         EventUtil.unregister(this)
         super.detachFromWindow()
     }
+
+    fun getGoogleWebTranslatorWrapper(): FrameLayout =
+            rootView.findViewById(R.id.view_googleWebTranslatorWrapper)
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)

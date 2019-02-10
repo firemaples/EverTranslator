@@ -2,7 +2,7 @@
 <resources>
     <!-- Translation target codes for Google Translate. -->
     <!-- The elements in this array must match to the translationtargetlanguagenames_google array. -->
-    <string-array name="translationtargetiso6391_google" translatable="false">
+    <string-array name="google_translationLangCode_iso6391" translatable="false">
         <item>af</item> <!-- Afrikaans -->
         <item>sq</item> <!-- Albanian -->
         <item>ar</item> <!-- Arabic -->

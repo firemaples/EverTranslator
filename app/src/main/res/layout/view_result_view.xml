@@ -20,4 +20,9 @@
         android:layout_height="match_parent">
 
     </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/view_googleWebTranslatorWrapper"
+        android:layout_width="1dp"
+        android:layout_height="1dp"/>
 </RelativeLayout>

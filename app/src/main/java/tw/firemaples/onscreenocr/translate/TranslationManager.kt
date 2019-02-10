@@ -23,6 +23,9 @@ object TranslationManager {
             TranslationService.Yandex -> {
                 YandexApiTranslator
             }
+            TranslationService.GoogleTranslator -> {
+                GoogleWebViewTranslator
+            }
             else -> {
                 return
             }

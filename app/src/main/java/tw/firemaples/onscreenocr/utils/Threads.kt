@@ -1,13 +1,16 @@
 package tw.firemaples.onscreenocr.utils
 
 import kotlinx.coroutines.*
-import kotlinx.coroutines.android.Main
+import java.util.concurrent.Executors
 
 private val threadUI = Dispatchers.Main
 
-val stateManagerAction = newSingleThreadContext("stateManagerAction")
+val stateManagerAction = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
-val threadTranslation = newSingleThreadContext("threadTranslation")
+val threadTranslation = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
 fun threadUI(block: suspend CoroutineScope.() -> Unit): Job =
         GlobalScope.launch(threadUI, block = block)
+
+fun CoroutineDispatcher.launch(block: suspend CoroutineScope.() -> Unit): Job =
+        GlobalScope.launch(this, block = block)

@@ -109,7 +109,7 @@ object OCRDownloadTask {
                                 bytesDownloaded.toFloat() / 1024f / 1024f,
                                 totalBytes.toFloat() / 1024f / 1024f,
                                 (bytesDownloaded * 100 / totalBytes).toInt())
-                        logger.debug(msg)
+//                        logger.debug(msg)
                         threadUI {
                             callback.downloadProgressing(bytesDownloaded, totalBytes, msg)
                         }
