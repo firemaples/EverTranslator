@@ -96,6 +96,7 @@ object FirebaseEvent {
             ScreenshotHandler.ERROR_CODE_TIMEOUT -> "timeout"
             ScreenshotHandler.ERROR_CODE_IMAGE_FORMAT_ERROR ->
                 "image_format_error"
+            ScreenshotHandler.ERROR_CODE_OUT_OF_MEMORY -> "out_of_memory"
             ScreenshotHandler.ERROR_CODE_KNOWN_ERROR -> "unknown"
             else -> "non_error_code"
         }

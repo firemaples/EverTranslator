@@ -49,6 +49,7 @@ public class ScreenshotHandler {
     public final static int ERROR_CODE_KNOWN_ERROR = 0;
     public final static int ERROR_CODE_TIMEOUT = 1;
     public final static int ERROR_CODE_IMAGE_FORMAT_ERROR = 2;
+    public final static int ERROR_CODE_OUT_OF_MEMORY = 3;
 
     private Context context;
     private boolean isGetUserPermission;
@@ -190,6 +191,8 @@ public class ScreenshotHandler {
                 Image image = null;
                 Bitmap tempBmp = null;
                 Bitmap realSizeBitmap = null;
+                Throwable error = null;
+                int errorCode = ERROR_CODE_KNOWN_ERROR;
                 try {
                     image = reader.acquireLatestImage();
 //                    throw new UnsupportedOperationException("The producer output buffer format 0x5 doesn't match the ImageReader's configured buffer format 0x1.");
@@ -234,13 +237,11 @@ public class ScreenshotHandler {
                         saveBmpToFile(realSizeBitmap);
                     }
                 } catch (Throwable e) {
-                    logger.error("Screenshot failed");
-                    e.printStackTrace();
+                    logger.error("Screenshot failed", e);
+                    error = e;
                     if (callback != null) {
                         if (e instanceof UnsupportedOperationException) {
-                            callback.onScreenshotFailed(ERROR_CODE_IMAGE_FORMAT_ERROR, e);
-                        } else {
-                            callback.onScreenshotFailed(ERROR_CODE_KNOWN_ERROR, e);
+                            errorCode = ERROR_CODE_IMAGE_FORMAT_ERROR;
                         }
                     }
                     FirebaseEvent.INSTANCE.logException(e);
@@ -248,10 +249,20 @@ public class ScreenshotHandler {
                     if (image != null) {
                         image.close();
                     }
-                    reader.close();
-                    mProjection.stop();
-                    if (tempBmp != null) {
-                        tempBmp.recycle();
+                    try {
+                        reader.close();
+                    } catch (Exception e) {
+                        logger.error("Screenshot failed", e);
+                        error = e;
+                        if (e.getMessage() != null && e.getMessage().contains("Attempted to free")) {
+                            errorCode = ERROR_CODE_OUT_OF_MEMORY;
+                        }
+                        FirebaseEvent.INSTANCE.logException(e);
+                    } finally {
+                        mProjection.stop();
+                        if (tempBmp != null) {
+                            tempBmp.recycle();
+                        }
                     }
                 }
 
@@ -259,12 +270,14 @@ public class ScreenshotHandler {
                     handler.removeCallbacks(timeoutRunnable);
                     timeoutRunnable = null;
                 }
-                if (realSizeBitmap != null) {
+                if (realSizeBitmap != null && error == null) {
                     long spentTime = System.currentTimeMillis() - screenshotStartTime;
                     logger.info("Screenshot finished, spent: " + spentTime + " ms");
                     if (callback != null) {
                         callback.onScreenshotFinished(realSizeBitmap);
                     }
+                } else {
+                    callback.onScreenshotFailed(errorCode, error);
                 }
             }
         }, handler);

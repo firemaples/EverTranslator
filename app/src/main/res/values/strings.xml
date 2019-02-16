@@ -112,4 +112,5 @@
     <string name="auto_close_app_when_spen_inserted_samsung_note_series_only">Auto close APP when inserting Spen back (Samsung Note series ONLY)</string>
     <string name="ocr_only">OCR only, without any translation</string>
     <string name="service_google_translate">Google Translate</string>
+    <string name="error_screenshot_out_of_memory">Screenshot failed cause of memory not enough, please try again later</string>
 </resources>

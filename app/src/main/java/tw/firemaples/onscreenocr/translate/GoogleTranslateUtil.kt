@@ -11,7 +11,7 @@ import tw.firemaples.onscreenocr.floatingviews.screencrop.DialogView
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.translate.event.InstallGoogleTranslatorEvent
 import tw.firemaples.onscreenocr.utils.Utils
-import tw.firemaples.onscreenocr.utils.asStringRes
+import tw.firemaples.onscreenocr.utils.asString
 
 private const val PACKAGE_NAME_GOOGLE_TRANSLATE = "com.google.android.apps.translate"
 
@@ -46,8 +46,8 @@ class GoogleTranslateUtil {
             DialogView(context).apply {
                 reset()
                 setType(DialogView.Type.CONFIRM_CANCEL)
-                setTitle(R.string.dialog_title_error.asStringRes())
-                setContentMsg(R.string.error_googleTranslatorNotInstalled.asStringRes())
+                setTitle(R.string.dialog_title_error.asString())
+                setContentMsg(R.string.error_googleTranslatorNotInstalled.asString())
                 okBtn.text = context.getString(R.string.install)
                 setCallback(object : DialogView.OnDialogViewCallback() {
                     override fun onConfirmClick(dialogView: DialogView) {
