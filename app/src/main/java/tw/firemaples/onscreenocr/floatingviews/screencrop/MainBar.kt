@@ -320,17 +320,15 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
 
                 val msg = when (errorCode) {
                     ScreenshotHandler.ERROR_CODE_TIMEOUT ->
-                        getContext().getString(R.string.dialog_content_screenshotTimeout)
+                        R.string.dialog_content_screenshotTimeout.asString()
                     ScreenshotHandler.ERROR_CODE_IMAGE_FORMAT_ERROR ->
-                        String.format(Locale.getDefault(),
-                                getContext().getString(
-                                        R.string.dialog_content_screenshotWithImageFormatError),
-                                e?.message ?: "Unknown")
+                        R.string.dialog_content_screenshotWithImageFormatError
+                                .asFormatString(e?.message ?: "Unknown")
+                    ScreenshotHandler.ERROR_CODE_OUT_OF_MEMORY ->
+                        R.string.error_screenshot_out_of_memory.asString()
                     else ->
-                        String.format(Locale.getDefault(),
-                                getContext().getString(
-                                        R.string.dialog_content_screenshotWithUnknownError),
-                                e?.message ?: "Unknown")
+                        R.string.dialog_content_screenshotWithUnknownError
+                                .asFormatString(e?.message ?: "Unknown")
                 }
 
                 showErrorDialog(DialogView.Type.CONFIRM_ONLY,

@@ -7,6 +7,7 @@ import android.widget.ListView
 import android.widget.TextView
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.R
+import java.util.*
 
 fun ListView.select(position: Int) {
 //    if (this.isSkipNextSelect(true))
@@ -54,4 +55,6 @@ fun View.onViewPrepared(callback: (View) -> Unit) {
     })
 }
 
-fun Int.asStringRes(): String = CoreApplication.instance.getString(this)
+fun Int.asString(): String = CoreApplication.instance.getString(this)
+
+fun Int.asFormatString(vararg args: Any?): String = String.format(Locale.US, this.asString(), *args)
