@@ -242,6 +242,11 @@ public class ScreenshotHandler {
                     if (callback != null) {
                         if (e instanceof UnsupportedOperationException) {
                             errorCode = ERROR_CODE_IMAGE_FORMAT_ERROR;
+                        } else if (e.getMessage() != null) {
+                            String errorMsg = e.getMessage();
+                            if (errorMsg.contains("Buffer not large enough for pixels")) {
+                                errorCode = ERROR_CODE_OUT_OF_MEMORY;
+                            }
                         }
                     }
                     FirebaseEvent.INSTANCE.logException(e);
