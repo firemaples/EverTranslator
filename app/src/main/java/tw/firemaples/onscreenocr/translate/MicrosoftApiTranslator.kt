@@ -6,7 +6,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
+import tw.firemaples.onscreenocr.utils.asString
 import tw.firemaples.onscreenocr.utils.threadTranslation
 import tw.firemaples.onscreenocr.utils.threadUI
 
@@ -24,11 +26,10 @@ object MicrosoftApiTranslator : Translator {
                 callback(true, result, null)
             }
         } catch (e: Throwable) {
-            e.printStackTrace()
+            logger.error("Translation failed", e)
             threadUI {
                 callback(false, "", e)
             }
         }
-
     }
 }
