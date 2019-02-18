@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="versionMessage_2_4_0">● 增加 Google 翻译\n● 修正错误</string>
     <string name="versionMessage_2_3_0">● 修正浏海手机文字辨识问题\n● 修正小米手机文字辨识问题\n● 支援全萤幕模式(翻译时不再触发导航列)\n● 增加选项 "自动複製文字辨识结果至剪贴簿"\n● 增加选项 "插入 Spen 后自动关闭 APP (仅支援三星 Note 系列)"\n● 变更翻译引擎名称 “停用翻译” 为 “仅文字辨识”</string>
     <string name="versionMessage_2_2_0">● 选择区域可缩放\n● 更新教学\n● 增加圆型图示\n● 储存主浮动视窗最后位置\n● 修正阿拉伯文及北印度语错误</string>
     <string name="versionMessage_2_1_0">● 更新 UI/UX\n● 增加文字辨识档案下载来源选择\n● 增加翻译引擎选择</string>
