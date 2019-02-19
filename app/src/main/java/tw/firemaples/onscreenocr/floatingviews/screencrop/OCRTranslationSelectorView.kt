@@ -17,10 +17,7 @@ import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
 import tw.firemaples.onscreenocr.translate.TranslationService
 import tw.firemaples.onscreenocr.translate.TranslationUtil
 import tw.firemaples.onscreenocr.translate.event.TranslationServiceChangedEvent
-import tw.firemaples.onscreenocr.utils.HomeWatcher
-import tw.firemaples.onscreenocr.utils.isSkipNextSelect
-import tw.firemaples.onscreenocr.utils.select
-import tw.firemaples.onscreenocr.utils.skipNextSelect
+import tw.firemaples.onscreenocr.utils.*
 
 class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
     private val spTrainedDataSite: Spinner = rootView.findViewById(R.id.sp_trainedDataSite)
@@ -43,6 +40,8 @@ class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
                 android.R.id.text1,
                 translationLangNameList)
     }
+
+    var showTranslationServiceAtNextAttached: Once<Boolean> = Once(false)
 
     init {
         setViews()
@@ -131,6 +130,9 @@ class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
     override fun attachToWindow() {
         super.attachToWindow()
         EventUtil.register(this)
+        if (showTranslationServiceAtNextAttached.isValue(true)) {
+            rootView.postDelayed({ spTranslationService.performClick() }, 1000)
+        }
     }
 
     override fun detachFromWindow() {

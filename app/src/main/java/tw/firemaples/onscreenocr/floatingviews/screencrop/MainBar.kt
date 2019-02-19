@@ -62,6 +62,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
     }
 
     private val tempDisableAutoAreaSelecting = Once(false)
+    private val showTranslationServiceAtNextAttached: Once<Boolean> = Once(false)
 
     init {
         setViews()
@@ -148,6 +149,9 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
                         .getString(R.string.error_canNotChangeLangWhenTranslating))
             } else {
                 ocrTranslationSelectorView = OCRTranslationSelectorView(context).apply {
+                    if (this@MainBar.showTranslationServiceAtNextAttached.isValue(true)) {
+                        this.showTranslationServiceAtNextAttached.setValue(true)
+                    }
                     attachToWindow()
                 }
             }
@@ -371,11 +375,24 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
             override fun onTranslated() {
             }
 
-            override fun onTranslationFailed(t: Throwable?) {
-                showErrorDialog(DialogView.Type.CANCEL_ONLY,
-                        context.getString(R.string.title_translationFailed),
-                        t?.message ?: context.getString(R.string.error_unknownError))
-            }
+            override fun onTranslationFailed(t: Throwable?) =
+                    if (t?.message?.contains(R.string.error_content_microsoft_azure_reached_word_limit.asString()) == true) {
+                        showErrorDialog(DialogView.Type.CONFIRM_ONLY,
+                                context.getString(R.string.title_translationFailed),
+                                R.string.error_microsoft_azure_reached_word_limit.asString(),
+                                object : DialogView.OnDialogViewCallback() {
+                                    override fun onConfirmClick(dialogView: DialogView?) {
+                                        super.onConfirmClick(dialogView)
+                                        dialogView?.setCallback(null)
+                                        showTranslationServiceAtNextAttached.setValue(true)
+                                        viewLangSelector.performClick()
+                                    }
+                                })
+                    } else {
+                        showErrorDialog(DialogView.Type.CANCEL_ONLY,
+                                context.getString(R.string.title_translationFailed),
+                                t?.message ?: context.getString(R.string.error_unknownError))
+                    }
 
             override fun detachResultView() {
                 ocrResultView?.detachFromWindow()
@@ -388,12 +405,13 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
         }
     }
 
-    fun showErrorDialog(type: DialogView.Type, title: String, msg: String) {
+    fun showErrorDialog(type: DialogView.Type, title: String, msg: String, callback: DialogView.OnDialogViewCallback? = null) {
         dialogView.reset()
         dialogView.setType(type)
         dialogView.setTitle(title)
         dialogView.setContentMsg(msg)
         dialogView.attachToWindow()
+        dialogView.setCallback(callback)
     }
 
     fun checkScreenshotPermission(): Boolean =

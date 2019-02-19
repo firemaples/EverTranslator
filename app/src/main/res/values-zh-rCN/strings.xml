@@ -111,4 +111,5 @@
     <string name="auto_close_app_when_spen_inserted_samsung_note_series_only">插入 Spen 后自动关闭 APP (仅支援三星 Note 系列)</string>
     <string name="service_google_translate">谷歌翻译</string>
     <string name="error_screenshot_out_of_memory">记忆体不足撷取萤幕失败，请稍后再重试</string>
+    <string name="error_microsoft_azure_reached_word_limit">很抱歉，微软 Azure 翻译已达到每月使用上限，请改使用其他翻译引擎(将会在下个月初恢復)</string>
 </resources>
