@@ -15,12 +15,13 @@ import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.utils.threadUI
 import java.io.File
 import java.io.IOException
+import java.util.concurrent.Executors
 
 internal const val EXT_TRAINED_DATA = ".traineddata"
 internal const val EXT_TMP_FILE = ".tmp"
 
-internal val downloadThread = newSingleThreadContext("downloadThread")
-internal val moveFileThread = newSingleThreadContext("moveFileThread")
+internal val downloadThread = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+internal val moveFileThread = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
 internal val DOWNLOAD_TAG: String = "downloadTag"
 

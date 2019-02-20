@@ -26,6 +26,7 @@ class GoogleTranslateUtil {
         @JvmStatic
         fun getGoogleTranslateInfo(): GoogleTranslateInfo? =
                 Utils.getPackageInfo(PACKAGE_NAME_GOOGLE_TRANSLATE)?.let {
+                    @Suppress("DEPRECATION")
                     GoogleTranslateInfo(
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                                 it.longVersionCode

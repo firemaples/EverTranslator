@@ -385,7 +385,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
                                         super.onConfirmClick(dialogView)
                                         dialogView?.setCallback(null)
                                         showTranslationServiceAtNextAttached.setValue(true)
-                                        viewLangSelector.performClick()
+                                        viewLangSelector.safePerformClick()
                                     }
                                 })
                     } else {
