@@ -106,11 +106,6 @@ class AreaSelectionView(context: Context, attrs: AttributeSet) : AppCompatImageV
         }
     }
 
-    @Suppress("RedundantOverride")
-    override fun performClick(): Boolean {
-        return super.performClick()
-    }
-
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         helpTextView?.stopAnim()

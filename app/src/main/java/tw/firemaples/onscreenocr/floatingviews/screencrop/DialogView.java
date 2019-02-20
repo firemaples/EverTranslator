@@ -99,9 +99,13 @@ public class DialogView extends FloatingView {
         public void onClick(View v) {
             int id = v.getId();
             if (id == R.id.bt_dialogOk) {
-                callback.onConfirmClick(DialogView.this);
+                if (callback != null) {
+                    callback.onConfirmClick(DialogView.this);
+                }
             } else if (id == R.id.bt_dialogCancel) {
-                callback.onCancelClicked(DialogView.this);
+                if (callback != null) {
+                    callback.onCancelClicked(DialogView.this);
+                }
             }
         }
     };

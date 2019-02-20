@@ -55,6 +55,14 @@ fun View.onViewPrepared(callback: (View) -> Unit) {
     })
 }
 
+fun View?.safePerformClick() {
+    try {
+        this?.performClick()
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
+
 fun Int.asString(): String = CoreApplication.instance.getString(this)
 
 fun Int.asFormatString(vararg args: Any?): String = String.format(Locale.US, this.asString(), *args)

@@ -131,7 +131,9 @@ class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
         super.attachToWindow()
         EventUtil.register(this)
         if (showTranslationServiceAtNextAttached.isValue(true)) {
-            rootView.postDelayed({ spTranslationService.performClick() }, 1000)
+            rootView.postDelayed({
+                spTranslationService.safePerformClick()
+            }, 1000)
         }
     }
 
