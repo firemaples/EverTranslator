@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="versionMessage_2_4_3">● 修正 Google 翻譯失敗問題\n● 修正部分彈出視窗無法關閉問題\n● 增加通知欄快捷\n● 修正錯誤</string>
     <string name="versionMessage_2_4_1">● 增加 Google 翻譯\n● 微軟 Azure 翻譯達到翻譯上限時顯示提示\n● 修正錯誤</string>
     <string name="versionMessage_2_3_0">● 修正瀏海手機文字辨識問題\n● 修正小米手機文字辨識問題\n● 支援全螢幕模式(翻譯時不再觸發導航列)\n● 增加選項 "自動複製文字辨識結果至剪貼簿"\n● 增加選項 "插入 Spen 後自動關閉 APP (僅支援三星 Note 系列)"\n● 變更翻譯引擎名稱 “停用翻譯” 為 “僅文字辨識”</string>
     <string name="versionMessage_2_2_0">● 選擇區域可縮放\n● 更新教學\n● 增加圓型圖示\n● 儲存主浮動視窗最後位置\n● 修正阿拉伯文及北印度語錯誤</string>
