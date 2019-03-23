@@ -101,10 +101,14 @@ public class DialogView extends FloatingView {
             if (id == R.id.bt_dialogOk) {
                 if (callback != null) {
                     callback.onConfirmClick(DialogView.this);
+                } else {
+                    detachFromWindow();
                 }
             } else if (id == R.id.bt_dialogCancel) {
                 if (callback != null) {
                     callback.onCancelClicked(DialogView.this);
+                } else {
+                    detachFromWindow();
                 }
             }
         }
