@@ -1,8 +1,10 @@
 package tw.firemaples.onscreenocr.translate
 
+import com.firemaples.googlewebtranslator.Tools
 import com.firemaples.googlewebtranslator.GoogleWebTranslator
 import com.firemaples.googlewebtranslator.TranslatedResult
 import kotlinx.coroutines.Job
+import tw.firemaples.onscreenocr.BuildConfig
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.utils.launch
 import tw.firemaples.onscreenocr.utils.threadTranslation
@@ -10,6 +12,7 @@ import java.io.IOException
 
 object GoogleWebViewTranslator : Translator {
     val translator: GoogleWebTranslator by lazy {
+        Tools.DEBUG = BuildConfig.DEBUG
         GoogleWebTranslator(CoreApplication.instance)
     }
 
