@@ -50,6 +50,14 @@ public class MainActivity extends AppCompatActivity {
         context.startActivity(getStarterIntent(context));
     }
 
+    public static Intent getShowingStateSwitchIntent(Context context, boolean toShow) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(MainActivity.ACTION_START_FROM_NOTIFY);
+        intent.putExtra(MainActivity.INTENT_SHOW_FLOATING_VIEW, toShow);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

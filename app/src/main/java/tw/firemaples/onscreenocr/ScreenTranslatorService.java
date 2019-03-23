@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import tw.firemaples.onscreenocr.event.EventUtil;
+import tw.firemaples.onscreenocr.event.events.ShowingStateChanged;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
 import tw.firemaples.onscreenocr.floatingviews.screencrop.MainBar;
 import tw.firemaples.onscreenocr.receivers.SamsungSpenInsertedReceiver;
@@ -97,6 +99,17 @@ public class ScreenTranslatorService extends Service {
         if (_instance != null) {
             _instance._stopFloatingView(true);
         }
+    }
+
+    public static boolean isFloatingViewShowing() {
+        if (_instance != null) {
+            return _instance._isFloatingViewShowing();
+        }
+        return false;
+    }
+
+    private boolean _isFloatingViewShowing() {
+        return mainFloatingView != null && mainFloatingView.isAttached();
     }
 
     @Override
@@ -194,16 +207,13 @@ public class ScreenTranslatorService extends Service {
                 R.drawable.ic_launcher_shadow));
         builder.setTicker(getString(R.string.app_name));
         builder.setContentTitle(getString(R.string.app_name));
-        boolean toShow = mainFloatingView == null || !mainFloatingView.isAttached();
+        boolean toShow = !_isFloatingViewShowing();
         if (!toShow) {
             builder.setContentText(getString(R.string.notification_contentText_hide));
         } else {
             builder.setContentText(getString(R.string.notification_contentText_show));
         }
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        notificationIntent.setAction(MainActivity.ACTION_START_FROM_NOTIFY);
-        notificationIntent.putExtra(MainActivity.INTENT_SHOW_FLOATING_VIEW, toShow);
+        Intent notificationIntent = MainActivity.getShowingStateSwitchIntent(this, toShow);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
         builder.setAutoCancel(false);
@@ -221,13 +231,15 @@ public class ScreenTranslatorService extends Service {
     }
 
     private void _startFloatingView() {
-        if (mainFloatingView != null && mainFloatingView.isAttached()) {
+        if (_isFloatingViewShowing()) {
             mainFloatingView.detachFromWindow();
         }
 //        mainFloatingView = new FloatingPoint(this);
         mainFloatingView = new MainBar(this);
         mainFloatingView.attachToWindow();
         updateNotification();
+
+        EventUtil.post(new ShowingStateChanged(true));
     }
 
     private void _stopFloatingView(boolean updateNotify) {
@@ -237,5 +249,7 @@ public class ScreenTranslatorService extends Service {
         if (updateNotify) {
             updateNotification();
         }
+
+        EventUtil.post(new ShowingStateChanged(false));
     }
 }
