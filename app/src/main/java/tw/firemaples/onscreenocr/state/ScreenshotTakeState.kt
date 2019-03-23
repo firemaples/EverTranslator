@@ -1,10 +1,11 @@
 package tw.firemaples.onscreenocr.state
 
-import android.graphics.Bitmap
 import tw.firemaples.onscreenocr.StateManager
 import tw.firemaples.onscreenocr.StateName
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler
+import tw.firemaples.onscreenocr.utils.ImageFile
+import java.io.File
 
 object ScreenshotTakeState : BaseState() {
     var manager: StateManager? = null
@@ -30,10 +31,10 @@ object ScreenshotTakeState : BaseState() {
             manager?.dispatchBeforeScreenshot()
         }
 
-        override fun onScreenshotFinished(bitmap: Bitmap) {
+        override fun onScreenshotFinished(screenshotFile: ImageFile) {
             FirebaseEvent.logCaptureScreenFinished()
             manager?.apply {
-                this.bitmap = bitmap
+                this.screenshotFile = screenshotFile
                 dispatchScreenshotSuccess()
                 enterState(OCRProcessState)
             }

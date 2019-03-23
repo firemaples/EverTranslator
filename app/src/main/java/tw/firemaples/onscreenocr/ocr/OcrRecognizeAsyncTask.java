@@ -2,6 +2,7 @@ package tw.firemaples.onscreenocr.ocr;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.util.DisplayMetrics;
@@ -14,11 +15,13 @@ import com.googlecode.tesseract.android.TessBaseAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
+import tw.firemaples.onscreenocr.utils.ImageFile;
 import tw.firemaples.onscreenocr.utils.SettingUtil;
 import tw.firemaples.onscreenocr.utils.Utils;
 
@@ -30,14 +33,14 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
 
     private final Context context;
     private final TessBaseAPI baseAPI;
-    private Bitmap screenshot;
+    private ImageFile screenshot;
     private final List<Rect> boxList;
 
     private static final int textMargin = 10;
 
     private OnTextRecognizeAsyncTaskCallback callback;
 
-    public OcrRecognizeAsyncTask(Context context, Bitmap screenshot, List<Rect> boxList, OnTextRecognizeAsyncTaskCallback callback) {
+    public OcrRecognizeAsyncTask(Context context, ImageFile screenshot, List<Rect> boxList, OnTextRecognizeAsyncTaskCallback callback) {
         this.context = context;
         this.screenshot = screenshot;
         this.boxList = boxList;
@@ -58,7 +61,7 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
 
     @Override
     protected List<OcrResult> doInBackground(Void... params) {
-        baseAPI.setImage(ReadFile.readBitmap(screenshot));
+        baseAPI.setImage(ReadFile.readFile(screenshot.getFile()));
 
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -93,7 +96,9 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
 
             if (SettingUtil.INSTANCE.isDebugMode()) {
                 OcrResult.DebugInfo debugInfo = new OcrResult.DebugInfo();
-                Bitmap cropped = Bitmap.createBitmap(screenshot, rect.left, rect.top, rect.width(), rect.height());
+                Bitmap fullBitmap = BitmapFactory.decodeFile(screenshot.getFile().getAbsolutePath());
+                Bitmap cropped = Bitmap.createBitmap(fullBitmap, rect.left, rect.top, rect.width(), rect.height());
+                fullBitmap.recycle();
                 debugInfo.setCroppedBitmap(cropped);
                 debugInfo.addInfoString(String.format(Locale.getDefault(), "Screen size:%dx%d", metrics.widthPixels, metrics.heightPixels));
                 debugInfo.addInfoString(String.format(Locale.getDefault(), "Screenshot size:%dx%d", screenshot.getWidth(), screenshot.getHeight()));
