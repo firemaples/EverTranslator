@@ -27,15 +27,15 @@ android:
     - extra-google-m2repository
     - extra-android-m2repository
     # Google Play Services
-    - extra-google-google_play_services
+    #- extra-google-google_play_services
     # Support library
     - extra-android-support
 
-    - addon-google_apis-google-$ANDROID_API_LEVEL
-    - addon-google_apis-google-$EMULATOR_API_LEVEL
+    #- addon-google_apis-google-$ANDROID_API_LEVEL
+    #- addon-google_apis-google-$EMULATOR_API_LEVEL
 
-    - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
-    - sys-img-armeabi-v7a-addon-google_apis-google-$EMULATOR_API_LEVEL
+    #- sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
+    #- sys-img-armeabi-v7a-addon-google_apis-google-$EMULATOR_API_LEVEL
 before_script:
   - echo y | android update sdk -a --no-ui --filter android-21
   #- echo y | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-21
