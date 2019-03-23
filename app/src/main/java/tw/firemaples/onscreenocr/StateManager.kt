@@ -14,8 +14,10 @@ import tw.firemaples.onscreenocr.state.State
 import tw.firemaples.onscreenocr.state.event.StateChangedEvent
 import tw.firemaples.onscreenocr.translate.TranslationService
 import tw.firemaples.onscreenocr.translate.TranslationUtil
+import tw.firemaples.onscreenocr.utils.ImageFile
 import tw.firemaples.onscreenocr.utils.stateManagerAction
 import tw.firemaples.onscreenocr.utils.threadUI
+import java.io.File
 import java.util.*
 
 object StateManager {
@@ -26,7 +28,7 @@ object StateManager {
     var listener: OnStateChangedListener? = null
 
     var boxList: MutableList<Rect> = arrayListOf()
-    var bitmap: Bitmap? = null
+    var screenshotFile: ImageFile? = null
     var ocrResultList: MutableList<OcrResult> = ArrayList()
     var ocrResultText: String?
         get() = if (ocrResultList.isNotEmpty()) ocrResultList.first().text else null
@@ -48,7 +50,7 @@ object StateManager {
 
     fun clear() {
         boxList.clear()
-        bitmap = null
+        screenshotFile = null
         ocrResultList.clear()
     }
 

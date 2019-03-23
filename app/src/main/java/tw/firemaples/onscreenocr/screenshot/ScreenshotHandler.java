@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -33,6 +34,7 @@ import java.util.Locale;
 import tw.firemaples.onscreenocr.MainActivity;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.log.FirebaseEvent;
+import tw.firemaples.onscreenocr.utils.ImageFile;
 import tw.firemaples.onscreenocr.utils.NotchUtil;
 import tw.firemaples.onscreenocr.utils.SettingUtil;
 import tw.firemaples.onscreenocr.utils.Utils;
@@ -50,6 +52,7 @@ public class ScreenshotHandler {
     public final static int ERROR_CODE_TIMEOUT = 1;
     public final static int ERROR_CODE_IMAGE_FORMAT_ERROR = 2;
     public final static int ERROR_CODE_OUT_OF_MEMORY = 3;
+    public final static int ERROR_CODE_IO_EXCEPTION = 4;
 
     private Context context;
     private boolean isGetUserPermission;
@@ -140,6 +143,12 @@ public class ScreenshotHandler {
         logger.info("Start screenshot");
         final long screenshotStartTime = System.currentTimeMillis();
 
+        final File screenshotFile = new File(context.getCacheDir(), "screenshot.jpg");
+        if (screenshotFile.exists() && !screenshotFile.delete()) {
+            callback.onScreenshotFailed(ERROR_CODE_IO_EXCEPTION, new IOException("Delete the old one screenshot failed"));
+            return;
+        }
+
         final MediaProjection mProjection = getMediaProjection();
         if (mProjection == null) {
             logger.error("MediaProjection is null");
@@ -191,6 +200,7 @@ public class ScreenshotHandler {
                 Image image = null;
                 Bitmap tempBmp = null;
                 Bitmap realSizeBitmap = null;
+                int[] size = null;
                 Throwable error = null;
                 int errorCode = ERROR_CODE_KNOWN_ERROR;
                 try {
@@ -233,8 +243,16 @@ public class ScreenshotHandler {
                     realSizeBitmap = Bitmap.createBitmap(tempBmp, notchWidthDiff, notchHeightDiff,
                             deviceWidth, tempBmp.getHeight() - notchHeightDiff);
 
+                    size = new int[]{realSizeBitmap.getWidth(), realSizeBitmap.getHeight()};
+                    saveBmpToFile(realSizeBitmap, screenshotFile);
+
                     if (SettingUtil.INSTANCE.isDebugMode()) {
-                        saveBmpToFile(realSizeBitmap);
+                        String fileName = String.format(Locale.getDefault(), "debug_screenshot_%s.jpg",
+                                new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.getDefault())
+                                        .format(new Date(System.currentTimeMillis())));
+                        File debugFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName);
+                        Utils.showToast("Saving debug screenshot to " + debugFile.getAbsolutePath());
+                        saveBmpToFile(realSizeBitmap, debugFile);
                     }
                 } catch (Throwable e) {
                     logger.error("Screenshot failed", e);
@@ -242,6 +260,8 @@ public class ScreenshotHandler {
                     if (callback != null) {
                         if (e instanceof UnsupportedOperationException) {
                             errorCode = ERROR_CODE_IMAGE_FORMAT_ERROR;
+                        } else if (e instanceof FileNotFoundException) {
+                            errorCode = ERROR_CODE_IO_EXCEPTION;
                         } else if (e.getMessage() != null) {
                             String errorMsg = e.getMessage();
                             if (errorMsg.contains("Buffer not large enough for pixels")) {
@@ -268,6 +288,9 @@ public class ScreenshotHandler {
                         if (tempBmp != null) {
                             tempBmp.recycle();
                         }
+                        if (realSizeBitmap != null) {
+                            realSizeBitmap.recycle();
+                        }
                     }
                 }
 
@@ -275,11 +298,11 @@ public class ScreenshotHandler {
                     handler.removeCallbacks(timeoutRunnable);
                     timeoutRunnable = null;
                 }
-                if (realSizeBitmap != null && error == null) {
+                if (error == null && size != null && screenshotFile.exists()) {
                     long spentTime = System.currentTimeMillis() - screenshotStartTime;
                     logger.info("Screenshot finished, spent: " + spentTime + " ms");
                     if (callback != null) {
-                        callback.onScreenshotFinished(realSizeBitmap);
+                        callback.onScreenshotFinished(new ImageFile(screenshotFile, size[0], size[1]));
                     }
                 } else {
                     callback.onScreenshotFailed(errorCode, error);
@@ -288,22 +311,16 @@ public class ScreenshotHandler {
         }, handler);
     }
 
-    private void saveBmpToFile(Bitmap bitmap) {
-        String fileName = String.format(Locale.getDefault(), "debug_screenshot_%s.jpg",
-                new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.getDefault())
-                        .format(new Date(System.currentTimeMillis())));
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName);
+    private void saveBmpToFile(Bitmap bitmap, File file) throws FileNotFoundException {
         logger.info("Saving debug screenshot to " + file.getAbsolutePath());
-        Utils.showToast("Saving debug screenshot to " + file.getAbsolutePath());
         FileOutputStream out = null;
         try {
             out = new FileOutputStream(file.getAbsolutePath());
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
             // PNG is a lossless format, the compression factor (100) is ignored
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
             logger.error("Save debug screenshot failed");
-            Utils.showErrorToast("Save debug screenshot failed");
-            e.printStackTrace();
+            throw e;
         } finally {
             try {
                 if (out != null) {
@@ -318,7 +335,7 @@ public class ScreenshotHandler {
     public interface OnScreenshotHandlerCallback {
         void onScreenshotStart();
 
-        void onScreenshotFinished(Bitmap bitmap);
+        void onScreenshotFinished(ImageFile screenshotFile);
 
         void onScreenshotFailed(int errorCode, @Nullable Throwable e);
     }

@@ -33,7 +33,7 @@ object OCRProcessState : OverlayState() {
             manager.ocrResultList.add(ocrResult)
         }
 
-        OCRManager.start(manager.bitmap!!, manager.boxList)
+        OCRManager.start(manager.screenshotFile!!, manager.boxList)
     }
 
     val callback = object : OCRManager.OnOCRStateChangedListener {

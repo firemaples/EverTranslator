@@ -4,7 +4,9 @@ import android.graphics.Bitmap
 import android.graphics.Rect
 import android.os.AsyncTask
 import com.googlecode.tesseract.android.TessBaseAPI
+import tw.firemaples.onscreenocr.utils.ImageFile
 import tw.firemaples.onscreenocr.utils.Utils.Companion.context
+import java.io.File
 
 object OCRManager {
     val tessBaseAPI: TessBaseAPI by lazy { TessBaseAPI() }
@@ -12,14 +14,14 @@ object OCRManager {
     private var callback: OnOCRStateChangedListener? = null
     private var lastAsyncTask: AsyncTask<*, *, *>? = null
 
-    private var currentScreenshot: Bitmap? = null
+    private var currentScreenshot: ImageFile? = null
     private var boxList: List<Rect>? = null
 
     fun setListener(callback: OnOCRStateChangedListener) {
         this.callback = callback
     }
 
-    fun start(screenshot: Bitmap, boxList: List<Rect>) {
+    fun start(screenshot: ImageFile, boxList: List<Rect>) {
         this.currentScreenshot = screenshot
         this.boxList = boxList
 
