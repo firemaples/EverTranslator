@@ -4,7 +4,7 @@
     package="tw.firemaples.onscreenocr"
     android:installLocation="auto">
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -17,15 +17,15 @@
         android:appComponentFactory="whateverString"
         android:fullBackupContent="true"
         android:icon="@drawable/ic_launcher_shadow"
-        android:roundIcon="@mipmap/ic_round"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
             android:excludeFromRecents="true"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -47,6 +47,16 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="034212d0a941b036105ee0ffa8473d6a0cf260af" />
+
+        <service
+            android:name=".QuickTileService"
+            android:icon="@drawable/ic_for_notify"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
