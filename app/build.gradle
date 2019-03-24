@@ -108,7 +108,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.0'
     implementation 'com.rmtheis:tess-two:9.0.0'
     implementation 'com.muddzdev:styleabletoast:2.1.2'
-    implementation 'io.github.firemaples:microsoft-translator-java-api:0.8.6'
+    implementation 'io.github.firemaples:microsoft-translator-java-api:0.8.7'
     implementation 'com.google.android.exoplayer:exoplayer:r2.4.0'
     implementation 'com.amitshekhar.android:android-networking:1.0.0'
     implementation 'com.facebook.stetho:stetho:1.5.0'
