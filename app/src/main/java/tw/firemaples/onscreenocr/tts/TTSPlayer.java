@@ -10,7 +10,6 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -137,11 +136,6 @@ public class TTSPlayer {
 
     private ExoPlayer.EventListener eventListener = new ExoPlayer.EventListener() {
         @Override
-        public void onTimelineChanged(Timeline timeline, Object manifest) {
-
-        }
-
-        @Override
         public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
 
         }
@@ -164,11 +158,6 @@ public class TTSPlayer {
 
         @Override
         public void onPlayerError(ExoPlaybackException error) {
-
-        }
-
-        @Override
-        public void onPositionDiscontinuity() {
 
         }
 
