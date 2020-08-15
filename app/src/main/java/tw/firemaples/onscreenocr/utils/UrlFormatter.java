@@ -1,6 +1,6 @@
 package tw.firemaples.onscreenocr.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Created by firemaples on 30/11/2016.
