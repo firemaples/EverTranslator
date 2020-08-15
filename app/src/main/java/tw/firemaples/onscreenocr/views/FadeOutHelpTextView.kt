@@ -16,8 +16,8 @@ private const val TIME_TEXT_HIDDEN_ANIM: Long = 800
 private const val INTERVAL_TEXT_HIDDEN_ANIM: Long = 10
 
 class FadeOutHelpTextView : AppCompatImageView {
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     @Suppress("unused")
     private val logger: Logger by lazy { LoggerFactory.getLogger(FadeOutHelpTextView::class.java) }

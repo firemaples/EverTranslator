@@ -17,8 +17,8 @@ private const val ANIM_INTERVAL = 10L
 
 @Suppress("ConstantConditionIf")
 class ProgressBorderView : AppCompatImageView {
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     private val logger: Logger by lazy { LoggerFactory.getLogger(ProgressBorderView::class.java) }
 

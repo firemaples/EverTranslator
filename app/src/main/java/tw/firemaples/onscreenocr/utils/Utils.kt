@@ -107,7 +107,7 @@ class Utils {
 
         fun copyToClipboard(label: String, text: String) {
             (context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager)?.let {
-                it.primaryClip = ClipData.newPlainText(label, text)
+                it.setPrimaryClip(ClipData.newPlainText(label, text))
                 Utils.showToast(String.format(context.getString(R.string.msg_textHasBeenCopied), text))
             }
         }
