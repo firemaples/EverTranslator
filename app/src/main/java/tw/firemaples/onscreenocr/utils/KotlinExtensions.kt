@@ -1,5 +1,6 @@
 package tw.firemaples.onscreenocr.utils
 
+import android.graphics.Rect
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
@@ -66,3 +67,17 @@ fun View?.safePerformClick() {
 fun Int.asString(): String = CoreApplication.instance.getString(this)
 
 fun Int.asFormatString(vararg args: Any?): String = String.format(Locale.US, this.asString(), *args)
+
+fun View.getRectOnScreen(): Rect {
+    val location = IntArray(2)
+    this.getLocationOnScreen(location)
+
+    return Rect(location[0], location[1], location[0] + this.width, location[1] + this.height)
+}
+
+fun View.getTopLeftRect(): Rect {
+    val location = IntArray(2)
+    this.getLocationOnScreen(location)
+
+    return Rect(location[0], location[1], location[0], location[1])
+}
