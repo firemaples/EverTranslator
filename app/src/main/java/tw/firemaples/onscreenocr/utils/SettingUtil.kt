@@ -43,8 +43,8 @@ object SettingUtil {
         if (deviceId == null) {
             deviceId = UUID.randomUUID().toString()
             sp.edit().putString(KEY_DEVICE_ID, deviceId).apply()
-        }
-        deviceId
+            deviceId
+        } else deviceId
     }
 
     var isDebugMode: Boolean

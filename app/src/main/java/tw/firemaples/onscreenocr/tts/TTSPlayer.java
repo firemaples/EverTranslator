@@ -3,7 +3,7 @@ package tw.firemaples.onscreenocr.tts;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;

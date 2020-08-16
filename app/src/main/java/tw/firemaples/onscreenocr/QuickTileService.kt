@@ -3,7 +3,7 @@ package tw.firemaples.onscreenocr
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.slf4j.Logger

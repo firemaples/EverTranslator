@@ -14,7 +14,7 @@ import android.media.projection.MediaProjectionManager;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;

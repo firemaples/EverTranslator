@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.os.CountDownTimer
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.AppCompatImageView
+import androidx.core.content.ContextCompat
+import androidx.appcompat.widget.AppCompatImageView
 import android.util.AttributeSet
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -16,8 +16,8 @@ private const val TIME_TEXT_HIDDEN_ANIM: Long = 800
 private const val INTERVAL_TEXT_HIDDEN_ANIM: Long = 10
 
 class FadeOutHelpTextView : AppCompatImageView {
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     @Suppress("unused")
     private val logger: Logger by lazy { LoggerFactory.getLogger(FadeOutHelpTextView::class.java) }
