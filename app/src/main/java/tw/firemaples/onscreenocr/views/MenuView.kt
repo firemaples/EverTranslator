@@ -6,22 +6,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.animation.AnimationUtils
 import android.widget.*
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatingviews.FloatingView
 import tw.firemaples.onscreenocr.utils.UIUtil
 import tw.firemaples.onscreenocr.utils.onViewPrepared
 
-class MenuView(context: Context, private val selection: List<Int>,
-               private val listener: OnMenuItemClickedListener) : FloatingView(context) {
+class MenuView(
+        context: Context,
+        private val selection: List<String>,
+        private val ids: List<Int>,
+        private val listener: OnMenuItemClickedListener
+) : FloatingView(context) {
 
-    private val MARGIN_PX = 4f
-    private val layoutMargin by lazy { UIUtil.dpToPx(context, MARGIN_PX) }
+    var marginDp: Float = 4f
+    private val layoutMargin: Int
+        get() = UIUtil.dpToPx(context, marginDp)
 
-    private val adapter by lazy { MenuAdapter(context, selection) }
+    private val adapter by lazy { MenuAdapter(context, selection, ids) }
 
-    val viewRoot: RelativeLayout = rootView.findViewById(R.id.view_root)
-    val viewMenu: View = rootView.findViewById(R.id.view_menu)
+    private val viewRoot: RelativeLayout = rootView.findViewById(R.id.view_root)
+    private val viewMenu: View = rootView.findViewById(R.id.view_menu)
 
     init {
         val listView: ListView = rootView.findViewById(R.id.lv_menu)
@@ -29,7 +35,7 @@ class MenuView(context: Context, private val selection: List<Int>,
 
         listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             detachFromWindow()
-            listener.onMenuItemClicked(position, selection[position])
+            listener.onMenuItemClicked(position, ids[position], selection[position])
         }
 
         viewRoot.setOnClickListener {
@@ -51,6 +57,8 @@ class MenuView(context: Context, private val selection: List<Int>,
             }
 
             viewRoot.updateViewLayout(viewMenu, layoutParams)
+            
+            viewRoot.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_menu_appearance))
         }
     }
 
@@ -58,7 +66,7 @@ class MenuView(context: Context, private val selection: List<Int>,
 
     override fun getLayoutSize(): Int = WindowManager.LayoutParams.MATCH_PARENT
 
-    private class MenuAdapter(val context: Context, val selection: List<Int>) : BaseAdapter() {
+    private class MenuAdapter(val context: Context, val selection: List<String>, val ids: List<Int>) : BaseAdapter() {
         private val inflater by lazy { LayoutInflater.from(context) }
 
         private class ViewHolder(val view: View) {
@@ -75,19 +83,19 @@ class MenuView(context: Context, private val selection: List<Int>,
                 ViewHolder(inflater.inflate(R.layout.item_menu, parent, false))
             else convertView.tag as ViewHolder
 
-            holder.textView.setText(selection[position])
+            holder.textView.text = selection[position]
 
             return holder.view
         }
 
         override fun getItem(position: Int): Any = selection[position]
 
-        override fun getItemId(position: Int): Long = selection[position].toLong()
+        override fun getItemId(position: Int): Long = ids[position].toLong()
 
         override fun getCount(): Int = selection.size
     }
 
     interface OnMenuItemClickedListener {
-        fun onMenuItemClicked(position: Int, item: Int)
+        fun onMenuItemClicked(position: Int, id: Int, item: String)
     }
 }

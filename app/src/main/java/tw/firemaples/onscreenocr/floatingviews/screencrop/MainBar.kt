@@ -53,12 +53,13 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
     private var ocrResultView: OCRResultView? = null
     private val dialogView: DialogView by lazy { DialogView(context) }
     private val menuView: MenuView by lazy {
-        MenuView(context, listOf(R.string.menu_setting,
+        val ids = listOf(R.string.menu_setting,
                 R.string.menu_privacy_policy,
                 R.string.menu_about,
                 R.string.menu_help,
                 R.string.menu_hide,
-                R.string.menu_exit), onMenuItemClickedListener)
+                R.string.menu_exit)
+        MenuView(context, ids.map { context.getString(it) }.toList(), ids, onMenuItemClickedListener)
     }
 
     private val tempDisableAutoAreaSelecting = Once(false)
@@ -425,8 +426,8 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
             }
 
     private val onMenuItemClickedListener = object : MenuView.OnMenuItemClickedListener {
-        override fun onMenuItemClicked(position: Int, item: Int) {
-            when (item) {
+        override fun onMenuItemClicked(position: Int, id: Int, item: String) {
+            when (id) {
                 R.string.menu_setting -> SettingView(context).attachToWindow()
                 R.string.menu_privacy_policy -> {
                     resetAll()

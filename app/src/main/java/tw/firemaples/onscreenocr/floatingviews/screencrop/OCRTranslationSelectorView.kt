@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.floatingviews.screencrop
 
 import android.content.Context
+import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
@@ -18,11 +19,12 @@ import tw.firemaples.onscreenocr.translate.TranslationService
 import tw.firemaples.onscreenocr.translate.TranslationUtil
 import tw.firemaples.onscreenocr.translate.event.TranslationServiceChangedEvent
 import tw.firemaples.onscreenocr.utils.*
+import tw.firemaples.onscreenocr.views.MenuView
 
 class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
-    private val spTrainedDataSite: Spinner = rootView.findViewById(R.id.sp_trainedDataSite)
+    private val tvTrainedDataSite: TextView = rootView.findViewById(R.id.tv_trainedDataSite)
     private val lvOcrLang: ListView = rootView.findViewById(R.id.lv_ocrLang)
-    private val spTranslationService: Spinner = rootView.findViewById(R.id.sp_translationService)
+    private val tvTranslationService: TextView = rootView.findViewById(R.id.tv_translationService)
     private val lvTranslationLang: ListView = rootView.findViewById(R.id.lv_translationLang)
     private val tvLangEmptyTip: TextView = rootView.findViewById(R.id.tv_langEmptyTip)
     private val btClose: View = rootView.findViewById(R.id.bt_close)
@@ -67,21 +69,20 @@ class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
     private fun setViews() {
         btClose.setOnClickListener { detachFromWindow() }
 
-        spTrainedDataSite.adapter = ArrayAdapter<String>(context,
-                R.layout.item_spinner,
-                android.R.id.text1,
-                OCRFileUtil.trainedDataSites.map { it.name }).apply {
-            setDropDownViewResource(R.layout.item_spinner_dropdown)
-        }
-        spTrainedDataSite.skipNextSelect()
-        spTrainedDataSite.setSelection(OCRFileUtil.trainedDataDownloadSiteIndex)
-        spTrainedDataSite.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (parent?.isSkipNextSelect(true) == true) return
-                OCRFileUtil.trainedDataDownloadSiteIndex = position
+        val trainedDataSites = OCRFileUtil.trainedDataSites
+        tvTrainedDataSite.text = trainedDataSites[OCRFileUtil.trainedDataDownloadSiteIndex].name
+        tvTrainedDataSite.setOnClickListener {
+            MenuView(context = context,
+                    selection = trainedDataSites.map { it.name },
+                    ids = trainedDataSites.map { it.name.hashCode() },
+                    listener = object : MenuView.OnMenuItemClickedListener {
+                        override fun onMenuItemClicked(position: Int, id: Int, item: String) {
+                            OCRFileUtil.trainedDataDownloadSiteIndex = position
+                            tvTrainedDataSite.text = trainedDataSites[position].name
+                        }
+                    }).apply {
+                marginDp = 0f
+                attachToWindow(tvTrainedDataSite.getTopLeftRect())
             }
         }
 
@@ -95,26 +96,21 @@ class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
             }
         }
 
-        spTranslationService.adapter = ArrayAdapter<String>(context,
-                R.layout.item_spinner,
-                android.R.id.text1,
-                TranslationUtil.serviceList.asSequence()
-                        .sortedBy { it.sort }.map { it.fullName }.toList()).apply {
-            setDropDownViewResource(R.layout.item_spinner_dropdown)
-        }
-        spTranslationService.skipNextSelect()
-        spTranslationService.setSelection(TranslationUtil.currentServiceIndex)
-        spTranslationService.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (parent?.isSkipNextSelect(true) == true) return
-                TranslationUtil.currentService = TranslationUtil.serviceList.sortedBy { it.sort }[position]
-                if (TranslationUtil.currentService == TranslationService.GoogleTranslatorApp) {
-                    GoogleTranslateUtil.checkInstalled(context)
-                }
-            }
+        val translationServiceList = TranslationUtil.serviceList.asSequence().sortedBy { it.sort }.toList()
+        tvTranslationService.text = translationServiceList[TranslationUtil.currentServiceIndex].fullName
+        tvTranslationService.setOnClickListener {
+            MenuView(context = context,
+                    selection = translationServiceList.map { it.fullName },
+                    ids = translationServiceList.map { it.sort },
+                    listener = object : MenuView.OnMenuItemClickedListener {
+                        override fun onMenuItemClicked(position: Int, id: Int, item: String) {
+                            TranslationUtil.currentService = translationServiceList[position]
+                            tvTranslationService.text = translationServiceList[position].fullName
+                            if (TranslationUtil.currentService == TranslationService.GoogleTranslatorApp) {
+                                GoogleTranslateUtil.checkInstalled(context)
+                            }
+                        }
+                    }).attachToWindow(tvTranslationService.getTopLeftRect())
         }
 
         lvTranslationLang.choiceMode = ListView.CHOICE_MODE_SINGLE
@@ -132,7 +128,7 @@ class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
         EventUtil.register(this)
         if (showTranslationServiceAtNextAttached.isValue(true)) {
             rootView.postDelayed({
-                spTranslationService.safePerformClick()
+                tvTranslationService.safePerformClick()
             }, 1000)
         }
     }
@@ -146,8 +142,7 @@ class OCRTranslationSelectorView(context: Context) : FloatingView(context) {
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onTrainedDataDownloadSiteChanged(event: TrainedDataDownloadSiteChangedEvent) {
-        spTrainedDataSite.skipNextSelect()
-        spTrainedDataSite.setSelection(event.index)
+        tvTrainedDataSite.text = OCRFileUtil.trainedDataSites[event.index].name
     }
 
     @Suppress("unused")

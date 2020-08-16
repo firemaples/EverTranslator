@@ -33,13 +33,15 @@
             android:text="@string/download_site"
             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-        <Spinner
-            android:id="@+id/sp_trainedDataSite"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tv_trainedDataSite"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/gradient_spinner"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="1dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            tools:entries="@array/microsoft_translationLangName" />
+            tools:text="Github" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -85,13 +87,15 @@
             android:text="@string/provider"
             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-        <Spinner
-            android:id="@+id/sp_translationService"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tv_translationService"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/gradient_spinner"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="1dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            tools:entries="@array/microsoft_translationLangName" />
+            tools:text="Arabic" />
 
         <TextView
             android:layout_width="wrap_content"
