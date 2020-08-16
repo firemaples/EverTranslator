@@ -17,6 +17,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.hiya.jacoco-android'
+apply from: '../../FiremaplesAndroidSign/playstore_sign.gradle'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
@@ -24,11 +25,6 @@ repositories {
 }
 
 android {
-    signingConfigs {
-        config {
-            storeFile file('/Users/louischen/Github/play_store_upload_key_store.jks')
-        }
-    }
     packagingOptions {
         exclude 'META-INF/main.kotlin_module'
     }
@@ -67,7 +63,7 @@ android {
         }
         prod {
             dimension "tier"
-            signingConfig signingConfigs.config
+            signingConfig signingConfigs.playStore
         }
     }
     // Instead, use the bundle block to control which types of configuration APKs
