@@ -1,6 +1,8 @@
 package tw.firemaples.onscreenocr
 
+import android.content.Intent
 import android.os.Build
+import android.os.IBinder
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
@@ -14,6 +16,14 @@ import tw.firemaples.onscreenocr.event.events.ShowingStateChanged
 @RequiresApi(Build.VERSION_CODES.N)
 class QuickTileService : TileService() {
     private val logger: Logger by lazy { LoggerFactory.getLogger(QuickTileService::class.java) }
+
+    override fun onBind(intent: Intent?): IBinder? {
+        return try {
+            super.onBind(intent)
+        } catch (e: Exception) {
+            null
+        }
+    }
 
     override fun onTileAdded() {
         super.onTileAdded()
