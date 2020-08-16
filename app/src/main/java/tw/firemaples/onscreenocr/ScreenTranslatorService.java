@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.IBinder;
+
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
@@ -65,7 +66,7 @@ public class ScreenTranslatorService extends Service {
 
     public static void start(Context context, boolean showFloatingView) {
         if (!isRunning()) {
-            context.startService(new Intent(context, ScreenTranslatorService.class));
+            ContextCompat.startForegroundService(context, new Intent(context, ScreenTranslatorService.class));
         } else if (_instance != null) {
             if (showFloatingView) {
                 _instance._startFloatingView();

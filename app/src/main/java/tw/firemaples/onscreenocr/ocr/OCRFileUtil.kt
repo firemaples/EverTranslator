@@ -81,8 +81,13 @@ object OCRFileUtil : BaseSettingUtil() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val externalCacheDirs = context.getExternalFilesDirs(null)
                 for (file in externalCacheDirs) {
-                    if (file != null && Environment.isExternalStorageRemovable(file)) {
-                        return file
+                    if (file != null) {
+                        try {
+                            Environment.isExternalStorageRemovable(file)
+                            return file
+                        } catch (t: Throwable) {
+                            //ignore
+                        }
                     }
                 }
             }
