@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="versionCodes" translatable="false">
+        <item>2.4.5</item>
         <item>2.4.3</item>
         <item>2.4.1</item>
         <item>2.3.0</item>
@@ -12,6 +13,7 @@
         <item>1.7.1</item>
     </string-array>
 
+    <string name="versionMessage_2_4_5">● Fix dropdown lists are missing on Android 11</string>
     <string name="versionMessage_2_4_3">● Fix Google translator issue\n● Fix some dialog not closable\n● Add shortcut to notification shade on Android 7.0 and upper\n● Fix errors</string>
     <string name="versionMessage_2_4_1">● Add Google Translate service\n● Show alert when Microsoft Azure reached the limit\n● Fix errors</string>
     <string name="versionMessage_2_3_0">● Fix OCR issue on notch device\n● Fix OCR issue on MIUI 10\n● Support for full screen mode (will not trigger navigation bar when translation)\n● Add option "Auto copy OCR result"\n● Add option "Auto close APP when inserting Spen back (Samsung Note series ONLY)"\n● Change the naming of translation provider from "Disable translation" to "OCR only"</string>
