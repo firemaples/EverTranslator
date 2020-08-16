@@ -50,7 +50,7 @@ class QuickTileService : TileService() {
     }
 
     private fun updateTileState(isShowing: Boolean = ScreenTranslatorService.isFloatingViewShowing()) {
-        val tile = qsTile
+        val tile = qsTile ?: return
         tile.state = if (isShowing) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
         tile.updateTile()
     }
