@@ -1,14 +1,16 @@
 package tw.firemaples.onscreenocr.log
 
 import android.os.Bundle
-import com.crashlytics.android.Crashlytics
+import android.util.Log
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.ocr.OCRLangUtil
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler
 import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
 import tw.firemaples.onscreenocr.translate.TranslationService
+import tw.firemaples.onscreenocr.utils.SignatureUtil
 import java.util.*
 
 private const val EVENT_START_AREA_SELECTION = "start_area_translation"
@@ -222,6 +224,21 @@ object FirebaseEvent {
     }
 
     fun logException(t: Throwable) {
-        Crashlytics.logException(t)
+        FirebaseCrashlytics.getInstance().recordException(t)
+    }
+
+    fun validateSignature() {
+        val crashlytics = FirebaseCrashlytics.getInstance()
+        try {
+            val sha = SignatureUtil.getCurrentSignatureSHA(context)
+            val result = SignatureUtil.validateSignature(context)
+            crashlytics.setCustomKey("Signature_SHA", sha)
+            crashlytics.setCustomKey("Signature_SHA_is_correct", result)
+            crashlytics.setCustomKey("Package_name", context.packageName)
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            crashlytics.setCustomKey("ValidateSignatureFailed", e.message.toString())
+            crashlytics.log(Log.getStackTraceString(e))
+        }
     }
 }

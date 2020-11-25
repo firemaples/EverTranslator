@@ -29,6 +29,7 @@ object SettingUtil {
     private const val KEY_HOW_TO_USE_SHOWN_VERSION = "KEY_HOW_TO_USE_SHOWN_VERSION"
     private const val KEY_LAST_MAIN_BAR_POSITION_X = "KEY_LAST_MAIN_BAR_POSITION_X"
     private const val KEY_LAST_MAIN_BAR_POSITION_Y = "KEY_LAST_MAIN_BAR_POSITION_Y"
+    private const val KEY_FIREBASE_REMOTE_CONFIG_FETCH_INTERVAL_SEC = "KEY_FIREBASE_REMOTE_CONFIG_FETCH_INTERVAL_SEC"
 
     private val context: Context
         get() {
@@ -169,5 +170,11 @@ object SettingUtil {
         set(value) {
             sp.edit().putInt(KEY_LAST_MAIN_BAR_POSITION_X, value[0])
                     .putInt(KEY_LAST_MAIN_BAR_POSITION_Y, value[1]).apply()
+        }
+
+    var firebaseRemoteConfigFetchInterval: Long
+        get() = sp.getLong(KEY_FIREBASE_REMOTE_CONFIG_FETCH_INTERVAL_SEC, 43200)
+        set(value) {
+            sp.edit().putLong(KEY_FIREBASE_REMOTE_CONFIG_FETCH_INTERVAL_SEC, value)
         }
 }

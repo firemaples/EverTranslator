@@ -10,6 +10,7 @@ import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.remoteconfig.data.TrainedDataFileNames
 import tw.firemaples.onscreenocr.utils.JsonUtil
+import tw.firemaples.onscreenocr.utils.SettingUtil
 import tw.firemaples.onscreenocr.utils.TypeReference
 
 internal const val KEY_VERSION = "version"
@@ -26,12 +27,13 @@ object RemoteConfigUtil {
     private val context: Context by lazy { CoreApplication.instance }
 
     private val remoteConfig: FirebaseRemoteConfig by lazy {
-        val config = FirebaseRemoteConfig.getInstance()
-        config.setConfigSettings(FirebaseRemoteConfigSettings.Builder()
-                .setDeveloperModeEnabled(BuildConfig.DEBUG).build())
-        config.setDefaults(R.xml.remote_config_defaults)
+        val fetchInterval = if (BuildConfig.DEBUG) 0 else SettingUtil.firebaseRemoteConfigFetchInterval
+        val settings = FirebaseRemoteConfigSettings.Builder().setMinimumFetchIntervalInSeconds(fetchInterval).build()
 
-        config
+        FirebaseRemoteConfig.getInstance().apply {
+            setDefaultsAsync(R.xml.remote_config_defaults)
+            setConfigSettingsAsync(settings)
+        }
     }
 
     fun tryFetchNew() {
@@ -39,11 +41,10 @@ object RemoteConfigUtil {
         logger.info("lastFetchStatus: ${getLastFetchState()}")
 
         logger.info("Version before fetch: $versionString, keyGroup: $microsoftTranslationKeyGroupId")
-        remoteConfig.fetch(fetchInterval).addOnSuccessListener {
-            logger.info("Remote config fetch successfully")
-            remoteConfig.activateFetched()
-
+        remoteConfig.fetchAndActivate().addOnSuccessListener {
             logger.info("Version after fetch: $versionString, keyGroup: $microsoftTranslationKeyGroupId")
+
+            SettingUtil.firebaseRemoteConfigFetchInterval = remoteConfig.getLong(KEY_FETCH_INTERVAL)
         }.addOnFailureListener {
             logger.error("Remote config fetch failed", it)
         }
@@ -66,9 +67,6 @@ object RemoteConfigUtil {
 
     private val versionString: String
         get() = getString(KEY_VERSION)
-
-    private val fetchInterval: Long
-        get() = remoteConfig.getLong(KEY_FETCH_INTERVAL)
 
     val microsoftTranslationKeyGroupId: String
         get() = getString(KEY_MICROSOFT_KEY_GROUP_ID)
