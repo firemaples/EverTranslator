@@ -111,5 +111,5 @@
     <string name="ocr_only">僅文字辨識，不做任何翻譯</string>
     <string name="service_google_translate">Google 翻譯</string>
     <string name="error_screenshot_out_of_memory">記憶體不足擷取螢幕失敗，請稍後再重試</string>
-    <string name="error_microsoft_azure_reached_word_limit">很抱歉，微軟 Azure 翻譯已達到每月使用上限，請改使用其他翻譯引擎(將會在下個月初恢復)</string>
+    <string name="error_translation_service_exceeded_limit">很抱歉，%1$s 已達到每月使用上限，請改使用其他翻譯引擎(將會在下個月初恢復)</string>
 </resources>

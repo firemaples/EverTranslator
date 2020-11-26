@@ -113,6 +113,6 @@
     <string name="ocr_only">OCR only, without any translation</string>
     <string name="service_google_translate">Google Translate</string>
     <string name="error_screenshot_out_of_memory">Screenshot failed cause of memory not enough, please try again later</string>
-    <string name="error_microsoft_azure_reached_word_limit">Sorry, Microsoft Azure translator was reached the word limit per month, please use another translation service and will be available early next month</string>
+    <string name="error_translation_service_exceeded_limit">Sorry, %1$s translator is exceed the limit in this month.\n\nPlease use another translation service and it will be available on the next month</string>
     <string name="error_content_microsoft_azure_reached_word_limit" translatable="false">[microsoft-translator-api] Error retrieving translation: https://api.cognitive.microsoft.com/sts/v1.0/issueToken</string>
 </resources>
