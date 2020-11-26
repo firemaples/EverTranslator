@@ -160,6 +160,14 @@
                 android:textSize="12sp"
                 android:textStyle="bold"
                 tools:text="by Microsoft" />
+
+            <ImageView
+                android:id="@+id/iv_translationService"
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                android:layout_alignParentRight="true"
+                android:adjustViewBounds="true"
+                tools:src="@drawable/translated_by_google" />
         </RelativeLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

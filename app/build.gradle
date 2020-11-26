@@ -128,6 +128,8 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:1.7.25'
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.15'
+
+    implementation 'com.google.mlkit:translate:16.1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -168,8 +168,12 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
                     !GoogleTranslateUtil.checkInstalled(context)) {
                 return
             }
-            rescheduleFadeOut()
-            StateManager.startOCR()
+            TranslationManager.checkResource(context, OCRLangUtil.selectLangDisplayCode, TranslationUtil.currentTranslationLangCode) {
+                if (!it) return@checkResource
+
+                rescheduleFadeOut()
+                StateManager.startOCR()
+            }
         }
         btTranslation.setOnClickListener { doTranslation() }
         btOcrOnly.setOnClickListener { doTranslation() }
