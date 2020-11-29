@@ -8,9 +8,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
-import tw.firemaples.onscreenocr.utils.asString
-import tw.firemaples.onscreenocr.utils.threadTranslation
-import tw.firemaples.onscreenocr.utils.threadUI
+import tw.firemaples.onscreenocr.utils.*
 
 object MicrosoftApiTranslator : Translator {
     val logger: Logger = LoggerFactory.getLogger(MicrosoftApiTranslator::class.java)
@@ -28,7 +26,12 @@ object MicrosoftApiTranslator : Translator {
         } catch (e: Throwable) {
             logger.error("Translation failed", e)
             threadUI {
-                callback(false, "", e)
+                val error = if (e.message?.contains("\"code\":403001") == true) {
+                    TranslationErrorException(R.string.error_translation_service_exceeded_limit.asFormatString(R.string.service_microsoft_azure.asString()), e, ErrorType.ExceededDataLimit)
+                } else {
+                    TranslationErrorException(e.message, e)
+                }
+                callback(false, "", error)
             }
         }
     }

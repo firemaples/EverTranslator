@@ -111,5 +111,11 @@
     <string name="auto_close_app_when_spen_inserted_samsung_note_series_only">插入 Spen 后自动关闭 APP (仅支援三星 Note 系列)</string>
     <string name="service_google_translate">谷歌翻译</string>
     <string name="error_screenshot_out_of_memory">记忆体不足撷取萤幕失败，请稍后再重试</string>
-    <string name="error_microsoft_azure_reached_word_limit">很抱歉，微软 Azure 翻译已达到每月使用上限，请改使用其他翻译引擎(将会在下个月初恢復)</string>
+    <string name="error_translation_service_exceeded_limit">很抱歉，%1$s 已达到每月使用上限，请改使用其他翻译引擎(将会在下个月初恢復)</string>
+    <string name="service_google_mlkit_translate">谷歌 MLKit</string>
+    <string name="error_google_mlkit_is_not_support_the_source_language">很抱歉，Google MLKit 不支援此语言： %1$s。\n\n请选择其他翻译引擎。</string>
+    <string name="error_google_mlkit_models_are_not_downloaded">需要下载语言模组 %1$s 进行翻译。 请点选 [确认] 下载。</string>
+    <string name="dialog_content_mlkit_models_downloaded">所需的语言模组皆已下载完成。</string>
+    <string name="dialog_content_mlkit_model_downloading">正在下载语言模组： %1$s</string>
+    <string name="error_download_mlkit_model_failed">下载语言模组失败：%1$s</string>
 </resources>

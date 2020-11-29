@@ -111,5 +111,11 @@
     <string name="ocr_only">僅文字辨識，不做任何翻譯</string>
     <string name="service_google_translate">Google 翻譯</string>
     <string name="error_screenshot_out_of_memory">記憶體不足擷取螢幕失敗，請稍後再重試</string>
-    <string name="error_microsoft_azure_reached_word_limit">很抱歉，微軟 Azure 翻譯已達到每月使用上限，請改使用其他翻譯引擎(將會在下個月初恢復)</string>
+    <string name="error_translation_service_exceeded_limit">很抱歉，%1$s 已達到每月使用上限，請改使用其他翻譯引擎(將會在下個月初恢復)</string>
+    <string name="service_google_mlkit_translate">Google MLKit</string>
+    <string name="error_google_mlkit_is_not_support_the_source_language">很抱歉，Google MLKit 不支援此語言： %1$s。\n\n請選擇其他翻譯引擎。</string>
+    <string name="error_google_mlkit_models_are_not_downloaded">需要下載語言模組 %1$s 進行翻譯。 請點選 [確認] 下載。</string>
+    <string name="dialog_content_mlkit_models_downloaded">所需的語言模組皆已下載完成。</string>
+    <string name="dialog_content_mlkit_model_downloading">正在下載語言模組： %1$s</string>
+    <string name="error_download_mlkit_model_failed">下載語言模組失敗：%1$s</string>
 </resources>

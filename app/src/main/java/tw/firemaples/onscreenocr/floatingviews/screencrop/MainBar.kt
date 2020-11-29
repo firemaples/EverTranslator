@@ -6,6 +6,7 @@ import android.graphics.Rect
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
+import com.androidnetworking.error.ANError
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.slf4j.Logger
@@ -21,10 +22,7 @@ import tw.firemaples.onscreenocr.ocr.event.OCRLangChangedEvent
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler
 import tw.firemaples.onscreenocr.state.InitState
-import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
-import tw.firemaples.onscreenocr.translate.GoogleWebViewTranslator
-import tw.firemaples.onscreenocr.translate.TranslationService
-import tw.firemaples.onscreenocr.translate.TranslationUtil
+import tw.firemaples.onscreenocr.translate.*
 import tw.firemaples.onscreenocr.translate.event.InstallGoogleTranslatorEvent
 import tw.firemaples.onscreenocr.translate.event.TranslationLangChangedEvent
 import tw.firemaples.onscreenocr.translate.event.TranslationServiceChangedEvent
@@ -170,8 +168,12 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
                     !GoogleTranslateUtil.checkInstalled(context)) {
                 return
             }
-            rescheduleFadeOut()
-            StateManager.startOCR()
+            TranslationManager.checkResource(context, OCRLangUtil.selectLangDisplayCode, TranslationUtil.currentTranslationLangCode) {
+                if (!it) return@checkResource
+
+                rescheduleFadeOut()
+                StateManager.startOCR()
+            }
         }
         btTranslation.setOnClickListener { doTranslation() }
         btOcrOnly.setOnClickListener { doTranslation() }
@@ -376,24 +378,26 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
             override fun onTranslated() {
             }
 
-            override fun onTranslationFailed(t: Throwable?) =
-                    if (t?.message?.contains(R.string.error_content_microsoft_azure_reached_word_limit.asString()) == true) {
-                        showErrorDialog(DialogView.Type.CONFIRM_ONLY,
-                                context.getString(R.string.title_translationFailed),
-                                R.string.error_microsoft_azure_reached_word_limit.asString(),
-                                object : DialogView.OnDialogViewCallback() {
-                                    override fun onConfirmClick(dialogView: DialogView?) {
-                                        super.onConfirmClick(dialogView)
-                                        dialogView?.setCallback(null)
-                                        showTranslationServiceAtNextAttached.setValue(true)
-                                        viewLangSelector.safePerformClick()
-                                    }
-                                })
-                    } else {
-                        showErrorDialog(DialogView.Type.CANCEL_ONLY,
-                                context.getString(R.string.title_translationFailed),
-                                t?.message ?: context.getString(R.string.error_unknownError))
-                    }
+            override fun onTranslationFailed(t: Throwable?) {
+                val message = t?.message
+                if (t is TranslationErrorException && t.type == ErrorType.ExceededDataLimit && !message.isNullOrBlank()) {
+                    showErrorDialog(DialogView.Type.CONFIRM_ONLY,
+                            context.getString(R.string.title_translationFailed),
+                            message,
+                            object : DialogView.OnDialogViewCallback() {
+                                override fun onConfirmClick(dialogView: DialogView?) {
+                                    super.onConfirmClick(dialogView)
+                                    dialogView?.setCallback(null)
+                                    showTranslationServiceAtNextAttached.setValue(true)
+                                    viewLangSelector.safePerformClick()
+                                }
+                            })
+                } else {
+                    showErrorDialog(DialogView.Type.CANCEL_ONLY,
+                            context.getString(R.string.title_translationFailed),
+                            message ?: context.getString(R.string.error_unknownError))
+                }
+            }
 
             override fun detachResultView() {
                 ocrResultView?.detachFromWindow()

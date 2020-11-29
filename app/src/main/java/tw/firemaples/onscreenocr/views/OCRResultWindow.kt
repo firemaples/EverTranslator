@@ -10,6 +10,7 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -50,6 +51,7 @@ class OCRResultWindow(context: Context) : FrameLayout(context) {
     private val btOpenGtTT by lazy { view.getView(R.id.bt_openGoogleTranslate_translatedText) }
 
     private val tvTranslationService by lazy { view.getTextView(R.id.tv_translationService) }
+    private val ivTranslationService by lazy { view.findViewById<ImageView>(R.id.iv_translationService) }
 
     private val layoutParams by lazy {
         RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -149,11 +151,18 @@ class OCRResultWindow(context: Context) : FrameLayout(context) {
         btTtsTT.isEnabled = translated
         btOpenGtTT.isEnabled = translated
 
-
-        val translatedBy = context.getString(
-                R.string.translatedBy, TranslationUtil.currentService.fullName)
-        tvTranslationService.text = translatedBy
-        tvTranslationService.setVisible(TranslationUtil.isEnableTranslation)
+        val service = TranslationUtil.currentService
+        if (service.resultDrawableResId != -1) {
+            ivTranslationService.setImageResource(service.resultDrawableResId)
+            ivTranslationService.setVisible(true)
+            tvTranslationService.setVisible(false)
+        } else {
+            val translatedBy = context.getString(
+                    R.string.translatedBy, service.fullName)
+            tvTranslationService.text = translatedBy
+            tvTranslationService.setVisible(TranslationUtil.isEnableTranslation)
+            ivTranslationService.setVisible(false)
+        }
     }
 
     private var anchorView: View? = null

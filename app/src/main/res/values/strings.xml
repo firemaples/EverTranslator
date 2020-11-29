@@ -104,15 +104,21 @@
     <string name="provider">Provider:</string>
     <string name="service_microsoft_azure">Microsoft Azure</string>
     <string name="service_yandex" translatable="false">Yandex</string>
+    <string name="service_google_translate">Google Translate</string>
     <string name="service_google_translate_app">Google translate APP</string>
+    <string name="service_google_mlkit_translate">Google MLKit</string>
     <string name="service_ocr_only">OCR only</string>
     <string name="change">Change</string>
     <string name="select_download_site">Select download site</string>
     <string name="autoCopyOCRResult">Auto copy OCR result</string>
     <string name="auto_close_app_when_spen_inserted_samsung_note_series_only">Auto close APP when inserting Spen back (Samsung Note series ONLY)</string>
     <string name="ocr_only">OCR only, without any translation</string>
-    <string name="service_google_translate">Google Translate</string>
     <string name="error_screenshot_out_of_memory">Screenshot failed cause of memory not enough, please try again later</string>
-    <string name="error_microsoft_azure_reached_word_limit">Sorry, Microsoft Azure translator was reached the word limit per month, please use another translation service and will be available early next month</string>
+    <string name="error_translation_service_exceeded_limit">Sorry, %1$s translator is exceed the limit in this month.\n\nPlease use another translation service and it will be available on the next month</string>
     <string name="error_content_microsoft_azure_reached_word_limit" translatable="false">[microsoft-translator-api] Error retrieving translation: https://api.cognitive.microsoft.com/sts/v1.0/issueToken</string>
+    <string name="error_google_mlkit_is_not_support_the_source_language">Google MLKit is not support the source language: %1$s.  Please use another translation service.</string>
+    <string name="error_google_mlkit_models_are_not_downloaded">The language model %1$s needs to be downloaded for translation.  Please press [OK] button to download the model.</string>
+    <string name="dialog_content_mlkit_models_downloaded">Required language models downloaded.</string>
+    <string name="dialog_content_mlkit_model_downloading">Downloading language model: %1$s.</string>
+    <string name="error_download_mlkit_model_failed">Download language model failed: %1$s.</string>
 </resources>

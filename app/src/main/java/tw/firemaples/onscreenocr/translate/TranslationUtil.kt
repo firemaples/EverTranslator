@@ -15,7 +15,9 @@ object TranslationUtil : BaseSettingUtil() {
 
     var currentService: TranslationService
         get() = TranslationService.values()
-                .first { it.id == sp.getInt(KEY_TRANSLATE_SERVICE, DEFAULT_SERVICE) }
+                .firstOrNull {
+                    it.id == sp.getInt(KEY_TRANSLATE_SERVICE, DEFAULT_SERVICE) && it.enabled
+                } ?: serviceList[0]
         set(value) {
             if (currentService == value) return
             sp.edit().putInt(KEY_TRANSLATE_SERVICE, value.id).apply()
@@ -23,10 +25,10 @@ object TranslationUtil : BaseSettingUtil() {
             EventUtil.post(TranslationServiceChangedEvent(value))
         }
 
-    val serviceList = TranslationService.values().sortedBy { it.sort }
+    val serviceList = TranslationService.values().filter { it.enabled }.sortedBy { it.sort }
 
     val currentServiceIndex: Int
-        get() = serviceList.indexOf(currentService)
+        get() = serviceList.indexOf(currentService).let { it.coerceAtLeast(0) }
 
     private val translationLangCodeListMicrosoft: Array<String> by lazy {
         context.resources.getStringArray(R.array.microsoft_translationLangCode_iso6391)
@@ -37,11 +39,15 @@ object TranslationUtil : BaseSettingUtil() {
     private val translationLangCodeListGoogle: Array<String> by lazy {
         context.resources.getStringArray(R.array.google_translationLangCode_iso6391)
     }
+    private val translationLangCodeListGoogleMLKit: Array<String> by lazy {
+        context.resources.getStringArray(R.array.google_MLKit_translationLangCode_iso6391)
+    }
     val translationLangCodeList: Array<String>
         get() = when (currentService) {
             TranslationService.MicrosoftAzure -> translationLangCodeListMicrosoft
             TranslationService.Yandex -> translationLangCodeListYandex
             TranslationService.GoogleTranslator -> translationLangCodeListGoogle
+            TranslationService.GoogleMLKit -> translationLangCodeListGoogleMLKit
             TranslationService.GoogleTranslatorApp, TranslationService.OCROnly ->
                 arrayOf()
         }
@@ -58,12 +64,17 @@ object TranslationUtil : BaseSettingUtil() {
         context.resources.getStringArray(
                 R.array.google_translationLangName)
     }
+    private val getTranslationLangNameListGoogleMLKit: Array<String> by lazy {
+        context.resources.getStringArray(
+                R.array.google_MLKit_translationLangName)
+    }
 
     fun getTranslationLangNameList(service: TranslationService = currentService): Array<String> =
             when (service) {
                 TranslationService.MicrosoftAzure -> getTranslationLangNameListMicrosoft
                 TranslationService.Yandex -> getTranslationLangNameListYandex
                 TranslationService.GoogleTranslator -> getTranslationLangNameListGoogle
+                TranslationService.GoogleMLKit -> getTranslationLangNameListGoogleMLKit
                 TranslationService.GoogleTranslatorApp, TranslationService.OCROnly ->
                     arrayOf()
             }
@@ -96,10 +107,13 @@ object TranslationUtil : BaseSettingUtil() {
 
 enum class TranslationService(val id: Int, val sort: Int,
                               val fullName: String,
-                              val defaultLangCode: String) {
-    GoogleTranslator(3, 0, context.getString(R.string.service_google_translate), defaultLangCode = "en"),
+                              val defaultLangCode: String,
+                              val enabled: Boolean = true,
+                              val resultDrawableResId: Int = -1) {
+    GoogleTranslator(3, 0, context.getString(R.string.service_google_translate), defaultLangCode = "en", enabled = false, resultDrawableResId = R.drawable.translated_by_google),
+    GoogleMLKit(4, 0, context.getString(R.string.service_google_mlkit_translate), defaultLangCode = "en", resultDrawableResId = R.drawable.translated_by_google),
     MicrosoftAzure(0, 1, context.getString(R.string.service_microsoft_azure), defaultLangCode = "en"),
-    Yandex(1, 2, context.getString(R.string.service_yandex), defaultLangCode = "en"),
+    Yandex(1, 2, context.getString(R.string.service_yandex), defaultLangCode = "en", enabled = false),
     GoogleTranslatorApp(2, 3, context.getString(R.string.service_google_translate_app), defaultLangCode = "Google"),
     OCROnly(999, 999, context.getString(R.string.service_ocr_only), defaultLangCode = "None");
 
