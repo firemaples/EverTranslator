@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="versionMessage_2_4_6">● 增加 Google MLKit 翻譯\n● 移除 Yandex 翻譯\n● 修正錯誤訊息</string>
     <string name="versionMessage_2_4_5">● 修正下拉選單在 Android 11 上無法顯示的問題</string>
     <string name="versionMessage_2_4_3">● 修正 Google 翻譯失敗問題\n● 修正部分彈出視窗無法關閉問題\n● 增加通知欄快捷\n● 修正錯誤</string>
     <string name="versionMessage_2_4_1">● 增加 Google 翻譯\n● 微軟 Azure 翻譯達到翻譯上限時顯示提示\n● 修正錯誤</string>
