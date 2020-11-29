@@ -92,13 +92,26 @@ object GoogleMLKitTranslator : Translator {
     private fun downloadResource(context: Context, langToDownload: List<String>) {
         val lang = langToDownload[0]
 
-        val progress = ProgressView(context).apply {
-            showMessage(R.string.dialog_content_mlkit_model_downloading.asFormatString(lang))
+        var taskCancelled = false
+
+        val dialog = DialogView(context).apply {
+            setType(DialogView.Type.CANCEL_ONLY)
+            setTitle(R.string.btn_download.asString())
+            setContentMsg(R.string.dialog_content_mlkit_model_downloading.asFormatString(lang))
+            setCallback(object : DialogView.OnDialogViewCallback() {
+                override fun onCancelClicked(dialogView: DialogView?) {
+                    super.onCancelClicked(dialogView)
+                    taskCancelled = true
+                }
+            })
+            attachToWindow()
         }
 
         remoteModelManager.download(TranslateRemoteModel.Builder(lang).build(), DownloadConditions.Builder().build())
                 .addOnSuccessListener {
-                    progress.detachFromWindow()
+                    dialog.detachFromWindow()
+
+                    if (taskCancelled) return@addOnSuccessListener
 
                     val list = langToDownload.toMutableList()
                     list.remove(lang)
@@ -113,7 +126,7 @@ object GoogleMLKitTranslator : Translator {
                         downloadResource(context, list)
                     }
                 }.addOnFailureListener {
-                    progress.detachFromWindow()
+                    dialog.detachFromWindow()
 
                     DialogView(context).apply {
                         setType(DialogView.Type.CONFIRM_ONLY)
