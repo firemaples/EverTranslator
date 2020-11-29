@@ -9,7 +9,7 @@ import tw.firemaples.onscreenocr.log.UserInfoUtils
 import tw.firemaples.onscreenocr.ocr.OCRFileUtil.removableFileDirOrNormalFilesDir
 import tw.firemaples.onscreenocr.ocr.event.TrainedDataDownloadSiteChangedEvent
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
-import tw.firemaples.onscreenocr.remoteconfig.TrainedDataSite
+import tw.firemaples.onscreenocr.remoteconfig.data.TrainedDataSite
 import tw.firemaples.onscreenocr.utils.BaseSettingUtil
 import java.io.File
 
