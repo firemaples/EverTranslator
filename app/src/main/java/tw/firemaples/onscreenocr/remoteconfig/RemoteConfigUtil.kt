@@ -9,6 +9,7 @@ import tw.firemaples.onscreenocr.BuildConfig
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.remoteconfig.data.TrainedDataFileNames
+import tw.firemaples.onscreenocr.remoteconfig.data.TrainedDataSite
 import tw.firemaples.onscreenocr.utils.JsonUtil
 import tw.firemaples.onscreenocr.utils.SettingUtil
 import tw.firemaples.onscreenocr.utils.TypeReference
@@ -98,5 +99,3 @@ object RemoteConfigUtil {
     val privacyPolicyUrl: String
         get() = getString(KEY_PRIVACY_POLICY_URL)
 }
-
-data class TrainedDataSite(val name: String, val key: String, val url: String)
