@@ -73,8 +73,8 @@ object RemoteConfigUtil {
         get() = getString(KEY_MICROSOFT_KEY_GROUP_ID)
 
     val microsoftTranslationKey: String
-        get() = getString(KEY_MICROSOFT_KEY).let {
-            if (it.isBlank()) context.getString(R.string.default_microsoft_key) else it
+        get() = context.getString(R.string.default_microsoft_key).let {
+            if (it.isBlank()) getString(KEY_MICROSOFT_KEY) else it
         }
 
     val trainedDataSites: List<TrainedDataSite>
