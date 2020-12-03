@@ -8,6 +8,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.ocr.OCRFileUtil
 import tw.firemaples.onscreenocr.ocr.OCRLangUtil
+import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.translate.TranslationUtil
 import java.util.*
 
@@ -43,10 +44,11 @@ object UserInfoUtils {
         firebaseCrashlytics.setCustomKey("Tran_Lang_Code", TranslationUtil.currentTranslationLangCode)
 
         firebaseAnalytics.setUserProperty("ocr_site", trainedDataDownloadSite.key)
-        firebaseAnalytics.setUserProperty("ocr_site_url", trainedDataDownloadSite.url)
         firebaseAnalytics.setUserProperty("ocr_lang_code", OCRLangUtil.selectedLangCode)
         firebaseAnalytics.setUserProperty("ocr_page_seg_mode", OCRLangUtil.pageSegmentationMode)
         firebaseAnalytics.setUserProperty("tran_lang_code", TranslationUtil.currentTranslationLangCode)
+        firebaseAnalytics.setUserProperty("ms_translate_key_group", RemoteConfigUtil.microsoftTranslationKeyGroupId)
+        firebaseAnalytics.setUserProperty("current_translate_svc", TranslationUtil.currentService.name)
     }
 
     fun updatePlayServiceInfo() {
@@ -79,7 +81,7 @@ object UserInfoUtils {
 
         firebaseCrashlytics.setCustomKey("PlayServiceVersionCode", playServiceVersionCode)
         firebaseCrashlytics.setCustomKey("PlayServiceVersionName", playServiceVersionName)
-        firebaseAnalytics.setUserProperty("PlayServiceVersionCode", playServiceVersionCode.toString())
-        firebaseAnalytics.setUserProperty("PlayServiceVersionName", playServiceVersionName)
+        firebaseAnalytics.setUserProperty("play_service_vs_code", playServiceVersionCode.toString())
+        firebaseAnalytics.setUserProperty("play_service_vs_name", playServiceVersionName)
     }
 }
