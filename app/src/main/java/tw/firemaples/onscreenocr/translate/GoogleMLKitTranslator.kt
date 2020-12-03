@@ -160,10 +160,10 @@ object GoogleMLKitTranslator : Translator {
     @Throws(IllegalArgumentException::class)
     private fun getOptions(source: String, target: String): TranslatorOptions.Builder {
         val sourceLang = TranslateLanguage.fromLanguageTag(source.split("-")[0])
-        val targetLang = TranslateLanguage.fromLanguageTag(target)
+        val targetLang = TranslateLanguage.fromLanguageTag(target.split("-")[0])
 
-        if (sourceLang == null) throw IllegalArgumentException("The source language is not supported")
-        if (targetLang == null) throw IllegalArgumentException("The target lang is not supported")
+        if (sourceLang == null) throw IllegalArgumentException("The source language is not supported: $source")
+        if (targetLang == null) throw IllegalArgumentException("The target lang is not supported: $target")
 
         return TranslatorOptions.Builder().setSourceLanguage(sourceLang).setTargetLanguage(targetLang)
     }
