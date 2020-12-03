@@ -9,7 +9,7 @@ import tw.firemaples.onscreenocr.utils.BaseSettingUtil
 import tw.firemaples.onscreenocr.utils.Utils.Companion.context
 
 object TranslationUtil : BaseSettingUtil() {
-    private const val DEFAULT_SERVICE = 2
+    private const val DEFAULT_SERVICE = 4
     private const val KEY_TRANSLATE_SERVICE = "translateService"
     private const val KEY_CURRENT_TRANSLATE_LANG_CODE = "currentTranslateLangCode"
 
