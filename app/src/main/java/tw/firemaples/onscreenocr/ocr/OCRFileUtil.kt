@@ -39,7 +39,10 @@ object OCRFileUtil : BaseSettingUtil() {
         }
 
     val trainedDataDownloadSite: TrainedDataSite
-        get() = trainedDataSites.first { it.key == trainedDataDownloadSiteKey }
+        get() = trainedDataSites.firstOrNull { it.key == trainedDataDownloadSiteKey }
+                ?: TrainedDataSite(name = "Github",
+                        key = DEFAULT_TRAINED_DATA_SITE_KEY,
+                        url = "https://github.com/firemaples/tessdata/raw/master/%s.traineddata")
 
     val trainedDataSites: List<TrainedDataSite>
         get() = RemoteConfigUtil.trainedDataSites
