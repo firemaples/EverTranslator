@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragment_permission_float_window">
+
+    <fragment
+        android:id="@+id/fragment_permission_float_window"
+        android:name="tw.firemaples.onscreenocr.ui.permissions.PermissionFloatWindowFragment"
+        tools:layout="@layout/permission_float_window_fragment">
+
+        <action
+            android:id="@+id/action_requestCaptureScreenPage"
+            app:destination="@id/fragment_permission_capture_screen" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_permission_capture_screen"
+        android:name="tw.firemaples.onscreenocr.ui.permissions.PermissionCaptureScreenFragment"
+        tools:layout="@layout/permission_capture_screen_fragment" />
+</navigation>

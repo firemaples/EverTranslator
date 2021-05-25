@@ -2,6 +2,7 @@
 
 buildscript {
     ext.kotlin_version = '1.4.21'
+    ext.nav_version = "2.3.5"
     repositories {
         google()
         jcenter()
@@ -22,6 +23,9 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.firebase:perf-plugin:1.3.4'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.4.1'
+
+        // Refactor
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
     }
 }
 
