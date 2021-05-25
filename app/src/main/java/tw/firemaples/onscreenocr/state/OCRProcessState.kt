@@ -4,8 +4,10 @@ import android.graphics.Rect
 import tw.firemaples.onscreenocr.StateManager
 import tw.firemaples.onscreenocr.StateName
 import tw.firemaples.onscreenocr.log.FirebaseEvent
-import tw.firemaples.onscreenocr.ocr.OCRManager
-import tw.firemaples.onscreenocr.ocr.OcrResult
+import tw.firemaples.onscreenocr.ocr.TextRecognitionManager
+import tw.firemaples.onscreenocr.ocr.tesseract.OCRLangUtil
+import tw.firemaples.onscreenocr.ocr.tesseract.TesseractOCRManager
+import tw.firemaples.onscreenocr.ocr.tesseract.OcrResult
 import tw.firemaples.onscreenocr.translate.TranslationService
 import tw.firemaples.onscreenocr.translate.TranslationUtil
 import tw.firemaples.onscreenocr.utils.SettingUtil
@@ -21,10 +23,10 @@ object OCRProcessState : OverlayState() {
 
         manager.dispatchStartOCR()
 
-        OCRManager.setListener(callback)
+//        TesseractOCRManager.setListener(callback)
 
         manager.ocrResultList.clear()
-        for (rect in manager.boxList) {
+        for (rect in manager.userSelectedAreaBoxList) {
             val ocrResult = OcrResult()
             ocrResult.rect = rect
             val rectList = ArrayList<Rect>()
@@ -33,29 +35,44 @@ object OCRProcessState : OverlayState() {
             manager.ocrResultList.add(ocrResult)
         }
 
-        OCRManager.start(manager.screenshotFile!!, manager.boxList)
+//        TesseractOCRManager.start(manager.screenshotFile!!, manager.boxList)
+
+        val screenshot = manager.screenshotFile!!
+        val userSelectedAreaBox = manager.userSelectedAreaBoxList.first()
+
+        TextRecognitionManager.recognize(
+            imageFile = screenshot.file,
+            userSelectedRect = userSelectedAreaBox,
+            lang = OCRLangUtil.selectedLangCode,
+            onSuccess = { text, textBoxes ->
+
+            },
+            onFailed = {
+
+            }
+        )
     }
 
-    val callback = object : OCRManager.OnOCRStateChangedListener {
-        override fun onInitializing() {
-            FirebaseEvent.logStartOCRInitializing()
-            manager?.dispatchStartOCRInitializing()
-        }
-
-        override fun onInitialized() {
-            FirebaseEvent.logOCRInitialized()
-        }
-
-        override fun onRecognizing() {
-            FirebaseEvent.logStartOCR()
-            manager?.dispatchStartOCRRecognizing()
-        }
-
-        override fun onRecognized(results: List<OcrResult>) {
-            FirebaseEvent.logOCRFinished()
-            this@OCRProcessState.onRecognized(results)
-        }
-    }
+//    val callback = object : TesseractOCRManager.OnOCRStateChangedListener {
+//        override fun onInitializing() {
+//            FirebaseEvent.logStartOCRInitializing()
+//            manager?.dispatchStartOCRInitializing()
+//        }
+//
+//        override fun onInitialized() {
+//            FirebaseEvent.logOCRInitialized()
+//        }
+//
+//        override fun onRecognizing() {
+//            FirebaseEvent.logStartOCR()
+//            manager?.dispatchStartOCRRecognizing()
+//        }
+//
+//        override fun onRecognized(results: List<OcrResult>) {
+//            FirebaseEvent.logOCRFinished()
+//            this@OCRProcessState.onRecognized(results)
+//        }
+//    }
 
     fun onRecognized(results: List<OcrResult>) {
         manager?.ocrResultList?.apply {
@@ -64,7 +81,8 @@ object OCRProcessState : OverlayState() {
 
             if (results.any { !it.text.isNullOrBlank() } && SettingUtil.autoCopyOCRResult) {
                 Utils.copyToClipboard(Utils.LABEL_OCR_RESULT,
-                        results.first { !it.text.isNullOrBlank() }.text)
+                    results.first { !it.text.isNullOrBlank() }.text
+                )
             }
 
             manager?.apply {

@@ -2,7 +2,7 @@ package tw.firemaples.onscreenocr.state
 
 import tw.firemaples.onscreenocr.StateManager
 import tw.firemaples.onscreenocr.StateName
-import tw.firemaples.onscreenocr.ocr.OCRLangUtil
+import tw.firemaples.onscreenocr.ocr.tesseract.OCRLangUtil
 
 object AreaSelectedState : OverlayState() {
     override fun stateName(): StateName = StateName.AreaSelected

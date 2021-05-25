@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.ocr;
+package tw.firemaples.onscreenocr.ocr.tesseract;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,7 +15,6 @@ import com.googlecode.tesseract.android.TessBaseAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -46,7 +45,7 @@ public class OcrRecognizeAsyncTask extends AsyncTask<Void, String, List<OcrResul
         this.boxList = boxList;
         this.callback = callback;
 
-        this.baseAPI = OCRManager.INSTANCE.getTessBaseAPI();
+        this.baseAPI = TesseractOCRManager.INSTANCE.getTessBaseAPI();
     }
 
     @Override

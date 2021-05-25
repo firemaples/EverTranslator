@@ -15,4 +15,6 @@
     <dimen name="resultWindow_tool_marginLeft">4dp</dimen>
 
     <dimen name="dialog_content_height">300dp</dimen>
+
+    <dimen name="dialog_ocr_translation_block_padding">4dp</dimen>
 </resources>

@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.log.FirebaseEvent
+import tw.firemaples.onscreenocr.ocr.tesseract.OCRFileUtil
+import tw.firemaples.onscreenocr.ocr.tesseract.OCRLangUtil
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.utils.threadUI
 import java.io.File

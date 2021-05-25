@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.ocr
+package tw.firemaples.onscreenocr.ocr.tesseract
 
 import android.annotation.SuppressLint
 import android.os.Build
@@ -6,7 +6,7 @@ import android.os.Environment
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.event.EventUtil
 import tw.firemaples.onscreenocr.log.UserInfoUtils
-import tw.firemaples.onscreenocr.ocr.OCRFileUtil.removableFileDirOrNormalFilesDir
+import tw.firemaples.onscreenocr.ocr.tesseract.OCRFileUtil.removableFileDirOrNormalFilesDir
 import tw.firemaples.onscreenocr.ocr.event.TrainedDataDownloadSiteChangedEvent
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.remoteconfig.data.TrainedDataSite

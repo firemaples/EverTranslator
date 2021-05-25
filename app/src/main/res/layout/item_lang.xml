@@ -7,4 +7,4 @@
     android:background="@drawable/bg_lang_selector"
     android:textAppearance="@style/TextAppearance.AppCompat.Small"
     android:theme="@style/Base.Theme.AppCompat.Light"
-    tools:text="Chinese(Traditional)" />
+    tools:text="Chinese (Traditional)" />

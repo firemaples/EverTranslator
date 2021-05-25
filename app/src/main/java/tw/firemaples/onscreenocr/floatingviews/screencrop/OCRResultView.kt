@@ -14,7 +14,7 @@ import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.StateManager
 import tw.firemaples.onscreenocr.event.EventUtil
 import tw.firemaples.onscreenocr.floatingviews.FloatingView
-import tw.firemaples.onscreenocr.ocr.OcrResult
+import tw.firemaples.onscreenocr.ocr.tesseract.OcrResult
 import tw.firemaples.onscreenocr.state.OCRProcessState
 import tw.firemaples.onscreenocr.state.TranslatedState
 import tw.firemaples.onscreenocr.state.TranslatingState

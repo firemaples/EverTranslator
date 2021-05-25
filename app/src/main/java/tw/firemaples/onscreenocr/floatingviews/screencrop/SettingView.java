@@ -19,8 +19,8 @@ import java.nio.channels.FileChannel;
 import tw.firemaples.onscreenocr.BuildConfig;
 import tw.firemaples.onscreenocr.R;
 import tw.firemaples.onscreenocr.floatingviews.FloatingView;
-import tw.firemaples.onscreenocr.ocr.OCRFileUtil;
-import tw.firemaples.onscreenocr.ocr.TessDataLocation;
+import tw.firemaples.onscreenocr.ocr.tesseract.OCRFileUtil;
+import tw.firemaples.onscreenocr.ocr.tesseract.TessDataLocation;
 import tw.firemaples.onscreenocr.log.FirebaseEvent;
 import tw.firemaples.onscreenocr.utils.SettingUtil;
 

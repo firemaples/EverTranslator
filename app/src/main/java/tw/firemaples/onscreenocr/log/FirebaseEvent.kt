@@ -5,7 +5,7 @@ import android.util.Log
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import tw.firemaples.onscreenocr.CoreApplication
-import tw.firemaples.onscreenocr.ocr.OCRLangUtil
+import tw.firemaples.onscreenocr.ocr.tesseract.OCRLangUtil
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler
 import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
@@ -30,6 +30,8 @@ private const val EVENT_CAPTURE_SCREEN_FAILED = "capture_screen_failed"
 private const val EVENT_START_OCR_INITIALIZING = "start_ocr_initializing"
 private const val EVENT_OCR_INITIALIZED = "ocr_initialized"
 private const val EVENT_START_OCR = "start_ocr"
+private const val EVENT_OCR_FALLBACK = "ocr_fallback"
+private const val EVENT_OCR_FAILED = "ocr_failed"
 private const val EVENT_OCR_FINISHED = "ocr_finished"
 
 private const val EVENT_START_TRANSLATION_TEXT = "start_translation_text"
@@ -118,24 +120,41 @@ object FirebaseEvent {
         })
     }
 
-    fun logStartOCRInitializing() {
+    private fun engineBundle(engine: String): Bundle = Bundle().apply {
+        putString("recognition_engine", engine)
+    }
+
+    fun logStartOCRInitializing(engine: String) {
         PerformanceTracer.startTracing(TRACE_OCR_INITIALIZE)
-        logEvent(EVENT_START_OCR_INITIALIZING)
+        logEvent(EVENT_START_OCR_INITIALIZING, engineBundle(engine))
     }
 
-    fun logOCRInitialized() {
+    fun logOCRInitialized(engine: String) {
         PerformanceTracer.stopTracing(TRACE_OCR_INITIALIZE)
-        logEvent(EVENT_OCR_INITIALIZED)
+        logEvent(EVENT_OCR_INITIALIZED, engineBundle(engine))
     }
 
-    fun logStartOCR() {
+    fun logStartOCR(engine: String) {
         PerformanceTracer.startTracing(TRACE_OCR_PROCESS)
-        logEvent(EVENT_START_OCR)
+        logEvent(EVENT_START_OCR, engineBundle(engine))
     }
 
-    fun logOCRFinished() {
+    fun logOCRFallback(from: String, to: String) {
+        logEvent(EVENT_OCR_FALLBACK, Bundle().apply {
+            putString("from", from)
+            putString("to", to)
+        })
+    }
+
+    fun logOCRFailed(engine: String, throwable: Throwable) {
         PerformanceTracer.stopTracing(TRACE_OCR_PROCESS)
-        logEvent(EVENT_OCR_FINISHED)
+        logEvent(EVENT_OCR_FAILED, engineBundle(engine))
+        logException(throwable)
+    }
+
+    fun logOCRFinished(engine: String) {
+        PerformanceTracer.stopTracing(TRACE_OCR_PROCESS)
+        logEvent(EVENT_OCR_FINISHED, engineBundle(engine))
     }
 
     fun logStartTranslationText(text: String, _translateToLang: String, service: TranslationService?) {

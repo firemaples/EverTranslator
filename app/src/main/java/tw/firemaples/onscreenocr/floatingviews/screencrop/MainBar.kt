@@ -6,7 +6,6 @@ import android.graphics.Rect
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
-import com.androidnetworking.error.ANError
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.slf4j.Logger
@@ -16,8 +15,8 @@ import tw.firemaples.onscreenocr.event.EventUtil
 import tw.firemaples.onscreenocr.floatingviews.FloatingView
 import tw.firemaples.onscreenocr.floatingviews.MovableFloatingView
 import tw.firemaples.onscreenocr.log.FirebaseEvent
-import tw.firemaples.onscreenocr.ocr.OCRLangUtil
-import tw.firemaples.onscreenocr.ocr.OCRManager
+import tw.firemaples.onscreenocr.ocr.tesseract.OCRLangUtil
+import tw.firemaples.onscreenocr.ocr.tesseract.TesseractOCRManager
 import tw.firemaples.onscreenocr.ocr.event.OCRLangChangedEvent
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler
@@ -122,7 +121,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
         StateManager.resetState()
         ocrTranslationSelectorView?.detachFromWindow()
         FloatingView.detachAllNonPrimaryViews()
-        OCRManager.cancelRunningTask()
+        TesseractOCRManager.cancelRunningTask()
         drawAreaView = null
         ocrResultView = null
     }
@@ -162,7 +161,7 @@ class MainBar(context: Context) : MovableFloatingView(context), RealButtonHandle
         fun doTranslation() {
             FirebaseEvent.logClickTranslationStartButton()
             if (SettingUtil.isRememberLastSelection) {
-                SettingUtil.lastSelectionArea = StateManager.boxList
+                SettingUtil.lastSelectionArea = StateManager.userSelectedAreaBoxList
             }
             if (TranslationUtil.currentService == TranslationService.GoogleTranslatorApp &&
                     !GoogleTranslateUtil.checkInstalled(context)) {

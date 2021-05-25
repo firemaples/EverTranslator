@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.ocr;
+package tw.firemaples.onscreenocr.ocr.tesseract;
 
 public enum OcrNTranslateState {
     OCR_INIT(1), OCR_RUNNING(2), OCR_FINISHED(3),

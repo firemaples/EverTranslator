@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.ocr;
+package tw.firemaples.onscreenocr.ocr.tesseract;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;

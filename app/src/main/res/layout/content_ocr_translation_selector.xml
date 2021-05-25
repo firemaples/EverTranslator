@@ -1,129 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="256dp"
     android:layout_height="@dimen/dialog_content_height"
-    android:orientation="horizontal"
+    tools:ignore="MissingConstraints"
     tools:showIn="@layout/view_ocr_translation_selector">
 
-    <LinearLayout
-        android:layout_width="128dp"
-        android:layout_height="wrap_content"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/line_verticalCenter"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        android:padding="4dp">
+        app:layout_constraintGuide_percent="0.5" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ocr_language"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textStyle="bold" />
+    <!-- Left side -->
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/md_grey_700" />
+    <TextView
+        android:id="@+id/label_OCRLang"
+        style="@style/OCRTranslationSelector_items.leftSide"
+        android:text="@string/ocr_language"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:background="@drawable/bg_lang_selector_sub_title"
-            android:text="@string/download_site"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+    <View
+        android:id="@+id/divider_label_OCRLang"
+        style="@style/OCRTranslationSelector_items.leftSide"
+        android:layout_height="1dp"
+        android:background="@color/md_grey_700"
+        app:layout_constraintTop_toBottomOf="@id/label_OCRLang" />
 
-        <TextView
-            android:id="@+id/tv_trainedDataSite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/gradient_spinner"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="1dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            tools:text="Github" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:background="@drawable/bg_lang_selector_sub_title"
-            android:text="@string/language"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-        <ListView
-            android:id="@+id/lv_ocrLang"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fadeScrollbars="false" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="128dp"
+    <TextView
+        android:id="@+id/label_OCRLangSub"
+        style="@style/OCRTranslationSelector_items.leftSide"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="4dp">
+        android:layout_marginTop="2dp"
+        android:background="@drawable/bg_lang_selector_sub_title"
+        android:text="@string/language"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        app:layout_constraintTop_toBottomOf="@id/divider_label_OCRLang" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/translation"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/tv_ocrLang_latin"
+        style="@style/OCRTranslationSelector_items.leftSide"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/label_ocrLang_latin_name"
+        app:layout_constraintTop_toBottomOf="@id/label_OCRLangSub" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/md_grey_700" />
+    <ListView
+        android:id="@+id/lv_ocrLang"
+        style="@style/OCRTranslationSelector_items.leftSide"
+        android:layout_height="0dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:fadeScrollbars="false"
+        app:layout_constraintBottom_toTopOf="@+id/label_OCRLang_downloadSite"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ocrLang_latin"
+        tools:listitem="@layout/item_lang" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:background="@drawable/bg_lang_selector_sub_title"
-            android:text="@string/provider"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+    <TextView
+        android:id="@+id/label_OCRLang_downloadSite"
+        style="@style/OCRTranslationSelector_items.leftSide"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:background="@drawable/bg_lang_selector_sub_title"
+        android:text="@string/download_site"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        app:layout_constraintBottom_toTopOf="@+id/tv_trainedDataSite" />
 
-        <TextView
-            android:id="@+id/tv_translationService"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/gradient_spinner"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="1dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            tools:text="Arabic" />
+    <TextView
+        android:id="@+id/tv_trainedDataSite"
+        style="@style/OCRTranslationSelector_items.leftSide"
+        android:background="@drawable/gradient_spinner"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="1dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="Github" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:background="@drawable/bg_lang_selector_sub_title"
-            android:text="@string/language"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+    <!-- Right side -->
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/label_translationLang"
+        style="@style/OCRTranslationSelector_items.rightSide"
+        android:layout_height="wrap_content"
+        android:text="@string/translation"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_langEmptyTip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/md_red_400" />
+    <View
+        style="@style/OCRTranslationSelector_items.rightSide"
+        android:layout_height="1dp"
+        android:background="@color/md_grey_700"
+        app:layout_constraintTop_toBottomOf="@+id/label_translationLang" />
 
-            <ListView
-                android:id="@+id/lv_translationLang"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fadeScrollbars="false" />
-        </FrameLayout>
+    <TextView
+        android:id="@+id/label_translationService"
+        style="@style/OCRTranslationSelector_items.rightSide"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/bg_lang_selector_sub_title"
+        android:text="@string/provider"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        app:layout_constraintTop_toBottomOf="@id/label_translationLang" />
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_translationService"
+        style="@style/OCRTranslationSelector_items.rightSide"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/gradient_spinner"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="1dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        app:layout_constraintTop_toBottomOf="@+id/label_translationService"
+        tools:text="Arabic" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/label_translationLangSub"
+        style="@style/OCRTranslationSelector_items.rightSide"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/bg_lang_selector_sub_title"
+        android:text="@string/language"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        app:layout_constraintTop_toBottomOf="@+id/tv_translationService" />
+
+    <TextView
+        android:id="@+id/tv_langEmptyTip"
+        style="@style/OCRTranslationSelector_items.rightSide"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/md_red_400"
+        app:layout_constraintTop_toBottomOf="@+id/label_translationLangSub" />
+
+    <ListView
+        android:id="@+id/lv_translationLang"
+        style="@style/OCRTranslationSelector_items.rightSide"
+        android:layout_height="0dp"
+        android:layout_marginTop="2dp"
+        android:fadeScrollbars="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_translationLangSub"
+        tools:listitem="@layout/item_lang" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

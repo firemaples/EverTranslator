@@ -1,7 +1,6 @@
 package tw.firemaples.onscreenocr.floatingviews.screencrop
 
 import android.content.Context
-import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
@@ -11,8 +10,8 @@ import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.StateManager
 import tw.firemaples.onscreenocr.event.EventUtil
 import tw.firemaples.onscreenocr.floatingviews.FloatingView
-import tw.firemaples.onscreenocr.ocr.OCRFileUtil
-import tw.firemaples.onscreenocr.ocr.OCRLangUtil
+import tw.firemaples.onscreenocr.ocr.tesseract.OCRFileUtil
+import tw.firemaples.onscreenocr.ocr.tesseract.OCRLangUtil
 import tw.firemaples.onscreenocr.ocr.event.TrainedDataDownloadSiteChangedEvent
 import tw.firemaples.onscreenocr.translate.GoogleTranslateUtil
 import tw.firemaples.onscreenocr.translate.TranslationService

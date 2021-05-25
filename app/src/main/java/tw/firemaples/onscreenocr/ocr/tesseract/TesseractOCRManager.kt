@@ -1,14 +1,12 @@
-package tw.firemaples.onscreenocr.ocr
+package tw.firemaples.onscreenocr.ocr.tesseract
 
-import android.graphics.Bitmap
 import android.graphics.Rect
 import android.os.AsyncTask
 import com.googlecode.tesseract.android.TessBaseAPI
 import tw.firemaples.onscreenocr.utils.ImageFile
 import tw.firemaples.onscreenocr.utils.Utils.Companion.context
-import java.io.File
 
-object OCRManager {
+object TesseractOCRManager {
     val tessBaseAPI: TessBaseAPI by lazy { TessBaseAPI() }
 
     private var callback: OnOCRStateChangedListener? = null
@@ -18,12 +16,12 @@ object OCRManager {
     private var boxList: List<Rect>? = null
 
     fun setListener(callback: OnOCRStateChangedListener) {
-        this.callback = callback
+        TesseractOCRManager.callback = callback
     }
 
     fun start(screenshot: ImageFile, boxList: List<Rect>) {
-        this.currentScreenshot = screenshot
-        this.boxList = boxList
+        currentScreenshot = screenshot
+        TesseractOCRManager.boxList = boxList
 
         initOcrEngine()
     }

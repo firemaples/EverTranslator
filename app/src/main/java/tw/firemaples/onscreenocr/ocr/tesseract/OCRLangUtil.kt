@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.ocr
+package tw.firemaples.onscreenocr.ocr.tesseract
 
 import android.content.Context
 import tw.firemaples.onscreenocr.R
@@ -7,12 +7,15 @@ import tw.firemaples.onscreenocr.floatingviews.screencrop.DialogView
 import tw.firemaples.onscreenocr.floatingviews.screencrop.SingleSelectDialogView
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.log.UserInfoUtils
+import tw.firemaples.onscreenocr.ocr.OCRDownloadTask
+import tw.firemaples.onscreenocr.ocr.OnOCRDownloadTaskCallback
 import tw.firemaples.onscreenocr.ocr.event.OCRLangChangedEvent
 import tw.firemaples.onscreenocr.utils.BaseSettingUtil
 import java.util.*
 
 object OCRLangUtil : BaseSettingUtil() {
     private const val DEFAULT_LANG = "eng"
+    private const val KEY_RECOGNITION_SERVICE = "preference_recognition_service"
     private const val KEY_RECOGNITION_LANGUAGE = "preference_list_recognition_language"
     private const val KEY_PAGE_SEGMENTATION_MODE = "preference_list_page_segmentation_mode"
 
@@ -38,6 +41,16 @@ object OCRLangUtil : BaseSettingUtil() {
     val ocrLangDisplayCodeList: Array<String> by lazy {
         context.resources.getStringArray(R.array.ocr_langDisplayCode)
     }
+
+    var selectedOCRService: OCRService
+        get() = OCRService.fromId(sp.getInt(KEY_RECOGNITION_SERVICE, -1))
+                ?: OCRService.GoogleMLKit
+        set(value) {
+            sp.edit().putInt(KEY_RECOGNITION_SERVICE, value.id).apply()
+//            val displayCode =
+//            EventUtil.post(OCRLangChangedEvent(value, displayCode))
+//            UserInfoUtils.updateClientSettings()
+        }
 
     var selectedLangCode: String
         get() = sp.getString(KEY_RECOGNITION_LANGUAGE, DEFAULT_LANG) ?: DEFAULT_LANG
@@ -74,7 +87,7 @@ object OCRLangUtil : BaseSettingUtil() {
         dialogView.setTitle(context.getString(R.string.dialog_title_ocrFileNotFound))
         dialogView.setContentMsg(String.format(Locale.getDefault(),
                 context.getString(R.string.dialog_content_ocrFileNotFound),
-                OCRLangUtil.selectedLangName))
+                selectedLangName))
         dialogView.setType(DialogView.Type.CONFIRM_CANCEL)
         dialogView.okBtn.setText(R.string.btn_download)
         dialogView.setCallback(object : DialogView.OnDialogViewCallback() {
@@ -137,7 +150,7 @@ object OCRLangUtil : BaseSettingUtil() {
 
         override fun attachToWindow() {
             super.attachToWindow()
-            OCRDownloadTask.downloadOCRFiles(OCRLangUtil.selectedLangCode, callback)
+            OCRDownloadTask.downloadOCRFiles(selectedLangCode, callback)
         }
 
         override fun detachFromWindow() {
@@ -152,5 +165,14 @@ object OCRLangUtil : BaseSettingUtil() {
             OCRFileUtil.trainedDataDownloadSiteIndex = it
             callback()
         }.attachToWindow()
+    }
+
+    enum class OCRService(val id: Int) {
+        GoogleMLKit(id = 0),
+        Tesseract(id = 1);
+
+        companion object {
+            fun fromId(id: Int): OCRService? = OCRService.values().firstOrNull { it.id == id }
+        }
     }
 }

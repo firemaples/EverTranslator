@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.ocr;
+package tw.firemaples.onscreenocr.ocr.tesseract;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -31,7 +31,7 @@ public class OcrInitAsyncTask extends AsyncTask<Void, String, Boolean> {
         this.context = context.getApplicationContext();
         this.callback = callback;
 
-        this.baseAPI = OCRManager.INSTANCE.getTessBaseAPI();
+        this.baseAPI = TesseractOCRManager.INSTANCE.getTessBaseAPI();
         this.recognitionLang = OCRLangUtil.INSTANCE.getSelectedLangCode();
 
         this.tessRootDir = OCRFileUtil.INSTANCE.getTessDataBaseDir();
