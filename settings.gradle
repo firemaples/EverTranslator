@@ -1,2 +1,2 @@
-include ':refactor'
+include ':main'
 include ':app'
