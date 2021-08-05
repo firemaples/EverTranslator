@@ -15,7 +15,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.R
-import tw.firemaples.onscreenocr.floatingviews.screencrop.DialogView
+import tw.firemaples.onscreenocr.floatings.screencrop.DialogView
 
 class Utils {
     companion object {

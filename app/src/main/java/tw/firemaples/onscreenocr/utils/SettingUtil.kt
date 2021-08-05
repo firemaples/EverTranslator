@@ -7,8 +7,8 @@ import android.graphics.Rect
 import android.preference.PreferenceManager
 import tw.firemaples.onscreenocr.BuildConfig
 import tw.firemaples.onscreenocr.CoreApplication
-import tw.firemaples.onscreenocr.floatingviews.screencrop.HelpView
-import tw.firemaples.onscreenocr.floatingviews.screencrop.VersionHistoryView
+import tw.firemaples.onscreenocr.floatings.screencrop.HelpView
+import tw.firemaples.onscreenocr.floatings.screencrop.VersionHistoryView
 import tw.firemaples.onscreenocr.receivers.SamsungSpenInsertedReceiver
 import java.util.*
 

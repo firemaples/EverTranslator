@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.StateManager
 import tw.firemaples.onscreenocr.event.EventUtil
-import tw.firemaples.onscreenocr.floatingviews.screencrop.TTSPlayerView
-import tw.firemaples.onscreenocr.floatingviews.screencrop.TextEditDialogView
+import tw.firemaples.onscreenocr.floatings.screencrop.TTSPlayerView
+import tw.firemaples.onscreenocr.floatings.screencrop.TextEditDialogView
 import tw.firemaples.onscreenocr.ocr.tesseract.OCRLangUtil
 import tw.firemaples.onscreenocr.state.TranslatedState
 import tw.firemaples.onscreenocr.state.TranslatingState

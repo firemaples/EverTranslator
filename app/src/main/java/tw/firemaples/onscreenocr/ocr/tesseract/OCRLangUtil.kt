@@ -3,8 +3,8 @@ package tw.firemaples.onscreenocr.ocr.tesseract
 import android.content.Context
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.event.EventUtil
-import tw.firemaples.onscreenocr.floatingviews.screencrop.DialogView
-import tw.firemaples.onscreenocr.floatingviews.screencrop.SingleSelectDialogView
+import tw.firemaples.onscreenocr.floatings.screencrop.DialogView
+import tw.firemaples.onscreenocr.floatings.screencrop.SingleSelectDialogView
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.log.UserInfoUtils
 import tw.firemaples.onscreenocr.ocr.OCRDownloadTask

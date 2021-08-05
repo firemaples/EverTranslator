@@ -9,7 +9,7 @@ import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.*
 import tw.firemaples.onscreenocr.R
-import tw.firemaples.onscreenocr.floatingviews.FloatingView
+import tw.firemaples.onscreenocr.floatings.FloatingView
 import tw.firemaples.onscreenocr.utils.UIUtil
 import tw.firemaples.onscreenocr.utils.onViewPrepared
 
