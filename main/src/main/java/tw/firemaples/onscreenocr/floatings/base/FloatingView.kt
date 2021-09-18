@@ -10,10 +10,10 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
+import kotlinx.coroutines.*
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.PermissionUtil
 import tw.firemaples.onscreenocr.wigets.BackButtonTrackerView
@@ -67,7 +67,9 @@ abstract class FloatingView(protected val context: Context) {
     protected val rootView: BackButtonTrackerView by lazy {
         BackButtonTrackerView(
             context = context,
-            onAttachedToWindow = { onAttachedToScreen() }).apply {
+            onAttachedToWindow = { onAttachedToScreen() },
+            onBackButtonPressed = { onBackButtonPressed() },
+        ).apply {
             val innerView = LayoutInflater.from(context).inflate(layoutId, null)
             addView(
                 innerView,
@@ -82,7 +84,7 @@ abstract class FloatingView(protected val context: Context) {
     private var attached: Boolean = false
 
     @MainThread
-    fun attachToScreen() {
+    open fun attachToScreen() {
         if (attached) return
         if (!PermissionUtil.canDrawOverlays(context)) {
             logger.warn("You should obtain the draw overlays permission first!")
@@ -94,11 +96,14 @@ abstract class FloatingView(protected val context: Context) {
         }
 
         windowManager.addView(rootView, params)
+
+        lifecycleOwner.onStateChanged(Lifecycle.State.RESUMED)
+
         attached = true
     }
 
     @MainThread
-    fun detachFromScreen() {
+    open fun detachFromScreen() {
         if (!attached) return
         if (Looper.myLooper() != Looper.getMainLooper()) {
             logger.warn("attachToWindow() should be called in main thread")
@@ -109,14 +114,17 @@ abstract class FloatingView(protected val context: Context) {
             homeButtonWatcher.stopWatch()
         }
 
-        viewScope.cancel()
+        viewScope.coroutineContext.cancelChildren()
 
         windowManager.removeView(rootView)
+
+        lifecycleOwner.onStateChanged(Lifecycle.State.DESTROYED)
+
         attached = false
     }
 
     @CallSuper
-    open fun onAttachedToScreen() {
+    protected open fun onAttachedToScreen() {
         if (enableHomeButtonWatcher) {
             homeButtonWatcher.startWatch()
         }
@@ -136,6 +144,8 @@ abstract class FloatingView(protected val context: Context) {
         }
     }
 
+    open fun onBackButtonPressed(): Boolean = false
+
     open fun onHomeButtonPressed() {
 
     }
@@ -143,6 +153,8 @@ abstract class FloatingView(protected val context: Context) {
     open fun onHomeButtonLongPressed() {
 
     }
+
+    protected val lifecycleOwner: FloatingViewLifecycleOwner = FloatingViewLifecycleOwner()
 
 //    private val tasks = mutableListOf<WeakReference<Closeable>>()
 
@@ -158,6 +170,16 @@ abstract class FloatingView(protected val context: Context) {
 
         override fun close() {
             coroutineContext.cancel()
+        }
+    }
+
+    protected class FloatingViewLifecycleOwner : LifecycleOwner {
+        private val lifecycleRegistry = LifecycleRegistry(this)
+
+        override fun getLifecycle(): Lifecycle = lifecycleRegistry
+
+        fun onStateChanged(state: Lifecycle.State) {
+            lifecycleRegistry.currentState = state
         }
     }
 }

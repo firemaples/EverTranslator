@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.TextView
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.MovableFloatingView
+import tw.firemaples.onscreenocr.floatings.translationSelectPanel.TranslationSelectPanel
 
 class MainBar(context: Context) : MovableFloatingView(context) {
     override val layoutId: Int
@@ -35,7 +36,12 @@ class MainBar(context: Context) : MovableFloatingView(context) {
         ivGoogleTranslator.visibility = View.VISIBLE
 
         btSelect.visibility = View.VISIBLE
+
+        btLangSelector.setOnClickListener {
+            TranslationSelectPanel(context).attachToScreen()
+        }
+
 //        btOCROnly.visibility = View.VISIBLE
-        btClose.visibility = View.VISIBLE
+//        btClose.visibility = View.VISIBLE
     }
 }

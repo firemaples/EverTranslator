@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Translation target codes for Google Translate. -->
+    <!-- The elements in this array must match to the translationtargetlanguagenames_google array. -->
+    <string-array name="google_MLKit_translationLangCode_iso6391" translatable="false">
+        <item>af</item> <!-- Afrikaans -->
+        <item>sq</item> <!-- Albanian -->
+        <item>ar</item> <!-- Arabic -->
+<!--        <item>az</item> &lt;!&ndash; Azeri &ndash;&gt;-->
+<!--        <item>eu</item> &lt;!&ndash; Basque &ndash;&gt;-->
+        <item>be</item> <!-- Belarusian -->
+        <item>bg</item> <!-- Bulgarian -->
+        <item>bn</item> <!-- Bengali -->
+<!--        <item>bs</item> &lt;!&ndash; Bosnian &ndash;&gt;-->
+        <item>ca</item> <!-- Catalan -->
+<!--        <item>ceb</item> &lt;!&ndash; Cebuano &ndash;&gt;-->
+        <item>zh</item> <!-- Chinese -->
+<!--        <item>zh-CN</item> &lt;!&ndash; Chinese (Simplified) &ndash;&gt;-->
+<!--        <item>zh-TW</item> &lt;!&ndash; Chinese (Traditional) &ndash;&gt;-->
+        <item>hr</item> <!-- Croatian -->
+        <item>cs</item> <!-- Czech -->
+        <item>da</item> <!-- Danish -->
+        <item>nl</item> <!-- Dutch -->
+        <item>en</item> <!-- English -->
+        <item>eo</item> <!-- Esperanto -->
+        <item>et</item> <!-- Estonian -->
+        <item>fi</item> <!-- Finnish -->
+        <item>fr</item> <!-- French -->
+        <item>gl</item> <!-- Galician -->
+        <item>ka</item> <!-- Georgian -->
+        <item>de</item> <!-- German -->
+        <item>el</item> <!-- Greek -->
+        <item>gu</item> <!-- Gujarati -->
+        <item>ht</item> <!-- Haitian -->
+        <item>he</item> <!-- Hebrew -->
+        <item>hi</item> <!-- Hindi -->
+<!--        <item>hmn</item> &lt;!&ndash; Hmong &ndash;&gt;-->
+        <item>hu</item> <!-- Hungarian -->
+        <item>is</item> <!-- Icelandic -->
+        <item>id</item> <!-- Indonesian -->
+        <item>ga</item> <!-- Irish -->
+        <item>it</item> <!-- Italian -->
+        <item>ja</item> <!-- Japanese -->
+<!--        <item>jw</item> &lt;!&ndash; Javanese &ndash;&gt;-->
+        <item>kn</item> <!-- Kannada -->
+        <!-- <item>km</item> --> <!-- Khmer -->
+        <item>ko</item> <!-- Korean -->
+<!--        <item>lo</item> &lt;!&ndash; Lao &ndash;&gt;-->
+        <item>lt</item> <!-- Lithuanian -->
+        <item>lv</item> <!-- Latvian -->
+        <item>mk</item> <!-- Macedonian -->
+        <item>mr</item> <!-- Marathi -->
+        <item>ms</item> <!-- Malay -->
+        <item>mt</item> <!-- Maltese -->
+        <item>no</item> <!-- Norwegian -->
+        <item>fa</item> <!-- Persian -->
+        <item>pl</item> <!-- Polish -->
+        <item>pt</item> <!-- Portuguese -->
+        <item>ro</item> <!-- Romanian -->
+        <item>ru</item> <!-- Russian -->
+<!--        <item>sr</item> &lt;!&ndash; Serbian &ndash;&gt;-->
+        <item>sk</item> <!-- Slovak -->
+        <item>sl</item> <!-- Slovenian -->
+        <item>es</item> <!-- Spanish -->
+        <item>sv</item> <!-- Swedish -->
+        <item>sw</item> <!-- Swahili -->
+        <item>tl</item> <!-- Tagalog -->
+        <item>ta</item> <!-- Tamil -->
+        <item>te</item> <!-- Telugu -->
+        <item>th</item> <!-- Thai -->
+        <item>tr</item> <!-- Turkish -->
+        <item>uk</item> <!-- Ukrainian -->
+        <item>ur</item> <!-- Urdu -->
+        <item>vi</item> <!-- Vietnamese -->
+        <item>cy</item> <!-- Welsh -->
+<!--        <item>yi</item> &lt;!&ndash; Yiddish &ndash;&gt;-->
+    </string-array>
+</resources>

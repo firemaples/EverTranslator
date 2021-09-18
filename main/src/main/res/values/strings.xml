@@ -4,4 +4,9 @@
     <string name="btn_request_permission">Request permission</string>
     <string name="msg_evertranslator_needs_capture_screen_to_find_the_text_from_the_screen_for_you">EverTranslator needs [Capture screen] to find the text from the screen for you.</string>
     <string name="msg_request_permission_automatically_at_next_time">Request permission automatically at next time</string>
+
+    <string name="translation_provider_microsoft_azure">Microsoft Azure</string>
+    <string name="translation_provider_google_ml_kit">Google MLKit</string>
+    <string name="translation_provider_google_translate_app">Google Translate App</string>
+    <string name="translation_provider_none">OCR only</string>
 </resources>

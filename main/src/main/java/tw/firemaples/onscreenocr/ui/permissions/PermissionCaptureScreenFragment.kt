@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.ViewHolderService
 import tw.firemaples.onscreenocr.screenshot.ScreenshotManager
+import tw.firemaples.onscreenocr.utils.NotchUtil
 
 class PermissionCaptureScreenFragment : Fragment(R.layout.permission_capture_screen_fragment) {
 
@@ -45,6 +46,8 @@ class PermissionCaptureScreenFragment : Fragment(R.layout.permission_capture_scr
         }
 
     private fun startService() {
+        NotchUtil.check(requireActivity().window)
+
         ViewHolderService.showViews(requireActivity())
         requireActivity().finishAffinity()
     }

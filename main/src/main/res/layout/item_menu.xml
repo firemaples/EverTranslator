@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:button="@drawable/button_check"
+    android:gravity="start|center_vertical"
+    android:minHeight="0dp"
+    android:paddingHorizontal="8dp"
+    android:paddingVertical="8dp"
+    android:textAllCaps="false"
+    android:textColor="@color/foregroundSecond"
+    tools:text="Selection" />

@@ -5,7 +5,10 @@ import android.graphics.Point
 import android.graphics.Rect
 import android.util.DisplayMetrics
 import android.util.TypedValue
+import android.view.View
+import android.view.ViewTreeObserver
 import android.view.WindowManager
+import android.widget.TextView
 
 object UIUtils {
     private val context by lazy { Utils.context }
@@ -16,17 +19,18 @@ object UIUtils {
     val displayMetrics: DisplayMetrics
         get() = DisplayMetrics().also { windowManager.defaultDisplay.getMetrics(it) }
 
+    val realDisplayMetrics: DisplayMetrics
+        get() = DisplayMetrics().also { windowManager.defaultDisplay.getRealMetrics(it) }
+
+    val readSize: Point
+        get() = Point().also { windowManager.defaultDisplay.getRealSize(it) }
+
+    val isPortrait: Boolean
+        get() = readSize.let { it.y > it.x }
+
     val screenSize: IntArray
         get() {
             val metrics = displayMetrics
-            val size = Point().also {
-                windowManager.defaultDisplay.getRealSize(it)
-            }
-
-            val mWidth = size.x
-            val mHeight = size.y
-//        val mDensity = metrics.densityDpi
-            val isPortrait = mHeight > mWidth
 
             var deviceWidth = metrics.widthPixels
             var deviceHeight = metrics.heightPixels
@@ -38,6 +42,12 @@ object UIUtils {
 
             return intArrayOf(deviceWidth, deviceHeight)
         }
+
+    val isStatusBarTakingVerticalSpace: Boolean
+        get() = realDisplayMetrics.heightPixels != displayMetrics.heightPixels
+
+    val isStatusBarTakingHorizontalSpace: Boolean
+        get() = realDisplayMetrics.widthPixels != displayMetrics.widthPixels
 
     fun dpToPx(dp: Float): Int {
         return TypedValue.applyDimension(
@@ -56,33 +66,73 @@ object UIUtils {
     }
 
     fun countViewPosition(
-        anchorRect: Rect, itemWidth: Int, itemHeight: Int, layoutMargin: Int,
-        parentHeight: Int = screenSize[1]
+        anchorRect: Rect, parentRect: Rect,
+        itemWidth: Int, itemHeight: Int,
+        layoutMargin: Int,
     ): Array<Int> {
 
+        val parentHeight = parentRect.height()
         val needHeight = itemHeight + layoutMargin * 2
 
         val topMargin: Int = when {
+            // anchor on bottom
             parentHeight - anchorRect.bottom > needHeight -> //Gravity = BOTTOM
-                anchorRect.top + anchorRect.height()
-            anchorRect.top > needHeight -> //Gravity = TOP
-                anchorRect.top - itemHeight
-            else -> -1
-        }
+                anchorRect.bottom + layoutMargin
 
-        val screenSize = screenSize
+            // anchor on top
+            anchorRect.top > needHeight ->
+                anchorRect.top - itemHeight - layoutMargin
+
+            // center in vertical
+            else -> (parentHeight - itemHeight) / 2
+        } - parentRect.top
+
+        val parentWidth = parentRect.width()
+        val needWidth = itemWidth + layoutMargin
 
         val leftMargin: Int =
-            if (anchorRect.left + itemWidth + layoutMargin > screenSize[0]) {
-                // Match screen right
-                screenSize[0] - (itemWidth - layoutMargin)
-            } else {
-                // Match anchorView left
-                anchorRect.left
-            }
+            when {
+                // start from the left of the anchor
+                anchorRect.left + needWidth < parentWidth ->
+                    anchorRect.left
+
+                // end on the right of the anchor
+                anchorRect.right - needWidth > 0 ->
+                    anchorRect.right
+
+                // center in horizontal
+                else -> (parentWidth - itemWidth) / 2
+            } - parentRect.left
 
         return arrayOf(leftMargin, topMargin)
     }
 }
 
 fun Float.dpToPx(): Int = UIUtils.dpToPx(this)
+
+fun View.onViewPrepared(callback: (View) -> Unit) {
+    val view = this
+    this.viewTreeObserver.addOnGlobalLayoutListener(object :
+        ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            if (view.width == 0 || view.height == 0) {
+                return
+            }
+            view.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            callback(view)
+        }
+    })
+}
+
+fun View.getViewRect(): Rect {
+    val location = IntArray(2).also { getLocationOnScreen(it) }
+    return Rect(location[0], location[1], location[0] + measuredWidth, location[1] + measuredHeight)
+}
+
+fun TextView.setTextOrGone(text: String?) {
+    if (text.isNullOrBlank()) this.visibility = View.GONE
+    else {
+        this.text = text
+        this.visibility = View.VISIBLE
+    }
+}

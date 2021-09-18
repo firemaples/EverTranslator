@@ -127,7 +127,7 @@ abstract class MovableFloatingView(context: Context) : FloatingView(context) {
     }
 
     private fun getEdgePosition(currentX: Int, currentY: Int): IntArray {
-        val screenWidth = UIUtils.displayMetrics.widthPixels
+        val screenWidth = UIUtils.realDisplayMetrics.widthPixels
 
         val viewWidth = rootView.width
         val viewCenterX = currentX + viewWidth / 2

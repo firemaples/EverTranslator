@@ -14,4 +14,9 @@
     <color name="foreground">#de000000</color>
     <color name="foregroundSecond">#99000000</color>
     <color name="foregroundDisable">#61000000</color>
+    <color name="alert">@color/md_red_500</color>
+
+    <color name="dialogOutside">#88000000</color>
+    <color name="borderlessButtonText">#2196F3</color>
+    <color name="listItemChecked">@color/md_blue_300</color>
 </resources>
