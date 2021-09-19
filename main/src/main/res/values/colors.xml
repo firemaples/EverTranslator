@@ -8,6 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="appIconColor">#00695c</color>
+
     <color name="spinnerBorderColor">@color/md_grey_700</color>
 
     <color name="background">@color/md_white_1000</color>

@@ -81,7 +81,8 @@ abstract class FloatingView(protected val context: Context) {
         }
     }
 
-    private var attached: Boolean = false
+    var attached: Boolean = false
+        private set
 
     @MainThread
     open fun attachToScreen() {
@@ -118,9 +119,14 @@ abstract class FloatingView(protected val context: Context) {
 
         windowManager.removeView(rootView)
 
-        lifecycleOwner.onStateChanged(Lifecycle.State.DESTROYED)
+        lifecycleOwner.onStateChanged(Lifecycle.State.CREATED)
 
         attached = false
+    }
+
+    open fun release() {
+        detachFromScreen()
+        lifecycleOwner.onStateChanged(Lifecycle.State.DESTROYED)
     }
 
     @CallSuper
