@@ -5,24 +5,32 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import tw.firemaples.onscreenocr.floatings.main.MainBar
+import tw.firemaples.onscreenocr.screenshot.ScreenshotManager
 import tw.firemaples.onscreenocr.utils.Logger
 
 class ViewHolderService : Service() {
     companion object {
         private const val ACTION_SHOW_VIEWS = "ACTION_SHOW_VIEWS"
         private const val ACTION_HIDE_VIEWS = "ACTION_HIDE_VIEWS"
+        private const val ACTION_EXIT = "ACTION_EXIT"
 
         private val logger: Logger = Logger(ViewHolderService::class)
 
         fun showViews(context: Context) {
-            context.startService(Intent(context, ViewHolderService::class.java).apply {
-                action = ACTION_SHOW_VIEWS
-            })
+            startAction(context, ACTION_SHOW_VIEWS)
         }
 
         fun hideViews(context: Context) {
+            startAction(context, ACTION_HIDE_VIEWS)
+        }
+
+        fun exit(context: Context) {
+            startAction(context, ACTION_EXIT)
+        }
+
+        private fun startAction(context: Context, action: String) {
             context.startService(Intent(context, ViewHolderService::class.java).apply {
-                action = ACTION_HIDE_VIEWS
+                this.action = action
             })
         }
     }
@@ -45,7 +53,15 @@ class ViewHolderService : Service() {
                 START_STICKY
             }
 
-            else -> START_NOT_STICKY
+            ACTION_EXIT -> {
+                exit()
+                START_NOT_STICKY
+            }
+
+            else -> {
+                logger.debug("Got a unhandled action: ${intent?.action}")
+                START_NOT_STICKY
+            }
         }
     }
 
@@ -55,6 +71,12 @@ class ViewHolderService : Service() {
 
     private fun hideViews() {
         mainBar.detachFromScreen()
+    }
+
+    private fun exit() {
+        hideViews()
+        ScreenshotManager.release()
+        stopSelf()
     }
 
     override fun onBind(intent: Intent?): IBinder? = null

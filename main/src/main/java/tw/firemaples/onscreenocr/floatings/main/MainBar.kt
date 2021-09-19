@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.TextView
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.MovableFloatingView
+import tw.firemaples.onscreenocr.floatings.menu.MenuView
 import tw.firemaples.onscreenocr.floatings.translationSelectPanel.TranslationSelectPanel
 
 class MainBar(context: Context) : MovableFloatingView(context) {
@@ -26,6 +27,18 @@ class MainBar(context: Context) : MovableFloatingView(context) {
     private val btClose: View = rootView.findViewById(R.id.bt_close)
     private val btMenu: View = rootView.findViewById(R.id.bt_menu)
 
+    private val menuView: MenuView by lazy {
+        MenuView(context, false).apply {
+            setAnchor(btMenu)
+            onItemSelected = { view, key ->
+                view.detachFromScreen()
+                viewModel.onMenuItemClicked(key)
+            }
+        }
+    }
+
+    private val viewModel: MainBarViewModel by lazy { MainBarViewModel(viewScope) }
+
     init {
         setViews()
         setDragView(btMenu)
@@ -39,6 +52,17 @@ class MainBar(context: Context) : MovableFloatingView(context) {
 
         btLangSelector.setOnClickListener {
             TranslationSelectPanel(context).attachToScreen()
+        }
+
+        btMenu.setOnClickListener {
+            viewModel.onMenuButtonClicked()
+        }
+
+        viewModel.displayMenuItems.observe(lifecycleOwner) {
+            with(menuView) {
+                updateData(it)
+                attachToScreen()
+            }
         }
 
 //        btOCROnly.visibility = View.VISIBLE

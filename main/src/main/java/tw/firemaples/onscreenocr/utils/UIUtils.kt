@@ -98,7 +98,7 @@ object UIUtils {
 
                 // end on the right of the anchor
                 anchorRect.right - needWidth > 0 ->
-                    anchorRect.right
+                    anchorRect.right - needWidth
 
                 // center in horizontal
                 else -> (parentWidth - itemWidth) / 2

@@ -11,4 +11,8 @@ object ScreenshotManager {
     fun onMediaProjectionGranted(intent: Intent) {
         mediaProjectionIntent = intent.clone() as Intent
     }
+
+    fun release() {
+        mediaProjectionIntent = null
+    }
 }
