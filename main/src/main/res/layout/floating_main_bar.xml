@@ -63,6 +63,14 @@
             <!--                android:visibility="gone"-->
             <!--                tools:visibility="visible" />-->
 
+
+            <ImageButton
+                android:id="@+id/bt_translate"
+                style="@style/MainBar_Buttons"
+                android:src="@drawable/ic_translate"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
             <ImageButton
                 android:id="@+id/bt_close"
                 style="@style/MainBar_Buttons"

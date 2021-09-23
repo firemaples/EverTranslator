@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="circlingView_strokeWidth">2dp</dimen>
+    <dimen name="circlingView_helperTextSize">16sp</dimen>
+    <dimen name="circlingView_progressBorderWidth">4dp</dimen>
+</resources>

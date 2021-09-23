@@ -1,6 +1,8 @@
 package tw.firemaples.onscreenocr.repo
 
 import android.content.Context
+import androidx.lifecycle.asFlow
+import com.chibatching.kotpref.livedata.asLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -8,10 +10,16 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.pref.AppPref
+import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.Utils
 
 class OCRRepository {
+    private val logger: Logger by lazy { Logger(OCRRepository::class) }
     private val context: Context by lazy { Utils.context }
+
+    val selectedOCRLangFlow: Flow<String>
+        get() = AppPref.asLiveData(AppPref::selectedOCRLang).asFlow()
+            .flowOn(Dispatchers.Default)
 
     fun getAllOCRLanguages(): Flow<List<OCRLanguage>> = flow {
         val res = context.resources
@@ -32,9 +40,9 @@ class OCRRepository {
         emit(result)
     }.flowOn(Dispatchers.Default)
 
-    fun getSelectedOCRLanguage(): Flow<String> = flow {
-        emit(AppPref.selectedOCRLang)
-    }.flowOn(Dispatchers.Default)
+//    fun getSelectedOCRLanguage(): Flow<String> = flow {
+//        emit(AppPref.selectedOCRLang)
+//    }.flowOn(Dispatchers.Default)
 
     suspend fun setSelectedOCRLanguage(langCode: String) {
         withContext(Dispatchers.Default) {

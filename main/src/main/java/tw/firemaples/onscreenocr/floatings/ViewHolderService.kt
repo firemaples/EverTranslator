@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.main.MainBar
+import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.screenshot.ScreenshotManager
 import tw.firemaples.onscreenocr.utils.Logger
 
@@ -48,8 +49,6 @@ class ViewHolderService : Service() {
         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
-    private val mainBar: MainBar by lazy { MainBar(this) }
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 
@@ -82,11 +81,11 @@ class ViewHolderService : Service() {
     }
 
     private fun showViews() {
-        mainBar.attachToScreen()
+        FloatingStateManager.showMainBar()
     }
 
     private fun hideViews() {
-        mainBar.detachFromScreen()
+        FloatingStateManager.hideMainBar()
     }
 
     private fun exit() {
@@ -96,7 +95,10 @@ class ViewHolderService : Service() {
     }
 
     private fun startForeground() {
-        startForeground(ONGOING_NOTIFICATION_ID, createNotification(!mainBar.attached))
+        startForeground(
+            ONGOING_NOTIFICATION_ID,
+            createNotification(!FloatingStateManager.isMainBarAttached)
+        )
     }
 
     private fun stopForeground() {

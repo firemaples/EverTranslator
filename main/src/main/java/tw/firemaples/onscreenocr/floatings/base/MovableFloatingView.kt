@@ -114,6 +114,7 @@ abstract class MovableFloatingView(context: Context) : FloatingView(context) {
         when {
             moveToEdgeAfterMoved -> moveToEdge()
             fadeOutAfterMoved -> fadeOut()
+            else -> cancelFadeOut()
         }
     }
 
@@ -186,6 +187,7 @@ abstract class MovableFloatingView(context: Context) : FloatingView(context) {
     private var fadeOutAnimator: ValueAnimator? = null
 
     private fun fadeOut() {
+        logger.debug("fadeOut()")
         cancelFadeOut()
 
         fadeOutAnimator = ValueAnimator.ofFloat(fromAlpha, destinationAlpha).apply {
@@ -200,12 +202,14 @@ abstract class MovableFloatingView(context: Context) : FloatingView(context) {
     }
 
     private fun cancelFadeOut() {
+        logger.debug("cancelFadeOut(): fadeOutAnimator: $fadeOutAnimator")
         fadeOutAnimator?.cancel()
 
-        if (fadeOutAfterMoved) rootView.alpha = fromAlpha
+        rootView.alpha = fromAlpha
     }
 
     protected fun rescheduleFadeOut() {
+        logger.debug("rescheduleFadeOut()")
         cancelFadeOut()
         if (fadeOutAfterMoved) fadeOut()
     }

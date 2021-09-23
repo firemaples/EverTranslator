@@ -1,10 +1,13 @@
 package tw.firemaples.onscreenocr.repo
 
 import android.content.Context
+import androidx.lifecycle.asFlow
+import com.chibatching.kotpref.livedata.asLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.translator.TranslationLanguage
@@ -15,6 +18,14 @@ import tw.firemaples.onscreenocr.utils.Utils
 
 class TranslationRepository {
     private val context: Context by lazy { Utils.context }
+
+    val selectedProviderTypeFlow: Flow<TranslationProviderType>
+        get() = AppPref.asLiveData(AppPref::selectedTranslationProvider).asFlow()
+            .map { TranslationProviderType.fromKey(it) }
+            .flowOn(Dispatchers.Default)
+    val selectedTranslationLangFlow: Flow<String>
+        get() = AppPref.asLiveData(AppPref::selectedTranslationLang).asFlow()
+            .flowOn(Dispatchers.Default)
 
     fun getAllProviders(): Flow<List<TranslationProvider>> = flow {
         val selected = AppPref.selectedTranslationProvider

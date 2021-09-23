@@ -1,6 +1,8 @@
 package tw.firemaples.onscreenocr.pref
 
+import android.graphics.Rect
 import com.chibatching.kotpref.KotprefModel
+import com.chibatching.kotpref.gsonpref.gsonNullablePref
 import tw.firemaples.onscreenocr.utils.Constraints
 
 object AppPref : KotprefModel() {
@@ -14,4 +16,7 @@ object AppPref : KotprefModel() {
         default = Constraints.DEFAULT_TRANSLATION_PROVIDER.key
     )
     var selectedTranslationLang by stringPref(default = Constraints.DEFAULT_TRANSLATION_LANG)
+
+    var rememberLastSelectedArea: Boolean by booleanPref(default = true)
+    var lastRememberedSelectedArea: Rect? by gsonNullablePref()
 }

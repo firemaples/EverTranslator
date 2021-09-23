@@ -108,7 +108,7 @@ object UIUtils {
     }
 }
 
-fun Float.dpToPx(): Int = UIUtils.dpToPx(this)
+fun Number.dpToPx(): Int = UIUtils.dpToPx(this.toFloat())
 
 fun View.onViewPrepared(callback: (View) -> Unit) {
     val view = this
@@ -135,4 +135,20 @@ fun TextView.setTextOrGone(text: String?) {
         this.text = text
         this.visibility = View.VISIBLE
     }
+}
+
+fun View.show() {
+    if (visibility != View.VISIBLE) {
+        visibility = View.VISIBLE
+    }
+}
+
+fun View.hide() {
+    if (visibility != View.GONE) {
+        visibility = View.GONE
+    }
+}
+
+fun View.showOrHide(show: Boolean) {
+    if (show) show() else hide()
 }

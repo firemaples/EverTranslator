@@ -21,4 +21,10 @@
     <color name="dialogOutside">#88000000</color>
     <color name="borderlessButtonText">#2196F3</color>
     <color name="listItemChecked">@color/md_blue_300</color>
+
+    <color name="circlingView_background">#66000000</color>
+    <color name="circlingView_circlingBox">#6629B6F6</color>
+    <color name="circlingView_box">#8800FF00</color>
+    <color name="circlingView_helperText">@color/white</color>
+    <color name="circlingView_progressBorder">#FF4081</color>
 </resources>

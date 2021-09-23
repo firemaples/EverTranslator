@@ -95,6 +95,15 @@ dependencies {
     // Testing Navigation
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:26.1.0')
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-core'
+    implementation 'com.google.firebase:firebase-config'
+    implementation 'com.google.firebase:firebase-perf'
+
+    // Kotpref
     // core
     implementation 'com.chibatching.kotpref:kotpref:2.13.1'
     // optional, auto initialization module

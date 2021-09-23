@@ -66,7 +66,7 @@ data class TranslationProvider(
 ) {
     companion object {
         fun fromType(
-            context: Context, type: TranslationProviderType, selected: Boolean
+            context: Context, type: TranslationProviderType, selected: Boolean = false
         ): TranslationProvider =
             TranslationProvider(
                 key = type.key,
