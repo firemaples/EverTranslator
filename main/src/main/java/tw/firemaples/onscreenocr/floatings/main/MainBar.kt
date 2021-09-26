@@ -64,6 +64,10 @@ class MainBar(context: Context) : MovableFloatingView(context) {
             FloatingStateManager.startScreenCircling()
         }
 
+        btTranslate.setOnClickListener {
+            FloatingStateManager.startScreenCapturing()
+        }
+
         btClose.setOnClickListener {
             FloatingStateManager.cancelScreenCircling()
         }

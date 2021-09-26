@@ -19,7 +19,8 @@ class Logger(clazz: KClass<*>) {
     fun error(msg: String? = null, t: Throwable? = null) = log(ERROR, msg, t)
 
     private fun log(level: Int, msg: String?, t: Throwable?) {
-        val message = if (msg != null) "$msg" else null
+        val threadName = Thread.currentThread().name
+        val message = if (msg != null) "[$threadName] $msg" else "[$threadName]"
 
         when (level) {
             DEBUG -> Log.d(tag, message, t)

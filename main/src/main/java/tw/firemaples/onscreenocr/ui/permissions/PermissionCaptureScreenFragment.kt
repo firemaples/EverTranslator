@@ -9,7 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.ViewHolderService
-import tw.firemaples.onscreenocr.screenshot.ScreenshotManager
+import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
 import tw.firemaples.onscreenocr.utils.NotchUtil
 
 class PermissionCaptureScreenFragment : Fragment(R.layout.permission_capture_screen_fragment) {
@@ -19,7 +19,7 @@ class PermissionCaptureScreenFragment : Fragment(R.layout.permission_capture_scr
 
         setViews(view)
 
-        if (ScreenshotManager.isGranted) {
+        if (ScreenExtractor.isGranted) {
             startService()
         }
     }
@@ -40,7 +40,7 @@ class PermissionCaptureScreenFragment : Fragment(R.layout.permission_capture_scr
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             val intent = it.data
             if (it.resultCode == Activity.RESULT_OK && intent != null) {
-                ScreenshotManager.onMediaProjectionGranted(intent)
+                ScreenExtractor.onMediaProjectionGranted(intent)
                 startService()
             }
         }

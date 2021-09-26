@@ -5,6 +5,7 @@ import android.graphics.Rect
 import android.view.WindowManager
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
+import tw.firemaples.onscreenocr.utils.getViewRect
 
 class ScreenCirclingView(context: Context) : FloatingView(context) {
     override val layoutId: Int
@@ -26,7 +27,7 @@ class ScreenCirclingView(context: Context) : FloatingView(context) {
 
     private val viewModel: ScreenCirclingViewModel by lazy { ScreenCirclingViewModel(viewScope) }
 
-    var onAreaSelected: ((Rect) -> Unit)? = null
+    var onAreaSelected: ((parent: Rect, selected: Rect) -> Unit)? = null
 
     init {
         setViews()
@@ -34,8 +35,8 @@ class ScreenCirclingView(context: Context) : FloatingView(context) {
 
     private fun setViews() {
         circlingView.helperTextView = helperTextView
-        circlingView.onAreaSelected = {
-            onAreaSelected?.invoke(it)
+        circlingView.onAreaSelected = { selected ->
+            onAreaSelected?.invoke(circlingView.getViewRect(), selected)
         }
 
         viewModel.lastSelectedArea.observe(lifecycleOwner) {

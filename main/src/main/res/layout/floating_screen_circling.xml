@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     android:background="@color/circlingView_background">
 
-    <tw.firemaples.onscreenocr.floatings.screenCircling.CirclingView
-        android:id="@+id/view_circlingView"
+    <tw.firemaples.onscreenocr.floatings.screenCircling.ProgressBorderView
+        android:id="@+id/view_progressBorder"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -14,8 +14,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <tw.firemaples.onscreenocr.floatings.screenCircling.ProgressBorderView
-        android:id="@+id/view_progressBorder"
+    <tw.firemaples.onscreenocr.floatings.screenCircling.CirclingView
+        android:id="@+id/view_circlingView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

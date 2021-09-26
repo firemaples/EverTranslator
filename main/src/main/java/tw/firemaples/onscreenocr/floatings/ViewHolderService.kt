@@ -3,15 +3,15 @@ package tw.firemaples.onscreenocr.floatings
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import tw.firemaples.onscreenocr.R
-import tw.firemaples.onscreenocr.floatings.main.MainBar
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
-import tw.firemaples.onscreenocr.screenshot.ScreenshotManager
+import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
 import tw.firemaples.onscreenocr.utils.Logger
 
 class ViewHolderService : Service() {
@@ -90,15 +90,23 @@ class ViewHolderService : Service() {
 
     private fun exit() {
         hideViews()
-        ScreenshotManager.release()
+        ScreenExtractor.release()
         stopSelf()
     }
 
     private fun startForeground() {
-        startForeground(
-            ONGOING_NOTIFICATION_ID,
-            createNotification(!FloatingStateManager.isMainBarAttached)
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(
+                ONGOING_NOTIFICATION_ID,
+                createNotification(!FloatingStateManager.isMainBarAttached),
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION,
+            )
+        } else {
+            startForeground(
+                ONGOING_NOTIFICATION_ID,
+                createNotification(!FloatingStateManager.isMainBarAttached),
+            )
+        }
     }
 
     private fun stopForeground() {

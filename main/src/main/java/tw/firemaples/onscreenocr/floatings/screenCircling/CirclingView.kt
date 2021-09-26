@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.utils.Logger
+import tw.firemaples.onscreenocr.utils.getViewRect
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.properties.Delegates
@@ -91,13 +92,16 @@ class CirclingView @JvmOverloads constructor(
 
         override fun onAreaResizing(leftDiff: Int, rightDiff: Int, topDiff: Int, bottomDiff: Int) {
             val box = selectedBox ?: return
+            val parent = this@CirclingView.getViewRect()
 
             with(box) {
-                left = resizeBase.left + leftDiff
-                right = max(left + 1, resizeBase.right + rightDiff)
-                top = resizeBase.top + topDiff
-                bottom = max(top + 1, resizeBase.bottom + bottomDiff)
+                left = (resizeBase.left + leftDiff).coerceAtLeast(parent.left)
+                right = max(left + 1, resizeBase.right + rightDiff).coerceAtMost(parent.right)
+                top = (resizeBase.top + topDiff).coerceAtLeast(parent.top)
+                bottom = max(top + 1, resizeBase.bottom + bottomDiff).coerceAtMost(parent.bottom)
             }
+
+            logger.debug("onAreaResizing(), parent: ${this@CirclingView.getViewRect()}, box: $box")
 
             invalidate()
 

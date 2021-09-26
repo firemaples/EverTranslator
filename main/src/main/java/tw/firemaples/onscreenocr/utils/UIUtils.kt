@@ -4,7 +4,9 @@ import android.content.Context
 import android.graphics.Point
 import android.graphics.Rect
 import android.util.DisplayMetrics
+import android.util.SparseIntArray
 import android.util.TypedValue
+import android.view.Surface
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
@@ -16,11 +18,24 @@ object UIUtils {
         context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     }
 
+    private val orientations = SparseIntArray().apply {
+        append(Surface.ROTATION_0, 90)
+        append(Surface.ROTATION_90, 0)
+        append(Surface.ROTATION_180, 270)
+        append(Surface.ROTATION_270, 180)
+    }
+
     val displayMetrics: DisplayMetrics
         get() = DisplayMetrics().also { windowManager.defaultDisplay.getMetrics(it) }
 
     val realDisplayMetrics: DisplayMetrics
         get() = DisplayMetrics().also { windowManager.defaultDisplay.getRealMetrics(it) }
+
+    val orientation: Int
+        get() = windowManager.defaultDisplay.orientation
+
+    val orientationDegree: Int
+        get() = orientations.get(orientation + 90)
 
     val readSize: Point
         get() = Point().also { windowManager.defaultDisplay.getRealSize(it) }

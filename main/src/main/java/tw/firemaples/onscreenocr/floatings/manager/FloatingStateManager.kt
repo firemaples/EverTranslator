@@ -1,12 +1,14 @@
 package tw.firemaples.onscreenocr.floatings.manager
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Rect
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import tw.firemaples.onscreenocr.floatings.main.MainBar
 import tw.firemaples.onscreenocr.floatings.screenCircling.ScreenCirclingView
+import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.Utils
 
@@ -20,19 +22,21 @@ object FloatingStateManager {
     val currentState: State
         get() = _currentState.value
 
-    private var currentSelectedRect: Rect? = null
-
     private val mainBar: MainBar by lazy { MainBar(context) }
     private val screenCirclingView: ScreenCirclingView by lazy {
         ScreenCirclingView(context).apply {
-            onAreaSelected = { this@FloatingStateManager.onAreaSelected(it) }
+            onAreaSelected = { parent, selected ->
+                this@FloatingStateManager.onAreaSelected(parent, selected)
+            }
         }
     }
 
     val isMainBarAttached: Boolean
         get() = mainBar.attached
 
+    private var parentRect: Rect? = null
     private var selectedRect: Rect? = null
+    private var croppedBitmap: Bitmap? = null
 
     fun showMainBar() {
         mainBar.attachToScreen()
@@ -54,11 +58,13 @@ object FloatingStateManager {
         arrangeMainBarToTop()
     }
 
-    private fun onAreaSelected(rect: Rect) = stateIn(State.ScreenCircling) {
-        logger.debug("onAreaSelected(): $rect")
-        changeState(State.ScreenCircled)
-        selectedRect = rect
-    }
+    private fun onAreaSelected(parentRect: Rect, selectedRect: Rect) =
+        stateIn(State.ScreenCircling) {
+            logger.debug("onAreaSelected(), parentRect: $parentRect, selectedRect: $selectedRect")
+            changeState(State.ScreenCircled)
+            this@FloatingStateManager.selectedRect = selectedRect
+            this@FloatingStateManager.parentRect = parentRect
+        }
 
     fun cancelScreenCircling() = stateIn(State.ScreenCircling, State.ScreenCircled) {
         logger.debug("cancelScreenCircling()")
@@ -66,9 +72,31 @@ object FloatingStateManager {
         screenCirclingView.detachFromScreen()
     }
 
-    fun startScreenCapturing(selectedRect: Rect) = stateIn(State.ScreenCircled) {
-        currentSelectedRect = selectedRect
+    fun startScreenCapturing() = stateIn(State.ScreenCircled) {
+        val parent = parentRect ?: return@stateIn
+        val selected = selectedRect ?: return@stateIn
+        logger.debug("startScreenCapturing(), parentRect: $parent, selectedRect: $selected")
+        changeState(State.ScreenCapturing)
+//        screenCirclingView.detachFromScreen()
+        try {
+            val croppedBitmap =
+                ScreenExtractor.extractBitmapFromScreen(parentRect = parent, cropRect = selected)
+            if (croppedBitmap != null) {
+                this@FloatingStateManager.croppedBitmap = croppedBitmap
+                startRecognition()
+            } else {
 
+            }
+        } catch (t: Throwable) {
+            logger.debug(t = t)
+
+        }
+        screenCirclingView.detachFromScreen()
+    }
+
+    private fun startRecognition() = stateIn(State.ScreenCapturing) {
+        changeState(State.ErrorDisplaying)
+        changeState(State.Idle)
     }
 
     private fun stateIn(vararg states: State, block: suspend CoroutineScope.() -> Unit) {
