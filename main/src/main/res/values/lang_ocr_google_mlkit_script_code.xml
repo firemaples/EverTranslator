@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="google_MLKit_translationScriptCode">
+        <item>Latn</item> <!-- Latin-based -->
+        <item>Han</item> <!-- Chinese -->
+        <item>Deva</item> <!-- Devanagari -->
+        <item>Jpan</item> <!-- Japanese -->
+        <item>Kore</item> <!-- Korean -->
+    </string-array>
+</resources>

@@ -103,6 +103,18 @@ dependencies {
     implementation 'com.google.firebase:firebase-config'
     implementation 'com.google.firebase:firebase-perf'
 
+    // Google MLKit - Text recognition v2
+    // To recognize Latin script
+    implementation 'com.google.mlkit:text-recognition:16.0.0-beta1'
+    // To recognize Chinese script
+    implementation 'com.google.mlkit:text-recognition-chinese:16.0.0-beta1'
+    // To recognize Devanagari script
+    implementation 'com.google.mlkit:text-recognition-devanagari:16.0.0-beta1'
+    // To recognize Japanese script
+    implementation 'com.google.mlkit:text-recognition-japanese:16.0.0-beta1'
+    // To recognize Korean script
+    implementation 'com.google.mlkit:text-recognition-korean:16.0.0-beta1'
+
     // Kotpref
     // core
     implementation 'com.chibatching.kotpref:kotpref:2.13.1'

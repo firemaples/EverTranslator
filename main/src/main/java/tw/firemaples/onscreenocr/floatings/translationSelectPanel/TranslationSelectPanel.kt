@@ -106,7 +106,11 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         viewModel.ocrLanguageList.observe(lifecycleOwner) {
             logger.debug("on ocrLanguageList changed: $it")
 
-            ocrLangListAdapter.submitList(it)
+            ocrLangListAdapter.submitList(it) {
+                rvOCRLang.scrollToPosition(
+                    it.indexOfFirst { item -> item.selected }
+                        .coerceAtLeast(0))
+            }
         }
 
         viewModel.selectedTranslationProviderName.observe(lifecycleOwner) {
@@ -114,7 +118,12 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         }
 
         viewModel.translationLangList.observe(lifecycleOwner) {
-            translationLangListAdapter.submitList(it)
+            translationLangListAdapter.submitList(it) {
+                rvTranslationLang.scrollToPosition(
+                    it.indexOfFirst { item -> item.selected }
+                        .coerceAtLeast(0)
+                )
+            }
         }
 
         viewModel.displayTranslationHint.observe(lifecycleOwner) {

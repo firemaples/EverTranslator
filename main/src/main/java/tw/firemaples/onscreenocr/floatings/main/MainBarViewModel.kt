@@ -10,6 +10,7 @@ import tw.firemaples.onscreenocr.floatings.ViewHolderService
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.floatings.manager.State
+import tw.firemaples.onscreenocr.recognition.TextRecognizer
 import tw.firemaples.onscreenocr.repo.OCRRepository
 import tw.firemaples.onscreenocr.repo.TranslationRepository
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
@@ -78,7 +79,7 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
             FloatingStateManager.currentStateFlow.collect { onStateChanged(it) }
         }
         viewScope.launch {
-            ocrRepo.selectedOCRLangFlow.collect { onSelectedLangChanged(ocrLang = it) }
+            ocrRepo.selectedOCRLangFlow.collect { onSelectedLangChanged(_ocrLang = it) }
         }
         viewScope.launch {
             translateRepo.selectedProviderTypeFlow.collect {
@@ -112,15 +113,17 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
 
     @Suppress("RedundantSuspendModifier")
     private suspend fun onSelectedLangChanged(
-        ocrLang: String = selectedOCRLang,
+        _ocrLang: String = selectedOCRLang,
         translationProviderType: TranslationProviderType = selectedTranslationProviderType,
         translationLang: String = selectedTranslationLang,
     ) {
-        this.selectedOCRLang = ocrLang
+        this.selectedOCRLang = _ocrLang
         this.selectedTranslationProviderType = translationProviderType
         this.selectedTranslationLang = translationLang
 
-        logger.debug("onSelectedLangChanged(), ocrLang: $ocrLang, provider: $translationProviderType, translationLang: $translationLang")
+        logger.debug("onSelectedLangChanged(), ocrLang: $_ocrLang, provider: $translationProviderType, translationLang: $translationLang")
+
+        val ocrLang = TextRecognizer.getRecognizer().parseToDisplayLangCode(_ocrLang)
 
         val displayGoogleTranslateIcon =
             translationProviderType == TranslationProviderType.GoogleTranslateApp

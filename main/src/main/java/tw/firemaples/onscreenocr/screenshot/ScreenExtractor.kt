@@ -67,14 +67,10 @@ object ScreenExtractor {
     }
 
     @Throws(IllegalStateException::class, IllegalArgumentException::class)
-    suspend fun extractBitmapFromScreen(parentRect: Rect, cropRect: Rect): Bitmap? {
+    suspend fun extractBitmapFromScreen(parentRect: Rect, cropRect: Rect): Bitmap {
         logger.debug("extractBitmapFromScreen(), parentRect: $parentRect, cropRect: $cropRect")
 
         val fullBitmap = doCaptureScreen()
-        if (fullBitmap == null) {
-            logger.debug("The capture result is null: $fullBitmap")
-            return null
-        }
 
         return try {
             cropBitmap(fullBitmap, parentRect, cropRect)
@@ -108,8 +104,8 @@ object ScreenExtractor {
 
     @SuppressLint("WrongConstant")
     @Throws(IllegalStateException::class, IllegalArgumentException::class)
-    private suspend fun doCaptureScreen(): Bitmap? {
-        var bitmap: Bitmap? = null
+    private suspend fun doCaptureScreen(): Bitmap {
+        var bitmap: Bitmap
         withContext(Dispatchers.Default) {
             val mpIntent = mediaProjectionIntent
             if (mpIntent == null) {
@@ -160,7 +156,7 @@ object ScreenExtractor {
             imageReader.close()
             projection.stop()
 
-            logger.debug("Bitmap size: ${bitmap?.width}x${bitmap?.height}, screen size: ${screenWidth}x$screenHeight")
+            logger.debug("Bitmap size: ${bitmap.width}x${bitmap.height}, screen size: ${screenWidth}x$screenHeight")
         }
 
         return bitmap

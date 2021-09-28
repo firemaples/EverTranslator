@@ -8,8 +8,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.pref.AppPref
+import tw.firemaples.onscreenocr.recognition.RecognitionLanguage
+import tw.firemaples.onscreenocr.recognition.TextRecognizer
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.Utils
 
@@ -21,23 +22,25 @@ class OCRRepository {
         get() = AppPref.asLiveData(AppPref::selectedOCRLang).asFlow()
             .flowOn(Dispatchers.Default)
 
-    fun getAllOCRLanguages(): Flow<List<OCRLanguage>> = flow {
-        val res = context.resources
-        val codeList = res.getStringArray(R.array.ocr_langCode_iso6391)
-        val ocrCodeList = res.getStringArray(R.array.ocr_langCode_iso6393)
-        val displayNameList = res.getStringArray(R.array.ocr_langName)
+    fun getAllOCRLanguages(): Flow<List<RecognitionLanguage>> = flow {
+//        val res = context.resources
+//        val codeList = res.getStringArray(R.array.ocr_langCode_iso6391)
+//        val ocrCodeList = res.getStringArray(R.array.ocr_langCode_iso6393)
+//        val displayNameList = res.getStringArray(R.array.ocr_langName)
+//
+//        val selectedLang = AppPref.selectedOCRLang
+//
+//        val result = (codeList.indices).map {
+//            val code = codeList[it]
+//            val ocrCode = ocrCodeList[it]
+//            val displayName = displayNameList[it]
+//
+//            OCRLanguage(code, ocrCode, displayName, code == selectedLang)
+//        }
 
-        val selectedLang = AppPref.selectedOCRLang
+        val supportedLangList = TextRecognizer.getRecognizer().supportedLanguages()
 
-        val result = (codeList.indices).map {
-            val code = codeList[it]
-            val ocrCode = ocrCodeList[it]
-            val displayName = displayNameList[it]
-
-            OCRLanguage(code, ocrCode, displayName, code == selectedLang)
-        }
-
-        emit(result)
+        emit(supportedLangList)
     }.flowOn(Dispatchers.Default)
 
 //    fun getSelectedOCRLanguage(): Flow<String> = flow {
@@ -51,9 +54,9 @@ class OCRRepository {
     }
 }
 
-data class OCRLanguage(
-    val code: String,
-    val ocrCode: String,
-    val displayName: String,
-    val selected: Boolean,
-)
+//data class OCRLanguage(
+//    val code: String,
+//    val ocrCode: String,
+//    val displayName: String,
+//    val selected: Boolean,
+//)
