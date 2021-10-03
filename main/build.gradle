@@ -115,6 +115,9 @@ dependencies {
     // To recognize Korean script
     implementation 'com.google.mlkit:text-recognition-korean:16.0.0-beta1'
 
+    // Google MLKit - Text translate
+    implementation 'com.google.mlkit:translate:16.1.2'
+
     // Kotpref
     // core
     implementation 'com.chibatching.kotpref:kotpref:2.13.1'

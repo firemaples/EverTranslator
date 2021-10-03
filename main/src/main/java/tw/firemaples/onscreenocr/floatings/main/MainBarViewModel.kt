@@ -14,7 +14,7 @@ import tw.firemaples.onscreenocr.recognition.TextRecognizer
 import tw.firemaples.onscreenocr.repo.OCRRepository
 import tw.firemaples.onscreenocr.repo.TranslationRepository
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
-import tw.firemaples.onscreenocr.utils.Constraints
+import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.Utils
 
@@ -64,13 +64,13 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
     private val ocrRepo by lazy { OCRRepository() }
     private val translateRepo by lazy { TranslationRepository() }
 
-    private var selectedOCRLang: String = Constraints.DEFAULT_OCR_LANG
+    private var selectedOCRLang: String = Constants.DEFAULT_OCR_LANG
 
     //    private var selectedTranslationProvider: TranslationProvider =
 //        TranslationProvider.fromType(context, Constraints.DEFAULT_TRANSLATION_PROVIDER)
     private var selectedTranslationProviderType: TranslationProviderType =
-        Constraints.DEFAULT_TRANSLATION_PROVIDER
-    private var selectedTranslationLang: String = Constraints.DEFAULT_TRANSLATION_LANG
+        Constants.DEFAULT_TRANSLATION_PROVIDER
+    private var selectedTranslationLang: String = Constants.DEFAULT_TRANSLATION_LANG
 
     fun onAttachedToScreen() {
         logger.debug("onAttachedToScreen()")

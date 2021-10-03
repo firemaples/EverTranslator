@@ -4,12 +4,16 @@ import android.content.Context
 import androidx.annotation.StringRes
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.pref.AppPref
-import tw.firemaples.onscreenocr.utils.Constraints
+import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Utils
 
 interface Translator {
     companion object {
-        fun getTranslator(type: TranslationProviderType): Translator =
+        suspend fun getTranslator(
+            type: TranslationProviderType = TranslationProviderType.fromKey(
+                AppPref.selectedTranslationProvider
+            )
+        ): Translator =
             when (type) {
                 TranslationProviderType.MicrosoftAzure -> MicrosoftAzureTranslator
                 TranslationProviderType.GoogleMLKit -> GoogleMLKitTranslator
@@ -24,15 +28,18 @@ interface Translator {
     open val translationHint: String?
         get() = null
 
+    suspend fun checkResources(langList: List<String>): List<String> = emptyList()
+    suspend fun downloadResources(langList: List<String>) {}
+
     suspend fun supportedLanguages(): List<TranslationLanguage> = emptyList()
-    suspend fun translate(text: String): String
+    suspend fun translate(text: String, sourceLangCode: String): TranslationResult
     suspend fun selectedLangCode(supportedLangList: Array<String>): String {
         val selectedLangCode = AppPref.selectedTranslationLang
 
         return if (supportedLangList.any { it == selectedLangCode }) selectedLangCode
         else {
-            AppPref.selectedTranslationLang = Constraints.DEFAULT_TRANSLATION_LANG
-            Constraints.DEFAULT_TRANSLATION_LANG
+            AppPref.selectedTranslationLang = Constants.DEFAULT_TRANSLATION_LANG
+            Constants.DEFAULT_TRANSLATION_LANG
         }
     }
 }
@@ -53,7 +60,7 @@ enum class TranslationProviderType(
 
     companion object {
         fun fromKey(key: String): TranslationProviderType =
-            values().firstOrNull { it.key == key } ?: Constraints.DEFAULT_TRANSLATION_PROVIDER
+            values().firstOrNull { it.key == key } ?: Constants.DEFAULT_TRANSLATION_PROVIDER
     }
 }
 
@@ -83,3 +90,13 @@ data class TranslationLanguage(
     val displayName: String,
     val selected: Boolean
 )
+
+sealed class TranslationResult {
+    data class TranslatedResult(val result: String, val type: TranslationProviderType) :
+        TranslationResult()
+
+    data class TranslationFailed(val error: Throwable) : TranslationResult()
+
+    object OCROnlyResult : TranslationResult()
+    object OuterTranslatorLaunched : TranslationResult()
+}

@@ -7,7 +7,6 @@ object OCROnlyTranslator : Translator {
     override val translationHint: String
         get() = "Translation language is not available for OCR Only mode"
 
-    override suspend fun translate(text: String): String {
-        TODO("Not yet implemented")
-    }
+    override suspend fun translate(text: String, sourceLangCode: String): TranslationResult =
+        TranslationResult.OCROnlyResult
 }

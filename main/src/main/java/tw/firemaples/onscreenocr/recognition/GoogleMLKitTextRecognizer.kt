@@ -11,7 +11,7 @@ import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.pref.AppPref
-import tw.firemaples.onscreenocr.utils.Constraints
+import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Utils
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -78,7 +78,7 @@ class GoogleMLKitTextRecognizer : TextRecognizer {
         val langCodes = res.getStringArray(R.array.lang_ocr_google_mlkit_code_bcp_47)
         val langNames = res.getStringArray(R.array.lang_ocr_google_mlkit_name)
         val selected = AppPref.selectedOCRLang.let {
-            if (langCodes.contains(it)) it else Constraints.DEFAULT_OCR_LANG
+            if (langCodes.contains(it)) it else Constants.DEFAULT_OCR_LANG
         }
 
         return langCodes.indices.map { i ->

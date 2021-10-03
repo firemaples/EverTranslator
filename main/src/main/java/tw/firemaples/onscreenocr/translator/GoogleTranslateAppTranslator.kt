@@ -7,7 +7,6 @@ object GoogleTranslateAppTranslator : Translator {
     override val translationHint: String
         get() = "Select the translation language in Google Translate app"
 
-    override suspend fun translate(text: String): String {
-        TODO("Not yet implemented")
-    }
+    override suspend fun translate(text: String, sourceLangCode: String): TranslationResult =
+        TranslationResult.OuterTranslatorLaunched
 }

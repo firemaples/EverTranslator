@@ -25,7 +25,7 @@ object MicrosoftAzureTranslator : Translator {
         }
     }
 
-    override suspend fun translate(text: String): String {
+    override suspend fun translate(text: String, sourceLangCode: String): TranslationResult {
         TODO("Not yet implemented")
     }
 }

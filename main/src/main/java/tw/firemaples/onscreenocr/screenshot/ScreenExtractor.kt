@@ -15,8 +15,10 @@ import android.media.projection.MediaProjectionManager
 import android.os.Handler
 import android.os.HandlerThread
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withContext
-import tw.firemaples.onscreenocr.utils.Constraints
+import kotlinx.coroutines.withTimeout
+import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.UIUtils
 import tw.firemaples.onscreenocr.utils.Utils
@@ -43,7 +45,7 @@ object ScreenExtractor {
 
     //    private val mediaRecorder: MediaRecorder = MediaRecorder()
     private var virtualDisplay: VirtualDisplay? = null
-    private val screenshotDir: File by lazy { File(context.cacheDir, Constraints.PATH_SCREENSHOT) }
+    private val screenshotDir: File by lazy { File(context.cacheDir, Constants.PATH_SCREENSHOT) }
 //    private val screenshotFile: File by lazy { File(screenshotDir, "screenshot.jpg") }
 
     private val screenWidth: Int
@@ -66,7 +68,11 @@ object ScreenExtractor {
         mediaProjectionIntent = null
     }
 
-    @Throws(IllegalStateException::class, IllegalArgumentException::class)
+    @Throws(
+        IllegalStateException::class,
+        IllegalArgumentException::class,
+        TimeoutCancellationException::class
+    )
     suspend fun extractBitmapFromScreen(parentRect: Rect, cropRect: Rect): Bitmap {
         logger.debug("extractBitmapFromScreen(), parentRect: $parentRect, cropRect: $cropRect")
 
@@ -103,7 +109,11 @@ object ScreenExtractor {
 //    }
 
     @SuppressLint("WrongConstant")
-    @Throws(IllegalStateException::class, IllegalArgumentException::class)
+    @Throws(
+        IllegalStateException::class,
+        IllegalArgumentException::class,
+        TimeoutCancellationException::class,
+    )
     private suspend fun doCaptureScreen(): Bitmap {
         var bitmap: Bitmap
         withContext(Dispatchers.Default) {
@@ -138,7 +148,9 @@ object ScreenExtractor {
 //        delay(2000L)
 
             logger.debug("waitForImage")
-            val image = imageReader.waitForImage()
+            val image = withTimeout(Constants.TIMEOUT_EXTRACT_SCREEN) {
+                imageReader.waitForImage()
+            }
 
 //        mediaRecorder.stop()
 //        mediaRecorder.reset()
