@@ -9,4 +9,6 @@ object Constants {
 
     const val PATH_SCREENSHOT: String = "screenshot"
     const val TIMEOUT_EXTRACT_SCREEN = 1000L
+
+    const val PACKAGE_NAME_GOOGLE_TRANSLATE = "com.google.android.apps.translate"
 }

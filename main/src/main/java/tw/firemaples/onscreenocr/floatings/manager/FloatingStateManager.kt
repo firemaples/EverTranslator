@@ -10,7 +10,6 @@ import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.floatings.main.MainBar
 import tw.firemaples.onscreenocr.floatings.screenCircling.ScreenCirclingView
 import tw.firemaples.onscreenocr.log.FirebaseEvent
-import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.recognition.TextRecognizer
 import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
@@ -61,7 +60,7 @@ object FloatingStateManager {
     }
 
     fun startScreenCircling() = stateIn(State.Idle::class) {
-        if (!checkTranslationResources()) {
+        if (!Translator.getTranslator().checkEnvironment(scope)) {
             return@stateIn
         }
 
@@ -119,74 +118,6 @@ object FloatingStateManager {
         } catch (e: Exception) {
             logger.warn(t = e)
             showError(e.message ?: "Unknown error found while recognizing text")
-        }
-    }
-
-    private suspend fun checkTranslationResources(): Boolean {
-        val translator = Translator.getTranslator()
-        val langList = listOf(AppPref.selectedOCRLang, AppPref.selectedTranslationLang)
-
-        val langToDownload = try {
-            translator.checkResources(langList)
-        } catch (e: Exception) {
-            FirebaseEvent.logException(e)
-
-            DialogView(context).apply {
-                setTitle("Failed to check resources")
-                setMessage("Failed reason: ${e.localizedMessage}")
-                setDialogType(DialogView.DialogType.CONFIRM_ONLY)
-            }.attachToScreen()
-            return false
-        }
-
-        if (langToDownload.isNotEmpty()) {
-            DialogView(context).apply {
-                setTitle("Download")
-                setMessage(
-                    "The following language resources are not downloaded, do you want to download them now?" +
-                            "\n\nModels: ${langToDownload.joinToString(", ")}"
-                )
-                setDialogType(DialogView.DialogType.CONFIRM_CANCEL)
-
-                onButtonOkClicked = {
-                    downloadTranslationResources(translator, langToDownload)
-                }
-            }.attachToScreen()
-
-            return false
-        }
-        return true
-    }
-
-    private fun downloadTranslationResources(translator: Translator, langList: List<String>) {
-        scope.launch {
-            val dialog = DialogView(context).apply {
-                setTitle("Resources downloading")
-                setMessage("The following resources is downloading, please wait.")
-                setDialogType(DialogView.DialogType.CANCEL_ONLY)
-
-                attachToScreen()
-            }
-
-            try {
-                translator.downloadResources(langList)
-
-                dialog.detachFromScreen()
-                DialogView(context).apply {
-                    setTitle("Resources downloaded")
-                    setMessage("Resources downloaded, please click OK to continue.")
-                    setDialogType(DialogView.DialogType.CONFIRM_ONLY)
-                }.attachToScreen()
-            } catch (e: Exception) {
-                FirebaseEvent.logException(e)
-
-                dialog.detachFromScreen()
-                DialogView(context).apply {
-                    setTitle("Downloading resources failed")
-                    setMessage("Downloading resources failed, failed reason: ${e.localizedMessage}")
-                    setDialogType(DialogView.DialogType.CONFIRM_ONLY)
-                }.attachToScreen()
-            }
         }
     }
 

@@ -2,6 +2,7 @@ package tw.firemaples.onscreenocr.translator
 
 import android.content.Context
 import androidx.annotation.StringRes
+import kotlinx.coroutines.CoroutineScope
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.utils.Constants
@@ -25,11 +26,10 @@ interface Translator {
     val type: TranslationProviderType
     val context: Context
         get() = Utils.context
-    open val translationHint: String?
+    val translationHint: String?
         get() = null
 
-    suspend fun checkResources(langList: List<String>): List<String> = emptyList()
-    suspend fun downloadResources(langList: List<String>) {}
+    suspend fun checkEnvironment(coroutineScope: CoroutineScope): Boolean = true
 
     suspend fun supportedLanguages(): List<TranslationLanguage> = emptyList()
     suspend fun translate(text: String, sourceLangCode: String): TranslationResult
