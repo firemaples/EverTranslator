@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.floatings.main.MainBar
+import tw.firemaples.onscreenocr.floatings.result.ResultView
 import tw.firemaples.onscreenocr.floatings.screenCircling.ScreenCirclingView
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
@@ -35,6 +36,13 @@ object FloatingStateManager {
         ScreenCirclingView(context).apply {
             onAreaSelected = { parent, selected ->
                 this@FloatingStateManager.onAreaSelected(parent, selected)
+            }
+        }
+    }
+    private val resultView: ResultView by lazy {
+        ResultView(context).apply {
+            onUserDismiss = {
+                this@FloatingStateManager.backToIdle()
             }
         }
     }
@@ -112,8 +120,10 @@ object FloatingStateManager {
     private fun startRecognition(croppedBitmap: Bitmap) = stateIn(State.ScreenCapturing::class) {
         changeState(State.TextRecognizing)
         try {
+            resultView.startRecognition()
             val result = TextRecognizer.getRecognizer().recognize(croppedBitmap)
             logger.debug("On text recognized: $result")
+            resultView.textRecognized(result)
             startTranslation(result)
         } catch (e: Exception) {
             logger.warn(t = e)
@@ -125,7 +135,12 @@ object FloatingStateManager {
         stateIn(State.TextRecognizing::class) {
             try {
                 changeState(State.TextTranslating)
-                val translationResult = Translator.getTranslator()
+
+                val translator = Translator.getTranslator()
+
+                resultView.startTranslation(translator.type)
+
+                val translationResult = translator
                     .translate(recognitionResult.result, recognitionResult.langCode)
 
                 when (translationResult) {
@@ -167,8 +182,7 @@ object FloatingStateManager {
         stateIn(State.TextTranslating::class) {
             logger.debug("showResult(), $result")
 
-            //TODO remove this line
-            backToIdle()
+            resultView.textTranslated(result)
         }
 
     private fun showError(error: String) {
@@ -187,6 +201,7 @@ object FloatingStateManager {
             State.ErrorDisplaying::class
         ) {
             changeState(State.Idle)
+            resultView.backToIdle()
         }
 
     private fun stateIn(
