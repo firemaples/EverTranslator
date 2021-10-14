@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.floatings.result
 
 import android.content.Context
+import android.graphics.Rect
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
@@ -33,6 +34,9 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
     private val _displayTranslatedByGoogle = MutableLiveData<Boolean>()
     val displayTranslatedByGoogle: LiveData<Boolean> = _displayTranslatedByGoogle
 
+    private val _displayRecognizedTextAreas = MutableLiveData<Pair<List<Rect>, Rect>>()
+    val displayRecognizedTextAreas: LiveData<Pair<List<Rect>, Rect>> = _displayRecognizedTextAreas
+
     private val context: Context by lazy { Utils.context }
 
 //    companion object {
@@ -56,10 +60,24 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
         }
     }
 
-    fun textRecognized(result: RecognitionResult) {
+    fun textRecognized(result: RecognitionResult, parent: Rect, selected: Rect, viewRect: Rect) {
         viewScope.launch {
             _displayOCROperationProgress.value = false
             _ocrText.value = result.result
+
+            val topOffset = parent.top + selected.top - viewRect.top
+            val leftOffset = parent.left + selected.left - viewRect.left
+            val textAreas = result.boundingBoxes.map {
+                Rect(
+                    it.left + leftOffset,
+                    it.top + topOffset,
+                    it.right + leftOffset,
+                    it.bottom + topOffset
+                )
+            }
+            val unionRect = Rect()
+            textAreas.forEach { unionRect.union(it) }
+            _displayRecognizedTextAreas.value = textAreas to unionRect
         }
     }
 

@@ -27,4 +27,6 @@
     <color name="circlingView_box">#8800FF00</color>
     <color name="circlingView_helperText">@color/white</color>
     <color name="circlingView_progressBorder">#FF4081</color>
+
+    <color name="resultView_recognizedBoundingBoxes">#8800FF00</color>
 </resources>

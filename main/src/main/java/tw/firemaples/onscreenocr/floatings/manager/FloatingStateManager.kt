@@ -106,7 +106,7 @@ object FloatingStateManager {
 
             mainBar.attachToScreen()
 
-            startRecognition(croppedBitmap)
+            startRecognition(croppedBitmap, parent, selected)
         } catch (t: TimeoutCancellationException) {
             logger.debug(t = t)
             showError("Capturing screen failed: timeout, please try it again later")
@@ -117,19 +117,20 @@ object FloatingStateManager {
 //        screenCirclingView.detachFromScreen() // To test circled area
     }
 
-    private fun startRecognition(croppedBitmap: Bitmap) = stateIn(State.ScreenCapturing::class) {
-        changeState(State.TextRecognizing)
-        try {
-            resultView.startRecognition()
-            val result = TextRecognizer.getRecognizer().recognize(croppedBitmap)
-            logger.debug("On text recognized: $result")
-            resultView.textRecognized(result)
-            startTranslation(result)
-        } catch (e: Exception) {
-            logger.warn(t = e)
-            showError(e.message ?: "Unknown error found while recognizing text")
+    private fun startRecognition(croppedBitmap: Bitmap, parent: Rect, selected: Rect) =
+        stateIn(State.ScreenCapturing::class) {
+            changeState(State.TextRecognizing)
+            try {
+                resultView.startRecognition()
+                val result = TextRecognizer.getRecognizer().recognize(croppedBitmap)
+                logger.debug("On text recognized: $result")
+                resultView.textRecognized(result, parent, selected)
+                startTranslation(result)
+            } catch (e: Exception) {
+                logger.warn(t = e)
+                showError(e.message ?: "Unknown error found while recognizing text")
+            }
         }
-    }
 
     private fun startTranslation(recognitionResult: RecognitionResult) =
         stateIn(State.TextRecognizing::class) {

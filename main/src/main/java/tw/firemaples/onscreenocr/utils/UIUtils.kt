@@ -84,7 +84,7 @@ object UIUtils {
         anchorRect: Rect, parentRect: Rect,
         itemWidth: Int, itemHeight: Int,
         layoutMargin: Int,
-    ): Array<Int> {
+    ): Pair<Int, Int> {
 
         val parentHeight = parentRect.height()
         val needHeight = itemHeight + layoutMargin * 2
@@ -119,7 +119,7 @@ object UIUtils {
                 else -> (parentWidth - itemWidth) / 2
             } - parentRect.left
 
-        return arrayOf(leftMargin, topMargin)
+        return leftMargin to topMargin
     }
 }
 

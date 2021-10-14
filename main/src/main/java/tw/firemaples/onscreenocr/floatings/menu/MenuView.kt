@@ -95,7 +95,7 @@ class MenuView(context: Context, private val checkable: Boolean) : FloatingView(
 
         viewMenuWrapper.onViewPrepared {
 
-            val margins = UIUtils.countViewPosition(
+            val (leftMargin, topMargin) = UIUtils.countViewPosition(
                 anchorRect = anchorView.getViewRect(),
                 parentRect = viewRoot.getViewRect(),
                 itemWidth = viewMenuWrapper.width,
@@ -104,8 +104,8 @@ class MenuView(context: Context, private val checkable: Boolean) : FloatingView(
             )
 
             val layoutParams = (viewMenuWrapper.layoutParams as RelativeLayout.LayoutParams).apply {
-                leftMargin = margins[0]
-                topMargin = margins[1]
+                this.leftMargin = leftMargin
+                this.topMargin = topMargin
             }
 
             viewRoot.updateViewLayout(viewMenuWrapper, layoutParams)
