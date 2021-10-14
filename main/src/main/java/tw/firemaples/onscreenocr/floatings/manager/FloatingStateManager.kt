@@ -99,6 +99,9 @@ object FloatingStateManager {
         changeState(State.ScreenCapturing)
         mainBar.detachFromScreen()
         screenCirclingView.detachFromScreen()
+
+        delay(100L)
+
         try {
             val croppedBitmap =
                 ScreenExtractor.extractBitmapFromScreen(parentRect = parent, cropRect = selected)
