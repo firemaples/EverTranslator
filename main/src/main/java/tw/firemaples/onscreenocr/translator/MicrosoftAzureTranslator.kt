@@ -1,5 +1,9 @@
 package tw.firemaples.onscreenocr.translator
 
+import io.github.firemaples.language.Language
+import io.github.firemaples.translate.Translate
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import tw.firemaples.onscreenocr.R
 
 object MicrosoftAzureTranslator : Translator {
@@ -26,6 +30,23 @@ object MicrosoftAzureTranslator : Translator {
     }
 
     override suspend fun translate(text: String, sourceLangCode: String): TranslationResult {
-        TODO("Not yet implemented")
+        if (text.isBlank()) {
+            return TranslationResult.TranslatedResult(result = "", type)
+        }
+
+        val targetLang = supportedLanguages().firstOrNull { it.selected }?.code
+            ?.let { Language.fromString(it) }
+
+        Translate.setSubscriptionKey(context.getString(R.string.microsoftSubscriptionKey))
+
+        return try {
+            val result = withContext(Dispatchers.IO) {
+                Translate.execute(text, targetLang)
+            }
+
+            TranslationResult.TranslatedResult(result, type)
+        } catch (e: Exception) {
+            TranslationResult.TranslationFailed(e)
+        }
     }
 }

@@ -133,4 +133,7 @@ dependencies {
 //    implementation 'androidx.lifecycle:lifecycle-livedata:2.2.0'
 //    // experimental, preference screen build dsl
 //    implementation 'com.chibatching.kotpref:preference-screen-dsl:2.13.1'
+
+    // Microsoft translator
+    implementation 'io.github.firemaples:microsoft-translator-java-api:0.8.8.1'
 }

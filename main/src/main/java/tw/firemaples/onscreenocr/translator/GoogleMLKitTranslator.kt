@@ -85,7 +85,7 @@ object GoogleMLKitTranslator : Translator {
                 .addOnSuccessListener {
                     c.resume(
                         TranslationResult.TranslatedResult(
-                            it, TranslationProviderType.GoogleMLKit
+                            it, type
                         )
                     )
                 }
