@@ -86,11 +86,13 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
             if (!translationProviderType.nonTranslation) {
                 _displayTranslationBlock.value = true
                 _displayTranslationProgress.value = true
+                _displayTranslatedByGoogle.value = false
+                _translationProviderText.value = null
             }
 
             when (translationProviderType) {
                 TranslationProviderType.MicrosoftAzure ->
-                    _translatedText.value =
+                    _translationProviderText.value =
                         "translated by ${context.getString(translationProviderType.nameRes)}"
                 TranslationProviderType.GoogleMLKit ->
                     _displayTranslatedByGoogle.value = true

@@ -105,6 +105,11 @@ class ResultView(context: Context) : FloatingView(context) {
         viewRoot.setOnClickListener { onUserDismiss?.invoke() }
     }
 
+    override fun onAttachedToScreen() {
+        super.onAttachedToScreen()
+        viewResultWindow.visibility = View.INVISIBLE
+    }
+
     override fun onHomeButtonPressed() {
         super.onHomeButtonPressed()
         onUserDismiss?.invoke()
@@ -159,6 +164,10 @@ class ResultView(context: Context) : FloatingView(context) {
                 }
 
             viewRoot.updateViewLayout(viewResultWindow, layoutParams)
+
+            viewRoot.post {
+                viewResultWindow.visibility = View.VISIBLE
+            }
         }
     }
 }
