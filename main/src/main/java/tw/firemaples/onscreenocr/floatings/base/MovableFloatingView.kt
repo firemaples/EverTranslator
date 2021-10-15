@@ -19,9 +19,7 @@ abstract class MovableFloatingView(context: Context) : FloatingView(context) {
         private const val moveToEdgeDuration: Long = 450
 
         private const val fromAlpha: Float = 1f
-        private const val destinationAlpha: Float = 0.2f
         private const val fadeOutAnimationDuration: Long = 800
-        private const val fadeOutAnimationDelay: Long = 1000
     }
 
     private val logger: Logger by lazy { Logger(this::class) }
@@ -33,6 +31,8 @@ abstract class MovableFloatingView(context: Context) : FloatingView(context) {
         get() = moveToEdgeAfterMoved
 
     open val fadeOutAfterMoved: Boolean = false
+    open val fadeOutDelay: Long = 1000L
+    open val fadeOutDestinationAlpha: Float = 0.2f
 
     private lateinit var dragView: View
 
@@ -190,12 +190,12 @@ abstract class MovableFloatingView(context: Context) : FloatingView(context) {
         logger.debug("fadeOut()")
         cancelFadeOut()
 
-        fadeOutAnimator = ValueAnimator.ofFloat(fromAlpha, destinationAlpha).apply {
+        fadeOutAnimator = ValueAnimator.ofFloat(fromAlpha, fadeOutDestinationAlpha).apply {
             addUpdateListener { animation ->
                 rootView.alpha = animation.animatedValue as Float
             }
             duration = fadeOutAnimationDuration
-            startDelay = fadeOutAnimationDelay
+            startDelay = fadeOutDelay
 
             start()
         }

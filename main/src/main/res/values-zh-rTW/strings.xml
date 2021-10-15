@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_title_use_simple_style">使用單一按鈕</string>
+    <string name="pref_summary_use_simple_style">單一按鈕：\n使用單一按鈕來簡化懸浮條，單擊尋找畫面文字，長壓顯示選單，拖曳移動懸浮條。\n\n多按鈕：\n在懸浮條中使用雙按鈕，其一可以尋找畫面文字，另一單擊顯示選單，拖曳移動懸浮條。</string>
+    <string name="pref_title_enable_fade_out_while_idle">啟用閒置時透明化懸浮條</string>
+    <string name="pref_title_fade_out_after_seconds">閒置時間（秒）</string>
+    <string name="pref_title_opaque_percentage">不透明度（％）</string>
+    <string name="pref_category_floating_bar">懸浮條</string>
+    <string name="pref_category_text_blocks_selector">文字區塊選擇器</string>
+    <string name="pref_joiner_between_text_blocks">文字區塊間隔</string>
+
+    <string-array name="textBlockJoinersNames">
+        <item>換行字元</item>
+        <item>空格</item>
+        <item>無</item>
+    </string-array>
+</resources>

@@ -28,6 +28,9 @@
         <service
             android:name=".floatings.ViewHolderService"
             android:foregroundServiceType="mediaProjection" />
+        <activity
+            android:name=".pages.setting.SettingActivity"
+            android:noHistory="true" />
     </application>
 
 </manifest>

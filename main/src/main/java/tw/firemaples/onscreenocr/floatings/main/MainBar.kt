@@ -9,6 +9,8 @@ import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.floatings.manager.State
 import tw.firemaples.onscreenocr.floatings.menu.MenuView
 import tw.firemaples.onscreenocr.floatings.translationSelectPanel.TranslationSelectPanel
+import tw.firemaples.onscreenocr.pages.setting.SettingActivity
+import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.utils.showOrHide
 
 class MainBar(context: Context) : MovableFloatingView(context) {
@@ -20,7 +22,13 @@ class MainBar(context: Context) : MovableFloatingView(context) {
 
     override val fadeOutAfterMoved: Boolean
         get() = !arrayOf(State.ScreenCircling, State.ScreenCircled)
-            .contains(FloatingStateManager.currentState) && !menuView.attached
+            .contains(FloatingStateManager.currentState)
+                && !menuView.attached
+                && SettingManager.enableFadingOutWhileIdle
+    override val fadeOutDelay: Long
+        get() = SettingManager.timeoutToFadeOut
+    override val fadeOutDestinationAlpha: Float
+        get() = SettingManager.opaquePercentageToFadeOut
 
     private val btLangSelector: View = rootView.findViewById(R.id.bt_langSelector)
     private val tvLang: TextView = rootView.findViewById(R.id.tv_lang)
@@ -110,8 +118,10 @@ class MainBar(context: Context) : MovableFloatingView(context) {
         viewModel.rescheduleFadeOut.observe(lifecycleOwner) {
             rescheduleFadeOut()
         }
-//        btOCROnly.visibility = View.VISIBLE
-//        btClose.visibility = View.VISIBLE
+
+        viewModel.showSettingPage.observe(lifecycleOwner) {
+            SettingActivity.start(context)
+        }
     }
 
     override fun onAttachedToScreen() {

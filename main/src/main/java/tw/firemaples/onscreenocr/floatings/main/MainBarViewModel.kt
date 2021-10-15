@@ -16,6 +16,7 @@ import tw.firemaples.onscreenocr.repo.TranslationRepository
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
+import tw.firemaples.onscreenocr.utils.SingleLiveEvent
 import tw.firemaples.onscreenocr.utils.Utils
 
 class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) {
@@ -48,6 +49,9 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
 
     private val _rescheduleFadeOut = MutableLiveData<Boolean>()
     val rescheduleFadeOut: LiveData<Boolean> = _rescheduleFadeOut
+
+    private val _showSettingPage = SingleLiveEvent<Boolean>()
+    val showSettingPage: LiveData<Boolean> = _showSettingPage
 
     private val logger: Logger by lazy { Logger(MainBarViewModel::class) }
     private val context: Context by lazy { Utils.context }
@@ -150,6 +154,7 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
 
         when (action) {
             MENU_SETTING -> {
+                _showSettingPage.value = true
             }
             MENU_PRIVACY_POLICY -> {
             }
