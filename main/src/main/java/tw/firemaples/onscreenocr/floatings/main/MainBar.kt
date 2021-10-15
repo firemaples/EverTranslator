@@ -20,7 +20,7 @@ class MainBar(context: Context) : MovableFloatingView(context) {
 
     override val fadeOutAfterMoved: Boolean
         get() = !arrayOf(State.ScreenCircling, State.ScreenCircled)
-            .contains(FloatingStateManager.currentState)
+            .contains(FloatingStateManager.currentState) && !menuView.attached
 
     private val btLangSelector: View = rootView.findViewById(R.id.bt_langSelector)
     private val tvLang: TextView = rootView.findViewById(R.id.tv_lang)
@@ -35,9 +35,13 @@ class MainBar(context: Context) : MovableFloatingView(context) {
     private val menuView: MenuView by lazy {
         MenuView(context, false).apply {
             setAnchor(btMenu)
+
+            onAttached = { rescheduleFadeOut() }
+            onDetached = { rescheduleFadeOut() }
             onItemSelected = { view, key ->
                 view.detachFromScreen()
                 viewModel.onMenuItemClicked(key)
+                rescheduleFadeOut()
             }
         }
     }

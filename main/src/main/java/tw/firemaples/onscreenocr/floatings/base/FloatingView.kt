@@ -68,6 +68,7 @@ abstract class FloatingView(protected val context: Context) {
         BackButtonTrackerView(
             context = context,
             onAttachedToWindow = { onAttachedToScreen() },
+            onDetachedFromWindow = { onDetachedFromScreen() },
             onBackButtonPressed = { onBackButtonPressed() },
         ).apply {
             val innerView = LayoutInflater.from(context).inflate(layoutId, null)
@@ -83,6 +84,9 @@ abstract class FloatingView(protected val context: Context) {
 
     var attached: Boolean = false
         private set
+
+    var onAttached: (() -> Unit)? = null
+    var onDetached: (() -> Unit)? = null
 
     @MainThread
     open fun attachToScreen() {
@@ -134,6 +138,13 @@ abstract class FloatingView(protected val context: Context) {
         if (enableHomeButtonWatcher) {
             homeButtonWatcher.startWatch()
         }
+
+        onAttached?.invoke()
+    }
+
+    @CallSuper
+    protected open fun onDetachedFromScreen() {
+        onDetached?.invoke()
     }
 
     fun changeViewPosition(x: Int, y: Int) {
