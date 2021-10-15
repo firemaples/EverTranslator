@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fragment_permission_float_window"
-        android:name="tw.firemaples.onscreenocr.ui.permissions.PermissionFloatWindowFragment"
+        android:name="tw.firemaples.onscreenocr.pages.launch.permissions.PermissionFloatWindowFragment"
         tools:layout="@layout/permission_float_window_fragment">
 
         <action
@@ -17,6 +17,6 @@
 
     <fragment
         android:id="@+id/fragment_permission_capture_screen"
-        android:name="tw.firemaples.onscreenocr.ui.permissions.PermissionCaptureScreenFragment"
+        android:name="tw.firemaples.onscreenocr.pages.launch.permissions.PermissionCaptureScreenFragment"
         tools:layout="@layout/permission_capture_screen_fragment" />
 </navigation>

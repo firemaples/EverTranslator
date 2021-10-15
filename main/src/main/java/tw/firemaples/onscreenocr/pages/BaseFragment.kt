@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.ui
+package tw.firemaples.onscreenocr.pages
 
 import android.os.Bundle
 import android.view.View

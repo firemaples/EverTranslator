@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.ui.permissions
+package tw.firemaples.onscreenocr.pages.launch.permissions
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
