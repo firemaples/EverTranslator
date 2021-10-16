@@ -12,6 +12,8 @@ object SettingManager {
     private const val PREF_OPAQUE_PERCENTAGE = "pref_opaque_percentage"
 //    private const val PREF_TEXT_BLOCK_JOINER = "pref_text_block_joiner"
 
+    private const val PREF_SAVE_LAST_SELECTION_AREA = "pref_save_last_selection_area"
+
 //    private val DEFAULT_JOINER = TextBlockJoiner.Space
 
     private val context: Context by lazy { Utils.context }
@@ -48,4 +50,7 @@ object SettingManager {
 //        Space(" "),
 //        None(""),
 //    }
+
+    val saveLastSelectionArea: Boolean
+        get() = preferences.getBoolean(PREF_SAVE_LAST_SELECTION_AREA, true)
 }

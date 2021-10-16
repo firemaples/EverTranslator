@@ -15,7 +15,7 @@ class ScreenCirclingViewModel(viewScope: CoroutineScope) : FloatingViewModel(vie
     private val _lastSelectedArea = MutableLiveData<Rect?>()
     val lastSelectedArea: LiveData<Rect?> = _lastSelectedArea
 
-    fun load() {
+    fun onAttached() {
         viewScope.launch {
             if (generalRepo.isRememberLastSelection().first()) {
                 val lastSelection = generalRepo.getLastRememberedSelectionArea().first()
@@ -23,6 +23,12 @@ class ScreenCirclingViewModel(viewScope: CoroutineScope) : FloatingViewModel(vie
                     _lastSelectedArea.value = lastSelection
                 }
             }
+        }
+    }
+
+    fun onAreaSelected(selected: Rect) {
+        viewScope.launch {
+            generalRepo.setLastRememberedSelectionArea(selected)
         }
     }
 }

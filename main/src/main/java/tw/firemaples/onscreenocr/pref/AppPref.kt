@@ -1,11 +1,18 @@
 package tw.firemaples.onscreenocr.pref
 
 import android.graphics.Rect
+import com.chibatching.kotpref.Kotpref
 import com.chibatching.kotpref.KotprefModel
+import com.chibatching.kotpref.gsonpref.gson
 import com.chibatching.kotpref.gsonpref.gsonNullablePref
+import com.google.gson.Gson
 import tw.firemaples.onscreenocr.utils.Constants
 
 object AppPref : KotprefModel() {
+    init {
+        Kotpref.gson = Gson()
+    }
+
     var hasNotch: Boolean by booleanPref(default = false)
     var notchHeight: Int by intPref(default = 0)
     var statusBarHeight: Int by intPref(default = 0)
@@ -17,6 +24,5 @@ object AppPref : KotprefModel() {
     )
     var selectedTranslationLang by stringPref(default = Constants.DEFAULT_TRANSLATION_LANG)
 
-    var rememberLastSelectedArea: Boolean by booleanPref(default = true)
-    var lastRememberedSelectedArea: Rect? by gsonNullablePref()
+    var lastSelectionArea: Rect? by gsonNullablePref()
 }

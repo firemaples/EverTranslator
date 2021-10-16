@@ -43,7 +43,8 @@ class CirclingView @JvmOverloads constructor(
     private var startPoint: Point? = null
     private var endPoint: Point? = null
 
-    var selectedBox: Rect? by Delegates.observable(null) { _, _, _ ->
+    var selectedBox: Rect? by Delegates.observable(null) { _, _, newValue ->
+        helperTextView?.hasBox = newValue != null
         invalidate()
     }
     private var resizeBase: Rect = Rect()

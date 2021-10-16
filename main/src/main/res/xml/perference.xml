@@ -4,11 +4,11 @@
 
     <PreferenceCategory android:title="@string/pref_category_floating_bar">
 
-<!--        <SwitchPreference-->
-<!--            android:defaultValue="false"-->
-<!--            android:key="pref_use_simple_style"-->
-<!--            android:summary="@string/pref_summary_use_simple_style"-->
-<!--            android:title="@string/pref_title_use_simple_style" />-->
+        <!--        <SwitchPreference-->
+        <!--            android:defaultValue="false"-->
+        <!--            android:key="pref_use_simple_style"-->
+        <!--            android:summary="@string/pref_summary_use_simple_style"-->
+        <!--            android:title="@string/pref_title_use_simple_style" />-->
         <SwitchPreference
             android:defaultValue="true"
             android:key="pref_enable_fading_out_while_idle"
@@ -31,14 +31,21 @@
             app:showSeekBarValue="true" />
     </PreferenceCategory>
 
-<!--    <PreferenceCategory android:title="@string/pref_category_text_blocks_selector">-->
+    <!--    <PreferenceCategory android:title="@string/pref_category_text_blocks_selector">-->
 
-<!--        <ListPreference-->
-<!--            android:defaultValue="Space"-->
-<!--            android:entries="@array/textBlockJoinersNames"-->
-<!--            android:entryValues="@array/textBlockJoinersValues"-->
-<!--            android:key="pref_text_block_joiner"-->
-<!--            android:title="@string/pref_joiner_between_text_blocks"-->
-<!--            app:useSimpleSummaryProvider="true" />-->
-<!--    </PreferenceCategory>-->
+    <!--        <ListPreference-->
+    <!--            android:defaultValue="Space"-->
+    <!--            android:entries="@array/textBlockJoinersNames"-->
+    <!--            android:entryValues="@array/textBlockJoinersValues"-->
+    <!--            android:key="pref_text_block_joiner"-->
+    <!--            android:title="@string/pref_joiner_between_text_blocks"-->
+    <!--            app:useSimpleSummaryProvider="true" />-->
+    <!--    </PreferenceCategory>-->
+
+    <PreferenceCategory android:title="Other settings">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_save_last_selection_area"
+            android:title="Save last selected area" />
+    </PreferenceCategory>
 </PreferenceScreen>

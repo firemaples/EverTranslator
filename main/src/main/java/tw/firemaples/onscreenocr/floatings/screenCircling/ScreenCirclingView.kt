@@ -36,20 +36,23 @@ class ScreenCirclingView(context: Context) : FloatingView(context) {
     private fun setViews() {
         circlingView.helperTextView = helperTextView
         circlingView.onAreaSelected = { selected ->
+            viewModel.onAreaSelected(selected)
             onAreaSelected?.invoke(circlingView.getViewRect(), selected)
         }
 
-        viewModel.lastSelectedArea.observe(lifecycleOwner) {
-            circlingView.selectedBox = it
+        viewModel.lastSelectedArea.observe(lifecycleOwner) { selected ->
+            selected ?: return@observe
+            circlingView.selectedBox = selected
+            onAreaSelected?.invoke(circlingView.getViewRect(), selected)
         }
-
-        viewModel.load()
     }
 
     override fun attachToScreen() {
         super.attachToScreen()
 
         progressBorderView.start()
+
+        viewModel.onAttached()
     }
 
     override fun detachFromScreen() {
