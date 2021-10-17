@@ -62,11 +62,6 @@ class MainBar(context: Context) : MovableFloatingView(context) {
     }
 
     private fun setViews() {
-        tvLang.text = "En>"
-        ivGoogleTranslator.visibility = View.VISIBLE
-
-        btSelect.visibility = View.VISIBLE
-
         btLangSelector.setOnClickListener {
             rescheduleFadeOut()
             TranslationSelectPanel(context).attachToScreen()
