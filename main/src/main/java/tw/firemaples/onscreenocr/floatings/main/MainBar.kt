@@ -11,6 +11,7 @@ import tw.firemaples.onscreenocr.floatings.menu.MenuView
 import tw.firemaples.onscreenocr.floatings.translationSelectPanel.TranslationSelectPanel
 import tw.firemaples.onscreenocr.pages.setting.SettingActivity
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
+import tw.firemaples.onscreenocr.utils.Utils
 import tw.firemaples.onscreenocr.utils.showOrHide
 
 class MainBar(context: Context) : MovableFloatingView(context) {
@@ -116,6 +117,10 @@ class MainBar(context: Context) : MovableFloatingView(context) {
 
         viewModel.showSettingPage.observe(lifecycleOwner) {
             SettingActivity.start(context)
+        }
+
+        viewModel.openBrowser.observe(lifecycleOwner) {
+            Utils.openBrowser(it)
         }
     }
 

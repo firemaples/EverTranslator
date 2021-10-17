@@ -53,6 +53,9 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
     private val _showSettingPage = SingleLiveEvent<Boolean>()
     val showSettingPage: LiveData<Boolean> = _showSettingPage
 
+    private val _openBrowser = SingleLiveEvent<String>()
+    val openBrowser: LiveData<String> = _openBrowser
+
     private val logger: Logger by lazy { Logger(MainBarViewModel::class) }
     private val context: Context by lazy { Utils.context }
 
@@ -157,6 +160,7 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
                 _showSettingPage.value = true
             }
             MENU_PRIVACY_POLICY -> {
+                _openBrowser.value = "https://sites.google.com/view/privacy-policy-evertranslator"
             }
             MENU_ABOUT -> {
             }

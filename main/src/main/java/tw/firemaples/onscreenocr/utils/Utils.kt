@@ -1,8 +1,11 @@
 package tw.firemaples.onscreenocr.utils
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.net.Uri
+import androidx.core.content.ContextCompat
 import tw.firemaples.onscreenocr.CoreApplication
 
 object Utils {
@@ -22,4 +25,15 @@ object Utils {
             logger.warn(t = e)
             null
         }
+
+    fun openBrowser(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        try {
+            ContextCompat.startActivity(context, intent, null)
+        } catch (e: Exception) {
+            logger.warn("Unable to open a URL in browser", e)
+        }
+    }
 }
