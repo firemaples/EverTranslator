@@ -2,6 +2,7 @@ package tw.firemaples.onscreenocr.log
 
 import android.os.Bundle
 import android.util.Log
+import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import tw.firemaples.onscreenocr.utils.SignatureUtil
@@ -39,6 +40,10 @@ private const val EVENT_SHOW_GOOGLE_TRANSLATE_WINDOW_FAILED = "show_google_trans
 object FirebaseEvent {
     private val context by lazy { Utils.context }
     private val firebaseAnalytics by lazy { FirebaseAnalytics.getInstance(context) }
+
+    init {
+        FirebaseApp.initializeApp(context)
+    }
 
     fun logStartAreaSelection() {
         logEvent(EVENT_START_AREA_SELECTION)
