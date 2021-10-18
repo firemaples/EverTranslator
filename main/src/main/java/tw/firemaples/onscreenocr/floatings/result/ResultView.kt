@@ -18,6 +18,10 @@ import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.utils.*
 
 class ResultView(context: Context) : FloatingView(context) {
+    companion object {
+        private const val LABEL_RECOGNIZED_TEXT = "Recognized text"
+        private const val LABEL_TRANSLATED_TEXT = "Translated text"
+    }
 
     override val layoutId: Int
         get() = R.layout.floating_result_view
@@ -106,21 +110,30 @@ class ResultView(context: Context) : FloatingView(context) {
         tvTranslatedText.movementMethod = ScrollingMovementMethod()
         viewRoot.setOnClickListener { onUserDismiss?.invoke() }
         btEditOCRText.setOnClickListener {
-            DialogView(context, layoutFocusable = true).apply {
-                val originalRecognizedText = tvOCRText.text.toString()
-                val etOCRText = EditText(context)
-                etOCRText.setText(originalRecognizedText)
-                setContentView(etOCRText)
+            showRecognizedTextEditor(tvOCRText.text.toString())
+        }
+        btCopyOCRText.setOnClickListener {
+            Utils.copyToClipboard(LABEL_RECOGNIZED_TEXT, tvOCRText.text.toString())
+        }
+        btCopyTranslatedText.setOnClickListener {
+            Utils.copyToClipboard(LABEL_TRANSLATED_TEXT, tvTranslatedText.text.toString())
+        }
+    }
 
-                onButtonOkClicked = {
-                    val text = etOCRText.text.toString()
-                    if (text.isNotBlank() && text.trim() != originalRecognizedText) {
-                        viewModel.onOCRTextEdited(text)
-                    }
+    private fun showRecognizedTextEditor(recognizedText: String) {
+        DialogView(context, layoutFocusable = true).apply {
+            val etOCRText = EditText(context)
+            etOCRText.setText(recognizedText)
+            setContentView(etOCRText)
+
+            onButtonOkClicked = {
+                val text = etOCRText.text.toString()
+                if (text.isNotBlank() && text.trim() != recognizedText) {
+                    viewModel.onOCRTextEdited(text)
                 }
-
-                attachToScreen()
             }
+
+            attachToScreen()
         }
     }
 
