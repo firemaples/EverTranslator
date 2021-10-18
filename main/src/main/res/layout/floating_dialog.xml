@@ -31,6 +31,7 @@
                     android:id="@+id/tv_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:visibility="gone"
                     tools:text="Title"
@@ -40,10 +41,16 @@
                     android:id="@+id/tv_message"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:visibility="gone"
                     tools:text="Message"
+                    tools:visibility="visible" />
+
+                <FrameLayout
+                    android:id="@+id/view_contentViewWrapper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
                     tools:visibility="visible" />
 
             </LinearLayout>

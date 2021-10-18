@@ -119,6 +119,9 @@ dependencies {
     // Google MLKit - Text translate
     implementation 'com.google.mlkit:translate:16.1.2'
 
+    // Google MLKit - Identify Languages
+    implementation 'com.google.mlkit:language-id:17.0.1'
+
     // Kotpref
     // core
     implementation 'com.chibatching.kotpref:kotpref:2.13.1'

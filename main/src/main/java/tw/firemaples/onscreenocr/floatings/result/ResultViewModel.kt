@@ -6,10 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import tw.firemaples.onscreenocr.LanguageIdentify
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
+import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.floatings.manager.Result
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
+import tw.firemaples.onscreenocr.utils.Constants
+import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.Utils
 
 class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) {
@@ -37,7 +41,12 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
     private val _displayRecognizedTextAreas = MutableLiveData<Pair<List<Rect>, Rect>>()
     val displayRecognizedTextAreas: LiveData<Pair<List<Rect>, Rect>> = _displayRecognizedTextAreas
 
+    private val logger: Logger by lazy { Logger(ResultViewModel::class) }
+
     private val context: Context by lazy { Utils.context }
+
+    private var lastLangCode: String = Constants.DEFAULT_OCR_LANG
+    private var lastTextBoundingBoxes: List<Rect> = listOf()
 
 //    companion object {
 //        private const val STATE_RECOGNIZING = 0
@@ -62,11 +71,14 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
 
     fun textRecognized(result: RecognitionResult, parent: Rect, selected: Rect, viewRect: Rect) {
         viewScope.launch {
+            this@ResultViewModel.lastLangCode = result.langCode
+
             _displayOCROperationProgress.value = false
             _ocrText.value = result.result
 
             val topOffset = parent.top + selected.top - viewRect.top
             val leftOffset = parent.left + selected.left - viewRect.left
+            this@ResultViewModel.lastTextBoundingBoxes = result.boundingBoxes.toList()
             val textAreas = result.boundingBoxes.map {
                 Rect(
                     it.left + leftOffset,
@@ -114,6 +126,27 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
                 is Result.OCROnly -> {
                 }
             }
+        }
+    }
+
+    fun onOCRTextEdited(text: String) {
+        viewScope.launch {
+            _ocrText.value = text
+
+            val langCode = try {
+                LanguageIdentify.identifyLanguage(text)
+            } catch (e: Exception) {
+                logger.debug(t = e)
+                null
+            } ?: lastLangCode
+
+            FloatingStateManager.startTranslation(
+                RecognitionResult(
+                    langCode = langCode,
+                    result = text,
+                    boundingBoxes = lastTextBoundingBoxes,
+                )
+            )
         }
     }
 }

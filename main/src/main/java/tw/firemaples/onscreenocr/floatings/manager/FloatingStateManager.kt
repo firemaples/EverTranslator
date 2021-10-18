@@ -137,8 +137,8 @@ object FloatingStateManager {
             }
         }
 
-    private fun startTranslation(recognitionResult: RecognitionResult) =
-        stateIn(State.TextRecognizing::class) {
+    fun startTranslation(recognitionResult: RecognitionResult) =
+        stateIn(State.TextRecognizing::class, State.ResultDisplaying::class) {
             try {
                 changeState(State.TextTranslating)
 
@@ -187,6 +187,7 @@ object FloatingStateManager {
     private fun showResult(result: Result) =
         stateIn(State.TextTranslating::class) {
             logger.debug("showResult(), $result")
+            changeState(State.ResultDisplaying)
 
             resultView.textTranslated(result)
         }
@@ -214,10 +215,9 @@ object FloatingStateManager {
         vararg states: KClass<out State>,
         block: suspend CoroutineScope.() -> Unit
     ) {
-        scope.launch {
-            if (states.contains(currentState::class)) block.invoke(this)
-            else logger.error(t = IllegalStateException("The state should be in ${states.toList()}, current is $currentState"))
-        }
+        if (states.contains(currentState::class)) {
+            scope.launch { block.invoke(this) }
+        } else logger.error(t = IllegalStateException("The state should be in ${states.toList()}, current is $currentState"))
     }
 
     private suspend fun changeState(newState: State) {
@@ -233,7 +233,7 @@ object FloatingStateManager {
                 arrayOf(
                     State.ResultDisplaying::class, State.ErrorDisplaying::class, State.Idle::class
                 )
-            State.ResultDisplaying -> arrayOf(State.Idle::class)
+            State.ResultDisplaying -> arrayOf(State.Idle::class, State.TextTranslating::class)
             is State.ErrorDisplaying -> arrayOf(State.Idle::class)
         }
 

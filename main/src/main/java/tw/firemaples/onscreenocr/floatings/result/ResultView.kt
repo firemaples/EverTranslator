@@ -5,11 +5,13 @@ import android.graphics.Rect
 import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.view.WindowManager
+import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
+import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.floatings.manager.Result
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
@@ -103,6 +105,23 @@ class ResultView(context: Context) : FloatingView(context) {
         tvOCRText.movementMethod = ScrollingMovementMethod()
         tvTranslatedText.movementMethod = ScrollingMovementMethod()
         viewRoot.setOnClickListener { onUserDismiss?.invoke() }
+        btEditOCRText.setOnClickListener {
+            DialogView(context, layoutFocusable = true).apply {
+                val originalRecognizedText = tvOCRText.text.toString()
+                val etOCRText = EditText(context)
+                etOCRText.setText(originalRecognizedText)
+                setContentView(etOCRText)
+
+                onButtonOkClicked = {
+                    val text = etOCRText.text.toString()
+                    if (text.isNotBlank() && text.trim() != originalRecognizedText) {
+                        viewModel.onOCRTextEdited(text)
+                    }
+                }
+
+                attachToScreen()
+            }
+        }
     }
 
     override fun onAttachedToScreen() {
