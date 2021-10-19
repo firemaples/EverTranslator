@@ -31,6 +31,15 @@
         <activity
             android:name=".pages.setting.SettingActivity"
             android:noHistory="true" />
+        <service
+            android:name=".utils.QuickTileService"
+            android:icon="@drawable/ic_for_notify"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

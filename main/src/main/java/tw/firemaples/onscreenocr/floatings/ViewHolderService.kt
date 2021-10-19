@@ -9,6 +9,11 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
@@ -49,6 +54,15 @@ class ViewHolderService : Service() {
         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
+    private var floatingStateListenerJob: Job? = null
+
+    override fun onCreate() {
+        super.onCreate()
+        floatingStateListenerJob = CoroutineScope(Dispatchers.Main).launch {
+            FloatingStateManager.showingStateChangedFlow.collect { startForeground() }
+        }
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 
@@ -57,13 +71,11 @@ class ViewHolderService : Service() {
         return when (intent?.action) {
             ACTION_SHOW_VIEWS -> {
                 showViews()
-                startForeground()
                 START_STICKY
             }
 
             ACTION_HIDE_VIEWS -> {
                 hideViews()
-                startForeground()
                 START_STICKY
             }
 
@@ -89,6 +101,7 @@ class ViewHolderService : Service() {
     }
 
     private fun exit() {
+        floatingStateListenerJob?.cancel()
         hideViews()
         ScreenExtractor.release()
         stopSelf()

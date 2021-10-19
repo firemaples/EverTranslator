@@ -4,7 +4,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.floatings.main.MainBar
@@ -47,6 +50,10 @@ object FloatingStateManager {
         }
     }
 
+    private val _showingStateChangedFlow = MutableSharedFlow<Boolean>(
+        replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val showingStateChangedFlow: SharedFlow<Boolean> = _showingStateChangedFlow
     val isMainBarAttached: Boolean
         get() = mainBar.attached
 
@@ -54,12 +61,23 @@ object FloatingStateManager {
     private var selectedRect: Rect? = null
     private var croppedBitmap: Bitmap? = null
 
+    fun toggleMainBar() {
+        if (isMainBarAttached) hideMainBar()
+        else showMainBar()
+    }
+
     fun showMainBar() {
         mainBar.attachToScreen()
+        scope.launch {
+            _showingStateChangedFlow.emit(true)
+        }
     }
 
     fun hideMainBar() {
         mainBar.detachFromScreen()
+        scope.launch {
+            _showingStateChangedFlow.emit(false)
+        }
     }
 
     private fun arrangeMainBarToTop() {
