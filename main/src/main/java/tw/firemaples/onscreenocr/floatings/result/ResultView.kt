@@ -130,7 +130,7 @@ class ResultView(context: Context) : FloatingView(context) {
 
     private fun showRecognizedTextEditor(recognizedText: String) {
         DialogView(context, layoutFocusable = true).apply {
-            val etOCRText = EditText(context)
+            val etOCRText = View.inflate(context, R.layout.view_edittext, null) as EditText
             etOCRText.setText(recognizedText)
             setContentView(etOCRText)
 
