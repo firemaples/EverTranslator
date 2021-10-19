@@ -34,7 +34,7 @@
         <ImageButton
             android:id="@+id/bt_editOCRText"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_edit" />
+            android:src="@drawable/ic_square_edit_outline" />
 
         <ImageButton
             android:id="@+id/bt_copyOCRText"
