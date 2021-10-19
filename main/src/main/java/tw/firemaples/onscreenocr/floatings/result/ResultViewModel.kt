@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import tw.firemaples.onscreenocr.LanguageIdentify
+import tw.firemaples.onscreenocr.utils.LanguageIdentify
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.floatings.manager.Result

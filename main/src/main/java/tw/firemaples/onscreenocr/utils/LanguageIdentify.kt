@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr
+package tw.firemaples.onscreenocr.utils
 
 import com.google.mlkit.nl.languageid.LanguageIdentification
 import com.google.mlkit.nl.languageid.LanguageIdentifier
