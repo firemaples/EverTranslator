@@ -29,7 +29,8 @@
         <ImageButton
             android:id="@+id/bt_readOutOCRText"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_play" />
+            android:src="@drawable/ic_play"
+            android:visibility="gone" />
 
         <ImageButton
             android:id="@+id/bt_editOCRText"
@@ -96,7 +97,8 @@
         <ImageButton
             android:id="@+id/bt_readOutTranslatedText"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_play" />
+            android:src="@drawable/ic_play"
+            android:visibility="gone" />
 
         <ImageButton
             android:id="@+id/bt_copyTranslatedText"
