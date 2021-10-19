@@ -47,5 +47,9 @@
             android:defaultValue="true"
             android:key="pref_save_last_selection_area"
             android:title="Save last selected area" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_exit_app_while_spen_inserted"
+            android:title="Exit app while SPen Inserted" />
     </PreferenceCategory>
 </PreferenceScreen>

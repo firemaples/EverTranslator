@@ -16,8 +16,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
+import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
 import tw.firemaples.onscreenocr.utils.Logger
+import tw.firemaples.onscreenocr.utils.SamsungSpenInsertedReceiver
 
 class ViewHolderService : Service() {
     companion object {
@@ -61,6 +63,9 @@ class ViewHolderService : Service() {
         floatingStateListenerJob = CoroutineScope(Dispatchers.Main).launch {
             FloatingStateManager.showingStateChangedFlow.collect { startForeground() }
         }
+        if (SettingManager.exitAppWhileSPenInserted) {
+            SamsungSpenInsertedReceiver.start()
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -101,10 +106,15 @@ class ViewHolderService : Service() {
     }
 
     private fun exit() {
-        floatingStateListenerJob?.cancel()
         hideViews()
         ScreenExtractor.release()
         stopSelf()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        SamsungSpenInsertedReceiver.stop()
+        floatingStateListenerJob?.cancel()
     }
 
     private fun startForeground() {

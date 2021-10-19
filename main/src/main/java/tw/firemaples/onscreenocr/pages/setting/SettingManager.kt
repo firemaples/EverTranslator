@@ -2,7 +2,11 @@ package tw.firemaples.onscreenocr.pages.setting
 
 import android.content.Context
 import androidx.preference.PreferenceManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.utils.Logger
+import tw.firemaples.onscreenocr.utils.SamsungSpenInsertedReceiver
 import tw.firemaples.onscreenocr.utils.Utils
 
 object SettingManager {
@@ -13,6 +17,7 @@ object SettingManager {
 //    private const val PREF_TEXT_BLOCK_JOINER = "pref_text_block_joiner"
 
     private const val PREF_SAVE_LAST_SELECTION_AREA = "pref_save_last_selection_area"
+    private const val PREF_EXIT_APP_WHILE_SPEN_INSERTED = "pref_exit_app_while_spen_inserted"
 
 //    private val DEFAULT_JOINER = TextBlockJoiner.Space
 
@@ -53,4 +58,21 @@ object SettingManager {
 
     val saveLastSelectionArea: Boolean
         get() = preferences.getBoolean(PREF_SAVE_LAST_SELECTION_AREA, true)
+
+    val exitAppWhileSPenInserted: Boolean
+        get() = preferences.getBoolean(PREF_EXIT_APP_WHILE_SPEN_INSERTED, true)
+
+    init {
+        preferences.registerOnSharedPreferenceChangeListener { _, key ->
+            if (key == PREF_EXIT_APP_WHILE_SPEN_INSERTED) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    if (exitAppWhileSPenInserted) {
+                        SamsungSpenInsertedReceiver.start()
+                    } else {
+                        SamsungSpenInsertedReceiver.stop()
+                    }
+                }
+            }
+        }
+    }
 }
