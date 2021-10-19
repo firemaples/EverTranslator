@@ -118,6 +118,14 @@ class ResultView(context: Context) : FloatingView(context) {
         btCopyTranslatedText.setOnClickListener {
             Utils.copyToClipboard(LABEL_TRANSLATED_TEXT, tvTranslatedText.text.toString())
         }
+        btTranslateOCRTextWithGoogleTranslate.setOnClickListener {
+            GoogleTranslateUtils.launchGoogleTranslateApp(tvOCRText.text.toString())
+            onUserDismiss?.invoke()
+        }
+        btTranslateTranslatedTextWithGoogleTranslate.setOnClickListener {
+            GoogleTranslateUtils.launchGoogleTranslateApp(tvTranslatedText.text.toString())
+            onUserDismiss?.invoke()
+        }
     }
 
     private fun showRecognizedTextEditor(recognizedText: String) {
