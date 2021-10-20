@@ -9,6 +9,7 @@ import tw.firemaples.onscreenocr.floatings.history.VersionHistoryView
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.floatings.manager.State
 import tw.firemaples.onscreenocr.floatings.menu.MenuView
+import tw.firemaples.onscreenocr.floatings.readme.ReadmeView
 import tw.firemaples.onscreenocr.floatings.translationSelectPanel.TranslationSelectPanel
 import tw.firemaples.onscreenocr.pages.setting.SettingActivity
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
@@ -126,6 +127,10 @@ class MainBar(context: Context) : MovableFloatingView(context) {
 
         viewModel.showVersionHistory.observe(lifecycleOwner) {
             VersionHistoryView(context).attachToScreen()
+        }
+
+        viewModel.showReadme.observe(lifecycleOwner) {
+            ReadmeView(context).attachToScreen()
         }
     }
 

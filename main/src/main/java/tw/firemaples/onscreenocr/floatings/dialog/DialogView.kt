@@ -10,7 +10,7 @@ import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.utils.setTextOrGone
 import tw.firemaples.onscreenocr.utils.showOrHide
 
-open class DialogView(context: Context, override val layoutFocusable: Boolean = false) :
+open class DialogView(context: Context) :
     FloatingView(context) {
     override val layoutId: Int
         get() = R.layout.floating_dialog

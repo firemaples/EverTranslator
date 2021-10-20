@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.floatings.ViewHolderService
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
-import tw.firemaples.onscreenocr.floatings.history.VersionHistoryView
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.floatings.manager.State
 import tw.firemaples.onscreenocr.recognition.TextRecognizer
@@ -63,6 +62,9 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
     private val _showVersionHistory = SingleLiveEvent<Boolean>()
     val showVersionHistory: LiveData<Boolean> = _showVersionHistory
 
+    private val _showReadme = SingleLiveEvent<Boolean>()
+    val showReadme: LiveData<Boolean> = _showReadme
+
     private val logger: Logger by lazy { Logger(MainBarViewModel::class) }
     private val context: Context by lazy { Utils.context }
 
@@ -110,8 +112,12 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
         viewScope.launch {
             setupButtons(FloatingStateManager.currentState)
 
+            if (!repo.isReadmeAlreadyShown().first()) {
+                _showReadme.value = true
+            }
+
             if (!repo.isVersionHistoryAlreadyShown().first()) {
-                VersionHistoryView(context).attachToScreen()
+                _showVersionHistory.value = true
             }
         }
     }
@@ -182,6 +188,7 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
                 _showVersionHistory.value = true
             }
             MENU_README -> {
+                _showReadme.value = true
             }
             MENU_HIDE -> {
                 ViewHolderService.hideViews(context)

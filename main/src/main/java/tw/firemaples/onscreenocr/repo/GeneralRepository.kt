@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.floatings.readme.ReadmeView
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.utils.Logger
@@ -33,6 +34,18 @@ class GeneralRepository {
     suspend fun setLastRememberedSelectionArea(rect: Rect) {
         withContext(Dispatchers.Default) {
             AppPref.lastSelectionArea = rect
+        }
+    }
+
+    fun isReadmeAlreadyShown(): Flow<Boolean> = flow {
+        val lastVersionName = ReadmeView.VERSION
+        val lastShownName = AppPref.lastReadmeShownVersion
+
+        if (lastVersionName != lastShownName) {
+            AppPref.lastReadmeShownVersion = lastVersionName
+            emit(false)
+        } else {
+            emit(true)
         }
     }
 
