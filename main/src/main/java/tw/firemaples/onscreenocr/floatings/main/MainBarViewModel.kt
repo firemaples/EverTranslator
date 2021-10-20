@@ -5,12 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.floatings.ViewHolderService
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
+import tw.firemaples.onscreenocr.floatings.history.VersionHistoryView
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.floatings.manager.State
 import tw.firemaples.onscreenocr.recognition.TextRecognizer
+import tw.firemaples.onscreenocr.repo.GeneralRepository
 import tw.firemaples.onscreenocr.repo.OCRRepository
 import tw.firemaples.onscreenocr.repo.TranslationRepository
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
@@ -24,6 +27,7 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
         private const val MENU_SETTING = "setting"
         private const val MENU_PRIVACY_POLICY = "privacy_policy"
         private const val MENU_ABOUT = "about"
+        private const val MENU_VERSION_HISTORY = "version_history"
         private const val MENU_README = "readme"
         private const val MENU_HIDE = "hide"
         private const val MENU_EXIT = "exit"
@@ -56,6 +60,9 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
     private val _openBrowser = SingleLiveEvent<String>()
     val openBrowser: LiveData<String> = _openBrowser
 
+    private val _showVersionHistory = SingleLiveEvent<Boolean>()
+    val showVersionHistory: LiveData<Boolean> = _showVersionHistory
+
     private val logger: Logger by lazy { Logger(MainBarViewModel::class) }
     private val context: Context by lazy { Utils.context }
 
@@ -63,11 +70,13 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
         MENU_SETTING to "Setting",
         MENU_PRIVACY_POLICY to "Privacy Policy",
         MENU_ABOUT to "About",
+        MENU_VERSION_HISTORY to "Version History",
         MENU_README to "Readme",
         MENU_HIDE to "Hide",
         MENU_EXIT to "Exit",
     )
 
+    private val repo by lazy { GeneralRepository() }
     private val ocrRepo by lazy { OCRRepository() }
     private val translateRepo by lazy { TranslationRepository() }
 
@@ -100,6 +109,10 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
         }
         viewScope.launch {
             setupButtons(FloatingStateManager.currentState)
+
+            if (!repo.isVersionHistoryAlreadyShown().first()) {
+                VersionHistoryView(context).attachToScreen()
+            }
         }
     }
 
@@ -163,6 +176,10 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
                 _openBrowser.value = "https://sites.google.com/view/privacy-policy-evertranslator"
             }
             MENU_ABOUT -> {
+                _openBrowser.value = "https://github.com/firemaples/EverTranslator"
+            }
+            MENU_VERSION_HISTORY -> {
+                _showVersionHistory.value = true
             }
             MENU_README -> {
             }

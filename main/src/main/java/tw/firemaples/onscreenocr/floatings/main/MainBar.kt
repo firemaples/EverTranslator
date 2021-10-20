@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.TextView
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.MovableFloatingView
+import tw.firemaples.onscreenocr.floatings.history.VersionHistoryView
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.floatings.manager.State
 import tw.firemaples.onscreenocr.floatings.menu.MenuView
@@ -121,6 +122,10 @@ class MainBar(context: Context) : MovableFloatingView(context) {
 
         viewModel.openBrowser.observe(lifecycleOwner) {
             Utils.openBrowser(it)
+        }
+
+        viewModel.showVersionHistory.observe(lifecycleOwner) {
+            VersionHistoryView(context).attachToScreen()
         }
     }
 

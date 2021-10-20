@@ -25,4 +25,6 @@ object AppPref : KotprefModel() {
     var selectedTranslationLang by stringPref(default = Constants.DEFAULT_TRANSLATION_LANG)
 
     var lastSelectionArea: Rect? by gsonNullablePref()
+
+    var lastVersionHistoryShownVersion: String? by nullableStringPref(default = null)
 }
