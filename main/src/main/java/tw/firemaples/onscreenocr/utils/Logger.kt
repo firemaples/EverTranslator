@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.utils
 
 import android.util.Log
+import tw.firemaples.onscreenocr.BuildConfig
 import kotlin.reflect.KClass
 
 class Logger(clazz: KClass<*>) {
@@ -19,6 +20,8 @@ class Logger(clazz: KClass<*>) {
     fun error(msg: String? = null, t: Throwable? = null) = log(ERROR, msg, t)
 
     private fun log(level: Int, msg: String?, t: Throwable?) {
+        if (BuildConfig.DISABLE_LOGGING) return
+
         val threadName = Thread.currentThread().name
         val message = if (msg != null) "[$threadName] $msg" else "[$threadName]"
 

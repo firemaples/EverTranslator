@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
+import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
 import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.SamsungSpenInsertedReceiver
@@ -66,6 +67,7 @@ class ViewHolderService : Service() {
         if (SettingManager.exitAppWhileSPenInserted) {
             SamsungSpenInsertedReceiver.start()
         }
+        RemoteConfigManager.tryFetchNew()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

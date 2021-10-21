@@ -5,6 +5,7 @@ import io.github.firemaples.translate.Translate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
 
 object MicrosoftAzureTranslator : Translator {
     override val type: TranslationProviderType
@@ -37,7 +38,7 @@ object MicrosoftAzureTranslator : Translator {
         val targetLang = supportedLanguages().firstOrNull { it.selected }?.code
             ?.let { Language.fromString(it) }
 
-        Translate.setSubscriptionKey(context.getString(R.string.microsoftSubscriptionKey))
+        Translate.setSubscriptionKey(RemoteConfigManager.microsoftTranslationKey)
 
         return try {
             val result = withContext(Dispatchers.IO) {

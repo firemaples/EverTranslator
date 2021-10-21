@@ -13,6 +13,7 @@ import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.floatings.manager.State
 import tw.firemaples.onscreenocr.recognition.TextRecognizer
+import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
 import tw.firemaples.onscreenocr.repo.GeneralRepository
 import tw.firemaples.onscreenocr.repo.OCRRepository
 import tw.firemaples.onscreenocr.repo.TranslationRepository
@@ -180,10 +181,10 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
                 _showSettingPage.value = true
             }
             MENU_PRIVACY_POLICY -> {
-                _openBrowser.value = "https://sites.google.com/view/privacy-policy-evertranslator"
+                _openBrowser.value = RemoteConfigManager.privacyPolicyUrl
             }
             MENU_ABOUT -> {
-                _openBrowser.value = "https://github.com/firemaples/EverTranslator"
+                _openBrowser.value = RemoteConfigManager.aboutUrl
             }
             MENU_VERSION_HISTORY -> {
                 _showVersionHistory.value = true
