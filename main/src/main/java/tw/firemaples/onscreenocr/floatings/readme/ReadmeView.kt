@@ -13,7 +13,7 @@ class ReadmeView(context: Context) :
     }
 
     init {
-        setTitle("How to use")
+        setTitle(context.getString(R.string.title_guide))
         setDialogType(DialogType.CONFIRM_ONLY)
         setContentView(View.inflate(context, R.layout.view_help, null))
     }

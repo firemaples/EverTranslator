@@ -1,10 +1,7 @@
 <resources>
     <string name="app_name">EverTranslator</string>
-    <string name="msg_evertranslator_needs_display_over_other_apps_permission_to_show_a_floating_window_for_easily_using">EverTranslator needs [Display over other apps] permission to show a floating window for easily using.</string>
-    <string name="btn_request_permission">Request permission</string>
-    <string name="msg_evertranslator_needs_capture_screen_to_find_the_text_from_the_screen_for_you">EverTranslator needs [Capture screen] to find the text from the screen for you.</string>
-    <string name="msg_request_permission_automatically_at_next_time">Request permission automatically at next time</string>
-    <string name="msg_textHasBeenCopied">Text [%s] has been copied.</string>
+
+    <string name="channel_default">Default notification channel</string>
 
     <string name="translation_provider_microsoft_azure">Microsoft Azure</string>
     <string name="translation_provider_google_ml_kit">Google MLKit</string>
@@ -12,13 +9,62 @@
     <string name="translation_provider_none">OCR only</string>
 
     <string name="pref_title_use_simple_style">Use simple style</string>
+    <string name="pref_summary_use_simple_style">Simple style:\nUses only one button to minimize the floating bar, click it for finding texts, long-press it for displaying menu, drag it to move.\n\nFull style:\nDisplays two buttons, one for finding texts, another one for showing menu and moving by dragging it.</string>
     <string name="pref_title_enable_fade_out_while_idle">Enable fade out while idle</string>
     <string name="pref_title_fade_out_after_seconds">Fade out after (seconds)</string>
     <string name="pref_title_opaque_percentage">Opaque percentage (%)</string>
-    <string name="pref_summary_use_simple_style">Simple style:\nUses only one button to minimize the floating bar, click it for finding texts, long-press it for displaying menu, drag it to move.\n\nFull style:\nDisplays two buttons, one for finding texts, another one for showing menu and moving by dragging it.</string>
     <string name="pref_category_floating_bar">Floating bar</string>
     <string name="pref_category_text_blocks_selector">Text blocks selector</string>
     <string name="pref_joiner_between_text_blocks">Joiner between text blocks</string>
+    <string name="pref_other_settings">Other settings</string>
+    <string name="pref_save_last_selected_area">Save last selected area</string>
+    <string name="pref_exit_app_while_spen_inserted">Exit app while S Pen Inserted (Samsung only)</string>
+
+    <string name="menu_setting">Setting</string>
+    <string name="menu_privacy_policy">Privacy Policy</string>
+    <string name="menu_about">About</string>
+    <string name="menu_version_history">Version History</string>
+    <string name="menu_readme">Readme</string>
+    <string name="menu_hide">Hide</string>
+    <string name="menu_exit">Exit</string>
+
+    <string name="text_ocr_language">OCR language</string>
+    <string name="text_translation">Translation</string>
+    <string name="text_field_provider">Provider:</string>
+    <string name="text_field_language">Language:</string>
+    <string name="text_close">Close</string>
+    <string name="text_ocr_text">OCR Text</string>
+    <string name="text_translated_text">Translated Text</string>
+    <string name="text_translated_by">translated by</string>
+    <string name="msg_models_to_download">The following language resources are not downloaded, do you want to download them now?</string>
+    <string name="msg_wait_for_resources_downloading">The following resources is downloading, please wait.</string>
+    <string name="msg_resouces_downloaded">Resources downloaded, please click OK to continue.</string>
+    <string name="msg_select_lang_in_google_translate">Select the translation language in Google Translate app</string>
+    <string name="msg_ocr_only_mode_hint">Translation language selection is not available for OCR only mode</string>
+    <string name="text_request_permission">Request permission</string>
+
+    <string name="msg_evertranslator_needs_display_over_other_apps_permission_to_show_a_floating_window_for_easily_using">EverTranslator needs the [Display over other apps] permission to show a floating window on the screen.</string>
+    <string name="msg_evertranslator_needs_capture_screen_to_find_the_text_from_the_screen_for_you">EverTranslator needs the [Capture screen] permission to find the text from the screen for you.</string>
+    <string name="msg_textHasBeenCopied">Text [%s] has been copied.</string>
+    <string name="msg_click_to_show_the_floating_bar">Click to show the floating bar</string>
+    <string name="msg_click_to_hide_the_floating_bar">Click to hide the floating bar</string>
+    <string name="msg_recreate_selection_area">Drag here to recreate a translation area, pinch in/out to zoom the selected area</string>
+    <string name="msg_create_selection_area">Drag here to create a translation area</string>
+
+    <string name="title_version_history">Version History</string>
+    <string name="title_error">Error</string>
+    <string name="title_guide">How to use</string>
+    <string name="title_failed_to_check_resources">Failed to check resources</string>
+    <string name="title_download">Download</string>
+    <string name="title_resources_downloading">Resources downloading</string>
+    <string name="title_resouces_downloaded">Resources downloaded</string>
+    <string name="title_downloading_resouces_failed">Downloading resources failed</string>
+
+    <string name="error_an_unknown_error_found_while_recognition_text">An unknown error found while recognizing text</string>
+    <string name="error_capture_screen_timeout">Capturing screen failed: timeout, please try it again later</string>
+    <string name="error_unknown_error_capturing_screen">An unknown error found while capturing screen</string>
+    <string name="error_unknown">Unknown error</string>
+    <string name="error_google_translate_is_not_found">The Google Translate app is not found on your device, this provider depends on the app, please click the OK button to install it on PlayStore or change to another translation provider.</string>
 
     <string-array name="textBlockJoinersNames">
         <item>Line-breaker</item>

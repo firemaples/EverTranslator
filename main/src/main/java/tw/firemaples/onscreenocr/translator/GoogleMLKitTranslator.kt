@@ -104,8 +104,8 @@ object GoogleMLKitTranslator : Translator {
             FirebaseEvent.logException(e)
 
             DialogView(context).apply {
-                setTitle("Failed to check resources")
-                setMessage("Failed reason: ${e.localizedMessage}")
+                setTitle(context.getString(R.string.title_failed_to_check_resources))
+                setMessage(e.localizedMessage ?: context.getString(R.string.error_unknown))
                 setDialogType(DialogView.DialogType.CONFIRM_ONLY)
             }.attachToScreen()
             return false
@@ -113,10 +113,10 @@ object GoogleMLKitTranslator : Translator {
 
         if (langToDownload.isNotEmpty()) {
             DialogView(context).apply {
-                setTitle("Download")
+                setTitle(context.getString(R.string.title_download))
                 setMessage(
-                    "The following language resources are not downloaded, do you want to download them now?" +
-                            "\n\nModels: ${langToDownload.joinToString(", ")}"
+                    context.getString(R.string.msg_models_to_download) +
+                            "\n\n${langToDownload.joinToString(", ")}"
                 )
                 setDialogType(DialogView.DialogType.CONFIRM_CANCEL)
 
@@ -160,8 +160,8 @@ object GoogleMLKitTranslator : Translator {
 
     private suspend fun downloadTranslationResources(langList: List<String>) {
         val dialog = DialogView(context).apply {
-            setTitle("Resources downloading")
-            setMessage("The following resources is downloading, please wait.")
+            setTitle(context.getString(R.string.title_resources_downloading))
+            setMessage(context.getString(R.string.msg_wait_for_resources_downloading))
             setDialogType(DialogView.DialogType.CANCEL_ONLY)
 
             attachToScreen()
@@ -172,8 +172,8 @@ object GoogleMLKitTranslator : Translator {
 
             dialog.detachFromScreen()
             DialogView(context).apply {
-                setTitle("Resources downloaded")
-                setMessage("Resources downloaded, please click OK to continue.")
+                setTitle(context.getString(R.string.title_resouces_downloaded))
+                setMessage(context.getString(R.string.msg_resouces_downloaded))
                 setDialogType(DialogView.DialogType.CONFIRM_ONLY)
             }.attachToScreen()
         } catch (e: Exception) {
@@ -181,8 +181,8 @@ object GoogleMLKitTranslator : Translator {
 
             dialog.detachFromScreen()
             DialogView(context).apply {
-                setTitle("Downloading resources failed")
-                setMessage("Downloading resources failed, failed reason: ${e.localizedMessage}")
+                setTitle(context.getString(R.string.title_downloading_resouces_failed))
+                setMessage(e.localizedMessage ?: context.getString(R.string.error_unknown))
                 setDialogType(DialogView.DialogType.CONFIRM_ONLY)
             }.attachToScreen()
         }

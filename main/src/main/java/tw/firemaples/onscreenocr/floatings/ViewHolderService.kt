@@ -151,7 +151,7 @@ class ViewHolderService : Service() {
             if (!channels.any { it.id == NOTIFICATION_CHANNEL_ID }) {
                 val channel = NotificationChannel(
                     NOTIFICATION_CHANNEL_ID,
-                    "Foreground notification",
+                    getString(R.string.channel_default),
                     NotificationManager.IMPORTANCE_LOW
                 ).apply {
                     setShowBadge(false)
@@ -173,8 +173,8 @@ class ViewHolderService : Service() {
             .setTicker(getString(R.string.app_name))
             .setContentTitle(getString(R.string.app_name))
             .setContentText(
-                if (clickToShow) "Click to show the floating bar"
-                else "Click to hide the floating bar"
+                if (clickToShow) getString(R.string.msg_click_to_show_the_floating_bar)
+                else getString(R.string.msg_click_to_hide_the_floating_bar)
             )
             .setAutoCancel(false)
 

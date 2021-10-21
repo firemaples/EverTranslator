@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import tw.firemaples.onscreenocr.CoreApplication
+import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import java.util.*
 
@@ -62,8 +63,8 @@ object GoogleTranslateUtils {
         }
 
         DialogView(context).apply {
-            setTitle("Error")
-            setMessage("The Google Translate app is not found on your device, the translation provider is dependence on the app, please click the OK button to install it on PlayStore or change to another translation provider for translation.")
+            setTitle(context.getString(R.string.title_error))
+            setMessage(context.getString(R.string.error_google_translate_is_not_found))
             setDialogType(DialogView.DialogType.CONFIRM_CANCEL)
 
             onButtonOkClicked = {

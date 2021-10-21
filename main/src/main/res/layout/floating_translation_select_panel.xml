@@ -36,7 +36,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="OCR language"
+                android:text="@string/text_ocr_language"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@id/line_centerVertical"
                 app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +68,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="Translation"
+                android:text="@string/text_translation"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/line_centerVertical"
@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="2dp"
-                android:text="Provider:"
+                android:text="@string/text_field_provider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/line_centerVertical"
                 app:layout_constraintTop_toBottomOf="@id/tv_labelTranslationLangTitle" />
@@ -112,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="2dp"
-                android:text="Language:"
+                android:text="@string/text_field_language"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/line_centerVertical"
                 app:layout_constraintTop_toBottomOf="@id/tv_translationProvider" />
@@ -125,11 +125,11 @@
                 android:gravity="start|top"
                 android:textColor="@color/alert"
                 android:visibility="visible"
-                tools:text="Translation Hint"
                 app:layout_constraintBottom_toTopOf="@id/bt_close"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/line_centerVertical"
-                app:layout_constraintTop_toBottomOf="@id/tv_labelTranslationLang" />
+                app:layout_constraintTop_toBottomOf="@id/tv_labelTranslationLang"
+                tools:text="Translation Hint" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_translationLang"
@@ -148,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:background="?selectableItemBackgroundBorderless"
                 android:padding="8dp"
-                android:text="Close"
+                android:text="@string/text_close"
                 android:textColor="@color/borderlessButtonText"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />

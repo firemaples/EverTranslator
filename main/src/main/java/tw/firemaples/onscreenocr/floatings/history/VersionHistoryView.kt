@@ -29,7 +29,7 @@ class VersionHistoryView(context: Context) : DialogView(context) {
     private val adapter: HistoryAdapter by lazy { HistoryAdapter(context, diffUtil) }
 
     init {
-        setTitle("Version History")
+        setTitle(context.getString(R.string.title_version_history))
         setDialogType(DialogType.CONFIRM_ONLY)
         prepareContentView()
     }

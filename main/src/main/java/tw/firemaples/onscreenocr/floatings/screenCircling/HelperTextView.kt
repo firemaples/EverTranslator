@@ -53,10 +53,10 @@ class HelperTextView @JvmOverloads constructor(
         if (isDrawing) return
 
         val message: String = if (hasBox)
-            "Tap and drag here to recreate a translation area"
+            context.getString(R.string.msg_recreate_selection_area)
         else {
             textPaint.alpha = 255
-            "Tap and drag here to create a translation area"
+            context.getString(R.string.msg_create_selection_area)
         }
 
         val xPos = canvas.width / 2

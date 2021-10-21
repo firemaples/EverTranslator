@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.ViewHolderService
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
@@ -69,13 +70,13 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
     private val context: Context by lazy { Utils.context }
 
     private val menuItems = mapOf(
-        MENU_SETTING to "Setting",
-        MENU_PRIVACY_POLICY to "Privacy Policy",
-        MENU_ABOUT to "About",
-        MENU_VERSION_HISTORY to "Version History",
-        MENU_README to "Readme",
-        MENU_HIDE to "Hide",
-        MENU_EXIT to "Exit",
+        MENU_SETTING to context.getString(R.string.menu_setting),
+        MENU_PRIVACY_POLICY to context.getString(R.string.menu_privacy_policy),
+        MENU_ABOUT to context.getString(R.string.menu_about),
+        MENU_VERSION_HISTORY to context.getString(R.string.menu_version_history),
+        MENU_README to context.getString(R.string.menu_readme),
+        MENU_HIDE to context.getString(R.string.menu_hide),
+        MENU_EXIT to context.getString(R.string.menu_exit),
     )
 
     private val repo by lazy { GeneralRepository() }

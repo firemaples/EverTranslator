@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.floatings.main.MainBar
 import tw.firemaples.onscreenocr.floatings.result.ResultView
@@ -132,10 +133,10 @@ object FloatingStateManager {
             startRecognition(croppedBitmap, parent, selected)
         } catch (t: TimeoutCancellationException) {
             logger.debug(t = t)
-            showError("Capturing screen failed: timeout, please try it again later")
+            showError(context.getString(R.string.error_capture_screen_timeout))
         } catch (t: Throwable) {
             logger.debug(t = t)
-            showError(t.message ?: "Unknown error found while capturing screen")
+            showError(t.message ?: context.getString(R.string.error_unknown_error_capturing_screen))
         }
 //        screenCirclingView.detachFromScreen() // To test circled area
     }
@@ -151,7 +152,10 @@ object FloatingStateManager {
                 startTranslation(result)
             } catch (e: Exception) {
                 logger.warn(t = e)
-                showError(e.message ?: "Unknown error found while recognizing text")
+                showError(
+                    e.message
+                        ?: context.getString(R.string.error_an_unknown_error_found_while_recognition_text)
+                )
             }
         }
 
@@ -187,13 +191,10 @@ object FloatingStateManager {
                         )
                     is TranslationResult.TranslationFailed -> {
                         FirebaseEvent.logException(translationResult.error)
-                        DialogView(context).apply {
-                            setTitle("Translation failed")
-                            setMessage("Reason: ${translationResult.error.localizedMessage}")
-                            setDialogType(DialogView.DialogType.CONFIRM_ONLY)
-
-                            onButtonOkClicked = { backToIdle() }
-                        }.attachToScreen()
+                        showError(
+                            translationResult.error.localizedMessage
+                                ?: context.getString(R.string.error_unknown)
+                        )
                     }
                 }
             } catch (e: Exception) {
@@ -214,8 +215,13 @@ object FloatingStateManager {
         scope.launch {
             changeState(State.ErrorDisplaying(error))
 
-            //TODO remove this line
-            backToIdle()
+            DialogView(context).apply {
+                setTitle(context.getString(R.string.title_error))
+                setMessage(error)
+                setDialogType(DialogView.DialogType.CONFIRM_ONLY)
+
+                onButtonOkClicked = { backToIdle() }
+            }.attachToScreen()
         }
     }
 

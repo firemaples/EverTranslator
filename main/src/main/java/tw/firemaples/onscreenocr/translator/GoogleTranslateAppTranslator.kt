@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.translator
 
 import kotlinx.coroutines.CoroutineScope
+import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.utils.GoogleTranslateUtils
 import tw.firemaples.onscreenocr.utils.Logger
 
@@ -11,7 +12,7 @@ object GoogleTranslateAppTranslator : Translator {
         get() = TranslationProviderType.GoogleTranslateApp
 
     override val translationHint: String
-        get() = "Select the translation language in Google Translate app"
+        get() = context.getString(R.string.msg_select_lang_in_google_translate)
 
     override suspend fun checkEnvironment(
         coroutineScope: CoroutineScope

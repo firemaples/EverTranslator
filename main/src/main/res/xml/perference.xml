@@ -42,14 +42,14 @@
     <!--            app:useSimpleSummaryProvider="true" />-->
     <!--    </PreferenceCategory>-->
 
-    <PreferenceCategory android:title="Other settings">
+    <PreferenceCategory android:title="@string/pref_other_settings">
         <SwitchPreference
             android:defaultValue="true"
             android:key="pref_save_last_selection_area"
-            android:title="Save last selected area" />
+            android:title="@string/pref_save_last_selected_area" />
         <SwitchPreference
             android:defaultValue="true"
             android:key="pref_exit_app_while_spen_inserted"
-            android:title="Exit app while SPen Inserted" />
+            android:title="@string/pref_exit_app_while_spen_inserted" />
     </PreferenceCategory>
 </PreferenceScreen>
