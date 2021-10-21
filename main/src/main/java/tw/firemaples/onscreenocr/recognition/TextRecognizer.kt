@@ -12,6 +12,7 @@ interface TextRecognizer {
     }
 
     val type: Recognizer
+    val name: String
     suspend fun recognize(bitmap: Bitmap): RecognitionResult
     suspend fun supportedLanguages(): List<RecognitionLanguage>
     suspend fun parseToDisplayLangCode(langCode: String): String

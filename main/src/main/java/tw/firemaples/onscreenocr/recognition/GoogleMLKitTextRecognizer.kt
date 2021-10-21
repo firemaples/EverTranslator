@@ -10,6 +10,7 @@ import com.google.mlkit.vision.text.japanese.JapaneseTextRecognizerOptions
 import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Utils
@@ -27,6 +28,9 @@ class GoogleMLKitTextRecognizer : TextRecognizer {
     override val type: Recognizer
         get() = Recognizer.GoogleMLKit
 
+    override val name: String
+        get() = type.name
+
     private val recognizerMap =
         mutableMapOf<ScriptType, com.google.mlkit.vision.text.TextRecognizer>()
 
@@ -40,6 +44,8 @@ class GoogleMLKitTextRecognizer : TextRecognizer {
             val script = getScriptType(lang)
 
             val recognizer = recognizerMap.getOrPut(script) {
+                FirebaseEvent.logStartOCRInitializing(name)
+
                 val options = when (script) {
                     ScriptType.Chinese -> ChineseTextRecognizerOptions.Builder().build()
                     ScriptType.Devanagari -> DevanagariTextRecognizerOptions.Builder().build()
@@ -48,7 +54,9 @@ class GoogleMLKitTextRecognizer : TextRecognizer {
                     ScriptType.Latin -> TextRecognizerOptions.DEFAULT_OPTIONS
                 }
 
-                TextRecognition.getClient(options)
+                TextRecognition.getClient(options).also {
+                    FirebaseEvent.logOCRInitialized(name)
+                }
             }
 
             val image = InputImage.fromBitmap(bitmap, 0)

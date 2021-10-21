@@ -8,6 +8,7 @@ import android.os.Build
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.dialog.DialogView
+import tw.firemaples.onscreenocr.log.FirebaseEvent
 import java.util.*
 
 object GoogleTranslateUtils {
@@ -52,8 +53,10 @@ object GoogleTranslateUtils {
         intent.resolveActivity(context.packageManager)
         try {
             context.startActivity(intent)
+            FirebaseEvent.logShowGoogleTranslateWindow()
         } catch (e: Exception) {
             logger.warn("Launch Google Translate app failed", e)
+            FirebaseEvent.logShowGoogleTranslateWindowFailed(e)
         }
     }
 
@@ -90,4 +93,17 @@ object GoogleTranslateUtils {
             //TODO show error message
         }
     }
+
+    fun getGoogleTranslateInfo(): GoogleTranslateInfo? =
+        Utils.getPackageInfo(Constants.PACKAGE_NAME_GOOGLE_TRANSLATE)?.let {
+            @Suppress("DEPRECATION")
+            GoogleTranslateInfo(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                    it.longVersionCode
+                else
+                    it.versionCode.toLong(),
+                it.versionName)
+        }
+
+    data class GoogleTranslateInfo(val versionCode: Long, val versionName: String)
 }

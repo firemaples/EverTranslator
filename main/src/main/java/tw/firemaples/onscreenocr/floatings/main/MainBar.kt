@@ -11,6 +11,7 @@ import tw.firemaples.onscreenocr.floatings.manager.State
 import tw.firemaples.onscreenocr.floatings.menu.MenuView
 import tw.firemaples.onscreenocr.floatings.readme.ReadmeView
 import tw.firemaples.onscreenocr.floatings.translationSelectPanel.TranslationSelectPanel
+import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.pages.setting.SettingActivity
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.utils.Utils
@@ -75,6 +76,7 @@ class MainBar(context: Context) : MovableFloatingView(context) {
         }
 
         btTranslate.setOnClickListener {
+            FirebaseEvent.logClickTranslationStartButton()
             FloatingStateManager.startScreenCapturing()
         }
 

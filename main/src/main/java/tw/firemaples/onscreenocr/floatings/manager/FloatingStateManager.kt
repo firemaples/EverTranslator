@@ -93,6 +93,7 @@ object FloatingStateManager {
 
         logger.debug("startScreenCircling()")
         changeState(State.ScreenCircling)
+        FirebaseEvent.logStartAreaSelection()
         screenCirclingView.attachToScreen()
         arrangeMainBarToTop()
     }
@@ -124,9 +125,11 @@ object FloatingStateManager {
         delay(100L)
 
         try {
+            FirebaseEvent.logStartCaptureScreen()
             val croppedBitmap =
                 ScreenExtractor.extractBitmapFromScreen(parentRect = parent, cropRect = selected)
             this@FloatingStateManager.croppedBitmap = croppedBitmap
+            FirebaseEvent.logCaptureScreenFinished()
 
             mainBar.attachToScreen()
 
@@ -134,9 +137,11 @@ object FloatingStateManager {
         } catch (t: TimeoutCancellationException) {
             logger.debug(t = t)
             showError(context.getString(R.string.error_capture_screen_timeout))
+            FirebaseEvent.logCaptureScreenFailed(t)
         } catch (t: Throwable) {
             logger.debug(t = t)
             showError(t.message ?: context.getString(R.string.error_unknown_error_capturing_screen))
+            FirebaseEvent.logCaptureScreenFailed(t)
         }
 //        screenCirclingView.detachFromScreen() // To test circled area
     }
@@ -146,8 +151,11 @@ object FloatingStateManager {
             changeState(State.TextRecognizing)
             try {
                 resultView.startRecognition()
-                val result = TextRecognizer.getRecognizer().recognize(croppedBitmap)
+                val recognizer = TextRecognizer.getRecognizer()
+                FirebaseEvent.logStartOCR(recognizer.name)
+                val result = recognizer.recognize(croppedBitmap)
                 logger.debug("On text recognized: $result")
+                FirebaseEvent.logOCRFinished(recognizer.name)
                 resultView.textRecognized(result, parent, selected)
                 startTranslation(result)
             } catch (e: Exception) {
@@ -156,6 +164,7 @@ object FloatingStateManager {
                     e.message
                         ?: context.getString(R.string.error_an_unknown_error_found_while_recognition_text)
                 )
+                FirebaseEvent.logOCRFailed(TextRecognizer.getRecognizer().name, e)
             }
         }
 
@@ -168,19 +177,31 @@ object FloatingStateManager {
 
                 resultView.startTranslation(translator.type)
 
+                FirebaseEvent.logStartTranslationText(
+                    recognitionResult.result,
+                    recognitionResult.langCode,
+                    translator
+                )
+
                 val translationResult = translator
                     .translate(recognitionResult.result, recognitionResult.langCode)
 
                 when (translationResult) {
-                    TranslationResult.OuterTranslatorLaunched -> backToIdle()
-                    TranslationResult.OCROnlyResult ->
+                    TranslationResult.OuterTranslatorLaunched -> {
+                        FirebaseEvent.logTranslationTextFinished(translator)
+                        backToIdle()
+                    }
+                    TranslationResult.OCROnlyResult -> {
+                        FirebaseEvent.logTranslationTextFinished(translator)
                         showResult(
                             Result.OCROnly(
                                 ocrText = recognitionResult.result,
                                 boundingBoxes = recognitionResult.boundingBoxes,
                             )
                         )
-                    is TranslationResult.TranslatedResult ->
+                    }
+                    is TranslationResult.TranslatedResult -> {
+                        FirebaseEvent.logTranslationTextFinished(translator)
                         showResult(
                             Result.Translated(
                                 ocrText = recognitionResult.result,
@@ -189,7 +210,9 @@ object FloatingStateManager {
                                 providerType = translationResult.type,
                             )
                         )
+                    }
                     is TranslationResult.TranslationFailed -> {
+                        FirebaseEvent.logTranslationTextFailed(translator)
                         FirebaseEvent.logException(translationResult.error)
                         showError(
                             translationResult.error.localizedMessage

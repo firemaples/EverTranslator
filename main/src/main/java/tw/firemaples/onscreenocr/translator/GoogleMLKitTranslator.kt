@@ -17,6 +17,8 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 object GoogleMLKitTranslator : Translator {
+    private const val DOWNLOAD_SITE = "GoogleMLKit"
+
     private val remoteModelManager: RemoteModelManager by lazy { RemoteModelManager.getInstance() }
 
     override val type: TranslationProviderType
@@ -127,6 +129,8 @@ object GoogleMLKitTranslator : Translator {
                 }
             }.attachToScreen()
 
+            FirebaseEvent.logShowOCRFilesNotFoundAlert()
+
             return false
         }
         return true
@@ -167,6 +171,8 @@ object GoogleMLKitTranslator : Translator {
             attachToScreen()
         }
 
+        FirebaseEvent.logStartDownloadOCRFile(langList.joinToString(","), DOWNLOAD_SITE)
+
         try {
             downloadResources(langList)
 
@@ -176,6 +182,8 @@ object GoogleMLKitTranslator : Translator {
                 setMessage(context.getString(R.string.msg_resouces_downloaded))
                 setDialogType(DialogView.DialogType.CONFIRM_ONLY)
             }.attachToScreen()
+
+            FirebaseEvent.logOCRFileDownloadFinished()
         } catch (e: Exception) {
             FirebaseEvent.logException(e)
 
@@ -185,6 +193,11 @@ object GoogleMLKitTranslator : Translator {
                 setMessage(e.localizedMessage ?: context.getString(R.string.error_unknown))
                 setDialogType(DialogView.DialogType.CONFIRM_ONLY)
             }.attachToScreen()
+
+            FirebaseEvent.logOCRFileDownloadFailed(
+                langList.joinToString(","), DOWNLOAD_SITE,
+                e.localizedMessage ?: e.message
+            )
         }
     }
 }
