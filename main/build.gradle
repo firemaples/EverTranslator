@@ -8,8 +8,6 @@ plugins {
     id 'com.google.firebase.firebase-perf'
 }
 
-apply from: '../../FiremaplesAndroidSign/playstore_sign.gradle'
-
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -63,7 +61,8 @@ android {
         }
         prod {
             dimension "tier"
-            signingConfig signingConfigs.playStore
+
+            //signingConfig signingConfigs.playStore
         }
     }
 
