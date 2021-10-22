@@ -13,10 +13,6 @@ object AppPref : KotprefModel() {
         Kotpref.gson = Gson()
     }
 
-    var hasNotch: Boolean by booleanPref(default = false)
-    var notchHeight: Int by intPref(default = 0)
-    var statusBarHeight: Int by intPref(default = 0)
-
     var selectedOCRLang by stringPref(default = Constants.DEFAULT_OCR_LANG)
 
     var selectedTranslationProvider by stringPref(
