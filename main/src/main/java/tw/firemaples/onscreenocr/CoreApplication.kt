@@ -2,6 +2,7 @@ package tw.firemaples.onscreenocr
 
 import android.app.Application
 import tw.firemaples.onscreenocr.log.FirebaseEvent
+import tw.firemaples.onscreenocr.log.UserInfoUtils
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
 
 class CoreApplication : Application() {
@@ -14,6 +15,7 @@ class CoreApplication : Application() {
         instance = this
 
         FirebaseEvent.validateSignature()
+        UserInfoUtils.setClientInfo()
         RemoteConfigManager.tryFetchNew()
     }
 }

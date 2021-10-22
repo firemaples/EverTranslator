@@ -1,11 +1,19 @@
 package tw.firemaples.onscreenocr.log
 
 import android.os.Build
+import androidx.lifecycle.asFlow
+import com.chibatching.kotpref.livedata.asLiveData
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.CoreApplication
+import tw.firemaples.onscreenocr.pref.AppPref
+import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
 import java.util.*
 
 object UserInfoUtils {
@@ -31,32 +39,29 @@ object UserInfoUtils {
         updatePlayServiceInfo()
     }
 
-    fun updateClientSettings() {
-//        val trainedDataDownloadSite = OCRFileUtil.trainedDataDownloadSite
-//        firebaseCrashlytics.setCustomKey("OCR_Site", trainedDataDownloadSite.key)
-//        firebaseCrashlytics.setCustomKey("OCR_Site_Url", trainedDataDownloadSite.url)
-//        firebaseCrashlytics.setCustomKey("OCR_Lang_Code", OCRLangUtil.selectedLangCode)
-//        firebaseCrashlytics.setCustomKey("OCR_Page_Seg_Mode", OCRLangUtil.pageSegmentationMode)
-//        firebaseCrashlytics.setCustomKey(
-//            "Tran_Lang_Code",
-//            TranslationUtil.currentTranslationLangCode
-//        )
-//
-//        firebaseAnalytics.setUserProperty("ocr_site", trainedDataDownloadSite.key)
-//        firebaseAnalytics.setUserProperty("ocr_lang_code", OCRLangUtil.selectedLangCode)
-//        firebaseAnalytics.setUserProperty("ocr_page_seg_mode", OCRLangUtil.pageSegmentationMode)
-//        firebaseAnalytics.setUserProperty(
-//            "tran_lang_code",
-//            TranslationUtil.currentTranslationLangCode
-//        )
-//        firebaseAnalytics.setUserProperty(
-//            "ms_translate_key_group",
-//            RemoteConfigUtil.microsoftTranslationKeyGroupId
-//        )
-//        firebaseAnalytics.setUserProperty(
-//            "current_translate_svc",
-//            TranslationUtil.currentService.name
-//        )
+    private fun updateClientSettings() {
+        CoroutineScope(Dispatchers.Default).launch {
+            AppPref.asLiveData(AppPref::selectedOCRLang).asFlow().collect {
+                firebaseAnalytics.setUserProperty("ocr_lang_code", it)
+            }
+        }
+
+        CoroutineScope(Dispatchers.Default).launch {
+            AppPref.asLiveData(AppPref::selectedTranslationLang).asFlow().collect {
+                firebaseAnalytics.setUserProperty("tran_lang_code", it)
+            }
+        }
+
+        CoroutineScope(Dispatchers.Default).launch {
+            AppPref.asLiveData(AppPref::selectedTranslationProvider).asFlow().collect {
+                firebaseAnalytics.setUserProperty("current_translate_svc", it)
+            }
+        }
+
+        firebaseAnalytics.setUserProperty(
+            "ms_translate_key_group",
+            RemoteConfigManager.microsoftTranslationKeyGroupId
+        )
     }
 
     fun updatePlayServiceInfo() {
