@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="44dp"
+        android:height="44dp"
+        android:drawable="@drawable/icon_selection_ellipse_arrow_inside_shadow"
+        android:gravity="center"
+        android:left="4dp"
+        android:top="2dp" />
+    <item
+        android:width="44dp"
+        android:height="44dp"
+        android:drawable="@drawable/icon_selection_ellipse_arrow_inside"
+        android:gravity="center" />
+
+    <item
+        android:width="26dp"
+        android:height="26dp"
+        android:drawable="@drawable/icon_translate_shadow"
+        android:gravity="center"
+        android:left="4dp"
+        android:top="4dp" />
+
+    <item
+        android:width="26dp"
+        android:height="26dp"
+        android:drawable="@drawable/icon_translate"
+        android:gravity="center" />
+</layer-list>

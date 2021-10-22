@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import tw.firemaples.onscreenocr.R;
-import tw.firemaples.onscreenocr.floatingviews.screencrop.DialogView;
+import tw.firemaples.onscreenocr.floatings.screencrop.DialogView;
 
 /**
  * Created by firemaples on 30/04/2017.

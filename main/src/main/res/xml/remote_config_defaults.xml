@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>version</key>
+        <value>local</value>
+    </entry>
+    <entry>
+        <key>fetch_interval</key>
+        <value>43200</value>
+    </entry>
+    <entry>
+        <key>microsoft_key_group_id</key>
+        <value>local</value>
+    </entry>
+    <entry>
+        <key>microsoft_key</key>
+        <value></value>
+    </entry>
+    <entry>
+        <key>trained_data_url_data</key>
+        <value>[{"name":"Github","key":"github","url":"https://github.com/firemaples/tessdata/raw/master/%s.traineddata"},{"name":"RawGit CDN","key":"rawgit","url":"https://cdn.rawgit.com/firemaples/tessdata/6c965771/%s.traineddata"},{"name":"GitHack CDN","key":"githack","url":"https://rawcdn.githack.com/firemaples/tessdata/master/%s.traineddata"},{"name":"Gitlab","key":"gitlab","url":"https://gitlab.com/firemaples/tessdata/raw/master/%s.traineddata"}]</value>
+    </entry>
+    <entry>
+        <key>trained_data_url_data_v1</key>
+        <value>[{"name":"Github","key":"github","url":"https://github.com/firemaples/tessdata/raw/master/%s"},{"name":"RawGit CDN","key":"rawgit","url":"https://cdn.rawgit.com/firemaples/tessdata/6c965771/%s"},{"name":"GitHack CDN","key":"githack","url":"https://rawcdn.githack.com/firemaples/tessdata/master/%s"},{"name":"Gitlab","key":"gitlab","url":"https://gitlab.com/firemaples/tessdata/raw/master/%s"}]</value>
+    </entry>
+    <entry>
+        <key>trained_data_files</key>
+        <value>{"default":[".traineddata"],"others":{"ara":[".cube.bigrams",".cube.fold",".cube.lm",".cube.nn",".cube.params",".cube.size",".cube.word-freq"],"eng":[".cube.bigrams",".cube.fold",".cube.lm",".cube.nn",".cube.params",".cube.size",".cube.word-freq",".tesseract_cube.nn"],"fra":[".cube.bigrams",".cube.fold",".cube.lm",".cube.nn",".cube.params",".cube.size",".cube.word-freq",".tesseract_cube.nn"],"hin":[".cube.bigrams",".cube.fold",".cube.lm",".cube.nn",".cube.params",".cube.word-freq",".tesseract_cube.nn"],"ita":[".cube.bigrams",".cube.fold",".cube.lm",".cube.nn",".cube.params",".cube.size",".cube.word-freq",".tesseract_cube.nn"],"rus":[".cube.fold",".cube.lm",".cube.nn",".cube.params",".cube.size",".cube.word-freq"],"spa":[".cube.bigrams",".cube.fold",".cube.lm",".cube.nn",".cube.params",".cube.size",".cube.word-freq"]}}</value>
+    </entry>
+    <entry>
+        <key>privacy_policy_url</key>
+        <value>https://sites.google.com/view/privacy-policy-evertranslator</value>
+    </entry>
+    <entry>
+        <key>about_url</key>
+        <value>https://github.com/firemaples/EverTranslator</value>
+    </entry>
+</defaultsMap>

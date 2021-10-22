@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:button="@drawable/button_check"
+    android:foreground="?selectableItemBackground"
+    android:paddingVertical="8dp"
+    android:paddingStart="0dp"
+    android:paddingEnd="16dp"
+    android:textColor="@color/foregroundSecond"
+    android:theme="@style/Theme.EverTranslator"
+    tools:checked="true"
+    tools:text="Selection" />

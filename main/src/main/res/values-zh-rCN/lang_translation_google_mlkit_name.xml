@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Translation target names for Google Translate. -->
+    <!-- The elements in this array must match to the google_translationLangCode_iso6391 array. -->
+    <string-array name="google_MLKit_translationLangName">
+        <item>南非语</item>
+        <item>阿尔巴尼亚语</item>
+        <item>阿拉伯</item>
+        <item>白俄罗斯语</item>
+        <item>保加利亚语</item>
+        <item>孟加拉</item>
+        <item>加泰罗尼亚语</item>
+        <item>中文</item>
+        <item>克罗地亚语</item>
+        <item>捷克文</item>
+        <item>丹麦文</item>
+        <item>荷兰语</item>
+        <item>英语</item>
+        <item>世界语</item>
+        <item>爱沙尼亚语</item>
+        <item>芬兰语</item>
+        <item>法文</item>
+        <item>加利西亚语</item>
+        <item>格鲁吉亚语</item>
+        <item>德语</item>
+        <item>希腊语</item>
+        <item>古吉拉特语</item>
+        <item>海地</item>
+        <item>希伯来语</item>
+        <item>印地语</item>
+        <item>匈牙利</item>
+        <item>冰岛语</item>
+        <item>印度尼西亚</item>
+        <item>爱尔兰语</item>
+        <item>义大利文</item>
+        <item>日文</item>
+        <item>卡纳达语</item>
+        <item>韩语</item>
+        <item>立陶宛语</item>
+        <item>拉脱维亚语</item>
+        <item>马其顿语</item>
+        <item>马拉地语</item>
+        <item>马来语</item>
+        <item>马耳他语</item>
+        <item>挪威</item>
+        <item>波斯语</item>
+        <item>波兰语</item>
+        <item>葡萄牙语</item>
+        <item>罗马尼亚语</item>
+        <item>俄语</item>
+        <item>斯洛伐克文</item>
+        <item>斯洛文尼亚文</item>
+        <item>西班牙文</item>
+        <item>瑞典</item>
+        <item>斯瓦希里语</item>
+        <item>他加禄语</item>
+        <item>泰米尔语</item>
+        <item>泰卢固语</item>
+        <item>泰国</item>
+        <item>土耳其</item>
+        <item>乌克兰</item>
+        <item>乌尔都语</item>
+        <item>越南文</item>
+        <item>威尔士语</item>
+    </string-array>
+</resources>

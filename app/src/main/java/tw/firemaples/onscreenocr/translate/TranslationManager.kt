@@ -2,7 +2,7 @@ package tw.firemaples.onscreenocr.translate
 
 import android.content.Context
 import tw.firemaples.onscreenocr.log.FirebaseEvent
-import tw.firemaples.onscreenocr.ocr.OCRLangUtil
+import tw.firemaples.onscreenocr.ocr.tesseract.OCRLangUtil
 
 object TranslationManager {
     fun checkResource(context: Context, source: String, target: String, callback: (result: Boolean) -> Unit) =

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="tw.firemaples.onscreenocr">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <queries>
+        <package android:name="com.google.android.apps.translate" />
+    </queries>
+
+    <application
+        android:name=".CoreApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/icon_launcher_adoptive"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/icon_launcher_adoptive"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.EverTranslator">
+        <activity android:name=".pages.launch.LaunchActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name=".floatings.ViewHolderService"
+            android:foregroundServiceType="mediaProjection" />
+        <activity
+            android:name=".pages.setting.SettingActivity"
+            android:noHistory="true" />
+        <service
+            android:name=".utils.QuickTileService"
+            android:icon="@drawable/ic_for_notify"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

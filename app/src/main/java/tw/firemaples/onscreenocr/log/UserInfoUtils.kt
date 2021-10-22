@@ -6,9 +6,9 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import tw.firemaples.onscreenocr.CoreApplication
-import tw.firemaples.onscreenocr.ocr.OCRFileUtil
-import tw.firemaples.onscreenocr.ocr.OCRLangUtil
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil
+import tw.firemaples.onscreenocr.ocr.tesseract.OCRFileUtil
+import tw.firemaples.onscreenocr.ocr.tesseract.OCRLangUtil
 import tw.firemaples.onscreenocr.translate.TranslationUtil
 import java.util.*
 
@@ -41,39 +41,57 @@ object UserInfoUtils {
         firebaseCrashlytics.setCustomKey("OCR_Site_Url", trainedDataDownloadSite.url)
         firebaseCrashlytics.setCustomKey("OCR_Lang_Code", OCRLangUtil.selectedLangCode)
         firebaseCrashlytics.setCustomKey("OCR_Page_Seg_Mode", OCRLangUtil.pageSegmentationMode)
-        firebaseCrashlytics.setCustomKey("Tran_Lang_Code", TranslationUtil.currentTranslationLangCode)
+        firebaseCrashlytics.setCustomKey(
+            "Tran_Lang_Code",
+            TranslationUtil.currentTranslationLangCode
+        )
 
         firebaseAnalytics.setUserProperty("ocr_site", trainedDataDownloadSite.key)
         firebaseAnalytics.setUserProperty("ocr_lang_code", OCRLangUtil.selectedLangCode)
         firebaseAnalytics.setUserProperty("ocr_page_seg_mode", OCRLangUtil.pageSegmentationMode)
-        firebaseAnalytics.setUserProperty("tran_lang_code", TranslationUtil.currentTranslationLangCode)
-        firebaseAnalytics.setUserProperty("ms_translate_key_group", RemoteConfigUtil.microsoftTranslationKeyGroupId)
-        firebaseAnalytics.setUserProperty("current_translate_svc", TranslationUtil.currentService.name)
+        firebaseAnalytics.setUserProperty(
+            "tran_lang_code",
+            TranslationUtil.currentTranslationLangCode
+        )
+        firebaseAnalytics.setUserProperty(
+            "ms_translate_key_group",
+            RemoteConfigUtil.microsoftTranslationKeyGroupId
+        )
+        firebaseAnalytics.setUserProperty(
+            "current_translate_svc",
+            TranslationUtil.currentService.name
+        )
     }
 
     fun updatePlayServiceInfo() {
         val isPlayServiceAvailable = GoogleApiAvailability.getInstance()
-                .isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
+            .isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
 
-        firebaseCrashlytics.setCustomKey("isPlayServiceAvailable",
-                isPlayServiceAvailable)
-        firebaseAnalytics.setUserProperty("play_service_available", isPlayServiceAvailable.toString())
+        firebaseCrashlytics.setCustomKey(
+            "isPlayServiceAvailable",
+            isPlayServiceAvailable
+        )
+        firebaseAnalytics.setUserProperty(
+            "play_service_available",
+            isPlayServiceAvailable.toString()
+        )
 
         var playServiceVersionName: String
         var playServiceVersionCode = -1L
         try {
             context.packageManager.getPackageInfo(
-                    GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE, 0)
-                    .also { info ->
-                        playServiceVersionName = info?.versionName ?: "NoFound"
-                        playServiceVersionCode =
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                                    info.longVersionCode
-                                } else {
-                                    @Suppress("DEPRECATION")
-                                    info.versionCode.toLong()
-                                }
-                    }
+                GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE, 0
+            )
+                .also { info ->
+                    playServiceVersionName = info?.versionName ?: "NoFound"
+                    playServiceVersionCode =
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                            info.longVersionCode
+                        } else {
+                            @Suppress("DEPRECATION")
+                            info.versionCode.toLong()
+                        }
+                }
 
         } catch (e: Throwable) {
             playServiceVersionName = e.message ?: "Unknown exception"

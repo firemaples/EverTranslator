@@ -1,14 +1,13 @@
 package tw.firemaples.onscreenocr
 
-import android.graphics.Bitmap
 import android.graphics.Rect
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tw.firemaples.onscreenocr.event.EventUtil
-import tw.firemaples.onscreenocr.ocr.OCRLangUtil
-import tw.firemaples.onscreenocr.ocr.OcrResult
+import tw.firemaples.onscreenocr.ocr.tesseract.OCRLangUtil
+import tw.firemaples.onscreenocr.ocr.tesseract.OcrResult
 import tw.firemaples.onscreenocr.state.InitState
 import tw.firemaples.onscreenocr.state.State
 import tw.firemaples.onscreenocr.state.event.StateChangedEvent
@@ -17,7 +16,6 @@ import tw.firemaples.onscreenocr.translate.TranslationUtil
 import tw.firemaples.onscreenocr.utils.ImageFile
 import tw.firemaples.onscreenocr.utils.stateManagerAction
 import tw.firemaples.onscreenocr.utils.threadUI
-import java.io.File
 import java.util.*
 
 object StateManager {
@@ -27,7 +25,7 @@ object StateManager {
 
     var listener: OnStateChangedListener? = null
 
-    var boxList: MutableList<Rect> = arrayListOf()
+    var userSelectedAreaBoxList: MutableList<Rect> = arrayListOf()
     var screenshotFile: ImageFile? = null
     var ocrResultList: MutableList<OcrResult> = ArrayList()
     var ocrResultText: String?
@@ -49,7 +47,7 @@ object StateManager {
     }
 
     fun clear() {
-        boxList.clear()
+        userSelectedAreaBoxList.clear()
         screenshotFile = null
         ocrResultList.clear()
     }
@@ -76,7 +74,7 @@ object StateManager {
     }
 
     fun areaSelected(boxList: List<Rect>) = doAction {
-        this@StateManager.boxList = boxList.toMutableList()
+        this@StateManager.userSelectedAreaBoxList = boxList.toMutableList()
         state.areaSelected(this@StateManager)
     }
 

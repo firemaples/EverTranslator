@@ -22,8 +22,8 @@ import java.util.List;
 
 import tw.firemaples.onscreenocr.event.EventUtil;
 import tw.firemaples.onscreenocr.event.events.ShowingStateChanged;
-import tw.firemaples.onscreenocr.floatingviews.FloatingView;
-import tw.firemaples.onscreenocr.floatingviews.screencrop.MainBar;
+import tw.firemaples.onscreenocr.floatings.FloatingView;
+import tw.firemaples.onscreenocr.floatings.screencrop.MainBar;
 import tw.firemaples.onscreenocr.receivers.SamsungSpenInsertedReceiver;
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigUtil;
 import tw.firemaples.onscreenocr.screenshot.ScreenshotHandler;

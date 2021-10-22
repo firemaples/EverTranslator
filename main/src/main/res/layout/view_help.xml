@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.EverTranslator">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/helpPage.stepText"
+            android:layout_marginTop="0dp"
+            android:text="@string/guide_select_source_language_and_translation_destination_language" />
+
+        <ImageView
+            style="@style/helpPage.stepPicture"
+            android:src="@drawable/guide_1_select_lang" />
+
+        <TextView
+            style="@style/helpPage.stepText"
+            android:text="@string/guide_lang_selector" />
+
+        <ImageView
+            style="@style/helpPage.stepPicture"
+            android:src="@drawable/guide_2_lang_selector" />
+
+        <TextView
+            style="@style/helpPage.stepText"
+            android:text="@string/guide_click_selection_button" />
+
+        <ImageView
+            style="@style/helpPage.stepPicture"
+            android:src="@drawable/guide_3_click_to_start_selection" />
+
+        <TextView
+            style="@style/helpPage.stepText"
+            android:text="@string/guide_tap_and_drag_on_screen_to_create_selection_area_for_translation" />
+
+        <pl.droidsonroids.gif.GifImageView
+            style="@style/helpPage.stepPicture"
+            android:src="@drawable/guide_4_select_area" />
+
+        <TextView
+            style="@style/helpPage.stepText"
+            android:text="@string/guide_click_translation_button" />
+
+        <ImageView
+            style="@style/helpPage.stepPicture"
+            android:src="@drawable/guide_5_click_to_translate" />
+
+        <TextView
+            style="@style/helpPage.stepText"
+            android:text="@string/guide_get_the_result" />
+
+        <ImageView
+            style="@style/helpPage.stepPicture"
+            android:src="@drawable/guide_6_result_window" />
+
+        <TextView
+            style="@style/helpPage.stepText"
+            android:text="@string/guide_clear_result" />
+
+        <TextView
+            style="@style/helpPage.stepText"
+            android:text="@string/guide_menu" />
+
+        <pl.droidsonroids.gif.GifImageView
+            style="@style/helpPage.stepPicture"
+            android:src="@drawable/guide_n_move_main_bar_and_open_menu" />
+
+    </LinearLayout>
+
+</ScrollView>

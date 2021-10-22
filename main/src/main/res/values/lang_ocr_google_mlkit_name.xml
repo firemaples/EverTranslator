@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="lang_ocr_google_mlkit_name">
+        <!-- table (Supported languages) -->
+        <item>Afrikaans</item> <!-- af -->
+        <item>Albanian</item> <!-- sq -->
+        <item>Catalan</item> <!-- ca -->
+        <item>Chinese</item> <!-- zh -->
+        <item>Croatian</item> <!-- hr -->
+        <item>Czech</item> <!-- cs -->
+        <item>Danish</item> <!-- da -->
+        <item>Dutch</item> <!-- nl -->
+        <item>English</item> <!-- en -->
+        <item>Estonian</item> <!-- et -->
+        <item>Filipino</item> <!-- fil -->
+        <item>Finnish</item> <!-- fi -->
+        <item>French</item> <!-- fr -->
+        <item>German</item> <!-- de -->
+        <item>Hindi</item> <!-- hi -->
+        <item>Hungarian</item> <!-- hu -->
+        <item>Icelandic</item> <!-- is -->
+        <item>Indonesian</item> <!-- id -->
+        <item>Italian</item> <!-- it -->
+        <item>Japanese</item> <!-- ja -->
+        <item>Korean</item> <!-- ko -->
+        <item>Latvian</item> <!-- lv -->
+        <item>Lithuanian</item> <!-- lt -->
+        <item>Malay</item> <!-- ms -->
+        <item>Marathi</item> <!-- mr -->
+        <item>Nepali</item> <!-- ne -->
+        <item>Norwegian</item> <!-- no -->
+        <item>Polish</item> <!-- pl -->
+        <item>Portuguese</item> <!-- pt -->
+        <item>Romanian</item> <!-- ro -->
+        <item>Serbian</item> <!-- sr-Latn -->
+        <item>Slovak</item> <!-- sk -->
+        <item>Slovenian</item> <!-- sl -->
+        <item>Spanish</item> <!-- es -->
+        <item>Swedish</item> <!-- sv -->
+        <item>Turkish</item> <!-- tr -->
+        <item>Vietnamese</item> <!-- vi -->
+
+        <!-- table (Experimental languages) -->
+        <item>Azerbaijani</item> <!-- az -->
+        <item>Basque</item> <!-- eu -->
+        <item>Bosnian</item> <!-- bs -->
+        <item>Cebuano</item> <!-- ceb -->
+        <item>Esperanto</item> <!-- eo -->
+        <item>Galician</item> <!-- gl -->
+        <item>Haitian Creole</item> <!-- ht -->
+        <item>Irish</item> <!-- ga -->
+        <item>Javanese</item> <!-- jv -->
+        <item>Latin</item> <!-- la -->
+        <item>Maltese</item> <!-- mt -->
+        <item>Sanskrit</item> <!-- sa -->
+        <item>Swahili</item> <!-- sw -->
+        <item>Uzbek</item> <!-- uz -->
+        <item>Welsh</item> <!-- cy -->
+        <item>Zulu</item> <!-- zu -->
+
+        <!-- table (Mapped languages) -->
+        <item>Acehnese</item> <!-- ace -->
+        <item>Acholi</item> <!-- ach -->
+        <item>Adangme</item> <!-- ada -->
+        <item>Akan</item> <!-- ak -->
+        <item>Algonquinian</item> <!-- alg -->
+        <item>Araucanian/Mapuche</item> <!-- arn -->
+        <item>Asturian</item> <!-- ast -->
+        <item>Athabaskan</item> <!-- ath -->
+        <item>Aymara</item> <!-- ay -->
+        <item>Balinese</item> <!-- ban -->
+        <item>Bambara</item> <!-- bm -->
+        <item>Bantu</item> <!-- bnt -->
+        <item>Batak</item> <!-- btk -->
+        <item>Bemba</item> <!-- bem -->
+        <item>Bikol</item> <!-- bik -->
+        <item>Bislama</item> <!-- bi -->
+        <item>Breton</item> <!-- br -->
+        <item>Chinese</item> <!-- zh-Hans -->
+        <item>Chinese</item> <!-- zh-Hant -->
+        <item>Chinese</item> <!-- zh-Hant-HK -->
+        <item>Choctaw</item> <!-- cho -->
+        <item>Cree</item> <!-- cr -->
+        <item>Creek</item> <!-- mus -->
+        <item>Dakota</item> <!-- dak -->
+        <item>Duala</item> <!-- dua -->
+        <item>Efik</item> <!-- efi -->
+        <item>English</item> <!-- en-GB -->
+        <item>Ewe</item> <!-- ee -->
+        <item>Faroese</item> <!-- fo -->
+        <item>Fijian</item> <!-- fj -->
+        <item>Fon</item> <!-- fon -->
+        <item>French</item> <!-- fr-CA -->
+        <item>Fulah</item> <!-- ff -->
+        <item>Ga</item> <!-- gaa -->
+        <item>Ganda</item> <!-- lg -->
+        <item>Gayo</item> <!-- gay -->
+        <item>Gilbertese</item> <!-- gil -->
+        <item>Gothic</item> <!-- got -->
+        <item>Guarani</item> <!-- gn -->
+        <item>Hausa</item> <!-- ha -->
+        <item>Hawaiian</item> <!-- haw -->
+        <item>Herero</item> <!-- hz -->
+        <item>Hiligaynon</item> <!-- hil -->
+        <item>Iban</item> <!-- iba -->
+        <item>Igbo</item> <!-- ig -->
+        <item>Iloko</item> <!-- ilo -->
+        <item>Kabyle</item> <!-- kab -->
+        <item>Kachin</item> <!-- kac -->
+        <item>Kalaallisut</item> <!-- kl -->
+        <item>Kamba</item> <!-- kam -->
+        <item>Kanuri</item> <!-- kr -->
+        <item>Khasi</item> <!-- kha -->
+        <item>Kikuyu</item> <!-- ki -->
+        <item>Kinyarwanda</item> <!-- rw -->
+        <item>Kongo</item> <!-- kg -->
+        <item>Kosraean</item> <!-- kos -->
+        <item>Kuanyama</item> <!-- kj -->
+        <item>Lingala</item> <!-- ln -->
+        <item>Low German</item> <!-- nds -->
+        <item>Lozi</item> <!-- loz -->
+        <item>Luba-Katanga</item> <!-- lu -->
+        <item>Luo</item> <!-- luo -->
+        <item>Madurese</item> <!-- mad -->
+        <item>Malagasy</item> <!-- mg -->
+        <item>Mandingo</item> <!-- man -->
+        <item>Manx</item> <!-- gv -->
+        <item>Maori</item> <!-- mi -->
+        <item>Marshallese</item> <!-- mh -->
+        <item>Mende</item> <!-- men -->
+        <item>Middle English</item> <!-- enm -->
+        <item>Middle High German</item> <!-- gmh -->
+        <item>Minangkabau</item> <!-- min -->
+        <item>Mohawk</item> <!-- moh -->
+        <item>Mongo</item> <!-- lol -->
+        <item>Nahuatl</item> <!-- nah -->
+        <item>Navajo</item> <!-- nv -->
+        <item>Ndonga</item> <!-- ng -->
+        <item>Niuean</item> <!-- niu -->
+        <item>North Ndebele</item> <!-- nd -->
+        <item>Northern Sotho</item> <!-- nso -->
+        <item>Nyanja</item> <!-- ny -->
+        <item>Nyankole</item> <!-- nyn -->
+        <item>Nyasa Tonga</item> <!-- tog -->
+        <item>Nzima</item> <!-- nzi -->
+        <item>Occitan</item> <!-- oc -->
+        <item>Ojibwa</item> <!-- oj -->
+        <item>Old English</item> <!-- ang -->
+        <item>Old French</item> <!-- fro -->
+        <item>Old High German</item> <!-- goh -->
+        <item>Old Norse</item> <!-- non -->
+        <item>Old Provencal</item> <!-- pro -->
+        <item>Ossetic</item> <!-- os -->
+        <item>Pampanga</item> <!-- pam -->
+        <item>Pangasinan</item> <!-- pag -->
+        <item>Papiamento</item> <!-- pap -->
+        <item>Portuguese</item> <!-- pt-PT -->
+        <item>Quechua</item> <!-- qu -->
+        <item>Romansh</item> <!-- rm -->
+        <item>Romany</item> <!-- rom -->
+        <item>Rundi</item> <!-- rn -->
+        <item>Samoan</item> <!-- sm -->
+        <item>Sango</item> <!-- sg -->
+        <item>Scots</item> <!-- sco -->
+        <item>Scottish Gaelic</item> <!-- gd -->
+        <item>Shona</item> <!-- sn -->
+        <item>Songhai</item> <!-- son -->
+        <item>Southern Sotho</item> <!-- st -->
+        <item>Spanish</item> <!-- es-419 -->
+        <item>Sundanese</item> <!-- su -->
+        <item>Swati</item> <!-- ss -->
+        <item>Tahitian</item> <!-- ty -->
+        <item>Temne</item> <!-- tem -->
+        <item>Tongan</item> <!-- to -->
+        <item>Tsonga</item> <!-- ts -->
+        <item>Tswana</item> <!-- tn -->
+        <item>Turkmen</item> <!-- tk -->
+        <item>Venda</item> <!-- ve -->
+        <item>Western Frisian</item> <!-- fy -->
+        <item>Wolof</item> <!-- wo -->
+        <item>Xhosa</item> <!-- xh -->
+        <item>Yoruba</item> <!-- yo -->
+        <item>Zapotec</item> <!-- zap -->
+    </string-array>
+</resources>

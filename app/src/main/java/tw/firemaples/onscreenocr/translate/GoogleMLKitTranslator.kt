@@ -10,9 +10,8 @@ import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import kotlinx.coroutines.Job
 import tw.firemaples.onscreenocr.R
-import tw.firemaples.onscreenocr.floatingviews.screencrop.DialogView
-import tw.firemaples.onscreenocr.floatingviews.screencrop.ProgressView
-import tw.firemaples.onscreenocr.ocr.OCRLangUtil
+import tw.firemaples.onscreenocr.floatings.screencrop.DialogView
+import tw.firemaples.onscreenocr.ocr.tesseract.OCRLangUtil
 import tw.firemaples.onscreenocr.utils.*
 import kotlin.jvm.Throws
 

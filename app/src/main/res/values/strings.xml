@@ -121,4 +121,6 @@
     <string name="dialog_content_mlkit_models_downloaded">Required language models downloaded.</string>
     <string name="dialog_content_mlkit_model_downloading">Downloading language model: %1$s.\n\nYou can see the progress on the notification drawer.</string>
     <string name="error_download_mlkit_model_failed">Download language model failed: %1$s.</string>
+    <string name="label_ocrLang_latin_name">Latin (Recommend)</string>
+    <string name="label_ocrLang_latin_displayCode">Latin</string>
 </resources>

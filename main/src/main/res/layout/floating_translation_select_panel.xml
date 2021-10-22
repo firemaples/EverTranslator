@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view_outside"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dialogOutside">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="1dp"
+        android:theme="@style/Theme.EverTranslator">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"
+            android:background="@null"
+            android:clickable="true"
+            android:focusable="true">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/line_centerVertical"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <TextView
+                android:id="@+id/tv_labelOCRLangTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/text_ocr_language"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/line_centerVertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginEnd="2dp"
+                android:background="@color/foreground"
+                app:layout_constraintEnd_toStartOf="@id/line_centerVertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_labelOCRLangTitle" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_ocrLang"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="2dp"
+                app:layout_constraintBottom_toTopOf="@id/bt_close"
+                app:layout_constraintEnd_toStartOf="@id/line_centerVertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_labelOCRLangTitle"
+                tools:listitem="@layout/item_lang_list" />
+
+            <TextView
+                android:id="@+id/tv_labelTranslationLangTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="@string/text_translation"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/line_centerVertical"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/foreground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/line_centerVertical"
+                app:layout_constraintTop_toBottomOf="@id/tv_labelTranslationLangTitle" />
+
+            <TextView
+                android:id="@+id/tv_labelTranslationProvider"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="2dp"
+                android:text="@string/text_field_provider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/line_centerVertical"
+                app:layout_constraintTop_toBottomOf="@id/tv_labelTranslationLangTitle" />
+
+            <TextView
+                android:id="@+id/tv_translationProvider"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_spinner"
+                android:foreground="?selectableItemBackgroundBorderless"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/line_centerVertical"
+                app:layout_constraintTop_toBottomOf="@id/tv_labelTranslationProvider"
+                tools:text="Some provider" />
+
+            <TextView
+                android:id="@+id/tv_labelTranslationLang"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="2dp"
+                android:text="@string/text_field_language"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/line_centerVertical"
+                app:layout_constraintTop_toBottomOf="@id/tv_translationProvider" />
+
+            <TextView
+                android:id="@+id/tv_translationLangHint"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="4dp"
+                android:gravity="start|top"
+                android:textColor="@color/alert"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@id/bt_close"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/line_centerVertical"
+                app:layout_constraintTop_toBottomOf="@id/tv_labelTranslationLang"
+                tools:text="Translation Hint" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_translationLang"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@id/bt_close"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/line_centerVertical"
+                app:layout_constraintTop_toBottomOf="@id/tv_labelTranslationLang"
+                tools:itemCount="0"
+                tools:listitem="@layout/item_lang_list" />
+
+            <TextView
+                android:id="@+id/bt_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackgroundBorderless"
+                android:padding="8dp"
+                android:text="@string/text_close"
+                android:textColor="@color/borderlessButtonText"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</RelativeLayout>

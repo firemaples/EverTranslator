@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/pref_category_floating_bar">
+
+        <!--        <SwitchPreference-->
+        <!--            android:defaultValue="false"-->
+        <!--            android:key="pref_use_simple_style"-->
+        <!--            android:summary="@string/pref_summary_use_simple_style"-->
+        <!--            android:title="@string/pref_title_use_simple_style" />-->
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_enable_fading_out_while_idle"
+            android:title="@string/pref_title_enable_fade_out_while_idle" />
+        <SeekBarPreference
+            android:defaultValue="5"
+            android:dependency="pref_enable_fading_out_while_idle"
+            android:key="pref_fade_out_after_seconds"
+            android:max="60"
+            android:title="@string/pref_title_fade_out_after_seconds"
+            app:min="1"
+            app:showSeekBarValue="true" />
+        <SeekBarPreference
+            android:defaultValue="20"
+            android:dependency="pref_enable_fading_out_while_idle"
+            android:key="pref_opaque_percentage"
+            android:max="100"
+            android:title="@string/pref_title_opaque_percentage"
+            app:min="10"
+            app:showSeekBarValue="true" />
+    </PreferenceCategory>
+
+    <!--    <PreferenceCategory android:title="@string/pref_category_text_blocks_selector">-->
+
+    <!--        <ListPreference-->
+    <!--            android:defaultValue="Space"-->
+    <!--            android:entries="@array/textBlockJoinersNames"-->
+    <!--            android:entryValues="@array/textBlockJoinersValues"-->
+    <!--            android:key="pref_text_block_joiner"-->
+    <!--            android:title="@string/pref_joiner_between_text_blocks"-->
+    <!--            app:useSimpleSummaryProvider="true" />-->
+    <!--    </PreferenceCategory>-->
+
+    <PreferenceCategory android:title="@string/pref_other_settings">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_save_last_selection_area"
+            android:title="@string/pref_save_last_selected_area" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_exit_app_while_spen_inserted"
+            android:title="@string/pref_exit_app_while_spen_inserted" />
+    </PreferenceCategory>
+</PreferenceScreen>

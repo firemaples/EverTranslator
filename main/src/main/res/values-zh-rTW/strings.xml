@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">隨處翻譯</string>
+
+    <string name="channel_default">預設通知</string>
+
+    <string name="translation_provider_microsoft_azure">微軟 Azure</string>
+    <string name="translation_provider_google_ml_kit">Google MLKit</string>
+    <string name="translation_provider_google_translate_app">Google 翻譯 App</string>
+    <string name="translation_provider_none">僅辨識文字</string>
+
+    <string name="pref_title_use_simple_style">使用單一按鈕</string>
+    <string name="pref_summary_use_simple_style">單一按鈕：\n使用單一按鈕來簡化懸浮條，單擊尋找畫面文字，長壓顯示選單，拖曳移動懸浮條。\n\n多按鈕：\n在懸浮條中使用雙按鈕，其一可以尋找畫面文字，另一單擊顯示選單，拖曳移動懸浮條。</string>
+    <string name="pref_title_enable_fade_out_while_idle">啟用閒置時透明化懸浮條</string>
+    <string name="pref_title_fade_out_after_seconds">閒置時間（秒）</string>
+    <string name="pref_title_opaque_percentage">不透明度（％）</string>
+    <string name="pref_category_floating_bar">懸浮條</string>
+    <string name="pref_category_text_blocks_selector">文字區塊選擇器</string>
+    <string name="pref_joiner_between_text_blocks">文字區塊間隔</string>
+    <string name="pref_other_settings">其他設定</string>
+    <string name="pref_save_last_selected_area">儲存最後一次的選取區域</string>
+    <string name="pref_exit_app_while_spen_inserted">當 S Pen 插入時關閉 app (Samsung 專用)</string>
+
+    <string name="menu_setting">設定</string>
+    <string name="menu_privacy_policy">隱私聲明</string>
+    <string name="menu_about">關於</string>
+    <string name="menu_version_history">版本資訊</string>
+    <string name="menu_readme">使用說明</string>
+    <string name="menu_hide">隱藏</string>
+    <string name="menu_exit">離開</string>
+
+    <string name="text_ocr_language">辨識語言</string>
+    <string name="text_translation">翻譯</string>
+    <string name="text_field_provider">引擎:</string>
+    <string name="text_field_language">語言:</string>
+    <string name="text_close">關閉</string>
+    <string name="text_ocr_text">辨識結果</string>
+    <string name="text_translated_text">翻譯結果</string>
+    <string name="text_translated_by">翻譯引擎 </string>
+    <string name="text_request_permission">取得權限</string>
+
+    <string name="msg_evertranslator_needs_display_over_other_apps_permission_to_show_a_floating_window_for_easily_using">隨處翻譯需要 [顯示在其他應用程式上層] 權限來顯示懸浮視窗</string>
+    <string name="msg_evertranslator_needs_capture_screen_to_find_the_text_from_the_screen_for_you">隨處翻譯需要 [錄製或投放內容] 權限來取得螢幕上的文字翻譯</string>
+    <string name="msg_textHasBeenCopied">[%s] 文字已複製</string>
+    <string name="msg_models_to_download">下列語言資源尚未下載，要現在下載嗎？</string>
+    <string name="msg_wait_for_resources_downloading">下列語言資源正在下載中，請稍等。</string>
+    <string name="msg_resouces_downloaded">下列語言資源已下載完成，請點擊完成以繼續。</string>
+    <string name="msg_select_lang_in_google_translate">請在 Google 翻譯 app 中選擇欲翻譯的語言。</string>
+    <string name="msg_ocr_only_mode_hint">僅辨識文字模式時，無翻譯服務。</string>
+    <string name="msg_click_to_show_the_floating_bar">點擊以顯示浮動視窗</string>
+    <string name="msg_click_to_hide_the_floating_bar">點擊隱藏浮動視窗</string>
+    <string name="msg_recreate_selection_area">在此拖曳以重新建立選取區，雙指開合以縮放</string>
+    <string name="msg_create_selection_area">在此拖曳以建立選取區</string>
+
+    <string name="title_version_history">版本資訊</string>
+    <string name="title_error">錯誤</string>
+    <string name="title_guide">使用說明</string>
+    <string name="title_failed_to_check_resources">確認語言資源失敗</string>
+    <string name="title_download">下載</string>
+    <string name="title_resources_downloading">資源下載中</string>
+    <string name="title_resouces_downloaded">資源已下載</string>
+    <string name="title_downloading_resouces_failed">下載資源失敗</string>
+
+    <string name="error_an_unknown_error_found_while_recognition_text">辨識文字時發生未知錯誤。</string>
+    <string name="error_capture_screen_timeout">擷取螢幕超時，請稍後重試。</string>
+    <string name="error_unknown_error_capturing_screen">擷取螢幕時發生未知錯誤。</string>
+    <string name="error_unknown">未知錯誤</string>
+    <string name="error_google_translate_is_not_found">您尚未安裝 Google 翻譯 app，當前選擇的翻譯引擎需要此 app 來翻譯，請點擊確認開啟 Play 商店下載，或改用其他翻譯引擎。</string>
+
+    <string-array name="textBlockJoinersNames">
+        <item>換行字元</item>
+        <item>空格</item>
+        <item>無</item>
+    </string-array>
+</resources>
