@@ -1,2 +1,2 @@
 include ':main'
-include ':app'
+include ':deprecated'
