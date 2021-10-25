@@ -23,7 +23,6 @@ import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.UIUtils
 import tw.firemaples.onscreenocr.utils.Utils
-import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -44,21 +43,12 @@ object ScreenExtractor {
         })
     }
 
-    //    private val mediaRecorder: MediaRecorder = MediaRecorder()
     private var virtualDisplay: VirtualDisplay? = null
-    private val screenshotDir: File by lazy { File(context.cacheDir, Constants.PATH_SCREENSHOT) }
+//    private val screenshotDir: File by lazy { File(context.cacheDir, Constants.PATH_SCREENSHOT) }
 //    private val screenshotFile: File by lazy { File(screenshotDir, "screenshot.jpg") }
 
-//    private val screenWidth: Int
-//        get() = UIUtils.displayMetrics.widthPixels
-//    private val screenHeight: Int
-//        get() = UIUtils.displayMetrics.heightPixels
     private val screenDensityDpi: Int
         get() = UIUtils.displayMetrics.densityDpi
-
-    init {
-//        setupRecorder()
-    }
 
     fun onMediaProjectionGranted(intent: Intent) {
         mediaProjectionIntent = intent.clone() as Intent
@@ -85,29 +75,6 @@ object ScreenExtractor {
             fullBitmap.recycle()
         }
     }
-
-//    private fun setupRecorder() {
-//        try {
-//            with(mediaRecorder) {
-//                //            setAudioSource(MediaRecorder.AudioSource.MIC)
-//                setVideoSource(MediaRecorder.VideoSource.SURFACE)
-//                setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-//
-//                setOutputFile(screenshotMp4.absolutePath)
-//                setVideoSize(screenWidth, screenHeight)
-//                setVideoEncoder(MediaRecorder.VideoEncoder.H264)
-//                //            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-//                setVideoEncodingBitRate(512_000)
-//                setVideoFrameRate(5)
-//
-//
-//                setOrientationHint(UIUtils.orientationDegree)
-//                prepare()
-//            }
-//        } catch (e: Exception) {
-//            logger.error(t = e)
-//        }
-//    }
 
     @SuppressLint("WrongConstant")
     @Throws(
@@ -148,17 +115,11 @@ object ScreenExtractor {
                 imageReader.surface, null, null
             )
 
-//        mediaRecorder.start()
-
-//        delay(2000L)
-
             logger.debug("waitForImage")
             val image = withTimeout(Constants.TIMEOUT_EXTRACT_SCREEN) {
                 imageReader.waitForImage()
             }
 
-//        mediaRecorder.stop()
-//        mediaRecorder.reset()
             virtualDisplay?.release()
 
             if (image == null) {
@@ -167,11 +128,13 @@ object ScreenExtractor {
                 throw IllegalStateException("No image data found")
             }
 
-            bitmap = image.decodeBitmap(size)
-
-            image.close()
-            imageReader.close()
-            projection.stop()
+            bitmap = try {
+                image.decodeBitmap(size)
+            } finally {
+                image.close()
+                imageReader.close()
+                projection.stop()
+            }
 
             logger.debug("Bitmap size: ${bitmap.width}x${bitmap.height}, screen size: ${width}x$height")
         }
@@ -184,36 +147,17 @@ object ScreenExtractor {
         logger.debug(
             "cropBitmap(), " +
                     "bitmap: ${bitmap.width}x${bitmap.height}, " +
-//                    "screen size: ${screenWidth}x$screenHeight, " +
                     "parentRect: $parentRect, cropRect: $cropRect"
         )
 
-        val metric = UIUtils.realDisplayMetrics
+        val top = parentRect.top + cropRect.top
+        val bottom = parentRect.top + cropRect.bottom
 
-        val widthScale = bitmap.width.toFloat() / metric.widthPixels.toFloat()
-//        val widthScale = metric.widthPixels.toFloat() / bitmap.width.toFloat()
-        val heightScale = bitmap.height.toFloat() / metric.heightPixels.toFloat()
-//        val widthOffset = (bitmap.width.toFloat() - metric.widthPixels.toFloat()) / 2f
-        val widthOffset = 0f
-
-//        val startX = (parentRect.left + cropRect.left).times(widthScale).toInt()
-//        val startY = (parentRect.top + cropRect.top).times(heightScale).toInt()
-//        val width = cropRect.width().times(widthScale).toInt()
-//        val height = cropRect.height().times(heightScale).toInt()
-
-        val top = (parentRect.top + cropRect.top).times(heightScale).toInt()
-        val bottom = (parentRect.top + cropRect.bottom).times(heightScale).toInt()
-
-        val left =
-            (parentRect.left + cropRect.left).plus(widthOffset).toInt() //.times(widthScale).toInt()
-//            (parentRect.left + cropRect.left).times(widthScale).toInt() //.times(widthScale).toInt()
-        val right =
-            (parentRect.left + cropRect.right).plus(widthOffset).toInt()//.times(widthScale).toInt()
-//            (parentRect.left + cropRect.right).times(widthScale).toInt()//.times(widthScale).toInt()
+        val left = parentRect.left + cropRect.left
+        val right = parentRect.left + cropRect.right
 
         val rect = Rect(left, top, right, bottom)
 
-//        val cropped = Bitmap.createBitmap(bitmap, startX, startY, width, height)
         val cropped = Bitmap.createBitmap(bitmap, rect.left, rect.top, rect.width(), rect.height())
         logger.debug("cropped bitmap: ${cropped.width}x${cropped.height}")
 
@@ -232,11 +176,6 @@ object ScreenExtractor {
                     logger.warn(t = e)
                     it.resumeWithException(e)
                 } finally {
-//                    try {
-//                        reader.close()
-//                    } catch (e: Exception) {
-//                        logger.warn(t = e)
-//                    }
                 }
             }, handler)
         }
