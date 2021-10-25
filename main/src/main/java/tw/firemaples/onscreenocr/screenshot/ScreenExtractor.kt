@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.PixelFormat
+import android.graphics.Point
 import android.graphics.Rect
 import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
@@ -48,10 +49,10 @@ object ScreenExtractor {
     private val screenshotDir: File by lazy { File(context.cacheDir, Constants.PATH_SCREENSHOT) }
 //    private val screenshotFile: File by lazy { File(screenshotDir, "screenshot.jpg") }
 
-    private val screenWidth: Int
-        get() = UIUtils.displayMetrics.widthPixels
-    private val screenHeight: Int
-        get() = UIUtils.displayMetrics.heightPixels
+//    private val screenWidth: Int
+//        get() = UIUtils.displayMetrics.widthPixels
+//    private val screenHeight: Int
+//        get() = UIUtils.displayMetrics.heightPixels
     private val screenDensityDpi: Int
         get() = UIUtils.displayMetrics.densityDpi
 
@@ -133,12 +134,16 @@ object ScreenExtractor {
                 throw IllegalStateException("Retrieving media projection failed")
             }
 
+            val size = UIUtils.readSize
+            val width = size.x
+            val height = size.y
+
             val imageReader =
-                ImageReader.newInstance(screenWidth, screenHeight, PixelFormat.RGBA_8888, 2)
+                ImageReader.newInstance(width, height, PixelFormat.RGBA_8888, 2)
 
             virtualDisplay = projection.createVirtualDisplay(
                 "screen-mirror",
-                screenWidth, screenHeight, screenDensityDpi,
+                width, height, screenDensityDpi,
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC,
                 imageReader.surface, null, null
             )
@@ -162,13 +167,13 @@ object ScreenExtractor {
                 throw IllegalStateException("No image data found")
             }
 
-            bitmap = image.decodeBitmap()
+            bitmap = image.decodeBitmap(size)
 
             image.close()
             imageReader.close()
             projection.stop()
 
-            logger.debug("Bitmap size: ${bitmap.width}x${bitmap.height}, screen size: ${screenWidth}x$screenHeight")
+            logger.debug("Bitmap size: ${bitmap.width}x${bitmap.height}, screen size: ${width}x$height")
         }
 
         return bitmap
@@ -179,7 +184,7 @@ object ScreenExtractor {
         logger.debug(
             "cropBitmap(), " +
                     "bitmap: ${bitmap.width}x${bitmap.height}, " +
-                    "screen size: ${screenWidth}x$screenHeight, " +
+//                    "screen size: ${screenWidth}x$screenHeight, " +
                     "parentRect: $parentRect, cropRect: $cropRect"
         )
 
@@ -237,17 +242,23 @@ object ScreenExtractor {
         }
 
     @Throws(IllegalArgumentException::class)
-    private fun Image.decodeBitmap(): Bitmap =
+    private fun Image.decodeBitmap(size: Point): Bitmap =
         with(planes[0]) {
+            val width = size.x
+            val height = size.y
 //            val deviceWidth = screenWidth
 //            val rowPadding = rowStride - pixelStride * deviceWidth
-            Bitmap.createBitmap(
+            val temp = Bitmap.createBitmap(
                 rowStride / pixelStride,
 //                screenWidth + rowPadding / pixelStride,
-                screenHeight,
+                height,
                 Bitmap.Config.ARGB_8888
             ).apply {
                 copyPixelsFromBuffer(buffer)
+            }
+
+            Bitmap.createBitmap(temp, 0, 0, width, height).also {
+                temp.recycle()
             }
         }
 }
