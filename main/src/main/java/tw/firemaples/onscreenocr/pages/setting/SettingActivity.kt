@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.utils.MoPubAdManager
 
 class SettingActivity : AppCompatActivity() {
     companion object {
@@ -19,5 +20,7 @@ class SettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
+
+        MoPubAdManager.loadPermissionPageBanner(this, findViewById(R.id.ad_settingPage))
     }
 }

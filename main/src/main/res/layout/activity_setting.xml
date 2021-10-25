@@ -4,6 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.mopub.mobileads.MoPubView
+        android:id="@+id/ad_settingPage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:moPubAdSize="height_280" />
+
     <fragment
         android:id="@+id/fragment_setting"
         android:name="tw.firemaples.onscreenocr.pages.setting.SettingFragment"
@@ -12,6 +21,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/ad_settingPage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

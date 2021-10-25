@@ -47,6 +47,9 @@ private const val EVENT_SHOW_RESULT_WINDOW = "show_result_window"
 private const val EVENT_SHOW_GOOGLE_TRANSLATE_WINDOW = "show_google_translate_window"
 private const val EVENT_SHOW_GOOGLE_TRANSLATE_WINDOW_FAILED = "show_google_translate_window_failed"
 
+private const val EVENT_AD_SHOW_SUCCESS = "ad_show_success"
+private const val EVENT_AD_SHOW_FAILED = "ad_show_failed"
+
 object FirebaseEvent {
     private val context by lazy { Utils.context }
     private val firebaseAnalytics by lazy { FirebaseAnalytics.getInstance(context) }
@@ -240,6 +243,23 @@ object FirebaseEvent {
         }
 
         logEvent(EVENT_SHOW_GOOGLE_TRANSLATE_WINDOW_FAILED, params)
+    }
+
+    fun logEventAdShowSuccess(unitId: String) {
+        val params = Bundle().apply {
+            putString("unit_id", unitId)
+        }
+
+        logEvent(EVENT_AD_SHOW_SUCCESS, params)
+    }
+
+    fun loadEventAdShowFailed(unitId: String, errorCode: String) {
+        val params = Bundle().apply {
+            putString("unit_id", unitId)
+            putString("error_code", errorCode)
+        }
+
+        logEvent(EVENT_AD_SHOW_FAILED, params)
     }
 
     private fun logEvent(key: String, params: Bundle? = null) {
