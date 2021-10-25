@@ -64,7 +64,11 @@ android {
         prod {
             dimension "tier"
 
-            //signingConfig signingConfigs.playStore
+            def signGradlePath = System.getenv("ANDROID_SIGN_GRADLE_PATH")
+            if (signGradlePath != null) {
+                apply from: signGradlePath
+                signingConfig signingConfigs.playStore
+            }
         }
     }
 
