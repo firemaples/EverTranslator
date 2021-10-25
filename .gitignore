@@ -47,3 +47,5 @@ google-services.json
 !app/src/main/res/values/keys.xml
 !main/src/main/res/values/keys.xml
 !main/src/dev/google-services.json
+config_ad.xml
+!main/src/main/res/values/config_ad.xml

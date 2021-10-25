@@ -18,6 +18,11 @@
         android:roundIcon="@drawable/icon_launcher_adoptive"
         android:supportsRtl="true"
         android:theme="@style/Theme.EverTranslator">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_application_id" />
+
         <activity android:name=".pages.launch.LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,12 +30,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".floatings.ViewHolderService"
             android:foregroundServiceType="mediaProjection" />
+
         <activity
             android:name=".pages.setting.SettingActivity"
             android:noHistory="true" />
+
         <service
             android:name=".utils.QuickTileService"
             android:icon="@drawable/ic_for_notify"
