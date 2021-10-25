@@ -15,7 +15,7 @@
         <item>1.7.1</item>
     </string-array>
 
-    <string name="version_3_0_0">● Improve the recognition performance and accuracy.\n● Redesign all UIs.\n● Support night mode.\n● Add ADs on launch page and setting page.</string>
+    <string name="version_3_0_0">● Improve the recognition performance and accuracy.\n● Add more options to settings.\n● Redesign all UIs.\n● Support night mode.\n● Add ADs on launch page and setting page.</string>
     <string name="version_2_4_6">● Add Google MLKit translator\n● Remove Yandex translator\n● Enhance error message</string>
     <string name="version_2_4_5">● Fix dropdown lists are missing on Android 11</string>
     <string name="version_2_4_3">● Fix Google translator issue\n● Fix some dialog not closable\n● Add shortcut to notification shade on Android 7.0 and upper\n● Fix errors</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="version_3_0_0">● 提升辨識速度及準確度\n● 重新設計介面\n● 支援夜間模式\n● 增加廣告在啟動頁及設定頁</string>
+    <string name="version_3_0_0">● 提升辨識速度及準確度\n● 增加更多選項至設定\n● 重新設計介面\n● 支援夜間模式\n● 增加廣告在啟動頁及設定頁</string>
     <string name="version_2_4_6">● 增加 Google MLKit 翻譯\n● 移除 Yandex 翻譯\n● 修正錯誤訊息</string>
     <string name="version_2_4_5">● 修正下拉選單在 Android 11 上無法顯示的問題</string>
     <string name="version_2_4_3">● 修正 Google 翻譯失敗問題\n● 修正部分彈出視窗無法關閉問題\n● 增加通知欄快捷\n● 修正錯誤</string>
