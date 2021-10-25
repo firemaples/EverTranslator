@@ -10,11 +10,17 @@ import tw.firemaples.onscreenocr.utils.SamsungSpenInsertedReceiver
 import tw.firemaples.onscreenocr.utils.Utils
 
 object SettingManager {
+    private const val PREF_RESTORE_MAIN_BAR_POSITION = "pref_restore_main_bar_position"
+
     //    private const val PREF_USE_SIMPLE_STYLE = "pref_use_simple_style"
     private const val PREF_ENABLE_FADING_OUT_WHILE_IDLE = "pref_enable_fading_out_while_idle"
     private const val PREF_FADE_OUT_AFTER_SECONDS = "pref_fade_out_after_seconds"
     private const val PREF_OPAQUE_PERCENTAGE = "pref_opaque_percentage"
 //    private const val PREF_TEXT_BLOCK_JOINER = "pref_text_block_joiner"
+
+    private const val PREF_AUTO_COPY_OCR_RESULT = "pref_auto_copy_ocr_result"
+    private const val PREF_HIDE_RECOGNIZED_RESULT_AFTER_TRANSLATED =
+        "pref_hide_recognized_result_after_translated"
 
     private const val PREF_SAVE_LAST_SELECTION_AREA = "pref_save_last_selection_area"
     private const val PREF_EXIT_APP_WHILE_SPEN_INSERTED = "pref_exit_app_while_spen_inserted"
@@ -25,6 +31,9 @@ object SettingManager {
     private val logger: Logger = Logger(SettingManager::class)
 
     private val preferences by lazy { PreferenceManager.getDefaultSharedPreferences(context) }
+
+    val restoreMainBarPosition: Boolean
+        get() = preferences.getBoolean(PREF_RESTORE_MAIN_BAR_POSITION, true)
 
 //    val useSimpleStyle: Boolean
 //        get() = preferences.getBoolean(PREF_USE_SIMPLE_STYLE, false)
@@ -55,6 +64,12 @@ object SettingManager {
 //        Space(" "),
 //        None(""),
 //    }
+
+    val autoCopyOCRResult: Boolean
+        get() = preferences.getBoolean(PREF_AUTO_COPY_OCR_RESULT, false)
+
+    val hideRecognizedResultAfterTranslated: Boolean
+        get() = preferences.getBoolean(PREF_HIDE_RECOGNIZED_RESULT_AFTER_TRANSLATED, false)
 
     val saveLastSelectionArea: Boolean
         get() = preferences.getBoolean(PREF_SAVE_LAST_SELECTION_AREA, true)

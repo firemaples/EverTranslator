@@ -200,4 +200,10 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
             }
         }
     }
+
+    fun saveLastPosition(x: Int, y: Int) {
+        viewScope.launch {
+            repo.saveLastMainBarPosition(x, y)
+        }
+    }
 }

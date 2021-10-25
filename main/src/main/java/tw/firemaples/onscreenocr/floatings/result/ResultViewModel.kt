@@ -5,17 +5,16 @@ import android.graphics.Rect
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.floatings.manager.Result
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
+import tw.firemaples.onscreenocr.repo.GeneralRepository
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
-import tw.firemaples.onscreenocr.utils.Constants
-import tw.firemaples.onscreenocr.utils.LanguageIdentify
-import tw.firemaples.onscreenocr.utils.Logger
-import tw.firemaples.onscreenocr.utils.Utils
+import tw.firemaples.onscreenocr.utils.*
 
 class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) {
     private val _displayOCROperationProgress = MutableLiveData<Boolean>()
@@ -30,6 +29,9 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
     private val _translatedText = MutableLiveData<String?>()
     val translatedText: LiveData<String?> = _translatedText
 
+    private val _displayRecognitionBlock = MutableLiveData<Boolean>()
+    val displayRecognitionBlock: LiveData<Boolean> = _displayRecognitionBlock
+
     private val _displayTranslationBlock = MutableLiveData<Boolean>()
     val displayTranslatedBlock: LiveData<Boolean> = _displayTranslationBlock
 
@@ -42,9 +44,14 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
     private val _displayRecognizedTextAreas = MutableLiveData<Pair<List<Rect>, Rect>>()
     val displayRecognizedTextAreas: LiveData<Pair<List<Rect>, Rect>> = _displayRecognizedTextAreas
 
+    private val _copyRecognizedText = SingleLiveEvent<String>()
+    val copyRecognizedText: LiveData<String> = _copyRecognizedText
+
     private val logger: Logger by lazy { Logger(ResultViewModel::class) }
 
     private val context: Context by lazy { Utils.context }
+
+    private val repo: GeneralRepository by lazy { GeneralRepository() }
 
     private var lastLangCode: String = Constants.DEFAULT_OCR_LANG
     private var lastTextBoundingBoxes: List<Rect> = listOf()
@@ -64,6 +71,7 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
             _ocrText.value = null
             _translatedText.value = null
 
+            _displayRecognitionBlock.value = true
             _displayTranslationBlock.value = false
             _translationProviderText.value = null
             _displayTranslatedByGoogle.value = false
@@ -91,6 +99,10 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
             val unionRect = Rect()
             textAreas.forEach { unionRect.union(it) }
             _displayRecognizedTextAreas.value = textAreas to unionRect
+
+            if (repo.isAutoCopyOCRResult().first()) {
+                _copyRecognizedText.value = result.result
+            }
         }
     }
 
@@ -124,6 +136,10 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
             when (result) {
                 is Result.Translated -> {
                     _translatedText.value = result.translatedText
+
+                    if (repo.hideRecognizedTextAfterTranslated().first()) {
+                        _displayRecognitionBlock.value = false
+                    }
                 }
                 is Result.OCROnly -> {
                 }

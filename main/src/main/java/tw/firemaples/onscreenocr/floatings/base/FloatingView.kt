@@ -2,6 +2,7 @@ package tw.firemaples.onscreenocr.floatings.base
 
 import android.content.Context
 import android.graphics.PixelFormat
+import android.graphics.Point
 import android.os.Build
 import android.os.Looper
 import android.view.Gravity
@@ -27,6 +28,7 @@ abstract class FloatingView(protected val context: Context) {
 
     private val windowManager: WindowManager by lazy { context.getSystemService(Context.WINDOW_SERVICE) as WindowManager }
 
+    open val initialPosition: Point = Point(0, 0)
     open val layoutWidth: Int = WindowManager.LayoutParams.WRAP_CONTENT
     open val layoutHeight: Int = WindowManager.LayoutParams.WRAP_CONTENT
     open val layoutFocusable: Boolean = false
@@ -51,6 +53,9 @@ abstract class FloatingView(protected val context: Context) {
 
         WindowManager.LayoutParams(layoutWidth, layoutHeight, type, flags, PixelFormat.TRANSLUCENT)
             .apply {
+                val initPoint = initialPosition
+                x = initPoint.x
+                y = initPoint.y
                 gravity = layoutGravity
             }
     }

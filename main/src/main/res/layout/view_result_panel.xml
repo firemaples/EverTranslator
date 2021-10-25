@@ -166,6 +166,12 @@
         tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_recognitionViews"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="wrapper_ocrButtons,wrapper_ocrResult" />
+
+    <androidx.constraintlayout.widget.Group
         android:id="@+id/group_translationViews"
         android:layout_width="0dp"
         android:layout_height="0dp"

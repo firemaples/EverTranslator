@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.floatings.main
 
 import android.content.Context
+import android.graphics.Point
 import android.view.View
 import android.widget.TextView
 import tw.firemaples.onscreenocr.R
@@ -14,12 +15,18 @@ import tw.firemaples.onscreenocr.floatings.translationSelectPanel.TranslationSel
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.pages.setting.SettingActivity
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
+import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.utils.Utils
 import tw.firemaples.onscreenocr.utils.showOrHide
 
 class MainBar(context: Context) : MovableFloatingView(context) {
     override val layoutId: Int
         get() = R.layout.floating_main_bar
+
+    override val initialPosition: Point
+        get() =
+            if (SettingManager.restoreMainBarPosition) AppPref.lastMainBarPosition
+            else Point(0, 0)
 
     override val moveToEdgeAfterMoved: Boolean
         get() = true
@@ -139,5 +146,10 @@ class MainBar(context: Context) : MovableFloatingView(context) {
     override fun onAttachedToScreen() {
         super.onAttachedToScreen()
         viewModel.onAttachedToScreen()
+    }
+
+    override fun onDetachedFromScreen() {
+        super.onDetachedFromScreen()
+        viewModel.saveLastPosition(params.x, params.y)
     }
 }

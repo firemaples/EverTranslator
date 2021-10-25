@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory android:title="@string/pref_category_floating_bar">
-
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_restore_main_bar_position"
+            android:title="@string/pref_member_last_main_bar_position" />
         <!--        <SwitchPreference-->
         <!--            android:defaultValue="false"-->
         <!--            android:key="pref_use_simple_style"-->
@@ -41,6 +44,17 @@
     <!--            android:title="@string/pref_joiner_between_text_blocks"-->
     <!--            app:useSimpleSummaryProvider="true" />-->
     <!--    </PreferenceCategory>-->
+
+    <PreferenceCategory android:title="@string/pref_result_panel">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_auto_copy_ocr_result"
+            android:title="@string/pref_auto_copy_the_recognized_result" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_hide_recognized_result_after_translated"
+            android:title="@string/pref_hide_recognized_result_after_translated" />
+    </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_other_settings">
         <SwitchPreference

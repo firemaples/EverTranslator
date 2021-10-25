@@ -20,6 +20,10 @@
     <string name="pref_other_settings">其他设定</string>
     <string name="pref_save_last_selected_area">储存最后一次的选取区域</string>
     <string name="pref_exit_app_while_spen_inserted">当 S Pen 插入时关闭 app (Samsung 专用)</string>
+    <string name="pref_member_last_main_bar_position">记住悬浮条最后的位置</string>
+    <string name="pref_result_panel">结果视窗</string>
+    <string name="pref_auto_copy_the_recognized_result">自动複製辨识结果文字</string>
+    <string name="pref_hide_recognized_result_after_translated">翻译后隐藏辨识结果</string>
 
     <string name="menu_setting">设定</string>
     <string name="menu_privacy_policy">隐私声明</string>

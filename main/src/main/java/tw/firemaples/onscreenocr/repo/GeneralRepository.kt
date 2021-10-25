@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.repo
 
 import android.content.Context
+import android.graphics.Point
 import android.graphics.Rect
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -82,6 +83,18 @@ class GeneralRepository {
         }.toList()
 
         emit(result)
+    }.flowOn(Dispatchers.Default)
+
+    suspend fun saveLastMainBarPosition(x: Int, y: Int) {
+        AppPref.lastMainBarPosition = Point(x, y)
+    }
+
+    fun isAutoCopyOCRResult(): Flow<Boolean> = flow {
+        emit(SettingManager.autoCopyOCRResult)
+    }.flowOn(Dispatchers.Default)
+
+    fun hideRecognizedTextAfterTranslated(): Flow<Boolean> = flow {
+        emit(SettingManager.hideRecognizedResultAfterTranslated)
     }.flowOn(Dispatchers.Default)
 
     data class Record(val version: String, val desc: String)

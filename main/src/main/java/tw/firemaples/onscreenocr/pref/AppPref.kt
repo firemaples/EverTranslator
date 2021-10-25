@@ -1,10 +1,12 @@
 package tw.firemaples.onscreenocr.pref
 
+import android.graphics.Point
 import android.graphics.Rect
 import com.chibatching.kotpref.Kotpref
 import com.chibatching.kotpref.KotprefModel
 import com.chibatching.kotpref.gsonpref.gson
 import com.chibatching.kotpref.gsonpref.gsonNullablePref
+import com.chibatching.kotpref.gsonpref.gsonPref
 import com.google.gson.Gson
 import tw.firemaples.onscreenocr.utils.Constants
 
@@ -26,4 +28,6 @@ object AppPref : KotprefModel() {
     var lastReadmeShownVersion: String? by nullableStringPref(default = null)
 
     var firebaseRemoteConfigFetchInterval: Long by longPref(default = 43200)
+
+    var lastMainBarPosition: Point by gsonPref(default = Point(0, 0))
 }

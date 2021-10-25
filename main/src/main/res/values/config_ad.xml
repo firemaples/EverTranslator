@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="admob_application_id" translatable="false" />
+    <string name="admob_application_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
 
     <string name="mopub_ad_unit_id_permission_page_banner" translatable="false" />
     <string name="mopub_ad_unit_id_setting_page_banner" translatable="false" />

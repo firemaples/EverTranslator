@@ -67,6 +67,7 @@ class ResultView(context: Context) : FloatingView(context) {
         val tvOCRText: TextView = rootView.findViewById(R.id.tv_ocrText)
         val tvTranslatedText: TextView = rootView.findViewById(R.id.tv_translatedText)
 
+        val groupRecognitionViews: Group = rootView.findViewById(R.id.group_recognitionViews)
         val groupTranslationViews: Group = rootView.findViewById(R.id.group_translationViews)
 
         val tvTranslationProvider: TextView = rootView.findViewById(R.id.tv_translationProvider)
@@ -89,6 +90,9 @@ class ResultView(context: Context) : FloatingView(context) {
             tvTranslatedText.text = it
         }
 
+        viewModel.displayRecognitionBlock.observe(lifecycleOwner) {
+            groupRecognitionViews.showOrHide(it)
+        }
         viewModel.displayTranslatedBlock.observe(lifecycleOwner) {
             groupTranslationViews.showOrHide(it)
         }
@@ -104,6 +108,10 @@ class ResultView(context: Context) : FloatingView(context) {
             val (boundingBoxes, unionRect) = it
             boundingBoxView.boundingBoxes = boundingBoxes
             updateSelectedAreas(unionRect)
+        }
+
+        viewModel.copyRecognizedText.observe(lifecycleOwner) {
+            Utils.copyToClipboard(LABEL_RECOGNIZED_TEXT, it)
         }
 
         tvOCRText.movementMethod = ScrollingMovementMethod()
