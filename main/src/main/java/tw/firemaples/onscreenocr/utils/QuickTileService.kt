@@ -44,10 +44,7 @@ class QuickTileService : TileService() {
         if (ScreenExtractor.isGranted) {
             FloatingStateManager.toggleMainBar()
         } else {
-            val intent = Intent(this, LaunchActivity::class.java).apply {
-                flags += Intent.FLAG_ACTIVITY_NEW_TASK
-            }
-            startActivityAndCollapse(intent)
+            startActivityAndCollapse(LaunchActivity.getLaunchIntent(this))
         }
     }
 
