@@ -1,5 +1,6 @@
 package tw.firemaples.onscreenocr.pref
 
+import android.graphics.PixelFormat
 import android.graphics.Point
 import android.graphics.Rect
 import com.chibatching.kotpref.Kotpref
@@ -30,4 +31,6 @@ object AppPref : KotprefModel() {
     var firebaseRemoteConfigFetchInterval: Long by longPref(default = 43200)
 
     var lastMainBarPosition: Point by gsonPref(default = Point(0, 0))
+
+    var imageReaderFormat: Int by intPref(default = PixelFormat.RGBA_8888)
 }

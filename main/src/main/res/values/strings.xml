@@ -54,6 +54,7 @@
     <string name="msg_click_to_hide_the_floating_bar">Click to hide the floating bar</string>
     <string name="msg_recreate_selection_area">Drag here to recreate a translation area, pinch in/out to zoom the selected area</string>
     <string name="msg_create_selection_area">Drag here to create a translation area</string>
+    <string name="msg_image_reader_format_unmatched">Found temporary error, please try it again. (Image reader format)</string>
 
     <string name="title_version_history">Version History</string>
     <string name="title_error">Error</string>

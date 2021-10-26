@@ -55,6 +55,7 @@
     <string name="msg_click_to_hide_the_floating_bar">点击隐藏浮动视窗</string>
     <string name="msg_recreate_selection_area">在此拖曳以重新建立选取区，双指开合以缩放</string>
     <string name="msg_create_selection_area">在此拖曳以建立选取区</string>
+    <string name="msg_image_reader_format_unmatched">发现暂时性错误，请再试一次(1) (Image reader format)</string>
 
     <string name="title_version_history">版本资讯</string>
     <string name="title_error">错误</string>

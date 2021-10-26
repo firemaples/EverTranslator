@@ -11,4 +11,8 @@ object Constants {
     const val TIMEOUT_EXTRACT_SCREEN = 1000L
 
     const val PACKAGE_NAME_GOOGLE_TRANSLATE = "com.google.android.apps.translate"
+
+    val regexForImageReaderFormatError: Regex by lazy {
+        "The producer output buffer format 0x(\\d+) doesn't match the ImageReader's configured buffer format 0x\\d+".toRegex()
+    }
 }
