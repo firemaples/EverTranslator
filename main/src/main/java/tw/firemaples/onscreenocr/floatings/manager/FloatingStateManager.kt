@@ -155,6 +155,7 @@ object FloatingStateManager {
                 FirebaseEvent.logStartOCR(recognizer.name)
                 val result = recognizer.recognize(croppedBitmap)
                 logger.debug("On text recognized: $result")
+                croppedBitmap.recycle()
                 FirebaseEvent.logOCRFinished(recognizer.name)
                 resultView.textRecognized(result, parent, selected)
                 startTranslation(result)
