@@ -12,6 +12,7 @@ import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
 import android.media.Image
 import android.media.ImageReader
+import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Handler
 import android.os.HandlerThread
@@ -19,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.UIUtils
@@ -93,50 +95,59 @@ object ScreenExtractor {
 
             val mpManager =
                 context.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-            val projection =
-                mpManager.getMediaProjection(Activity.RESULT_OK, mpIntent.clone() as Intent)
 
-            if (projection == null) {
-                logger.warn("Retrieve projection failed, projection: $projection")
-                throw IllegalStateException("Retrieving media projection failed")
-            }
+            var projection: MediaProjection? = null
+            var imageReader: ImageReader? = null
+            var image: Image? = null
 
-            val size = UIUtils.readSize
-            val width = size.x
-            val height = size.y
+            try {
+                projection =
+                    mpManager.getMediaProjection(Activity.RESULT_OK, mpIntent.clone() as Intent)
 
-            val imageReader =
-                ImageReader.newInstance(width, height, PixelFormat.RGBA_8888, 2)
+                if (projection == null) {
+                    logger.warn("Retrieve projection failed, projection: $projection")
+                    throw IllegalStateException("Retrieving media projection failed")
+                }
 
-            virtualDisplay = projection.createVirtualDisplay(
-                "screen-mirror",
-                width, height, screenDensityDpi,
-                DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC,
-                imageReader.surface, null, null
-            )
+                val size = UIUtils.readSize
+                val width = size.x
+                val height = size.y
 
-            logger.debug("waitForImage")
-            val image = withTimeout(Constants.TIMEOUT_EXTRACT_SCREEN) {
-                imageReader.waitForImage()
-            }
+                imageReader =
+                    ImageReader.newInstance(width, height, PixelFormat.RGBA_8888, 2)
 
-            virtualDisplay?.release()
+                virtualDisplay = projection.createVirtualDisplay(
+                    "screen-mirror",
+                    width, height, screenDensityDpi,
+                    DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC,
+                    imageReader.surface, null, null
+                )
 
-            if (image == null) {
-                logger.warn("The captured image is null")
-                imageReader.close()
-                throw IllegalStateException("No image data found")
-            }
+                logger.debug("waitForImage")
+                image = withTimeout(Constants.TIMEOUT_EXTRACT_SCREEN) {
+                    imageReader.waitForImage()
+                }
 
-            bitmap = try {
-                image.decodeBitmap(size)
+                virtualDisplay?.release()
+
+                if (image == null) {
+                    logger.warn("The captured image is null")
+                    imageReader.close()
+                    throw IllegalStateException("No image data found")
+                }
+
+                bitmap = image.decodeBitmap(size)
+
+                logger.debug("Bitmap size: ${bitmap.width}x${bitmap.height}, screen size: ${width}x$height")
             } finally {
-                image.close()
-                imageReader.close()
-                projection.stop()
+                image?.close()
+                try {
+                    imageReader?.close()
+                } catch (e: Exception) {
+                    FirebaseEvent.logException(e)
+                }
+                projection?.stop()
             }
-
-            logger.debug("Bitmap size: ${bitmap.width}x${bitmap.height}, screen size: ${width}x$height")
         }
 
         return bitmap
