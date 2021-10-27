@@ -109,7 +109,7 @@ class ViewHolderService : Service() {
     }
 
     private fun hideViews() {
-        FloatingStateManager.hideMainBar()
+        FloatingStateManager.detachAllViews()
     }
 
     private fun exit() {
