@@ -7,6 +7,7 @@ import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Utils
+import tw.firemaples.onscreenocr.utils.firstPart
 
 interface Translator {
     companion object {
@@ -30,6 +31,9 @@ interface Translator {
         get() = null
 
     suspend fun checkEnvironment(coroutineScope: CoroutineScope): Boolean = true
+
+    suspend fun isLangSupport(): Boolean =
+        supportedLanguages().any { it.code.firstPart() == AppPref.selectedOCRLang.firstPart() }
 
     suspend fun supportedLanguages(): List<TranslationLanguage> = emptyList()
     suspend fun translate(text: String, sourceLangCode: String): TranslationResult
@@ -97,6 +101,7 @@ sealed class TranslationResult {
 
     data class TranslationFailed(val error: Throwable) : TranslationResult()
 
+    data class SourceLangNotSupport(val type: TranslationProviderType) : TranslationResult()
     object OCROnlyResult : TranslationResult()
     object OuterTranslatorLaunched : TranslationResult()
 }

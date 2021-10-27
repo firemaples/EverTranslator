@@ -1,14 +1,18 @@
 package tw.firemaples.onscreenocr.floatings.translationSelectPanel
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
 import tw.firemaples.onscreenocr.repo.OCRRepository
 import tw.firemaples.onscreenocr.repo.TranslationRepository
 import tw.firemaples.onscreenocr.translator.TranslationProvider
+import tw.firemaples.onscreenocr.utils.Utils
+import tw.firemaples.onscreenocr.utils.firstPart
 
 class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
     FloatingViewModel(viewScope) {
@@ -28,6 +32,8 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
 
     private val _displayTranslationHint = MutableLiveData<String?>()
     val displayTranslationHint: LiveData<String?> = _displayTranslationHint
+
+    private val context: Context by lazy { Utils.context }
 
     private val ocrRepo = OCRRepository()
     private val translationRepo = TranslationRepository()
@@ -49,13 +55,24 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
     private suspend fun loadTranslationLanguageList(providerKey: String) {
         val translationLanguages =
             translationRepo.getTranslationLanguageList(providerKey).first()
+
         if (translationLanguages.isEmpty()) {
             _displayTranslationHint.value = translationRepo.getTranslationHint(providerKey).first()
             _translationLangList.value = emptyList()
         } else {
-            _displayTranslationHint.value = null
-            _translationLangList.value = translationLanguages
-                .map { LangItem(it.code, it.displayName, it.selected) }
+            val selectedOCRLang = ocrRepo.selectedOCRLangFlow.first()
+
+            if (translationLanguages.any {
+                    it.code.firstPart() == selectedOCRLang.firstPart()
+                }) {
+                _displayTranslationHint.value = null
+                _translationLangList.value = translationLanguages
+                    .map { LangItem(it.code, it.displayName, it.selected) }
+            } else {
+                _displayTranslationHint.value =
+                    context.getString(R.string.msg_translator_provider_does_not_support_the_ocr_lang)
+                _translationLangList.value = emptyList()
+            }
         }
     }
 
@@ -66,6 +83,8 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
             _ocrLanguageList.value = ocrLangList.map {
                 it.copy(selected = it.code == langCode)
             }
+
+            loadTranslationLanguageList(translationRepo.selectedProviderTypeFlow.first().key)
         }
     }
 

@@ -56,6 +56,7 @@
     <string name="msg_recreate_selection_area">在此拖曳以重新建立選取區，雙指開合以縮放</string>
     <string name="msg_create_selection_area">在此拖曳以建立選取區</string>
     <string name="msg_image_reader_format_unmatched">發現暫時性錯誤，請再試一次(1) (Image reader format)</string>
+    <string name="msg_translator_provider_does_not_support_the_ocr_lang">此翻譯引擎不支援選擇的辨識語言</string>
 
     <string name="title_version_history">版本資訊</string>
     <string name="title_error">錯誤</string>

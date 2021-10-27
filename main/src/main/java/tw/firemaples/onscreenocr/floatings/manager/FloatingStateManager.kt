@@ -199,6 +199,18 @@ object FloatingStateManager {
                         FirebaseEvent.logTranslationTextFinished(translator)
                         backToIdle()
                     }
+                    is TranslationResult.SourceLangNotSupport -> {
+                        FirebaseEvent.logTranslationSourceLangNotSupport(
+                            translator, recognitionResult.langCode,
+                        )
+                        showResult(
+                            Result.SourceLangNotSupport(
+                                ocrText = recognitionResult.result,
+                                boundingBoxes = recognitionResult.boundingBoxes,
+                                providerType = translationResult.type,
+                            )
+                        )
+                    }
                     TranslationResult.OCROnlyResult -> {
                         FirebaseEvent.logTranslationTextFinished(translator)
                         showResult(
@@ -325,6 +337,12 @@ sealed class Result(
         override val ocrText: String,
         override val boundingBoxes: List<Rect>,
         val translatedText: String,
+        val providerType: TranslationProviderType,
+    ) : Result(ocrText, boundingBoxes)
+
+    data class SourceLangNotSupport(
+        override val ocrText: String,
+        override val boundingBoxes: List<Rect>,
         val providerType: TranslationProviderType,
     ) : Result(ocrText, boundingBoxes)
 

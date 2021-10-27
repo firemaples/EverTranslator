@@ -42,6 +42,7 @@ private const val EVENT_OCR_FINISHED = "ocr_finished"
 private const val EVENT_START_TRANSLATION_TEXT = "start_translation_text"
 private const val EVENT_TRANSLATION_TEXT_FINISHED = "translation_text_finished"
 private const val EVENT_TRANSLATION_TEXT_FAILED = "translation_text_failed"
+private const val EVENT_TRANSLATION_SOURCE_LANG_NOT_SUPPORT = "translation_source_lang_not_support"
 
 private const val EVENT_SHOW_RESULT_WINDOW = "show_result_window"
 private const val EVENT_SHOW_GOOGLE_TRANSLATE_WINDOW = "show_google_translate_window"
@@ -209,6 +210,16 @@ object FirebaseEvent {
         val serviceName = translator.type.name
         logEvent(EVENT_TRANSLATION_TEXT_FINISHED, Bundle().apply {
             putString("translate_service", serviceName)
+        })
+    }
+
+    fun logTranslationSourceLangNotSupport(translator: Translator, fromLang: String) {
+        PerformanceTracer.stopTracing(TRACE_TRANSLATE_TEXT, false)
+
+        val serviceName = translator.type.name
+        logEvent(EVENT_TRANSLATION_SOURCE_LANG_NOT_SUPPORT, Bundle().apply {
+            putString("translate_service", serviceName)
+            putString("translate_from", fromLang)
         })
     }
 

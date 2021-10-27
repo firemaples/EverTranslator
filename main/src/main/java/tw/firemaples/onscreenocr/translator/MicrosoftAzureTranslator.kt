@@ -5,7 +5,9 @@ import io.github.firemaples.translate.Translate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
+import tw.firemaples.onscreenocr.utils.firstPart
 
 object MicrosoftAzureTranslator : Translator {
     override val type: TranslationProviderType
@@ -31,12 +33,22 @@ object MicrosoftAzureTranslator : Translator {
     }
 
     override suspend fun translate(text: String, sourceLangCode: String): TranslationResult {
+        if (!isLangSupport()) {
+            return TranslationResult.SourceLangNotSupport(type)
+        }
+
         if (text.isBlank()) {
             return TranslationResult.TranslatedResult(result = "", type)
         }
 
-        val targetLang = supportedLanguages().firstOrNull { it.selected }?.code
-            ?.let { Language.fromString(it) }
+        val targetLangCode = supportedLanguages().firstOrNull { it.selected }?.code
+            ?: return TranslationResult.TranslationFailed(IllegalArgumentException("The selected translation language is not found"))
+
+        if (AppPref.selectedOCRLang.firstPart() == targetLangCode) {
+            return TranslationResult.TranslatedResult(result = text, type)
+        }
+
+        val targetLang = targetLangCode.let { Language.fromString(it) }
 
         Translate.setSubscriptionKey(RemoteConfigManager.microsoftTranslationKey)
 

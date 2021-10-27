@@ -12,6 +12,7 @@ import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.pref.AppPref
+import tw.firemaples.onscreenocr.utils.firstPart
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -51,6 +52,10 @@ object GoogleMLKitTranslator : Translator {
         checkTranslationResources(coroutineScope)
 
     override suspend fun translate(text: String, sourceLangCode: String): TranslationResult {
+        if (!isLangSupport()) {
+            return TranslationResult.SourceLangNotSupport(type)
+        }
+
         val targetLangCode = supportedLanguages().firstOrNull { it.selected }?.code
             ?: return TranslationResult.TranslationFailed(IllegalArgumentException("Selected language code is not found"))
         val sourceLang = TranslateLanguage.fromLanguageTag(sourceLangCode)
@@ -98,7 +103,10 @@ object GoogleMLKitTranslator : Translator {
     }
 
     private suspend fun checkTranslationResources(coroutineScope: CoroutineScope): Boolean {
-        val langList = listOf(AppPref.selectedOCRLang, AppPref.selectedTranslationLang)
+        val langList = supportedLanguages().filter {
+            it.code.firstPart() == AppPref.selectedOCRLang.firstPart()
+                    || it.code.firstPart() == AppPref.selectedTranslationLang.firstPart()
+        }.map { it.code }.toList()
 
         val langToDownload = try {
             checkResources(langList)

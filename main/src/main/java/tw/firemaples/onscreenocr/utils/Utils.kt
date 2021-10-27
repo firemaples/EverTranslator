@@ -47,3 +47,5 @@ object Utils {
         }
     }
 }
+
+fun String.firstPart(): String = split("-")[0]

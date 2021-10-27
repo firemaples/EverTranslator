@@ -26,8 +26,8 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
     private val _ocrText = MutableLiveData<String?>()
     val ocrText: LiveData<String?> = _ocrText
 
-    private val _translatedText = MutableLiveData<String?>()
-    val translatedText: LiveData<String?> = _translatedText
+    private val _translatedText = MutableLiveData<Pair<String, Int>?>()
+    val translatedText: LiveData<Pair<String, Int>?> = _translatedText
 
     private val _displayRecognitionBlock = MutableLiveData<Boolean>()
     val displayRecognitionBlock: LiveData<Boolean> = _displayRecognitionBlock
@@ -135,11 +135,15 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
 
             when (result) {
                 is Result.Translated -> {
-                    _translatedText.value = result.translatedText
+                    _translatedText.value = result.translatedText to R.color.foregroundSecond
 
                     if (repo.hideRecognizedTextAfterTranslated().first()) {
                         _displayRecognitionBlock.value = false
                     }
+                }
+                is Result.SourceLangNotSupport -> {
+                    _translatedText.value =
+                        context.getString(R.string.msg_translator_provider_does_not_support_the_ocr_lang) to R.color.alert
                 }
                 is Result.OCROnly -> {
                 }

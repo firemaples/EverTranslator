@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
+import androidx.core.content.ContextCompat
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.floatings.dialog.DialogView
@@ -87,7 +88,15 @@ class ResultView(context: Context) : FloatingView(context) {
             tvOCRText.text = it
         }
         viewModel.translatedText.observe(lifecycleOwner) {
-            tvTranslatedText.text = it
+            if (it == null) {
+                tvTranslatedText.text = null
+            } else {
+                val (text, color) = it
+                tvTranslatedText.text = text
+                tvTranslatedText.setTextColor(ContextCompat.getColor(context, color))
+            }
+
+            reposition()
         }
 
         viewModel.displayRecognitionBlock.observe(lifecycleOwner) {

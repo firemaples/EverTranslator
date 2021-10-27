@@ -73,6 +73,7 @@
             android:layout_height="wrap_content"
             android:fadeScrollbars="false"
             android:scrollbars="vertical"
+            android:textColor="@color/foregroundSecond"
             tools:text="The original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \n\nThe original text \n\nThe original text \n\nThe original text \n\nThe original text \n\nThe original text \n\nThe original text \n" />
 
     </LinearLayout>
@@ -136,6 +137,7 @@
             android:layout_height="wrap_content"
             android:fadeScrollbars="false"
             android:scrollbars="vertical"
+            android:textColor="@color/foregroundSecond"
             tools:text="The translated \nThe translated \nThe translated \nThe translated \nThe translated \nThe translated \nThe translated \nThe translated \nThe translated \nThe translated \nThe translated \nThe translated \nThe translated \nThe translated \nThe translated \nThe translated \nThe translated \nThe translated \nThe translated \nThe translated \n" />
 
     </LinearLayout>
