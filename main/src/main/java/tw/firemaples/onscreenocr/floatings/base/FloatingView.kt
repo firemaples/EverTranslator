@@ -24,6 +24,14 @@ import kotlin.coroutines.CoroutineContext
 
 abstract class FloatingView(protected val context: Context) {
 
+    companion object {
+        private val attachedFloatingViews: MutableList<FloatingView> = mutableListOf()
+
+        fun detachAllFloatingViews() {
+            attachedFloatingViews.toList().forEach { it.detachFromScreen() }
+        }
+    }
+
     private val logger: Logger by lazy { Logger(this::class) }
 
     private val windowManager: WindowManager by lazy { context.getSystemService(Context.WINDOW_SERVICE) as WindowManager }
@@ -109,6 +117,8 @@ abstract class FloatingView(protected val context: Context) {
 
         lifecycleOwner.onStateChanged(Lifecycle.State.RESUMED)
 
+        attachedFloatingViews.add(this)
+
         attached = true
     }
 
@@ -129,6 +139,8 @@ abstract class FloatingView(protected val context: Context) {
         windowManager.removeView(rootView)
 
         lifecycleOwner.onStateChanged(Lifecycle.State.CREATED)
+
+        attachedFloatingViews.remove(this)
 
         attached = false
     }

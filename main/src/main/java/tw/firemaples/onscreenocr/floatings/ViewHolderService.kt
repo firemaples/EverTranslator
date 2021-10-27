@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
+import tw.firemaples.onscreenocr.pages.launch.LaunchActivity
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
 import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
@@ -100,11 +101,15 @@ class ViewHolderService : Service() {
     }
 
     private fun showViews() {
-        FloatingStateManager.showMainBar()
+        if (ScreenExtractor.isGranted) {
+            FloatingStateManager.showMainBar()
+        } else {
+            startActivity(LaunchActivity.getLaunchIntent(this))
+        }
     }
 
     private fun hideViews() {
-        FloatingStateManager.hideMainBar()
+        FloatingStateManager.detachAllViews()
     }
 
     private fun exit() {

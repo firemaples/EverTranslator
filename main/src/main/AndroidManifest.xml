@@ -12,6 +12,10 @@
 
     <queries>
         <package android:name="com.google.android.apps.translate" />
+
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT" />
+        </intent>
     </queries>
 
     <application

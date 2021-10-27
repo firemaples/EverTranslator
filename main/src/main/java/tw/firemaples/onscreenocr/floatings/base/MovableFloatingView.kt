@@ -119,6 +119,10 @@ abstract class MovableFloatingView(context: Context) : FloatingView(context) {
     }
 
     //region Moving to edge
+    fun moveToEdgeIfEnabled() {
+        rootView.post { if (moveToEdgeAfterMoved) moveToEdge() }
+    }
+
     private fun moveToEdge() {
         val params = params
 

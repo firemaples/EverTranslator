@@ -97,22 +97,27 @@ class MainBar(context: Context) : MovableFloatingView(context) {
 
         viewModel.languageText.observe(lifecycleOwner) {
             tvLang.text = it
+            moveToEdgeIfEnabled()
         }
 
         viewModel.displayGoogleTranslateIcon.observe(lifecycleOwner) {
             ivGoogleTranslator.showOrHide(it)
+            moveToEdgeIfEnabled()
         }
 
         viewModel.displaySelectButton.observe(lifecycleOwner) {
             btSelect.showOrHide(it)
+            moveToEdgeIfEnabled()
         }
 
         viewModel.displayTranslateButton.observe(lifecycleOwner) {
             btTranslate.showOrHide(it)
+            moveToEdgeIfEnabled()
         }
 
         viewModel.displayCloseButton.observe(lifecycleOwner) {
             btClose.showOrHide(it)
+            moveToEdgeIfEnabled()
         }
 
         viewModel.displayMenuItems.observe(lifecycleOwner) {

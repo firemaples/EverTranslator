@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.floatings.main.MainBar
 import tw.firemaples.onscreenocr.floatings.result.ResultView
@@ -21,6 +22,7 @@ import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.translator.TranslationResult
 import tw.firemaples.onscreenocr.translator.Translator
+import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.Utils
 import kotlin.reflect.KClass
@@ -62,12 +64,8 @@ object FloatingStateManager {
     private var selectedRect: Rect? = null
     private var croppedBitmap: Bitmap? = null
 
-    fun toggleMainBar() {
-        if (isMainBarAttached) hideMainBar()
-        else showMainBar()
-    }
-
     fun showMainBar() {
+        if (isMainBarAttached) return
         mainBar.attachToScreen()
         scope.launch {
             _showingStateChangedFlow.emit(true)
@@ -75,6 +73,7 @@ object FloatingStateManager {
     }
 
     fun hideMainBar() {
+        if (!isMainBarAttached) return
         mainBar.detachFromScreen()
         scope.launch {
             _showingStateChangedFlow.emit(false)
@@ -84,6 +83,14 @@ object FloatingStateManager {
     private fun arrangeMainBarToTop() {
         mainBar.detachFromScreen()
         mainBar.attachToScreen()
+    }
+
+    fun detachAllViews() {
+        backToIdle()
+        scope.launch {
+            hideMainBar()
+            FloatingView.detachAllFloatingViews()
+        }
     }
 
     fun startScreenCircling() = stateIn(State.Idle::class) {
@@ -160,11 +167,15 @@ object FloatingStateManager {
                 resultView.textRecognized(result, parent, selected)
                 startTranslation(result)
             } catch (e: Exception) {
+                val error =
+                    if (e.message?.contains(Constants.errorInputImageIsTooSmall) == true) {
+                        context.getString(R.string.error_selected_area_too_small)
+                    } else
+                        e.message
+                            ?: context.getString(R.string.error_an_unknown_error_found_while_recognition_text)
+
                 logger.warn(t = e)
-                showError(
-                    e.message
-                        ?: context.getString(R.string.error_an_unknown_error_found_while_recognition_text)
-                )
+                showError(error)
                 FirebaseEvent.logOCRFailed(TextRecognizer.getRecognizer().name, e)
             }
         }
@@ -191,6 +202,18 @@ object FloatingStateManager {
                     TranslationResult.OuterTranslatorLaunched -> {
                         FirebaseEvent.logTranslationTextFinished(translator)
                         backToIdle()
+                    }
+                    is TranslationResult.SourceLangNotSupport -> {
+                        FirebaseEvent.logTranslationSourceLangNotSupport(
+                            translator, recognitionResult.langCode,
+                        )
+                        showResult(
+                            Result.SourceLangNotSupport(
+                                ocrText = recognitionResult.result,
+                                boundingBoxes = recognitionResult.boundingBoxes,
+                                providerType = translationResult.type,
+                            )
+                        )
                     }
                     TranslationResult.OCROnlyResult -> {
                         FirebaseEvent.logTranslationTextFinished(translator)
@@ -249,14 +272,11 @@ object FloatingStateManager {
         }
     }
 
-    private fun backToIdle() =
-        stateIn(
-            State.TextTranslating::class,
-            State.ResultDisplaying::class,
-            State.ErrorDisplaying::class
-        ) {
-            changeState(State.Idle)
+    fun backToIdle() =
+        scope.launch {
+            if (currentState != State.Idle) changeState(State.Idle)
             resultView.backToIdle()
+            showMainBar()
         }
 
     private fun stateIn(
@@ -274,9 +294,13 @@ object FloatingStateManager {
             State.ScreenCircling -> arrayOf(State.Idle::class, State.ScreenCircled::class)
             State.ScreenCircled -> arrayOf(State.Idle::class, State.ScreenCapturing::class)
             State.ScreenCapturing ->
-                arrayOf(State.TextRecognizing::class, State.ErrorDisplaying::class)
+                arrayOf(
+                    State.Idle::class, State.TextRecognizing::class, State.ErrorDisplaying::class
+                )
             State.TextRecognizing ->
-                arrayOf(State.TextTranslating::class, State.ErrorDisplaying::class)
+                arrayOf(
+                    State.Idle::class, State.TextTranslating::class, State.ErrorDisplaying::class
+                )
             State.TextTranslating ->
                 arrayOf(
                     State.ResultDisplaying::class, State.ErrorDisplaying::class, State.Idle::class
@@ -317,6 +341,12 @@ sealed class Result(
         override val ocrText: String,
         override val boundingBoxes: List<Rect>,
         val translatedText: String,
+        val providerType: TranslationProviderType,
+    ) : Result(ocrText, boundingBoxes)
+
+    data class SourceLangNotSupport(
+        override val ocrText: String,
+        override val boundingBoxes: List<Rect>,
         val providerType: TranslationProviderType,
     ) : Result(ocrText, boundingBoxes)
 

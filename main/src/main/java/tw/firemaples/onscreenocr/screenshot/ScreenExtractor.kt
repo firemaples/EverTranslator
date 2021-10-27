@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.PixelFormat
 import android.graphics.Point
 import android.graphics.Rect
 import android.hardware.display.DisplayManager
@@ -20,7 +19,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.log.FirebaseEvent
+import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.UIUtils
@@ -114,7 +115,7 @@ object ScreenExtractor {
                 val height = size.y
 
                 imageReader =
-                    ImageReader.newInstance(width, height, PixelFormat.RGBA_8888, 2)
+                    ImageReader.newInstance(width, height, AppPref.imageReaderFormat, 2)
 
                 virtualDisplay = projection.createVirtualDisplay(
                     "screen-mirror",
@@ -139,6 +140,25 @@ object ScreenExtractor {
                 bitmap = image.decodeBitmap(size)
 
                 logger.debug("Bitmap size: ${bitmap.width}x${bitmap.height}, screen size: ${width}x$height")
+            } catch (e: Exception) {
+                logger.warn(t = e)
+
+                val message = e.message ?: e.localizedMessage
+                if (message != null) {
+                    val match = Constants.regexForImageReaderFormatError.find(message)
+                    val formatValue = match?.groupValues?.get(1)?.toIntOrNull()
+                    if (formatValue != null) {
+                        val msg =
+                            "Format not matched error found, change the image reader format from ${AppPref.imageReaderFormat} to $formatValue"
+                        logger.warn(msg)
+                        AppPref.imageReaderFormat = formatValue
+                        FirebaseEvent.logException(Exception(msg, e))
+
+                        throw Exception(context.getString(R.string.msg_image_reader_format_unmatched))
+                    }
+                }
+
+                throw e
             } finally {
                 image?.close()
                 try {
@@ -169,7 +189,10 @@ object ScreenExtractor {
 
         val rect = Rect(left, top, right, bottom)
 
-        val cropped = Bitmap.createBitmap(bitmap, rect.left, rect.top, rect.width(), rect.height())
+        val width = rect.width().coerceAtMost(bitmap.width - rect.left)
+        val height = rect.height().coerceAtMost(bitmap.height - rect.top)
+
+        val cropped = Bitmap.createBitmap(bitmap, rect.left, rect.top, width, height)
         logger.debug("cropped bitmap: ${cropped.width}x${cropped.height}")
 
         return cropped
