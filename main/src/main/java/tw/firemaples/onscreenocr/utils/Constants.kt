@@ -15,4 +15,6 @@ object Constants {
     val regexForImageReaderFormatError: Regex by lazy {
         "The producer output buffer format 0x(\\d+) doesn't match the ImageReader's configured buffer format 0x\\d+".toRegex()
     }
+
+    const val errorInputImageIsTooSmall: String = "InputImage width and height should be at least"
 }

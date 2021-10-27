@@ -71,6 +71,7 @@
     <string name="error_unknown_error_capturing_screen">撷取萤幕时发生未知错误。</string>
     <string name="error_unknown">未知错误</string>
     <string name="error_google_translate_is_not_found">您尚未安装 Google 翻译 app，当前选择的翻译引擎需要此 app 来翻译，请点击确认开启 Play 商店下载，或改用其他翻译引擎。</string>
+    <string name="error_selected_area_too_small">选择的区域过小，请加大选择区域。</string>
 
     <string-array name="textBlockJoinersNames">
         <item>换行字元</item>

@@ -70,6 +70,7 @@
     <string name="error_unknown_error_capturing_screen">An unknown error found while capturing screen</string>
     <string name="error_unknown">Unknown error</string>
     <string name="error_google_translate_is_not_found">The Google Translate app is not found on your device, this provider depends on the app, please click the OK button to install it on PlayStore or change to another translation provider.</string>
+    <string name="error_selected_area_too_small">The selected area is too small, please enlarge it.</string>
 
     <string-array name="textBlockJoinersNames">
         <item>Line-breaker</item>

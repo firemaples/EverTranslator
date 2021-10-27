@@ -21,6 +21,7 @@ import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.translator.TranslationResult
 import tw.firemaples.onscreenocr.translator.Translator
+import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.Utils
 import kotlin.reflect.KClass
@@ -162,11 +163,15 @@ object FloatingStateManager {
                 resultView.textRecognized(result, parent, selected)
                 startTranslation(result)
             } catch (e: Exception) {
+                val error =
+                    if (e.message?.contains(Constants.errorInputImageIsTooSmall) == true) {
+                        context.getString(R.string.error_selected_area_too_small)
+                    } else
+                        e.message
+                            ?: context.getString(R.string.error_an_unknown_error_found_while_recognition_text)
+
                 logger.warn(t = e)
-                showError(
-                    e.message
-                        ?: context.getString(R.string.error_an_unknown_error_found_while_recognition_text)
-                )
+                showError(error)
                 FirebaseEvent.logOCRFailed(TextRecognizer.getRecognizer().name, e)
             }
         }
