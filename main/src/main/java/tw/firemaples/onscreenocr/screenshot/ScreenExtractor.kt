@@ -189,7 +189,10 @@ object ScreenExtractor {
 
         val rect = Rect(left, top, right, bottom)
 
-        val cropped = Bitmap.createBitmap(bitmap, rect.left, rect.top, rect.width(), rect.height())
+        val width = rect.width().coerceAtMost(bitmap.width - rect.left)
+        val height = rect.height().coerceAtMost(bitmap.height - rect.top)
+
+        val cropped = Bitmap.createBitmap(bitmap, rect.left, rect.top, width, height)
         logger.debug("cropped bitmap: ${cropped.width}x${cropped.height}")
 
         return cropped
