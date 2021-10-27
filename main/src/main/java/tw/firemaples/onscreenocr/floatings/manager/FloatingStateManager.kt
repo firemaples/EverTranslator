@@ -68,6 +68,7 @@ object FloatingStateManager {
     }
 
     fun showMainBar() {
+        if (isMainBarAttached) return
         mainBar.attachToScreen()
         scope.launch {
             _showingStateChangedFlow.emit(true)
@@ -75,6 +76,7 @@ object FloatingStateManager {
     }
 
     fun hideMainBar() {
+        if (!isMainBarAttached) return
         mainBar.detachFromScreen()
         scope.launch {
             _showingStateChangedFlow.emit(false)
@@ -257,6 +259,7 @@ object FloatingStateManager {
         ) {
             changeState(State.Idle)
             resultView.backToIdle()
+            showMainBar()
         }
 
     private fun stateIn(
