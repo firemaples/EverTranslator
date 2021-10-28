@@ -160,13 +160,21 @@ object ScreenExtractor {
 
                 throw e
             } finally {
-                image?.close()
+                try {
+                    projection?.stop()
+                } catch (e: Exception) {
+                    FirebaseEvent.logException(e)
+                }
+                try {
+                    image?.close()
+                } catch (e: Exception) {
+                    FirebaseEvent.logException(e)
+                }
                 try {
                     imageReader?.close()
                 } catch (e: Exception) {
                     FirebaseEvent.logException(e)
                 }
-                projection?.stop()
             }
         }
 

@@ -11,10 +11,7 @@ import android.widget.RelativeLayout
 import androidx.recyclerview.widget.*
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
-import tw.firemaples.onscreenocr.utils.UIUtils
-import tw.firemaples.onscreenocr.utils.dpToPx
-import tw.firemaples.onscreenocr.utils.getViewRect
-import tw.firemaples.onscreenocr.utils.onViewPrepared
+import tw.firemaples.onscreenocr.utils.*
 
 class MenuView(context: Context, private val checkable: Boolean) : FloatingView(context) {
     override val layoutId: Int
@@ -63,7 +60,7 @@ class MenuView(context: Context, private val checkable: Boolean) : FloatingView(
             adapter = this@MenuView.adapter
         }
 
-        viewRoot.setOnClickListener { detachFromScreen() }
+        viewRoot.clickOnce { detachFromScreen() }
     }
 
     fun setAnchor(view: View) {
@@ -141,7 +138,7 @@ class MenuView(context: Context, private val checkable: Boolean) : FloatingView(
 
             holder.button.text = item.name
             holder.radioButton?.isChecked = item.checked
-            holder.itemView.setOnClickListener {
+            holder.itemView.clickOnce {
                 onItemChecked.invoke(item.key)
             }
         }

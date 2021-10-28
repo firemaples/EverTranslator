@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
+import tw.firemaples.onscreenocr.utils.clickOnce
 import tw.firemaples.onscreenocr.utils.setTextOrGone
 import tw.firemaples.onscreenocr.utils.showOrHide
 
@@ -35,11 +36,11 @@ open class DialogView(context: Context) :
     }
 
     private fun setViews() {
-        btOk.setOnClickListener {
+        btOk.clickOnce {
             detachFromScreen()
             onButtonOkClicked?.invoke()
         }
-        btCancel.setOnClickListener {
+        btCancel.clickOnce {
             detachFromScreen()
             onButtonCancelClicked?.invoke()
         }
@@ -73,9 +74,9 @@ open class DialogView(context: Context) :
 
     fun setCancelByClickingOutside(cancelByClickingOutside: Boolean) {
         if (cancelByClickingOutside) {
-            rootView.setOnClickListener { detachFromScreen() }
+            rootView.clickOnce { detachFromScreen() }
         } else {
-            rootView.setOnClickListener(null)
+            rootView.clickOnce {}
         }
     }
 
