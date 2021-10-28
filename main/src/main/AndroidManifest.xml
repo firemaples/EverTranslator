@@ -31,7 +31,10 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_application_id" />
 
-        <activity android:name=".pages.launch.LaunchActivity">
+        <activity
+            android:name=".pages.launch.LaunchActivity"
+            android:exported="true"
+            android:theme="@style/Theme.EverTranslator.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,14 +44,17 @@
 
         <service
             android:name=".floatings.ViewHolderService"
+            android:exported="false"
             android:foregroundServiceType="mediaProjection" />
 
         <activity
             android:name=".pages.setting.SettingActivity"
+            android:exported="false"
             android:noHistory="true" />
 
         <service
             android:name=".utils.QuickTileService"
+            android:exported="true"
             android:icon="@drawable/ic_for_notify"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -56,6 +62,35 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
+
+
+        <!-- START # Override them to add the exported attribute for target version 31 -->
+        <activity
+            android:name="com.mopub.mobileads.MoPubFullscreenActivity"
+            android:exported="false"
+            tools:replace="exported" />
+
+        <activity
+            android:name="com.mopub.common.MoPubBrowser"
+            android:exported="false"
+            tools:replace="exported" />
+
+        <activity
+            android:name="com.mopub.common.privacy.ConsentDialogActivity"
+            android:exported="false"
+            tools:replace="exported" />
+
+        <activity
+            android:name="com.adcolony.sdk.AdColonyInterstitialActivity"
+            android:exported="false"
+            tools:replace="exported" />
+
+        <activity
+            android:name="com.adcolony.sdk.AdColonyAdViewActivity"
+            android:exported="false"
+            tools:replace="exported" />
+        <!-- END # Override them to add the exported attribute for target version 31 -->
+
     </application>
 
 </manifest>
