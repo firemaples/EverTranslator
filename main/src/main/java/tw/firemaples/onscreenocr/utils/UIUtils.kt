@@ -167,3 +167,13 @@ fun View.hide() {
 fun View.showOrHide(show: Boolean) {
     if (show) show() else hide()
 }
+
+fun View.clickOnce(threshold: Long = 500L, action: () -> Unit) {
+    setOnClickListener {
+        isEnabled = false
+        action.invoke()
+        postDelayed({
+            isEnabled = true
+        }, threshold)
+    }
+}

@@ -17,6 +17,7 @@ import tw.firemaples.onscreenocr.pages.setting.SettingActivity
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.utils.Utils
+import tw.firemaples.onscreenocr.utils.clickOnce
 import tw.firemaples.onscreenocr.utils.showOrHide
 
 class MainBar(context: Context) : MovableFloatingView(context) {
@@ -73,25 +74,25 @@ class MainBar(context: Context) : MovableFloatingView(context) {
     }
 
     private fun setViews() {
-        btLangSelector.setOnClickListener {
+        btLangSelector.clickOnce {
             rescheduleFadeOut()
             TranslationSelectPanel(context).attachToScreen()
         }
 
-        btSelect.setOnClickListener {
+        btSelect.clickOnce {
             FloatingStateManager.startScreenCircling()
         }
 
-        btTranslate.setOnClickListener {
+        btTranslate.clickOnce {
             FirebaseEvent.logClickTranslationStartButton()
             FloatingStateManager.startScreenCapturing()
         }
 
-        btClose.setOnClickListener {
+        btClose.clickOnce {
             FloatingStateManager.cancelScreenCircling()
         }
 
-        btMenu.setOnClickListener {
+        btMenu.clickOnce {
             viewModel.onMenuButtonClicked()
         }
 

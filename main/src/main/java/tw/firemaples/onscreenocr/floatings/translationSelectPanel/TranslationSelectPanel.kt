@@ -12,6 +12,7 @@ import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.floatings.menu.MenuView
 import tw.firemaples.onscreenocr.utils.Logger
+import tw.firemaples.onscreenocr.utils.clickOnce
 import tw.firemaples.onscreenocr.utils.setTextOrGone
 
 class TranslationSelectPanel(context: Context) : FloatingView(context) {
@@ -68,8 +69,8 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
     }
 
     private fun setViews() {
-        viewOutside.setOnClickListener { detachFromScreen() }
-        btClose.setOnClickListener { detachFromScreen() }
+        viewOutside.clickOnce { detachFromScreen() }
+        btClose.clickOnce { detachFromScreen() }
 
         with(rvOCRLang) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -99,7 +100,7 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
             adapter = translationLangListAdapter
         }
 
-        tvTranslationProvider.setOnClickListener {
+        tvTranslationProvider.clickOnce {
             viewModel.onTranslationProviderClicked()
         }
 
@@ -167,7 +168,7 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
 
             holder.name.text = item.displayName
             holder.name.isChecked = item.selected
-            holder.itemView.setOnClickListener { onItemClicked.invoke(item.code) }
+            holder.itemView.clickOnce { onItemClicked.invoke(item.code) }
         }
     }
 }

@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.utils.PermissionUtil
 import tw.firemaples.onscreenocr.utils.Toaster
+import tw.firemaples.onscreenocr.utils.clickOnce
 
 class PermissionFloatWindowFragment : Fragment(R.layout.permission_float_window_fragment) {
 
@@ -25,7 +26,7 @@ class PermissionFloatWindowFragment : Fragment(R.layout.permission_float_window_
     }
 
     private fun setViews(view: View) {
-        view.findViewById<Button>(R.id.bt_requestPermission).setOnClickListener {
+        view.findViewById<Button>(R.id.bt_requestPermission).clickOnce {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 goPermissionPage()
             }

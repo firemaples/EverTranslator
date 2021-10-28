@@ -125,21 +125,21 @@ class ResultView(context: Context) : FloatingView(context) {
 
         tvOCRText.movementMethod = ScrollingMovementMethod()
         tvTranslatedText.movementMethod = ScrollingMovementMethod()
-        viewRoot.setOnClickListener { onUserDismiss?.invoke() }
-        btEditOCRText.setOnClickListener {
+        viewRoot.clickOnce { onUserDismiss?.invoke() }
+        btEditOCRText.clickOnce {
             showRecognizedTextEditor(tvOCRText.text.toString())
         }
-        btCopyOCRText.setOnClickListener {
+        btCopyOCRText.clickOnce {
             Utils.copyToClipboard(LABEL_RECOGNIZED_TEXT, tvOCRText.text.toString())
         }
-        btCopyTranslatedText.setOnClickListener {
+        btCopyTranslatedText.clickOnce {
             Utils.copyToClipboard(LABEL_TRANSLATED_TEXT, tvTranslatedText.text.toString())
         }
-        btTranslateOCRTextWithGoogleTranslate.setOnClickListener {
+        btTranslateOCRTextWithGoogleTranslate.clickOnce {
             GoogleTranslateUtils.launchGoogleTranslateApp(tvOCRText.text.toString())
             onUserDismiss?.invoke()
         }
-        btTranslateTranslatedTextWithGoogleTranslate.setOnClickListener {
+        btTranslateTranslatedTextWithGoogleTranslate.clickOnce {
             GoogleTranslateUtils.launchGoogleTranslateApp(tvTranslatedText.text.toString())
             onUserDismiss?.invoke()
         }

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.ViewHolderService
 import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
+import tw.firemaples.onscreenocr.utils.clickOnce
 
 class PermissionCaptureScreenFragment : Fragment(R.layout.permission_capture_screen_fragment) {
 
@@ -24,7 +25,7 @@ class PermissionCaptureScreenFragment : Fragment(R.layout.permission_capture_scr
     }
 
     private fun setViews(view: View) {
-        view.findViewById<View>(R.id.bt_requestPermission).setOnClickListener {
+        view.findViewById<View>(R.id.bt_requestPermission).clickOnce {
             requestMediaProject()
         }
     }
