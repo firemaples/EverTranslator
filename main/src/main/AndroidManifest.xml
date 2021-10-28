@@ -33,7 +33,8 @@
 
         <activity
             android:name=".pages.launch.LaunchActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.EverTranslator.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
