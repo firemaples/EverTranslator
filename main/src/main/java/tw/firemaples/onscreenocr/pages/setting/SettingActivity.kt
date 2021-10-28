@@ -21,6 +21,6 @@ class SettingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
 
-        MoPubAdManager.loadPermissionPageBanner(this, findViewById(R.id.ad_settingPage))
+        MoPubAdManager.loadSettingPageBanner(this, findViewById(R.id.ad_settingPage))
     }
 }
