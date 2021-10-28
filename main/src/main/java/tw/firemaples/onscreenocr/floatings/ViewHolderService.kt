@@ -190,7 +190,15 @@ class ViewHolderService : Service() {
             action = if (clickToShow) ACTION_SHOW_VIEWS else ACTION_HIDE_VIEWS
         }
         val pendingIntent =
-            PendingIntent.getService(this, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                PendingIntent.getService(
+                    this, REQUEST_CODE, intent,
+                    PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+            else
+                PendingIntent.getService(
+                    this, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT
+                )
         builder.setContentIntent(pendingIntent)
 
         return builder.build()
