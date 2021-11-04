@@ -174,7 +174,7 @@ abstract class FloatingView(protected val context: Context) {
         try {
             windowManager.updateViewLayout(rootView, params)
         } catch (e: Exception) {
-            logger.warn(t = e)
+//            logger.warn(t = e)
         }
     }
 

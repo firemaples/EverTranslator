@@ -58,6 +58,7 @@ object ScreenExtractor {
     }
 
     fun release() {
+        releaseAllResources()
         virtualDisplay?.release()
         mediaProjectionIntent = null
     }
@@ -79,6 +80,10 @@ object ScreenExtractor {
         }
     }
 
+    private var projection: MediaProjection? = null
+    private var imageReader: ImageReader? = null
+    private var image: Image? = null
+
     @SuppressLint("WrongConstant")
     @Throws(
         IllegalStateException::class,
@@ -88,6 +93,8 @@ object ScreenExtractor {
     private suspend fun doCaptureScreen(): Bitmap {
         var bitmap: Bitmap
         withContext(Dispatchers.Default) {
+            releaseAllResources()
+
             val mpIntent = mediaProjectionIntent
             if (mpIntent == null) {
                 logger.warn("The mediaProjectionIntent is null: $mpIntent")
@@ -97,14 +104,11 @@ object ScreenExtractor {
             val mpManager =
                 context.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
 
-            var projection: MediaProjection? = null
-            var imageReader: ImageReader? = null
-            var image: Image? = null
-
             try {
                 projection =
                     mpManager.getMediaProjection(Activity.RESULT_OK, mpIntent.clone() as Intent)
 
+                val projection = projection
                 if (projection == null) {
                     logger.warn("Retrieve projection failed, projection: $projection")
                     throw IllegalStateException("Retrieving media projection failed")
@@ -116,6 +120,13 @@ object ScreenExtractor {
 
                 imageReader =
                     ImageReader.newInstance(width, height, AppPref.imageReaderFormat, 2)
+                val imageReader = imageReader
+
+                if (imageReader == null) {
+                    logger.debug("The imageReader is null after initialized")
+                    releaseAllResources()
+                    throw IllegalStateException("No image reader initialized failed")
+                }
 
                 virtualDisplay = projection.createVirtualDisplay(
                     "screen-mirror",
@@ -131,17 +142,22 @@ object ScreenExtractor {
 
                 virtualDisplay?.release()
 
+                val image = image
                 if (image == null) {
                     logger.warn("The captured image is null")
-                    imageReader.close()
+                    releaseAllResources()
                     throw IllegalStateException("No image data found")
                 }
 
                 bitmap = image.decodeBitmap(size)
 
+                releaseAllResources()
+
                 logger.debug("Bitmap size: ${bitmap.width}x${bitmap.height}, screen size: ${width}x$height")
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 logger.warn(t = e)
+
+                releaseAllResources()
 
                 val message = e.message ?: e.localizedMessage
                 if (message != null) {
@@ -159,26 +175,33 @@ object ScreenExtractor {
                 }
 
                 throw e
-            } finally {
-                try {
-                    projection?.stop()
-                } catch (e: Exception) {
-                    FirebaseEvent.logException(e)
-                }
-                try {
-                    image?.close()
-                } catch (e: Exception) {
-                    FirebaseEvent.logException(e)
-                }
-                try {
-                    imageReader?.close()
-                } catch (e: Exception) {
-                    FirebaseEvent.logException(e)
-                }
             }
         }
 
         return bitmap
+    }
+
+    private fun releaseAllResources() {
+        try {
+            imageReader?.setOnImageAvailableListener(null, handler)
+        } catch (e: Exception) {
+            FirebaseEvent.logException(e)
+        }
+        try {
+            imageReader?.close()
+        } catch (e: Exception) {
+            FirebaseEvent.logException(e)
+        }
+        try {
+            projection?.stop()
+        } catch (e: Exception) {
+            FirebaseEvent.logException(e)
+        }
+        try {
+            image?.close()
+        } catch (e: Exception) {
+            FirebaseEvent.logException(e)
+        }
     }
 
     @Throws(IllegalArgumentException::class)
