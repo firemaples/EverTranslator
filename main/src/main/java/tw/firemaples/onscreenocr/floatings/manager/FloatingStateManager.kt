@@ -109,7 +109,7 @@ object FloatingStateManager {
 
     private fun onAreaSelected(parentRect: Rect, selectedRect: Rect) =
         stateIn(State.ScreenCircling::class, State.ScreenCircled::class) {
-            logger.debug("onAreaSelected(), parentRect: $parentRect, selectedRect: $selectedRect")
+            logger.debug("onAreaSelected(), parentRect: $parentRect, selectedRect: $selectedRect, size: ${selectedRect.width()}x${selectedRect.height()}")
             if (currentState != State.ScreenCircled) {
                 changeState(State.ScreenCircled)
             }
