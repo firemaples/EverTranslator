@@ -29,6 +29,9 @@ class MainBar(context: Context) : MovableFloatingView(context) {
             if (SettingManager.restoreMainBarPosition) AppPref.lastMainBarPosition
             else Point(0, 0)
 
+    override val enableDeviceDirectionTracker: Boolean
+        get() = true
+
     override val moveToEdgeAfterMoved: Boolean
         get() = true
 
