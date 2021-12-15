@@ -43,6 +43,8 @@ private const val EVENT_START_TRANSLATION_TEXT = "start_translation_text"
 private const val EVENT_TRANSLATION_TEXT_FINISHED = "translation_text_finished"
 private const val EVENT_TRANSLATION_TEXT_FAILED = "translation_text_failed"
 private const val EVENT_TRANSLATION_SOURCE_LANG_NOT_SUPPORT = "translation_source_lang_not_support"
+private const val EVENT_MICROSOFT_TRANSLATION_OUT_OF_QUOTA =
+    "event_microsoft_translation_out_of_quota"
 
 private const val EVENT_SHOW_RESULT_WINDOW = "show_result_window"
 private const val EVENT_SHOW_GOOGLE_TRANSLATE_WINDOW = "show_google_translate_window"
@@ -230,6 +232,16 @@ object FirebaseEvent {
         logEvent(EVENT_TRANSLATION_TEXT_FAILED, Bundle().apply {
             putString("translate_service", serviceName)
         })
+    }
+
+    fun logMicrosoftTranslationError(error: MicrosoftAzureTranslator.Error) {
+        when (error.type) {
+            MicrosoftAzureTranslator.ErrorType.OutOfQuota -> {
+                logEvent(EVENT_MICROSOFT_TRANSLATION_OUT_OF_QUOTA, Bundle().apply {
+                    putString("group_id", RemoteConfigManager.microsoftTranslationKeyGroupId)
+                })
+            }
+        }
     }
 
     fun logShowGoogleTranslateWindow() {

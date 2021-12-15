@@ -19,6 +19,7 @@ import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.recognition.TextRecognizer
 import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
+import tw.firemaples.onscreenocr.translator.MicrosoftAzureTranslator
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.translator.TranslationResult
 import tw.firemaples.onscreenocr.translator.Translator
@@ -237,6 +238,9 @@ object FloatingStateManager {
                     }
                     is TranslationResult.TranslationFailed -> {
                         FirebaseEvent.logTranslationTextFailed(translator)
+                        if (translationResult.error is MicrosoftAzureTranslator.Error) {
+                            FirebaseEvent.logMicrosoftTranslationError(translationResult.error)
+                        }
                         FirebaseEvent.logException(translationResult.error)
                         showError(
                             translationResult.error.localizedMessage
