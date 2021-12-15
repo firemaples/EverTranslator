@@ -10,6 +10,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.log.FirebaseEvent
+import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.getViewRect
 import kotlin.math.max
@@ -44,6 +45,7 @@ class CirclingView @JvmOverloads constructor(
     private var endPoint: Point? = null
 
     var selectedBox: Rect? by Delegates.observable(null) { _, _, newValue ->
+        selectedBox?.fixBoxSize()
         helperTextView?.hasBox = newValue != null
         invalidate()
     }
@@ -67,7 +69,7 @@ class CirclingView @JvmOverloads constructor(
         }
 
         override fun onAreaCreationFinish(startPoint: Point, endPoint: Point) {
-            val newBox = createNewBox(startPoint, endPoint)
+            val newBox = createNewBox(startPoint, endPoint).fixBoxSize()
             selectedBox = newBox
             this@CirclingView.startPoint = null
             this@CirclingView.endPoint = null
@@ -100,6 +102,8 @@ class CirclingView @JvmOverloads constructor(
                 right = max(left + 1, resizeBase.right + rightDiff).coerceAtMost(parent.right)
                 top = (resizeBase.top + topDiff).coerceAtLeast(parent.top)
                 bottom = max(top + 1, resizeBase.bottom + bottomDiff).coerceAtMost(parent.bottom)
+
+                fixBoxSize()
             }
 
             logger.debug("onAreaResizing(), parent: ${this@CirclingView.getViewRect()}, box: $box")
@@ -172,5 +176,29 @@ class CirclingView @JvmOverloads constructor(
         }
 
 //        canvas.restore()
+    }
+
+    private fun Rect.fixBoxSize(): Rect {
+        val parent = this@CirclingView.getViewRect()
+
+        if (this.width() < Constants.MIN_SCREEN_CROP_SIZE) {
+            this.right += (Constants.MIN_SCREEN_CROP_SIZE - this.width())
+            if (this.right > parent.right) {
+                val move = this.right - parent.right
+                this.right -= move
+                this.left -= move
+            }
+        }
+
+        if (this.height() < Constants.MIN_SCREEN_CROP_SIZE) {
+            this.bottom += (Constants.MIN_SCREEN_CROP_SIZE - this.height())
+            if (this.bottom > parent.bottom) {
+                val move = this.bottom - parent.bottom
+                this.bottom -= move
+                this.top -= move
+            }
+        }
+
+        return this
     }
 }
