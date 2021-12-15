@@ -24,6 +24,7 @@
     <string name="pref_auto_copy_the_recognized_result">Auto copy the recognized result</string>
     <string name="pref_hide_recognized_result_after_translated">Hide recognized result after translated</string>
     <string name="pref_category_text_recognition">Text Recognition</string>
+    <string name="pref_capturing_screen_timeout">Timeout for capturing screen (seconds)</string>
 
     <string name="menu_setting">Setting</string>
     <string name="menu_privacy_policy">Privacy Policy</string>

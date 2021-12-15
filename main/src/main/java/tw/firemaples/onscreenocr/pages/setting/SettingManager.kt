@@ -5,6 +5,7 @@ import androidx.preference.PreferenceManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.SamsungSpenInsertedReceiver
 import tw.firemaples.onscreenocr.utils.Utils
@@ -16,6 +17,8 @@ object SettingManager {
     private const val PREF_ENABLE_FADING_OUT_WHILE_IDLE = "pref_enable_fading_out_while_idle"
     private const val PREF_FADE_OUT_AFTER_SECONDS = "pref_fade_out_after_seconds"
     private const val PREF_OPAQUE_PERCENTAGE = "pref_opaque_percentage"
+
+    private const val PREF_TIMEOUT_FOR_CAPTURING_SCREEN = "pref_timeout_for_capturing_screen"
     private const val PREF_TEXT_BLOCK_JOINER = "pref_text_block_joiner"
 
     private const val PREF_AUTO_COPY_OCR_RESULT = "pref_auto_copy_ocr_result"
@@ -46,6 +49,11 @@ object SettingManager {
 
     val opaquePercentageToFadeOut: Float
         get() = preferences.getInt(PREF_OPAQUE_PERCENTAGE, 20).toFloat() / 100f
+
+    val timeoutForCapturingScreen: Long
+        get() = preferences.getInt(
+            PREF_TIMEOUT_FOR_CAPTURING_SCREEN, Constants.TIMEOUT_EXTRACT_SCREEN
+        ) * 1000L
 
     val textBlockJoiner: TextBlockJoiner
         get() =
