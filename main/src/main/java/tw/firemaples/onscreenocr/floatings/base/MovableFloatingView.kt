@@ -50,6 +50,11 @@ abstract class MovableFloatingView(context: Context) : FloatingView(context) {
         moveToEdgeOrFadeOut()
     }
 
+    override fun onDeviceDirectionChanged() {
+        super.onDeviceDirectionChanged()
+        moveToEdgeOrFadeOut()
+    }
+
     private var initX: Int = 0
     private var initY: Int = 0
     private var initTouchX: Float = 0f
@@ -92,9 +97,9 @@ abstract class MovableFloatingView(context: Context) : FloatingView(context) {
                     }
 
                     val nextX = (initX + (if (isAlignParentLeft) xDiff else -xDiff))
-                        .coerceAtLeast(0)
+                        .fixXPosition()
                     val nextY = (initY + (if (isAlignParentTop) yDIff else -yDIff))
-                        .coerceAtLeast(0)
+                        .fixYPosition()
 
                     changeViewPosition(nextX, nextY)
                 }
@@ -132,7 +137,7 @@ abstract class MovableFloatingView(context: Context) : FloatingView(context) {
     }
 
     private fun getEdgePosition(currentX: Int, currentY: Int): IntArray {
-        val screenWidth = UIUtils.realDisplayMetrics.widthPixels
+        val screenWidth = UIUtils.screenSize[0]
 
         val viewWidth = rootView.width
         val viewCenterX = currentX + viewWidth / 2
@@ -191,7 +196,7 @@ abstract class MovableFloatingView(context: Context) : FloatingView(context) {
     private var fadeOutAnimator: ValueAnimator? = null
 
     private fun fadeOut() {
-        logger.debug("fadeOut()")
+//        logger.debug("fadeOut()")
         cancelFadeOut()
 
         fadeOutAnimator = ValueAnimator.ofFloat(fromAlpha, fadeOutDestinationAlpha).apply {
@@ -206,14 +211,14 @@ abstract class MovableFloatingView(context: Context) : FloatingView(context) {
     }
 
     private fun cancelFadeOut() {
-        logger.debug("cancelFadeOut(): fadeOutAnimator: $fadeOutAnimator")
+//        logger.debug("cancelFadeOut(): fadeOutAnimator: $fadeOutAnimator")
         fadeOutAnimator?.cancel()
 
         rootView.alpha = fromAlpha
     }
 
     protected fun rescheduleFadeOut() {
-        logger.debug("rescheduleFadeOut()")
+//        logger.debug("rescheduleFadeOut()")
         cancelFadeOut()
         if (fadeOutAfterMoved) fadeOut()
     }

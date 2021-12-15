@@ -5,10 +5,7 @@ import android.graphics.PixelFormat
 import android.graphics.Point
 import android.os.Build
 import android.os.Looper
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
 import androidx.lifecycle.Lifecycle
@@ -17,6 +14,7 @@ import androidx.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.*
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.PermissionUtil
+import tw.firemaples.onscreenocr.utils.UIUtils
 import tw.firemaples.onscreenocr.wigets.BackButtonTrackerView
 import tw.firemaples.onscreenocr.wigets.HomeButtonWatcher
 import java.io.Closeable
@@ -62,8 +60,8 @@ abstract class FloatingView(protected val context: Context) {
         WindowManager.LayoutParams(layoutWidth, layoutHeight, type, flags, PixelFormat.TRANSLUCENT)
             .apply {
                 val initPoint = initialPosition
-                x = initPoint.x
-                y = initPoint.y
+                x = initPoint.x.fixXPosition()
+                y = initPoint.y.fixYPosition()
                 gravity = layoutGravity
             }
     }
@@ -95,6 +93,18 @@ abstract class FloatingView(protected val context: Context) {
         }
     }
 
+    private var lastScreenWidth: Int = -1
+    open val enableDeviceDirectionTracker: Boolean = false
+    private val orientationEventListener = object : OrientationEventListener(context) {
+        override fun onOrientationChanged(orientation: Int) {
+            val screenWidth = UIUtils.screenSize[0]
+            if (screenWidth != lastScreenWidth) {
+                lastScreenWidth = screenWidth
+                onDeviceDirectionChanged()
+            }
+        }
+    }
+
     var attached: Boolean = false
         private set
 
@@ -119,6 +129,9 @@ abstract class FloatingView(protected val context: Context) {
 
         attachedFloatingViews.add(this)
 
+        if (enableDeviceDirectionTracker)
+            orientationEventListener.enable()
+
         attached = true
     }
 
@@ -142,12 +155,21 @@ abstract class FloatingView(protected val context: Context) {
 
         attachedFloatingViews.remove(this)
 
+        if (enableDeviceDirectionTracker)
+            orientationEventListener.disable()
+
         attached = false
     }
 
     open fun release() {
         detachFromScreen()
         lifecycleOwner.onStateChanged(Lifecycle.State.DESTROYED)
+    }
+
+    protected open fun onDeviceDirectionChanged() {
+        params.x = params.x.fixXPosition()
+        params.y = params.y.fixYPosition()
+        updateViewLayout()
     }
 
     @CallSuper
@@ -216,4 +238,12 @@ abstract class FloatingView(protected val context: Context) {
             lifecycleRegistry.currentState = state
         }
     }
+
+    protected fun Int.fixXPosition(): Int =
+        this.coerceAtLeast(0)
+            .coerceAtMost(UIUtils.screenSize[0] - rootView.width)
+
+    protected fun Int.fixYPosition(): Int =
+        this.coerceAtLeast(0)
+            .coerceAtMost(UIUtils.screenSize[1] - rootView.height)
 }
