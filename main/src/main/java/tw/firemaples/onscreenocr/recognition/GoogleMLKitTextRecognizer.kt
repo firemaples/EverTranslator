@@ -11,6 +11,7 @@ import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.log.FirebaseEvent
+import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Utils
@@ -63,10 +64,13 @@ class GoogleMLKitTextRecognizer : TextRecognizer {
 
             recognizer.process(image)
                 .addOnSuccessListener { result ->
+                    val joiner = SettingManager.textBlockJoiner.joiner
+                    val text = result.textBlocks.joinToString(separator = joiner) { it.text }
+
                     it.resume(
                         RecognitionResult(
                             langCode = lang.toISO639(),
-                            result = result.text,
+                            result = text,
                             boundingBoxes = result.textBlocks.mapNotNull { it.boundingBox }),
                     )
                 }
