@@ -21,6 +21,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.log.FirebaseEvent
+import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
@@ -136,7 +137,7 @@ object ScreenExtractor {
                 )
 
                 logger.debug("waitForImage")
-                image = withTimeout(Constants.TIMEOUT_EXTRACT_SCREEN) {
+                image = withTimeout(SettingManager.timeoutForCapturingScreen) {
                     imageReader.waitForImage()
                 }
 

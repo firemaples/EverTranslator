@@ -25,6 +25,7 @@
     <string name="pref_auto_copy_the_recognized_result">自动複製辨识结果文字</string>
     <string name="pref_hide_recognized_result_after_translated">翻译后隐藏辨识结果</string>
     <string name="pref_category_text_recognition">文字辨识</string>
+    <string name="pref_capturing_screen_timeout">撷取萤幕超时（秒）</string>
 
     <string name="menu_setting">设定</string>
     <string name="menu_privacy_policy">隐私声明</string>

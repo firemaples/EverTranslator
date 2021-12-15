@@ -35,6 +35,13 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_category_text_recognition">
+        <SeekBarPreference
+            android:defaultValue="5"
+            android:key="pref_timeout_for_capturing_screen"
+            android:max="10"
+            android:title="@string/pref_capturing_screen_timeout"
+            app:min="1"
+            app:showSeekBarValue="true" />
         <ListPreference
             android:defaultValue="Space"
             android:entries="@array/textBlockJoinersNames"
