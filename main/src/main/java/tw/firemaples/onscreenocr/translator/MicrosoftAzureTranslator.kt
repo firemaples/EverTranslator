@@ -10,6 +10,9 @@ import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
 import tw.firemaples.onscreenocr.utils.firstPart
 
 object MicrosoftAzureTranslator : Translator {
+    private val errorRegex = "\"code\":(\\d+)".toRegex()
+    private const val errorOutOfQuota = 403001
+
     override val type: TranslationProviderType
         get() = TranslationProviderType.MicrosoftAzure
 
@@ -59,7 +62,35 @@ object MicrosoftAzureTranslator : Translator {
 
             TranslationResult.TranslatedResult(result, type)
         } catch (e: Exception) {
-            TranslationResult.TranslationFailed(e)
+            var error: Throwable? = null
+            val message = e.message
+            if (!message.isNullOrBlank()) {
+                error = when (val code =
+                    errorRegex.find(message)?.groupValues?.getOrNull(1)?.toIntOrNull()) {
+                    errorOutOfQuota ->
+                        Error(
+                            message = context.getString(
+                                R.string.error_microsoft_translation_out_of_quota,
+                                code.toString(),
+                                RemoteConfigManager.microsoftTranslationKeyGroupId
+                            ),
+                            type = ErrorType.OutOfQuota,
+                            cause = e,
+                        )
+                    else -> null
+                }
+            }
+            TranslationResult.TranslationFailed(error ?: e)
         }
     }
+
+    enum class ErrorType {
+        OutOfQuota,
+    }
+
+    data class Error(
+        override val message: String?,
+        val type: ErrorType,
+        override val cause: Throwable?
+    ) : Exception(message, cause)
 }

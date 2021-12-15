@@ -74,6 +74,7 @@
     <string name="error_unknown">未知錯誤</string>
     <string name="error_google_translate_is_not_found">您尚未安裝 Google 翻譯 app，當前選擇的翻譯引擎需要此 app 來翻譯，請點擊確認開啟 Play 商店下載，或改用其他翻譯引擎。</string>
     <string name="error_selected_area_too_small">選擇的區域過小，請加大選擇區域。</string>
+    <string name="error_microsoft_translation_out_of_quota">很抱歉，微軟 Azure 翻譯功能的翻譯字數已用盡，將會在下個月重置，請選用其他的翻譯引擎。\n\n(%1$s/%2$s)</string>
 
     <string-array name="textBlockJoinersNames">
         <item>換行字元</item>

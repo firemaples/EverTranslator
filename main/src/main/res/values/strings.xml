@@ -56,6 +56,7 @@
     <string name="msg_recreate_selection_area">Drag here to recreate a translation area, pinch in/out to zoom the selected area</string>
     <string name="msg_create_selection_area">Drag here to create a translation area</string>
     <string name="msg_image_reader_format_unmatched">Found temporary error, please try it again. (Image reader format)</string>
+    <string name="msg_translator_provider_does_not_support_the_ocr_lang">This translation provider does not support the selected recognition language.</string>
 
     <string name="title_version_history">Version History</string>
     <string name="title_error">Error</string>
@@ -72,7 +73,7 @@
     <string name="error_unknown">Unknown error</string>
     <string name="error_google_translate_is_not_found">The Google Translate app is not found on your device, this provider depends on the app, please click the OK button to install it on PlayStore or change to another translation provider.</string>
     <string name="error_selected_area_too_small">The selected area is too small, please enlarge it.</string>
-    <string name="msg_translator_provider_does_not_support_the_ocr_lang">This translation provider does not support the selected recognition language.</string>
+    <string name="error_microsoft_translation_out_of_quota">Sorry, the quota of the Microsoft Azure translate is running out.\n\nIt will be reset the next month, please use another translation provider.\n\n(%1$s/%2$s)</string>
 
     <string-array name="textBlockJoinersNames">
         <item>Line-breaker</item>
