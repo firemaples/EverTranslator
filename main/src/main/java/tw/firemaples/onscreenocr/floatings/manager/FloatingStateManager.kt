@@ -26,6 +26,7 @@ import tw.firemaples.onscreenocr.translator.Translator
 import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.Utils
+import java.io.IOException
 import kotlin.reflect.KClass
 
 object FloatingStateManager {
@@ -238,14 +239,21 @@ object FloatingStateManager {
                     }
                     is TranslationResult.TranslationFailed -> {
                         FirebaseEvent.logTranslationTextFailed(translator)
-                        if (translationResult.error is MicrosoftAzureTranslator.Error) {
-                            FirebaseEvent.logMicrosoftTranslationError(translationResult.error)
+                        val error = translationResult.error
+
+                        if (error is MicrosoftAzureTranslator.Error) {
+                            FirebaseEvent.logMicrosoftTranslationError(error)
                         }
-                        FirebaseEvent.logException(translationResult.error)
-                        showError(
-                            translationResult.error.localizedMessage
-                                ?: context.getString(R.string.error_unknown)
-                        )
+
+                        if (error is IOException) {
+                            showError(context.getString(R.string.error_can_not_connect_to_translation_server))
+                        } else {
+                            FirebaseEvent.logException(error)
+                            showError(
+                                error.localizedMessage
+                                    ?: context.getString(R.string.error_unknown)
+                            )
+                        }
                     }
                 }
             } catch (e: Exception) {
