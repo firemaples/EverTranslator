@@ -34,16 +34,15 @@
             app:showSeekBarValue="true" />
     </PreferenceCategory>
 
-    <!--    <PreferenceCategory android:title="@string/pref_category_text_blocks_selector">-->
-
-    <!--        <ListPreference-->
-    <!--            android:defaultValue="Space"-->
-    <!--            android:entries="@array/textBlockJoinersNames"-->
-    <!--            android:entryValues="@array/textBlockJoinersValues"-->
-    <!--            android:key="pref_text_block_joiner"-->
-    <!--            android:title="@string/pref_joiner_between_text_blocks"-->
-    <!--            app:useSimpleSummaryProvider="true" />-->
-    <!--    </PreferenceCategory>-->
+    <PreferenceCategory android:title="@string/pref_category_text_recognition">
+        <ListPreference
+            android:defaultValue="Space"
+            android:entries="@array/textBlockJoinersNames"
+            android:entryValues="@array/textBlockJoinersValues"
+            android:key="pref_text_block_joiner"
+            android:title="@string/pref_joiner_between_text_blocks"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_result_panel">
         <SwitchPreference
