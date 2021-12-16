@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="version_3_0_10">● 新增文字区块连结符号选项\n● 新增萤幕撷取超时设定\n● 修正主浮动视窗位置以避免被系统介面遮蔽或超出萤幕外\n● 现在你可以将 EverTranalstor 移动到外接记忆卡\n● 修正错误讯息</string>
     <string name="version_3_0_0">● 提升辨识速度及准确度\n● 增加更多选项至设定\n● 重新设计介面\n● 支援夜间模式\n● 增加广告在启动页及设定页</string>
     <string name="version_2_4_6">● 增加 Google MLKit 翻译\n● 移除 Yandex 翻译\n● 修正错误讯息</string>
     <string name="version_2_4_5">● 修正下拉选单在 Android 11 上无法显示的问题</string>
