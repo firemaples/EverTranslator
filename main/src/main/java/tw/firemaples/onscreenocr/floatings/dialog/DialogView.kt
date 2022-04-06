@@ -5,11 +5,15 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.TextView
+import kotlinx.coroutines.suspendCancellableCoroutine
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
+import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.utils.clickOnce
 import tw.firemaples.onscreenocr.utils.setTextOrGone
 import tw.firemaples.onscreenocr.utils.showOrHide
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 open class DialogView(context: Context) :
     FloatingView(context) {
@@ -74,7 +78,10 @@ open class DialogView(context: Context) :
 
     fun setCancelByClickingOutside(cancelByClickingOutside: Boolean) {
         if (cancelByClickingOutside) {
-            rootView.clickOnce { detachFromScreen() }
+            rootView.clickOnce {
+                detachFromScreen()
+                onButtonCancelClicked?.invoke()
+            }
         } else {
             rootView.clickOnce {}
         }
@@ -86,3 +93,43 @@ open class DialogView(context: Context) :
         CONFIRM_CANCEL,
     }
 }
+
+suspend fun Context.showDialog(
+    title: String? = null,
+    message: String,
+    dialogType: DialogView.DialogType,
+    cancelByClickingOutside: Boolean = false,
+): Boolean = suspendCancellableCoroutine { cont ->
+    DialogView(this).apply {
+        setTitle(title)
+        setMessage(message)
+        setDialogType(dialogType)
+        setCancelByClickingOutside(cancelByClickingOutside)
+
+        onButtonOkClicked = {
+            cont.resume(true)
+        }
+
+        onButtonCancelClicked = {
+            cont.resume(false)
+        }
+
+        cont.invokeOnCancellation { detachFromScreen() }
+
+        attachToScreen()
+    }
+}
+
+suspend fun Context.showErrorDialog(error: String): Boolean =
+    suspendCancellableCoroutine { cont ->
+        DialogView(this).apply {
+            setTitle(getString(R.string.title_error))
+            setMessage(error)
+            setDialogType(DialogView.DialogType.CONFIRM_ONLY)
+            setCancelByClickingOutside(false)
+
+            onButtonOkClicked = { cont.resume(false) }
+
+            cont.invokeOnCancellation { detachFromScreen() }
+        }.attachToScreen()
+    }

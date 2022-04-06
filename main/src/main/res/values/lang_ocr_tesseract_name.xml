@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- The elements in this array must match to the iso6393 array. -->
-    <string-array name="ocr_langName">
+    <string-array name="lang_ocr_tesseract_name">
         <item>Afrikaans</item>
         <item>Albanian</item>
         <item>Arabic</item>

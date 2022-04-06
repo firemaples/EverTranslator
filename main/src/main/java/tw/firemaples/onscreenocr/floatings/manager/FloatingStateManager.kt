@@ -11,12 +11,13 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
-import tw.firemaples.onscreenocr.floatings.dialog.DialogView
+import tw.firemaples.onscreenocr.floatings.dialog.showErrorDialog
 import tw.firemaples.onscreenocr.floatings.main.MainBar
 import tw.firemaples.onscreenocr.floatings.result.ResultView
 import tw.firemaples.onscreenocr.floatings.screenCircling.ScreenCirclingView
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
+import tw.firemaples.onscreenocr.recognition.TesseractTextRecognizer
 import tw.firemaples.onscreenocr.recognition.TextRecognizer
 import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
 import tw.firemaples.onscreenocr.translator.MicrosoftAzureTranslator
@@ -62,6 +63,7 @@ object FloatingStateManager {
     val isMainBarAttached: Boolean
         get() = mainBar.attached
 
+    private var selectedOCRLang: String = Constants.DEFAULT_OCR_LANG
     private var parentRect: Rect? = null
     private var selectedRect: Rect? = null
     private var croppedBitmap: Bitmap? = null
@@ -123,7 +125,8 @@ object FloatingStateManager {
         screenCirclingView.detachFromScreen()
     }
 
-    fun startScreenCapturing() = stateIn(State.ScreenCircled::class) {
+    fun startScreenCapturing(selectedOCRLang: String) = stateIn(State.ScreenCircled::class) {
+        this@FloatingStateManager.selectedOCRLang = selectedOCRLang
         val parent = parentRect ?: return@stateIn
         val selected = selectedRect ?: return@stateIn
         logger.debug("startScreenCapturing(), parentRect: $parent, selectedRect: $selected")
@@ -160,9 +163,11 @@ object FloatingStateManager {
             changeState(State.TextRecognizing)
             try {
                 resultView.startRecognition()
-                val recognizer = TextRecognizer.getRecognizer()
+                val recognizer = TesseractTextRecognizer()
                 FirebaseEvent.logStartOCR(recognizer.name)
-                val result = recognizer.recognize(croppedBitmap)
+                val result = recognizer.recognize(
+                    TextRecognizer.getLanguage(selectedOCRLang)!!, croppedBitmap
+                )
                 logger.debug("On text recognized: $result")
                 croppedBitmap.recycle()
                 FirebaseEvent.logOCRFinished(recognizer.name)
@@ -178,7 +183,7 @@ object FloatingStateManager {
 
                 logger.warn(t = e)
                 showError(error)
-                FirebaseEvent.logOCRFailed(TextRecognizer.getRecognizer().name, e)
+                FirebaseEvent.logOCRFailed(TextRecognizer.getRecognizer(selectedOCRLang).name, e)
             }
         }
 
@@ -273,14 +278,8 @@ object FloatingStateManager {
     private fun showError(error: String) {
         scope.launch {
             changeState(State.ErrorDisplaying(error))
-
-            DialogView(context).apply {
-                setTitle(context.getString(R.string.title_error))
-                setMessage(error)
-                setDialogType(DialogView.DialogType.CONFIRM_ONLY)
-
-                onButtonOkClicked = { backToIdle() }
-            }.attachToScreen()
+            context.showErrorDialog(error)
+            backToIdle()
         }
     }
 

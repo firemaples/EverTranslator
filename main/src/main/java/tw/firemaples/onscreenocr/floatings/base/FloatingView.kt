@@ -75,23 +75,23 @@ abstract class FloatingView(protected val context: Context) {
     }
 
     abstract val layoutId: Int
-    protected val rootView: BackButtonTrackerView by lazy {
+    protected var rootLayout: View
+    protected val rootView: BackButtonTrackerView =
         BackButtonTrackerView(
             context = context,
             onAttachedToWindow = { onAttachedToScreen() },
             onDetachedFromWindow = { onDetachedFromScreen() },
             onBackButtonPressed = { onBackButtonPressed() },
         ).apply {
-            val innerView = LayoutInflater.from(context).inflate(layoutId, null)
+            rootLayout = LayoutInflater.from(context).inflate(layoutId, null)
             addView(
-                innerView,
+                rootLayout,
                 ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
                 )
             )
         }
-    }
 
     private var lastScreenWidth: Int = -1
     open val enableDeviceDirectionTracker: Boolean = false

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="ocr_langName">
+    <string-array name="lang_ocr_tesseract_name">
         <item>南非荷兰语</item>
         <item>阿尔巴尼亚文</item>
         <item>阿拉伯语</item>

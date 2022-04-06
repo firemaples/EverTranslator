@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- The elements in this array must match to the languagenames array. -->
-    <string-array name="ocr_langCode_iso6393" translatable="false">
+    <string-array name="lang_ocr_tesseract_code_iso6393" translatable="false">
         <item>afr</item> <!-- Afrikaans -->
         <item>sqi</item> <!-- Albanian -->
         <item>ara</item> <!-- Arabic -->

@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
@@ -84,7 +83,8 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
     private val ocrRepo by lazy { OCRRepository() }
     private val translateRepo by lazy { TranslationRepository() }
 
-    private var selectedOCRLang: String = Constants.DEFAULT_OCR_LANG
+    private var _selectedOCRLang: String = Constants.DEFAULT_OCR_LANG
+    val selectedOCRLang: String get() = _selectedOCRLang
 
     //    private var selectedTranslationProvider: TranslationProvider =
 //        TranslationProvider.fromType(context, Constraints.DEFAULT_TRANSLATION_PROVIDER)
@@ -141,17 +141,17 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
 
     @Suppress("RedundantSuspendModifier")
     private suspend fun onSelectedLangChanged(
-        _ocrLang: String = selectedOCRLang,
+        _ocrLang: String = _selectedOCRLang,
         translationProviderType: TranslationProviderType = selectedTranslationProviderType,
         translationLang: String = selectedTranslationLang,
     ) {
-        this.selectedOCRLang = _ocrLang
+        this._selectedOCRLang = _ocrLang
         this.selectedTranslationProviderType = translationProviderType
         this.selectedTranslationLang = translationLang
 
         logger.debug("onSelectedLangChanged(), ocrLang: $_ocrLang, provider: $translationProviderType, translationLang: $translationLang")
 
-        val ocrLang = TextRecognizer.getRecognizer().parseToDisplayLangCode(_ocrLang)
+        val ocrLang = TextRecognizer.getRecognizer(_ocrLang).parseToDisplayLangCode(_ocrLang)
 
         val displayGoogleTranslateIcon =
             translationProviderType == TranslationProviderType.GoogleTranslateApp

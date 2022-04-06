@@ -16,6 +16,9 @@ object AppPref : KotprefModel() {
         Kotpref.gson = Gson()
     }
 
+    var selectedOCRProvider by stringPref(
+        default = Constants.DEFAULT_OCR_PROVIDER.key
+    )
     var selectedOCRLang by stringPref(default = Constants.DEFAULT_OCR_LANG)
 
     var selectedTranslationProvider by stringPref(

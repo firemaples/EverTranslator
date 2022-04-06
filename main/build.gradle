@@ -79,6 +79,13 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
+
+    packagingOptions {
+        pickFirst 'lib/*/*.so'
+    }
 }
 
 dependencies {
@@ -90,16 +97,17 @@ dependencies {
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
     implementation "androidx.preference:preference-ktx:1.2.0"
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
     // For using coroutines in tests
     // For runBlockingTest, CoroutineDispatcher etc.
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.0"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0"
     // For InstantTaskExecutorRule
     testImplementation "androidx.arch.core:core-testing:2.1.0"
 
@@ -159,6 +167,13 @@ dependencies {
 //    // experimental, preference screen build dsl
 //    implementation 'com.chibatching.kotpref:preference-screen-dsl:2.13.1'
 
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+
+    // Tesseract
+    implementation 'cz.adaptech.tesseract4android:tesseract4android:4.1.0'
+//    implementation 'cz.adaptech:tesseract4android:4.1.0'
+
     // Microsoft translator
     implementation 'io.github.firemaples:microsoft-translator-java-api:0.8.8.1'
 
@@ -176,7 +191,7 @@ dependencies {
     implementation 'com.facebook.android:audience-network-sdk:6.5.0'
     implementation 'com.mopub.mediation:facebookaudiencenetwork:6.5.0.0'
     // Google Ad network - Admob
-    implementation 'com.google.android.gms:play-services-ads:20.5.0'
+    implementation 'com.google.android.gms:play-services-ads:20.6.0'
     implementation 'com.mopub.mediation:admob:20.2.0.0'
     // Adcolony Ad network
     implementation 'com.adcolony:sdk:4.5.0'
