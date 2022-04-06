@@ -2,13 +2,14 @@ package tw.firemaples.onscreenocr.floatings.translationSelectPanel
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.CheckedTextView
-import android.widget.TextView
+import androidx.appcompat.widget.AppCompatCheckedTextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.*
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.databinding.FloatingTranslationSelectPanelBinding
+import tw.firemaples.onscreenocr.databinding.ItemLangListBinding
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.floatings.menu.MenuView
 import tw.firemaples.onscreenocr.utils.Logger
@@ -31,17 +32,12 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         TranslationSelectPanelViewModel(viewScope)
     }
 
-    private val viewOutside: View = rootView.findViewById(R.id.view_outside)
-    private val btClose: View = rootView.findViewById(R.id.bt_close)
-
-    private val rvOCRLang: RecyclerView = rootView.findViewById(R.id.rv_ocrLang)
-    private val tvTranslationProvider: TextView = rootView.findViewById(R.id.tv_translationProvider)
-    private val rvTranslationLang: RecyclerView = rootView.findViewById(R.id.rv_translationLang)
-    private val tvTranslationLangHint: TextView = rootView.findViewById(R.id.tv_translationLangHint)
+    private val binding: FloatingTranslationSelectPanelBinding =
+        FloatingTranslationSelectPanelBinding.bind(rootLayout)
 
     private val translationProviderMenuView: MenuView by lazy {
         MenuView(context, checkable = true).apply {
-            setAnchor(tvTranslationProvider)
+            setAnchor(binding.tvTranslationProvider)
             onItemSelected = { view, key ->
                 logger.debug("onItemSelected: $key")
 
@@ -69,10 +65,10 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
     }
 
     private fun setViews() {
-        viewOutside.clickOnce { detachFromScreen() }
-        btClose.clickOnce { detachFromScreen() }
+        binding.viewOutside.clickOnce { detachFromScreen() }
+        binding.btClose.clickOnce { detachFromScreen() }
 
-        with(rvOCRLang) {
+        with(binding.rvOcrLang) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             ocrLangListAdapter = LangListAdapter(
@@ -86,7 +82,7 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
             adapter = ocrLangListAdapter
         }
 
-        with(rvTranslationLang) {
+        with(binding.rvTranslationLang) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             translationLangListAdapter = LangListAdapter(
@@ -95,12 +91,12 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
                 onItemClicked = {
                     logger.debug("on translation lang checked, $it")
 
-                    viewModel.onTranslationLangChecked(it)
+                    viewModel.onTranslationLangChecked(it.code)
                 })
             adapter = translationLangListAdapter
         }
 
-        tvTranslationProvider.clickOnce {
+        binding.tvTranslationProvider.clickOnce {
             viewModel.onTranslationProviderClicked()
         }
 
@@ -108,19 +104,19 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
             logger.debug("on ocrLanguageList changed: $it")
 
             ocrLangListAdapter.submitList(it) {
-                rvOCRLang.scrollToPosition(
+                binding.rvOcrLang.scrollToPosition(
                     it.indexOfFirst { item -> item.selected }
                         .coerceAtLeast(0))
             }
         }
 
         viewModel.selectedTranslationProviderName.observe(lifecycleOwner) {
-            tvTranslationProvider.text = it
+            binding.tvTranslationProvider.text = it
         }
 
         viewModel.translationLangList.observe(lifecycleOwner) {
             translationLangListAdapter.submitList(it) {
-                rvTranslationLang.scrollToPosition(
+                binding.rvTranslationLang.scrollToPosition(
                     it.indexOfFirst { item -> item.selected }
                         .coerceAtLeast(0)
                 )
@@ -128,7 +124,7 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         }
 
         viewModel.displayTranslationHint.observe(lifecycleOwner) {
-            tvTranslationLangHint.setTextOrGone(it)
+            binding.tvTranslationLangHint.setTextOrGone(it)
         }
 
         viewModel.displayTranslateProviders.observe(lifecycleOwner) {
@@ -153,22 +149,28 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
     private class LangListAdapter(
         private val context: Context,
         diffCallback: DiffUtil.ItemCallback<LangItem>,
-        private val onItemClicked: (langCode: String) -> Unit,
+        private val onItemClicked: (lang: LangItem) -> Unit,
     ) :
         ListAdapter<LangItem, LangListAdapter.ViewHolder>(diffCallback) {
-        class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val name: CheckedTextView = itemView as CheckedTextView
-        }
+        class ViewHolder(val binding: ItemLangListBinding) : RecyclerView.ViewHolder(binding.root)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-            ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_lang_list, parent, false))
+            ViewHolder(ItemLangListBinding.inflate(LayoutInflater.from(context), parent, false))
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = getItem(position)
 
-            holder.name.text = item.displayName
-            holder.name.isChecked = item.selected
-            holder.itemView.clickOnce { onItemClicked.invoke(item.code) }
+            with(holder.binding.lang) {
+                text = item.displayName
+                isChecked = item.selected
+                val drawable =
+                    if (item.showDownloadIcon)
+                        ContextCompat.getDrawable(context, R.drawable.ic_download)
+                    else null
+                setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, drawable, null)
+            }
+
+            holder.itemView.clickOnce { onItemClicked.invoke(item) }
         }
     }
 }

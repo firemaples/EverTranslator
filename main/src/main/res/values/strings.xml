@@ -7,6 +7,8 @@
     <string name="translation_provider_google_ml_kit">Google MLKit</string>
     <string name="translation_provider_google_translate_app">Google Translate App</string>
     <string name="translation_provider_none">OCR only</string>
+    <string name="ocr_provider_google_ml_kit">Google MLKit (Recommended)</string>
+    <string name="ocr_provider_tesseract">Tesseract</string>
 
     <string name="pref_title_use_simple_style">Use simple style</string>
     <string name="pref_summary_use_simple_style">Simple style:\nUses only one button to minimize the floating bar, click it for finding texts, long-press it for displaying menu, drag it to move.\n\nFull style:\nDisplays two buttons, one for finding texts, another one for showing menu and moving by dragging it.</string>

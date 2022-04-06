@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- The elements in this array must match to the translationtargetlanguagenames_google array. -->
-    <string-array name="ocr_langCode_iso6391" translatable="false">
+    <string-array name="lang_ocr_tesseract_display_code_iso6391" translatable="false">
         <item>af</item> <!-- Afrikaans -->
         <item>sq</item> <!-- Albanian -->
         <item>ar</item> <!-- Arabic -->

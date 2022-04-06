@@ -1,9 +1,11 @@
 package tw.firemaples.onscreenocr.utils
 
+import tw.firemaples.onscreenocr.recognition.TextRecognitionProviderType
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 
 object Constants {
     val DEFAULT_TRANSLATION_PROVIDER = TranslationProviderType.GoogleMLKit
+    val DEFAULT_OCR_PROVIDER = TextRecognitionProviderType.GoogleMLKit
     const val DEFAULT_OCR_LANG = "en"
     const val DEFAULT_TRANSLATION_LANG = "en"
 

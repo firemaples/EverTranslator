@@ -22,6 +22,34 @@ import kotlin.coroutines.suspendCoroutine
 class GoogleMLKitTextRecognizer : TextRecognizer {
     companion object {
         private val devanagariLangCodes = arrayOf("hi", "mr", "ne", "sa")
+
+        fun getSupportedLanguageList(context: Context): List<RecognitionLanguage> {
+            val res = context.resources
+            val langCodes = res.getStringArray(R.array.lang_ocr_google_mlkit_code_bcp_47)
+            val langNames = res.getStringArray(R.array.lang_ocr_google_mlkit_name)
+
+            return langCodes.indices
+                .mapNotNull { i ->
+                    val name = langNames[i]
+
+                    if (name.startsWith("old ", ignoreCase = true) ||
+                        name.startsWith("middle ", ignoreCase = true)
+                    ) null
+                    else {
+                        val code = langCodes[i]
+                        RecognitionLanguage(
+                            code = code,
+                            displayName = name,
+                            selected = false,
+                            downloaded = true,
+                            recognizer = Recognizer.GoogleMLKit,
+                            innerCode = code,
+                        )
+                    }
+                }
+                .distinctBy { it.displayName }
+                .sortedBy { it.displayName }
+        }
     }
 
     private val context: Context by lazy { Utils.context }
@@ -35,7 +63,7 @@ class GoogleMLKitTextRecognizer : TextRecognizer {
     private val recognizerMap =
         mutableMapOf<ScriptType, com.google.mlkit.vision.text.TextRecognizer>()
 
-    override suspend fun recognize(bitmap: Bitmap): RecognitionResult {
+    override suspend fun recognize(lang: RecognitionLanguage, bitmap: Bitmap): RecognitionResult {
         val lang = AppPref.selectedOCRLang
         return doRecognize(bitmap, lang)
     }
@@ -81,45 +109,58 @@ class GoogleMLKitTextRecognizer : TextRecognizer {
 
     override suspend fun parseToDisplayLangCode(langCode: String): String = langCode.toISO639()
 
-    override suspend fun supportedLanguages(): List<RecognitionLanguage> {
-        return getSupportedLanguageList()
-    }
+//    override suspend fun supportedLanguages(): List<RecognitionLanguage> {
+//        return getSupportedLanguageList()
+//    }
+//
+//    private fun getSupportedLanguageList(): List<RecognitionLanguage> {
+//        val res = context.resources
+//        val langCodes = res.getStringArray(R.array.lang_ocr_google_mlkit_code_bcp_47)
+//        val langNames = res.getStringArray(R.array.lang_ocr_google_mlkit_name)
+//        val selected = AppPref.selectedOCRLang.let {
+//            if (langCodes.contains(it)) it else Constants.DEFAULT_OCR_LANG
+//        }
+//
+//        return langCodes.indices
+//            .map { i ->
+//                val code = langCodes[i]
+//                RecognitionLanguage(
+//                    code = code,
+//                    displayName = langNames[i],
+//                    selected = code == selected,
+//                    downloaded = true,
+//                    recognizer = Recognizer.GoogleMLKit,
+//                    innerCode = code,
+//                )
+//            }
+//            .sortedBy { it.displayName }
+//            .distinctBy { it.displayName }
+//            .filterNot {
+//                it.displayName.startsWith("old ", ignoreCase = true) ||
+//                        it.displayName.startsWith("middle ", ignoreCase = true)
+//            }
+//    }
 
-    private fun getSupportedLanguageList(): List<RecognitionLanguage> {
-        val res = context.resources
-        val langCodes = res.getStringArray(R.array.lang_ocr_google_mlkit_code_bcp_47)
-        val langNames = res.getStringArray(R.array.lang_ocr_google_mlkit_name)
-        val selected = AppPref.selectedOCRLang.let {
-            if (langCodes.contains(it)) it else Constants.DEFAULT_OCR_LANG
-        }
-
-        return langCodes.indices.map { i ->
-            val code = langCodes[i]
-            RecognitionLanguage(
-                code = code,
-                displayName = langNames[i],
-                selected = code == selected,
-            )
-        }.sortedBy { it.displayName }.distinctBy { it.displayName }
-    }
-
-    private fun getSupportedScriptList(): List<RecognitionLanguage> {
-        val res = context.resources
-        val scriptCodes = res.getStringArray(R.array.google_MLKit_translationScriptCode)
-        val scriptNames = res.getStringArray(R.array.google_MLKit_translationScriptName)
-        val selected = AppPref.selectedOCRLang.let {
-            if (scriptCodes.contains(it)) it else scriptCodes[0]
-        }
-
-        return scriptCodes.indices.map { i ->
-            val code = scriptCodes[i]
-            RecognitionLanguage(
-                code = code,
-                displayName = scriptNames[i],
-                selected = code == selected,
-            )
-        }
-    }
+//    private fun getSupportedScriptList(): List<RecognitionLanguage> {
+//        val res = context.resources
+//        val scriptCodes = res.getStringArray(R.array.google_MLKit_translationScriptCode)
+//        val scriptNames = res.getStringArray(R.array.google_MLKit_translationScriptName)
+//        val selected = AppPref.selectedOCRLang.let {
+//            if (scriptCodes.contains(it)) it else scriptCodes[0]
+//        }
+//
+//        return scriptCodes.indices.map { i ->
+//            val code = scriptCodes[i]
+//            RecognitionLanguage(
+//                code = code,
+//                displayName = scriptNames[i],
+//                selected = code == selected,
+//                downloaded = true,
+//                recognizer = Recognizer.GoogleMLKit,
+//                innerCode = code,
+//            )
+//        }
+//    }
 
     private fun getScriptType(lang: String): ScriptType =
         when {

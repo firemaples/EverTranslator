@@ -88,7 +88,7 @@ class MainBar(context: Context) : MovableFloatingView(context) {
 
         btTranslate.clickOnce {
             FirebaseEvent.logClickTranslationStartButton()
-            FloatingStateManager.startScreenCapturing()
+            FloatingStateManager.startScreenCapturing(viewModel.selectedOCRLang)
         }
 
         btClose.clickOnce {
