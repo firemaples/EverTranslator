@@ -196,4 +196,7 @@ dependencies {
     // Adcolony Ad network
     implementation 'com.adcolony:sdk:4.5.0'
     implementation 'com.mopub.mediation:adcolony:4.5.0.1'
+
+    // Admob
+    implementation 'com.google.android.gms:play-services-ads:20.6.0'
 }

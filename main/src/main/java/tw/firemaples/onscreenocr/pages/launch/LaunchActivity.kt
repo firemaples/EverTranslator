@@ -1,11 +1,14 @@
 package tw.firemaples.onscreenocr.pages.launch
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.databinding.ActivityLaunchBinding
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
+import tw.firemaples.onscreenocr.utils.AdManager
 import tw.firemaples.onscreenocr.utils.MoPubAdManager
 
 class LaunchActivity : AppCompatActivity() {
@@ -17,11 +20,16 @@ class LaunchActivity : AppCompatActivity() {
             }
     }
 
+    private lateinit var binding: ActivityLaunchBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_launch)
+        binding = ActivityLaunchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        MoPubAdManager.loadPermissionPageBanner(this, findViewById(R.id.ad_permissionPage))
+        AdManager.loadBanner(binding.admobAd)
+
+//        MoPubAdManager.loadPermissionPageBanner(this, findViewById(R.id.ad_permissionPage))
 
         RemoteConfigManager.tryFetchNew()
     }

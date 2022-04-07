@@ -35,6 +35,7 @@
         <activity
             android:name=".pages.launch.LaunchActivity"
             android:exported="true"
+            android:hardwareAccelerated="true"
             android:theme="@style/Theme.EverTranslator.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,6 +52,7 @@
         <activity
             android:name=".pages.setting.SettingActivity"
             android:exported="false"
+            android:hardwareAccelerated="true"
             android:noHistory="true" />
 
         <service

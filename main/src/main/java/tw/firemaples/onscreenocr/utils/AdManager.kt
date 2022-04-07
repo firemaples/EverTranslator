@@ -1,0 +1,59 @@
+package tw.firemaples.onscreenocr.utils
+
+import android.content.Context
+import com.google.android.gms.ads.*
+
+object AdManager {
+    private val logger: Logger by lazy { Logger(AdManager::class) }
+
+    private val context: Context get() = Utils.context
+    private var initialized = false
+    private val adRequestTasks = mutableListOf<() -> Unit>()
+
+    public fun init() {
+        MobileAds.initialize(context) {
+            synchronized(AdManager) {
+                initialized = true
+            }
+            adRequestTasks.forEach { it.invoke() }
+        }
+    }
+
+    private fun afterInitialized(block: () -> Unit) {
+        if (initialized) {
+            block.invoke()
+            return
+        }
+        synchronized(AdManager) {
+            if (initialized) {
+                block.invoke()
+                return
+            }
+
+            init()
+        }
+    }
+
+    fun loadBanner(admobAd: AdView) {
+        val request = AdRequest.Builder().build()
+        admobAd.loadAd(request)
+
+        val admobUnitId = admobAd.adUnitId
+        admobAd.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                logger.debug("Admob AD loaded: $admobUnitId")
+            }
+
+            override fun onAdImpression() {
+                super.onAdImpression()
+                logger.debug("Admob AD impression: $admobUnitId")
+            }
+
+            override fun onAdFailedToLoad(error: LoadAdError) {
+                super.onAdFailedToLoad(error)
+                logger.debug("Admob AD load failed: $admobUnitId, $error")
+            }
+        }
+    }
+}
