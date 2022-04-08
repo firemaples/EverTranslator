@@ -1,15 +1,12 @@
 package tw.firemaples.onscreenocr.pages.launch
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.databinding.ActivityLaunchBinding
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
 import tw.firemaples.onscreenocr.utils.AdManager
-import tw.firemaples.onscreenocr.utils.MoPubAdManager
 
 class LaunchActivity : AppCompatActivity() {
 

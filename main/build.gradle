@@ -180,22 +180,22 @@ dependencies {
     // koral--/android-gif-drawable
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.23'
 
-    // Ad network mediation - Mopub
-    implementation('com.mopub:mopub-sdk:+@aar') {
-        transitive = true
-    }
-    implementation('com.mopub:mopub-sdk-banner:+@aar') {
-        transitive = true
-    }
-    // Facebook Ad network - Audience network
-    implementation 'com.facebook.android:audience-network-sdk:6.5.0'
-    implementation 'com.mopub.mediation:facebookaudiencenetwork:6.5.0.0'
-    // Google Ad network - Admob
-    implementation 'com.google.android.gms:play-services-ads:20.6.0'
-    implementation 'com.mopub.mediation:admob:20.2.0.0'
-    // Adcolony Ad network
-    implementation 'com.adcolony:sdk:4.5.0'
-    implementation 'com.mopub.mediation:adcolony:4.5.0.1'
+//    // Ad network mediation - Mopub
+//    implementation('com.mopub:mopub-sdk:+@aar') {
+//        transitive = true
+//    }
+//    implementation('com.mopub:mopub-sdk-banner:+@aar') {
+//        transitive = true
+//    }
+//    // Facebook Ad network - Audience network
+//    implementation 'com.facebook.android:audience-network-sdk:6.5.0'
+//    implementation 'com.mopub.mediation:facebookaudiencenetwork:6.5.0.0'
+//    // Google Ad network - Admob
+//    implementation 'com.google.android.gms:play-services-ads:20.6.0'
+//    implementation 'com.mopub.mediation:admob:20.2.0.0'
+//    // Adcolony Ad network
+//    implementation 'com.adcolony:sdk:4.5.0'
+//    implementation 'com.mopub.mediation:adcolony:4.5.0.1'
 
     // Admob
     implementation 'com.google.android.gms:play-services-ads:20.6.0'

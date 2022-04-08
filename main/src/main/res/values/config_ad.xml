@@ -4,6 +4,6 @@
     <string name="admob_ad_unit_id_permission_page_banner" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="admob_ad_unit_id_setting_page_banner" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
 
-    <string name="mopub_ad_unit_id_permission_page_banner" translatable="false" />
-    <string name="mopub_ad_unit_id_setting_page_banner" translatable="false" />
+<!--    <string name="mopub_ad_unit_id_permission_page_banner" translatable="false" />-->
+<!--    <string name="mopub_ad_unit_id_setting_page_banner" translatable="false" />-->
 </resources>

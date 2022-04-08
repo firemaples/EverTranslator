@@ -4,10 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.databinding.ActivitySettingBinding
 import tw.firemaples.onscreenocr.utils.AdManager
-import tw.firemaples.onscreenocr.utils.MoPubAdManager
 
 class SettingActivity : AppCompatActivity() {
     companion object {
