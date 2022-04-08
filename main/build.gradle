@@ -199,4 +199,8 @@ dependencies {
 
     // Admob
     implementation 'com.google.android.gms:play-services-ads:20.6.0'
+    // Facebook Ad network
+    implementation 'com.google.ads.mediation:facebook:6.8.0.1'
+    // Adcolony Ad network
+    implementation 'com.google.ads.mediation:adcolony:4.7.1.0'
 }
