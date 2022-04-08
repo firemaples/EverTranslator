@@ -2,6 +2,7 @@ package tw.firemaples.onscreenocr.utils
 
 import android.content.Context
 import com.google.android.gms.ads.*
+import tw.firemaples.onscreenocr.log.FirebaseEvent
 
 object AdManager {
     private val logger: Logger by lazy { Logger(AdManager::class) }
@@ -48,11 +49,13 @@ object AdManager {
             override fun onAdImpression() {
                 super.onAdImpression()
                 logger.debug("Admob AD impression: $admobUnitId")
+                FirebaseEvent.logEventAdShowSuccess(admobUnitId)
             }
 
             override fun onAdFailedToLoad(error: LoadAdError) {
                 super.onAdFailedToLoad(error)
                 logger.debug("Admob AD load failed: $admobUnitId, $error")
+                FirebaseEvent.loadEventAdShowFailed(admobUnitId, error.message)
             }
         }
     }
