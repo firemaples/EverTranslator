@@ -50,8 +50,8 @@ private const val EVENT_SHOW_RESULT_WINDOW = "show_result_window"
 private const val EVENT_SHOW_GOOGLE_TRANSLATE_WINDOW = "show_google_translate_window"
 private const val EVENT_SHOW_GOOGLE_TRANSLATE_WINDOW_FAILED = "show_google_translate_window_failed"
 
-private const val EVENT_AD_SHOW_SUCCESS = "ad_show_success"
-private const val EVENT_AD_SHOW_FAILED = "ad_show_failed"
+private const val EVENT_AD_SHOW_SUCCESS = "admob_show_success"
+private const val EVENT_AD_SHOW_FAILED = "admob_show_failed"
 
 object FirebaseEvent {
     private val context by lazy { Utils.context }

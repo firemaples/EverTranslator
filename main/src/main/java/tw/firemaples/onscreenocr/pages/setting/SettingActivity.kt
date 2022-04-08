@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import tw.firemaples.onscreenocr.R
-import tw.firemaples.onscreenocr.utils.MoPubAdManager
+import tw.firemaples.onscreenocr.databinding.ActivitySettingBinding
+import tw.firemaples.onscreenocr.utils.AdManager
 
 class SettingActivity : AppCompatActivity() {
     companion object {
@@ -17,10 +17,15 @@ class SettingActivity : AppCompatActivity() {
         }
     }
 
+    private lateinit var binding: ActivitySettingBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setting)
+        binding = ActivitySettingBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        MoPubAdManager.loadSettingPageBanner(this, findViewById(R.id.ad_settingPage))
+        AdManager.loadBanner(binding.admobAd)
+
+//        MoPubAdManager.loadSettingPageBanner(this, findViewById(R.id.ad_settingPage))
     }
 }
