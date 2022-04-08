@@ -8,6 +8,8 @@
     <string name="translation_provider_google_ml_kit">Google MLKit</string>
     <string name="translation_provider_google_translate_app">Google 翻译 App</string>
     <string name="translation_provider_none">仅辨识文字</string>
+    <string name="ocr_provider_google_ml_kit">Google MLKit (推荐)</string>
+    <string name="ocr_provider_tesseract">Tesseract</string>
 
     <string name="pref_title_use_simple_style">使用单一按钮</string>
     <string name="pref_summary_use_simple_style">单一按钮：\n使用单一按钮来简化悬浮条，单击寻找画面文字，长压显示选单，拖曳移动悬浮条。\n\n多按钮：\n在悬浮条中使用双按钮，其一可以寻找画面文字，另一单击显示选单，拖曳移动悬浮条。</string>
