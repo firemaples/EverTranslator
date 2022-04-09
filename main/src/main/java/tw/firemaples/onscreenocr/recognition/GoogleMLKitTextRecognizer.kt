@@ -13,7 +13,6 @@ import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.pref.AppPref
-import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Utils
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -42,7 +41,7 @@ class GoogleMLKitTextRecognizer : TextRecognizer {
                             displayName = name,
                             selected = false,
                             downloaded = true,
-                            recognizer = Recognizer.GoogleMLKit,
+                            recognizer = TextRecognitionProviderType.GoogleMLKit,
                             innerCode = code,
                         )
                     }
@@ -54,8 +53,8 @@ class GoogleMLKitTextRecognizer : TextRecognizer {
 
     private val context: Context by lazy { Utils.context }
 
-    override val type: Recognizer
-        get() = Recognizer.GoogleMLKit
+    override val type: TextRecognitionProviderType
+        get() = TextRecognitionProviderType.GoogleMLKit
 
     override val name: String
         get() = type.name

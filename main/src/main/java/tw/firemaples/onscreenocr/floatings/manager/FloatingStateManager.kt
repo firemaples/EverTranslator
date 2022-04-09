@@ -16,8 +16,9 @@ import tw.firemaples.onscreenocr.floatings.main.MainBar
 import tw.firemaples.onscreenocr.floatings.result.ResultView
 import tw.firemaples.onscreenocr.floatings.screenCircling.ScreenCirclingView
 import tw.firemaples.onscreenocr.log.FirebaseEvent
+import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
-import tw.firemaples.onscreenocr.recognition.TesseractTextRecognizer
+import tw.firemaples.onscreenocr.recognition.TextRecognitionProviderType
 import tw.firemaples.onscreenocr.recognition.TextRecognizer
 import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
 import tw.firemaples.onscreenocr.translator.MicrosoftAzureTranslator
@@ -64,6 +65,7 @@ object FloatingStateManager {
         get() = mainBar.attached
 
     private var selectedOCRLang: String = Constants.DEFAULT_OCR_LANG
+    private val selectedOCRProvider: TextRecognitionProviderType get() = AppPref.selectedOCRProvider
     private var parentRect: Rect? = null
     private var selectedRect: Rect? = null
     private var croppedBitmap: Bitmap? = null
@@ -163,10 +165,11 @@ object FloatingStateManager {
             changeState(State.TextRecognizing)
             try {
                 resultView.startRecognition()
-                val recognizer = TesseractTextRecognizer()
+                val recognizer = TextRecognizer.getRecognizer(selectedOCRProvider)
                 FirebaseEvent.logStartOCR(recognizer.name)
                 val result = recognizer.recognize(
-                    TextRecognizer.getLanguage(selectedOCRLang)!!, croppedBitmap
+                    TextRecognizer.getLanguage(selectedOCRLang, selectedOCRProvider)!!,
+                    croppedBitmap
                 )
                 logger.debug("On text recognized: $result")
                 croppedBitmap.recycle()
@@ -183,7 +186,9 @@ object FloatingStateManager {
 
                 logger.warn(t = e)
                 showError(error)
-                FirebaseEvent.logOCRFailed(TextRecognizer.getRecognizer(selectedOCRLang).name, e)
+                FirebaseEvent.logOCRFailed(
+                    TextRecognizer.getRecognizer(selectedOCRProvider).name, e
+                )
             }
         }
 

@@ -27,6 +27,7 @@
     <string name="pref_hide_recognized_result_after_translated">Hide recognized result after translated</string>
     <string name="pref_category_text_recognition">Text Recognition</string>
     <string name="pref_capturing_screen_timeout">Timeout for capturing screen (seconds)</string>
+    <string name="pref_title_enable_unrecommended_lang_items">Enable unrecommended languages items</string>
 
     <string name="menu_setting">Setting</string>
     <string name="menu_privacy_policy">Privacy Policy</string>
@@ -78,6 +79,7 @@
     <string name="error_selected_area_too_small">The selected area is too small, please enlarge it.</string>
     <string name="error_microsoft_translation_out_of_quota">Sorry, the quota of the Microsoft Azure translate is running out.\n\nIt will be reset the next month, please use another translation provider.\n\n(%1$s/%2$s)</string>
     <string name="error_can_not_connect_to_translation_server">Can not connect to the translation server, please check your internet connection</string>
+    <string name="pref_summary_unrecommended_items_will_show_in_red">Unrecommended items will show in red</string>
 
     <string-array name="textBlockJoinersNames">
         <item>Line-breaker</item>

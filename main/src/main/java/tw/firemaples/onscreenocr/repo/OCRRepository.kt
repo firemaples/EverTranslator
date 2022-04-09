@@ -14,6 +14,7 @@ import tw.firemaples.onscreenocr.api.ApiHub
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.recognition.RecognitionLanguage
 import tw.firemaples.onscreenocr.recognition.TesseractTextRecognizer
+import tw.firemaples.onscreenocr.recognition.TextRecognitionProviderType
 import tw.firemaples.onscreenocr.recognition.TextRecognizer
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.Utils
@@ -30,39 +31,22 @@ class OCRRepository {
         get() = AppPref.asLiveData(AppPref::selectedOCRLang).asFlow()
             .flowOn(Dispatchers.Default)
 
-    fun getSelectedLanguage(): Flow<RecognitionLanguage?> = flow {
-        emit(TextRecognizer.getLanguage(AppPref.selectedOCRLang))
-    }.flowOn(Dispatchers.Default)
-
     fun getAllOCRLanguages(): Flow<List<RecognitionLanguage>> = flow {
-//        val res = context.resources
-//        val codeList = res.getStringArray(R.array.ocr_langCode_iso6391)
-//        val ocrCodeList = res.getStringArray(R.array.ocr_langCode_iso6393)
-//        val displayNameList = res.getStringArray(R.array.ocr_langName)
-//
-//        val selectedLang = AppPref.selectedOCRLang
-//
-//        val result = (codeList.indices).map {
-//            val code = codeList[it]
-//            val ocrCode = ocrCodeList[it]
-//            val displayName = displayNameList[it]
-//
-//            OCRLanguage(code, ocrCode, displayName, code == selectedLang)
-//        }
-
-
-        val supportedLangList = TextRecognizer.allSupportedLanguages(AppPref.selectedOCRLang)
+        val supportedLangList = TextRecognizer.allSupportedLanguages(
+            AppPref.selectedOCRLang,
+            AppPref.selectedOCRProvider
+        )
 
         emit(supportedLangList)
     }.flowOn(Dispatchers.Default)
 
-//    fun getSelectedOCRLanguage(): Flow<String> = flow {
-//        emit(AppPref.selectedOCRLang)
-//    }.flowOn(Dispatchers.Default)
-
-    suspend fun setSelectedOCRLanguage(langCode: String) {
+    suspend fun setSelectedOCRLanguage(
+        langCode: String,
+        ocrProviderType: TextRecognitionProviderType,
+    ) {
         withContext(Dispatchers.Default) {
             AppPref.selectedOCRLang = langCode
+            AppPref.selectedOCRProvider = ocrProviderType
         }
     }
 
@@ -119,10 +103,3 @@ class OCRRepository {
             return@withContext true
         }
 }
-
-//data class OCRLanguage(
-//    val code: String,
-//    val ocrCode: String,
-//    val displayName: String,
-//    val selected: Boolean,
-//)

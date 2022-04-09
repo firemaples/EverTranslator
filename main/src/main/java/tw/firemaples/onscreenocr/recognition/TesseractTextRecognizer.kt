@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import com.googlecode.tesseract.android.TessBaseAPI
 import tw.firemaples.onscreenocr.R
-import tw.firemaples.onscreenocr.repo.OCRRepository
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.Utils
 import java.io.File
@@ -57,7 +56,7 @@ class TesseractTextRecognizer : TextRecognizer {
                         displayName = name,
                         selected = false, //displayCode == selected,
                         downloaded = downloadedCodes.contains(innerCode),
-                        recognizer = Recognizer.Tesseract,
+                        recognizer = TextRecognitionProviderType.Tesseract,
                         innerCode = innerCode,
                     )
                 }
@@ -65,10 +64,8 @@ class TesseractTextRecognizer : TextRecognizer {
         }
     }
 
-//    private val ocrRepo: OCRRepository by lazy { OCRRepository() }
-
-    override val type: Recognizer
-        get() = Recognizer.Tesseract
+    override val type: TextRecognitionProviderType
+        get() = TextRecognitionProviderType.Tesseract
     override val name: String
         get() = type.name
 
@@ -79,29 +76,8 @@ class TesseractTextRecognizer : TextRecognizer {
         val resultText = tess.utF8Text
         val boxes = tess.regions.boxRects
 
-        return RecognitionResult("en", resultText, boxes)
+        return RecognitionResult(lang.code, resultText, boxes)
     }
-
-//    @Suppress("RedundantSuspendModifier")
-//    suspend fun isTessDataExists(langCode: String): Boolean {
-//        if (!initTessDataFolder()) {
-//            return false
-//        }
-//
-//        return getTessDataFile(langCode).exists()
-//    }
-//
-//    suspend fun downloadTessLangData(langCode: String): Boolean {
-//        val file = getTessDataFile(langCode)
-//        if (ocrRepo.downloadTessData(langCode, file)) {
-//            return true
-//        }
-//        return false
-//    }
-
-//    override suspend fun supportedLanguages(): List<RecognitionLanguage> {
-//        return emptyList()
-//    }
 
     override suspend fun parseToDisplayLangCode(langCode: String): String {
         return langCode

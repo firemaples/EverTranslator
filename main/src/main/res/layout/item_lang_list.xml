@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_checkable_item"
     android:foreground="?selectableItemBackground"
+    android:gravity="center_vertical"
     android:paddingHorizontal="4dp"
     android:paddingVertical="1dp"
     tools:text="English" />

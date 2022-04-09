@@ -11,6 +11,7 @@ import tw.firemaples.onscreenocr.floatings.ViewHolderService
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.floatings.manager.State
+import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.recognition.TextRecognizer
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
 import tw.firemaples.onscreenocr.repo.GeneralRepository
@@ -151,7 +152,9 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
 
         logger.debug("onSelectedLangChanged(), ocrLang: $_ocrLang, provider: $translationProviderType, translationLang: $translationLang")
 
-        val ocrLang = TextRecognizer.getRecognizer(_ocrLang).parseToDisplayLangCode(_ocrLang)
+        val ocrLang = TextRecognizer
+            .getRecognizer(AppPref.selectedOCRProvider)
+            .parseToDisplayLangCode(_ocrLang)
 
         val displayGoogleTranslateIcon =
             translationProviderType == TranslationProviderType.GoogleTranslateApp

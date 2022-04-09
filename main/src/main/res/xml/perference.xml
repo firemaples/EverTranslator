@@ -35,6 +35,11 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_category_text_recognition">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_enable_unrecommended_lang_items"
+            android:summary="@string/pref_summary_unrecommended_items_will_show_in_red"
+            android:title="@string/pref_title_enable_unrecommended_lang_items" />
         <SeekBarPreference
             android:defaultValue="5"
             android:key="pref_timeout_for_capturing_screen"
