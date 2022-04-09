@@ -270,6 +270,7 @@ object FloatingStateManager {
                 }
             } catch (e: Exception) {
                 logger.warn(t = e)
+                FirebaseEvent.logException(e)
                 showError(e.message ?: "Unknown error found while translating")
             }
         }
