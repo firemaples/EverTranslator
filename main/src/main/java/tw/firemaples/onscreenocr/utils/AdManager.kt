@@ -2,6 +2,7 @@ package tw.firemaples.onscreenocr.utils
 
 import android.content.Context
 import com.google.android.gms.ads.*
+import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 
 object AdManager {
@@ -10,12 +11,20 @@ object AdManager {
     private val context: Context get() = Utils.context
     private var initialized = false
     private val adRequestTasks = mutableListOf<() -> Unit>()
+    private val testDevices: List<String>
+        get() = context.resources.getStringArray(R.array.admob_test_devices).toList()
 
     public fun init() {
         MobileAds.initialize(context) {
             synchronized(AdManager) {
                 initialized = true
             }
+
+            val configuration = RequestConfiguration.Builder()
+                .setTestDeviceIds(testDevices)
+                .build()
+            MobileAds.setRequestConfiguration(configuration)
+
             adRequestTasks.forEach { it.invoke() }
         }
     }
