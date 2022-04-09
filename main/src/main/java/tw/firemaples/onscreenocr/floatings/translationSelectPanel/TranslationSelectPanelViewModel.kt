@@ -4,17 +4,14 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
 import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.floatings.dialog.showDialog
 import tw.firemaples.onscreenocr.floatings.dialog.showErrorDialog
 import tw.firemaples.onscreenocr.recognition.RecognitionLanguage
-import tw.firemaples.onscreenocr.recognition.Recognizer
 import tw.firemaples.onscreenocr.recognition.TextRecognitionProviderType
 import tw.firemaples.onscreenocr.recognition.TextRecognizer
 import tw.firemaples.onscreenocr.repo.OCRRepository
@@ -27,13 +24,8 @@ import tw.firemaples.onscreenocr.utils.firstPart
 class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
     FloatingViewModel(viewScope) {
 
-    private val _selectedOCRProviderName = MutableLiveData<String>()
-    val selectedOCRProviderName: LiveData<String> = _selectedOCRProviderName
-
-    private val _displayOCRProviders = MutableLiveData<List<TextRecognitionProviderType>>()
-
-    private val _ocrLanguageList = MutableLiveData<List<LangItem>>()
-    val ocrLanguageList: LiveData<List<LangItem>> = _ocrLanguageList
+    private val _ocrLanguageList = MutableLiveData<List<OCRLangItem>>()
+    val ocrLanguageList: LiveData<List<OCRLangItem>> = _ocrLanguageList
 
     private val _selectedTranslationProviderName = MutableLiveData<String>()
     val selectedTranslationProviderName: LiveData<String> = _selectedTranslationProviderName
@@ -42,8 +34,8 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
     val displayTranslateProviders: LiveData<List<TranslationProvider>> =
         _displayTranslationProviders
 
-    private val _translationLangList = MutableLiveData<List<LangItem>>()
-    val translationLangList: LiveData<List<LangItem>> = _translationLangList
+    private val _translationLangList = MutableLiveData<List<TranslateLangItem>>()
+    val translationLangList: LiveData<List<TranslateLangItem>> = _translationLangList
 
     private val _displayTranslationHint = MutableLiveData<String?>()
     val displayTranslationHint: LiveData<String?> = _displayTranslationHint
@@ -54,14 +46,20 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
     private val ocrRepo = OCRRepository()
     private val translationRepo = TranslationRepository()
 
-    private var ocrLangList: List<RecognitionLanguage> = listOf()
-
     fun load() {
         viewScope.launch {
             val ocrLanguages = ocrRepo.getAllOCRLanguages().first()
-            ocrLangList = ocrLanguages
             _ocrLanguageList.value = ocrLanguages
-                .map { LangItem(it.code, it.displayName, it.selected, !it.downloaded) }
+                .map {
+                    OCRLangItem(
+                        code = it.code,
+                        displayName = it.displayName,
+                        selected = it.selected,
+                        showDownloadIcon = !it.downloaded,
+                        unrecommended = it.unrecommended,
+                        ocrLang = it,
+                    )
+                }
 
             val selectedTranslationProvider =
                 translationRepo.getSelectedProvider().first()
@@ -86,7 +84,7 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
                 }) {
                 _displayTranslationHint.value = null
                 _translationLangList.value = translationLanguages
-                    .map { LangItem(it.code, it.displayName, it.selected) }
+                    .map { TranslateLangItem(it.code, it.displayName, it.selected) }
             } else {
                 _displayTranslationHint.value =
                     context.getString(R.string.msg_translator_provider_does_not_support_the_ocr_lang)
@@ -95,7 +93,7 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
         }
     }
 
-    fun onOCRLangSelected(langItem: LangItem) {
+    fun onOCRLangSelected(langItem: OCRLangItem) {
         viewScope.launch {
             if (langItem.showDownloadIcon) {
                 if (!downloadOCRModel(langItem)) {
@@ -105,11 +103,11 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
                 logger.debug("Download lang item success: $langItem")
             }
 
-            ocrRepo.setSelectedOCRLanguage(langItem.code)
+            ocrRepo.setSelectedOCRLanguage(langItem.code, langItem.recognizer)
             val ocrLangList = _ocrLanguageList.value ?: return@launch
             _ocrLanguageList.value = ocrLangList.map {
                 when {
-                    it.code == langItem.code ->
+                    it.code == langItem.code && it.recognizer == langItem.recognizer ->
                         it.copy(selected = true, showDownloadIcon = false)
                     it.selected ->
                         it.copy(selected = false)
@@ -121,8 +119,8 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
         }
     }
 
-    private suspend fun downloadOCRModel(langItem: LangItem): Boolean {
-        val ocrLang = ocrLangList.firstOrNull { it.code == langItem.code } ?: return false
+    private suspend fun downloadOCRModel(langItem: OCRLangItem): Boolean {
+        val ocrLang = langItem.ocrLang
         val result = context.showDialog(
             title = "Download OCR model",
             message = "Do you want to download ${langItem.displayName} language model for OCR?",
@@ -132,7 +130,7 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
 
         if (result) {
             when (val recognizer = ocrLang.recognizer) {
-                Recognizer.Tesseract -> {
+                TextRecognitionProviderType.Tesseract -> {
                     var cancelled = false
                     val dialogJob = viewScope.launch {
                         val downloadDialogResult = context.showDialog(
@@ -196,9 +194,27 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
     }
 }
 
-data class LangItem(
-    val code: String,
-    val displayName: String,
-    val selected: Boolean,
-    val showDownloadIcon: Boolean = false,
+sealed class LangItem(
+    open val code: String,
+    open val displayName: String,
+    open val selected: Boolean,
+    open val showDownloadIcon: Boolean = false,
+    open val unrecommended: Boolean = false,
 )
+
+data class OCRLangItem(
+    override val code: String,
+    override val displayName: String,
+    override val selected: Boolean,
+    override val showDownloadIcon: Boolean = false,
+    override val unrecommended: Boolean = false,
+    val ocrLang: RecognitionLanguage,
+) : LangItem(code, displayName, selected, showDownloadIcon, unrecommended) {
+    val recognizer: TextRecognitionProviderType get() = ocrLang.recognizer
+}
+
+data class TranslateLangItem(
+    override val code: String,
+    override val displayName: String,
+    override val selected: Boolean,
+) : LangItem(code, displayName, selected)

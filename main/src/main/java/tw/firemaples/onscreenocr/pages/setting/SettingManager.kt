@@ -5,6 +5,7 @@ import androidx.preference.PreferenceManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import tw.firemaples.onscreenocr.recognition.TextRecognizer
 import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.SamsungSpenInsertedReceiver
@@ -18,6 +19,7 @@ object SettingManager {
     private const val PREF_FADE_OUT_AFTER_SECONDS = "pref_fade_out_after_seconds"
     private const val PREF_OPAQUE_PERCENTAGE = "pref_opaque_percentage"
 
+    const val PREF_ENABLE_UNRECOMMENDED_LANG_ITEMS = "pref_enable_unrecommended_lang_items"
     private const val PREF_TIMEOUT_FOR_CAPTURING_SCREEN = "pref_timeout_for_capturing_screen"
     private const val PREF_TEXT_BLOCK_JOINER = "pref_text_block_joiner"
 
@@ -49,6 +51,9 @@ object SettingManager {
 
     val opaquePercentageToFadeOut: Float
         get() = preferences.getInt(PREF_OPAQUE_PERCENTAGE, 20).toFloat() / 100f
+
+    val enableUnrecommendedLangItems: Boolean
+        get() = preferences.getBoolean(PREF_ENABLE_UNRECOMMENDED_LANG_ITEMS, false)
 
     val timeoutForCapturingScreen: Long
         get() = preferences.getInt(
@@ -87,13 +92,18 @@ object SettingManager {
 
     init {
         preferences.registerOnSharedPreferenceChangeListener { _, key ->
-            if (key == PREF_EXIT_APP_WHILE_SPEN_INSERTED) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    if (exitAppWhileSPenInserted) {
-                        SamsungSpenInsertedReceiver.start()
-                    } else {
-                        SamsungSpenInsertedReceiver.stop()
+            when (key) {
+                PREF_EXIT_APP_WHILE_SPEN_INSERTED -> {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        if (exitAppWhileSPenInserted) {
+                            SamsungSpenInsertedReceiver.start()
+                        } else {
+                            SamsungSpenInsertedReceiver.stop()
+                        }
                     }
+                }
+                PREF_ENABLE_UNRECOMMENDED_LANG_ITEMS -> {
+                    TextRecognizer.invalidSupportLanguages()
                 }
             }
         }

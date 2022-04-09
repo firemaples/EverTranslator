@@ -9,6 +9,7 @@ import com.chibatching.kotpref.gsonpref.gson
 import com.chibatching.kotpref.gsonpref.gsonNullablePref
 import com.chibatching.kotpref.gsonpref.gsonPref
 import com.google.gson.Gson
+import tw.firemaples.onscreenocr.recognition.TextRecognitionProviderType
 import tw.firemaples.onscreenocr.utils.Constants
 
 object AppPref : KotprefModel() {
@@ -16,9 +17,15 @@ object AppPref : KotprefModel() {
         Kotpref.gson = Gson()
     }
 
-    var selectedOCRProvider by stringPref(
+    var selectedOCRProviderKey by stringPref(
         default = Constants.DEFAULT_OCR_PROVIDER.key
     )
+    var selectedOCRProvider: TextRecognitionProviderType
+        get() = TextRecognitionProviderType.values()
+            .firstOrNull { it.key == selectedOCRProviderKey } ?: Constants.DEFAULT_OCR_PROVIDER
+        set(value) {
+            selectedOCRProviderKey = value.key
+        }
     var selectedOCRLang by stringPref(default = Constants.DEFAULT_OCR_LANG)
 
     var selectedTranslationProvider by stringPref(

@@ -85,4 +85,6 @@
         <item>空格</item>
         <item>无</item>
     </string-array>
+    <string name="pref_title_enable_unrecommended_lang_items">顯示非推薦的語言選項</string>
+    <string name="pref_summary_unrecommended_items_will_show_in_red">非推薦的語言選項將顯示為紅色</string>
 </resources>
