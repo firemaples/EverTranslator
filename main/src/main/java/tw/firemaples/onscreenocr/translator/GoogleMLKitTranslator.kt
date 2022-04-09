@@ -58,7 +58,7 @@ object GoogleMLKitTranslator : Translator {
 
         val targetLangCode = supportedLanguages().firstOrNull { it.selected }?.code
             ?: return TranslationResult.TranslationFailed(IllegalArgumentException("Selected language code is not found"))
-        val sourceLang = TranslateLanguage.fromLanguageTag(sourceLangCode)
+        val sourceLang = TranslateLanguage.fromLanguageTag(sourceLangCode.firstPart())
             ?: return TranslationResult.TranslationFailed(IllegalArgumentException("Parsing language tag failed, sourceLangCode: $sourceLangCode"))
         val targetLang = TranslateLanguage.fromLanguageTag(targetLangCode)
             ?: return TranslationResult.TranslationFailed(IllegalArgumentException("Parsing language tag failed, targetLangCode: $targetLangCode"))
