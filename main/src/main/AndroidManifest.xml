@@ -66,34 +66,6 @@
             </intent-filter>
         </service>
 
-
-        <!-- START # Override them to add the exported attribute for target version 31 -->
-        <activity
-            android:name="com.mopub.mobileads.MoPubFullscreenActivity"
-            android:exported="false"
-            tools:replace="exported" />
-
-        <activity
-            android:name="com.mopub.common.MoPubBrowser"
-            android:exported="false"
-            tools:replace="exported" />
-
-        <activity
-            android:name="com.mopub.common.privacy.ConsentDialogActivity"
-            android:exported="false"
-            tools:replace="exported" />
-
-        <activity
-            android:name="com.adcolony.sdk.AdColonyInterstitialActivity"
-            android:exported="false"
-            tools:replace="exported" />
-
-        <activity
-            android:name="com.adcolony.sdk.AdColonyAdViewActivity"
-            android:exported="false"
-            tools:replace="exported" />
-        <!-- END # Override them to add the exported attribute for target version 31 -->
-
     </application>
 
 </manifest>
