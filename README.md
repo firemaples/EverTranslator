@@ -30,9 +30,13 @@ Android 5.0 (API level 21) or above.
 ## Get the app
 
 ### Download it on Google Play
+
 <a href="https://play.google.com/store/apps/details?id=tw.firemaples.onscreenocr">
   <img src="https://play.google.com/intl/en_us/badges/images/badge_new.png" alt="Get it on google play" />
 </a>
 
 ### Build from source
 
+1. Clone project by
+``` git clong git@github.com:firemaples/EverTranslator.git ```
+2. Build debug APK file by ```./gradlew clean assembleDebug```
