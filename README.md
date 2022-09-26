@@ -45,13 +45,14 @@ Android 5.0 (API level 21) or above.
 #### Produce APK by command line
 
 1. Create a local file `./local.properties` and put your Android SDK path to it as `sdk.dir=path to SDK`, or simplily <a href='#open-project-in-android-stuido'>open the project with Android Studio</a>, it will automatically create the required file for you.
-1. Assemble APK file ```./gradlew clean assembleDevDebug```
+1. Assemble APK file by ```./gradlew clean assembleDevDebug```
 1. You can find the APK file on `main/build/outputs/apk/dev/debug/main-dev-debug.apk`
-1. Install debug APK to your phone ```adb install -r -t main/build/outputs/apk/dev/debug/main-dev-debug.apk```
+1. Install debug APK to your phone by ```adb install -r -t main/build/outputs/apk/dev/debug/main-dev-debug.apk```
 
 #### Open project in Android Stuido
 
-1. Open the project's root folder by Android Studio, the application module is the `main` folder
+1. Open the project's root folder by Android Studio, the application module is the `main` folder.
+1. You can simplily build and run application by the built-in buttons in Android Studio.
 
 #### Flavors
 
