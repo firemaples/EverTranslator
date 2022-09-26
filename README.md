@@ -58,3 +58,9 @@ Android 5.0 (API level 21) or above.
 
 - **Dev** for development
 - **Prod** for releasing to Google Play
+
+## Contact
+
+If you encounter a bug, please open an issue.  
+
+For general questions, you can also open an issue or send an email firemaples@gmail.com.
