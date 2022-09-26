@@ -37,6 +37,16 @@ Android 5.0 (API level 21) or above.
 
 ### Build from source
 
-1. Clone project by
-``` git clong git@github.com:firemaples/EverTranslator.git ```
-2. Build debug APK file by ```./gradlew clean assembleDebug```
+#### Produce debug APK
+
+```./gradlew clean assembleDevDebug```
+
+You can find the APK file on `main/build/outputs/apk/dev/debug/main-dev-debug.apk`
+
+#### Install debug APK to your phone
+
+```adb install main/build/outputs/apk/dev/debug/main-dev-debug.apk -r -t```
+
+#### Edit project in Android Stuido
+
+Open the project root folder by Android Studio, the application module is the `main` folder
