@@ -5,13 +5,13 @@ buildscript {
     ext.nav_version = "2.5.0-rc01"
     repositories {
         google()
+        mavenCentral()
         maven {
             url "https://jitpack.io"
         }
         maven {
             url 'https://maven.google.com'
         }
-        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.2.0'
@@ -31,13 +31,13 @@ buildscript {
 allprojects {
     repositories {
         google()
+        mavenCentral()
         maven {
             url "https://jitpack.io"
         }
         maven {
             url 'https://maven.google.com'
         }
-        mavenCentral()
     }
 }
 
