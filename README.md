@@ -1,5 +1,5 @@
 
-# Ever Translator [![GitHub version](https://badge.fury.io/gh/firemaples%2FEverTranslator.svg)](https://badge.fury.io/gh/firemaples%2FEverTranslator) [![CI](https://github.com/firemaples/EverTranslator/actions/workflows/ci.yml/badge.svg)](https://github.com/firemaples/EverTranslator/actions/workflows/ci.yml)
+# EverTranslator [![GitHub version](https://badge.fury.io/gh/firemaples%2FEverTranslator.svg)](https://badge.fury.io/gh/firemaples%2FEverTranslator) [![CI](https://github.com/firemaples/EverTranslator/actions/workflows/ci.yml/badge.svg)](https://github.com/firemaples/EverTranslator/actions/workflows/ci.yml)
 
 <a href="https://play.google.com/store/apps/details?id=tw.firemaples.onscreenocr">
   <img src="materials/mipmap-xxhdpi/icon.png" alt="app icon" align="right" />
