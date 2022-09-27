@@ -1,10 +1,12 @@
 
-# EverTranslator [![GitHub version](https://badge.fury.io/gh/firemaples%2FEverTranslator.svg)](https://badge.fury.io/gh/firemaples%2FEverTranslator) [![CI](https://github.com/firemaples/EverTranslator/actions/workflows/ci.yml/badge.svg)](https://github.com/firemaples/EverTranslator/actions/workflows/ci.yml)
-
+# EverTranslator 
+[![GitHub version](https://badge.fury.io/gh/firemaples%2FEverTranslator.svg)](https://badge.fury.io/gh/firemaples%2FEverTranslator) 
+[![CI](https://github.com/firemaples/EverTranslator/actions/workflows/ci.yml/badge.svg)](https://github.com/firemaples/EverTranslator/actions/workflows/ci.yml)
 <a href="https://play.google.com/store/apps/details?id=tw.firemaples.onscreenocr">
-  <img src="materials/mipmap-xxhdpi/icon.png" alt="app icon" align="right" />
-  <img src="https://play.google.com/intl/en_us/badges/images/badge_new.png" align="right" alt="Get it on google play" />
+  <img src="https://play.google.com/intl/en_us/badges/images/badge_new.png" alt="Get it on google play" />
 </a>
+
+<img src="materials/mipmap-xxhdpi/icon.png" alt="app icon" align="right" />
 
 Translate any text on screen, even in games!
 
@@ -25,7 +27,8 @@ Translate any text on screen, even in games!
 
 ## Requirement
 
-Android 5.0 (API level 21) or above.
+- Android 5.0 (API level 21) or above.
+- Permission of display over other apps. (not suitable for Android Go)
 
 ## Get the app
 
