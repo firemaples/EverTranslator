@@ -92,22 +92,22 @@ dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.6.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.core:core-ktx:1.8.0' // newer version needs API 33 (Android 13)
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation "androidx.preference:preference-ktx:1.2.0"
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2'
     // For using coroutines in tests
     // For runBlockingTest, CoroutineDispatcher etc.
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.2"
     // For InstantTaskExecutorRule
     testImplementation "androidx.arch.core:core-testing:2.1.0"
 
@@ -126,7 +126,7 @@ dependencies {
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
 
     // Firebase
-    implementation platform('com.google.firebase:firebase-bom:29.0.4')
+    implementation platform('com.google.firebase:firebase-bom:30.5.0')
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-core'
@@ -135,21 +135,21 @@ dependencies {
 
     // Google MLKit - Text recognition v2
     // To recognize Latin script
-    implementation 'com.google.mlkit:text-recognition:16.0.0-beta4'
+    implementation 'com.google.mlkit:text-recognition:16.0.0-beta6'
     // To recognize Chinese script
-    implementation 'com.google.mlkit:text-recognition-chinese:16.0.0-beta4'
+    implementation 'com.google.mlkit:text-recognition-chinese:16.0.0-beta6'
     // To recognize Devanagari script
-    implementation 'com.google.mlkit:text-recognition-devanagari:16.0.0-beta4'
+    implementation 'com.google.mlkit:text-recognition-devanagari:16.0.0-beta6'
     // To recognize Japanese script
-    implementation 'com.google.mlkit:text-recognition-japanese:16.0.0-beta4'
+    implementation 'com.google.mlkit:text-recognition-japanese:16.0.0-beta6'
     // To recognize Korean script
-    implementation 'com.google.mlkit:text-recognition-korean:16.0.0-beta4'
+    implementation 'com.google.mlkit:text-recognition-korean:16.0.0-beta6'
 
     // Google MLKit - Text translate
-    implementation 'com.google.mlkit:translate:17.0.0'
+    implementation 'com.google.mlkit:translate:17.0.1'
 
     // Google MLKit - Identify Languages
-    implementation 'com.google.mlkit:language-id:17.0.3'
+    implementation 'com.google.mlkit:language-id:17.0.4'
 
     // Kotpref
     // core
@@ -198,9 +198,9 @@ dependencies {
 //    implementation 'com.mopub.mediation:adcolony:4.5.0.1'
 
     // Admob
-    implementation 'com.google.android.gms:play-services-ads:20.6.0'
+    implementation 'com.google.android.gms:play-services-ads:21.2.0'
     // Facebook Ad network
-    implementation 'com.google.ads.mediation:facebook:6.10.0.0'
+    implementation 'com.google.ads.mediation:facebook:6.11.0.0'
     // Adcolony Ad network
-    implementation 'com.google.ads.mediation:adcolony:4.7.1.0'
+    implementation 'com.google.ads.mediation:adcolony:4.8.0.0'
 }
