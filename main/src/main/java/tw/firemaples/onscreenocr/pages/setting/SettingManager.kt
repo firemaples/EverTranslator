@@ -22,6 +22,7 @@ object SettingManager {
     const val PREF_ENABLE_UNRECOMMENDED_LANG_ITEMS = "pref_enable_unrecommended_lang_items"
     private const val PREF_TIMEOUT_FOR_CAPTURING_SCREEN = "pref_timeout_for_capturing_screen"
     private const val PREF_TEXT_BLOCK_JOINER = "pref_text_block_joiner"
+    private const val PREF_REMOVE_END_DASH = "pref_remove_end_dash"
 
     private const val PREF_AUTO_COPY_OCR_RESULT = "pref_auto_copy_ocr_result"
     private const val PREF_HIDE_RECOGNIZED_RESULT_AFTER_TRANSLATED =
@@ -77,6 +78,9 @@ object SettingManager {
         Space(" "),
         None(""),
     }
+
+    val removeEndDash: Boolean
+        get() = preferences.getBoolean(PREF_REMOVE_END_DASH, true)
 
     val autoCopyOCRResult: Boolean
         get() = preferences.getBoolean(PREF_AUTO_COPY_OCR_RESULT, false)
