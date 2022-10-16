@@ -54,6 +54,11 @@
             android:key="pref_text_block_joiner"
             android:title="@string/pref_joiner_between_text_blocks"
             app:useSimpleSummaryProvider="true" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_remove_end_dash"
+            android:summary="@string/pref_summary_remove_end_dash"
+            android:title="@string/pref_title_remove_end_dash" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_result_panel">

@@ -28,6 +28,8 @@
     <string name="pref_category_text_recognition">Text Recognition</string>
     <string name="pref_capturing_screen_timeout">Timeout for capturing screen (seconds)</string>
     <string name="pref_title_enable_unrecommended_lang_items">Display unrecommended languages options</string>
+    <string name="pref_title_remove_end_dash">Remove ending dashes</string>
+    <string name="pref_summary_remove_end_dash">Remove dash symbols in the end of lines</string>
 
     <string name="menu_setting">Setting</string>
     <string name="menu_privacy_policy">Privacy Policy</string>
