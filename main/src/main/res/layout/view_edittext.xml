@@ -2,6 +2,8 @@
 <EditText xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:inputType="text"
+    android:gravity="top|start"
+    android:inputType="textMultiLine"
+    android:minLines="3"
     android:textColor="@color/foreground"
     android:theme="@style/Theme.EverTranslator" />
