@@ -85,6 +85,8 @@
         <item>空格</item>
         <item>無</item>
     </string-array>
-    <string name="pref_title_enable_unrecommended_lang_items">显示非推荐的语言选项</string>
-    <string name="pref_summary_unrecommended_items_will_show_in_red">非推荐的语言选项将显示为红色</string>
+    <string name="pref_title_enable_unrecommended_lang_items">顯示非推薦的語言選項</string>
+    <string name="pref_summary_unrecommended_items_will_show_in_red">非推薦的語言選項將顯示為紅色</string>
+    <string name="pref_title_remove_end_dash">移除結尾連字號</string>
+    <string name="pref_summary_remove_end_dash">移除每行文字結尾的連字符號</string>
 </resources>
