@@ -25,6 +25,8 @@ android {
         buildConfigField "boolean", "ENABLE_ADS", "true"
     }
 
+    namespace 'tw.firemaples.onscreenocr'
+
     buildTypes {
         release {
             minifyEnabled true
@@ -82,9 +84,10 @@ android {
     buildFeatures {
         viewBinding true
     }
-
     packagingOptions {
-        pickFirst 'lib/*/*.so'
+        jniLibs {
+            pickFirsts += ['lib/*/*.so']
+        }
     }
 }
 
