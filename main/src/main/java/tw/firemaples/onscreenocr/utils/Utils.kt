@@ -40,6 +40,21 @@ object Utils {
         }
     }
 
+    fun shareText(text: String) {
+        val sendIntent = Intent(Intent.ACTION_SEND).apply {
+            putExtra(Intent.EXTRA_TEXT, text)
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        shareIntent.flags += Intent.FLAG_ACTIVITY_NEW_TASK
+
+        try {
+            ContextCompat.startActivity(context, shareIntent, null)
+        } catch (e: Exception) {
+            logger.warn("Share text failed", e)
+        }
+    }
+
     fun copyToClipboard(label: String, text: String) {
         (context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager)?.let {
             it.setPrimaryClip(ClipData.newPlainText(label, text))

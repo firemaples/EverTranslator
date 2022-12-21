@@ -120,6 +120,10 @@ class ResultView(context: Context) : FloatingView(context) {
             GoogleTranslateUtils.launchGoogleTranslateApp(tvTranslatedText.text.toString())
             onUserDismiss?.invoke()
         }
+        btShareOCRText.clickOnce {
+            val ocrText = viewModel.ocrText.value ?: return@clickOnce
+            Utils.shareText(ocrText)
+        }
     }
 
     private fun showRecognizedTextEditor(recognizedText: String) {
