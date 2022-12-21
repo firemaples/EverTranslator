@@ -3,14 +3,15 @@ package tw.firemaples.onscreenocr.floatings.result
 import android.content.Context
 import android.graphics.Rect
 import android.text.method.ScrollingMovementMethod
+import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-import android.widget.EditText
 import android.widget.RelativeLayout
-import android.widget.TextView
-import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.databinding.FloatingResultViewBinding
+import tw.firemaples.onscreenocr.databinding.ViewEdittextBinding
+import tw.firemaples.onscreenocr.databinding.ViewResultPanelBinding
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.floatings.manager.Result
@@ -38,54 +39,30 @@ class ResultView(context: Context) : FloatingView(context) {
 
     private val viewModel: ResultViewModel by lazy { ResultViewModel(viewScope) }
 
-    private val viewRoot: RelativeLayout = rootView.findViewById(R.id.viewRoot)
+    private val binding: FloatingResultViewBinding = FloatingResultViewBinding.bind(rootLayout)
+
+    private val viewRoot: RelativeLayout = binding.viewRoot
 
     var onUserDismiss: (() -> Unit)? = null
 
-    private val viewResultWindow: View = rootView.findViewById(R.id.view_resultWindow)
+    private val viewResultWindow: View = binding.viewResultWindow
 
     private var unionRect: Rect = Rect()
 
     init {
-        setViews()
+        binding.resultPanel.setViews()
     }
 
-    private fun setViews() {
-        val btReadOutOCRText: View = rootView.findViewById(R.id.bt_readOutOCRText)
-        val btEditOCRText: View = rootView.findViewById(R.id.bt_editOCRText)
-        val btCopyOCRText: View = rootView.findViewById(R.id.bt_copyOCRText)
-        val btTranslateOCRTextWithGoogleTranslate: View =
-            rootView.findViewById(R.id.bt_translateOCRTextWithGoogleTranslate)
-
-        val btReadOutTranslatedText: View = rootView.findViewById(R.id.bt_readOutTranslatedText)
-        val btCopyTranslatedText: View = rootView.findViewById(R.id.bt_copyTranslatedText)
-        val btTranslateTranslatedTextWithGoogleTranslate: View =
-            rootView.findViewById(R.id.bt_translateTranslatedTextWithGoogleTranslate)
-
-        val pbOCROperating: View = rootView.findViewById(R.id.pb_ocrOperating)
-        val pbTranslating: View = rootView.findViewById(R.id.pb_translationOperating)
-
-        val tvOCRText: TextView = rootView.findViewById(R.id.tv_ocrText)
-        val tvTranslatedText: TextView = rootView.findViewById(R.id.tv_translatedText)
-
-        val groupRecognitionViews: Group = rootView.findViewById(R.id.group_recognitionViews)
-        val groupTranslationViews: Group = rootView.findViewById(R.id.group_translationViews)
-
-        val tvTranslationProvider: TextView = rootView.findViewById(R.id.tv_translationProvider)
-        val viewTranslatedByGoogle: View = rootView.findViewById(R.id.iv_translatedByGoogle)
-
-        val boundingBoxView: TextBoundingBoxView =
-            rootView.findViewById(R.id.view_textBoundingBoxView)
-
+    private fun ViewResultPanelBinding.setViews() {
         viewModel.displayOCROperationProgress.observe(lifecycleOwner) {
-            pbOCROperating.showOrHide(it)
+            pbOcrOperating.showOrHide(it)
         }
         viewModel.displayTranslationProgress.observe(lifecycleOwner) {
-            pbTranslating.showOrHide(it)
+            pbTranslationOperating.showOrHide(it)
         }
 
         viewModel.ocrText.observe(lifecycleOwner) {
-            tvOCRText.text = it
+            tvOcrText.text = it
         }
         viewModel.translatedText.observe(lifecycleOwner) {
             if (it == null) {
@@ -110,12 +87,12 @@ class ResultView(context: Context) : FloatingView(context) {
             tvTranslationProvider.setTextOrGone(it)
         }
         viewModel.displayTranslatedByGoogle.observe(lifecycleOwner) {
-            viewTranslatedByGoogle.showOrHide(it)
+            ivTranslatedByGoogle.showOrHide(it)
         }
 
         viewModel.displayRecognizedTextAreas.observe(lifecycleOwner) {
             val (boundingBoxes, unionRect) = it
-            boundingBoxView.boundingBoxes = boundingBoxes
+            binding.viewTextBoundingBoxView.boundingBoxes = boundingBoxes
             updateSelectedAreas(unionRect)
         }
 
@@ -123,20 +100,20 @@ class ResultView(context: Context) : FloatingView(context) {
             Utils.copyToClipboard(LABEL_RECOGNIZED_TEXT, it)
         }
 
-        tvOCRText.movementMethod = ScrollingMovementMethod()
+        tvOcrText.movementMethod = ScrollingMovementMethod()
         tvTranslatedText.movementMethod = ScrollingMovementMethod()
         viewRoot.clickOnce { onUserDismiss?.invoke() }
         btEditOCRText.clickOnce {
-            showRecognizedTextEditor(tvOCRText.text.toString())
+            showRecognizedTextEditor(tvOcrText.text.toString())
         }
         btCopyOCRText.clickOnce {
-            Utils.copyToClipboard(LABEL_RECOGNIZED_TEXT, tvOCRText.text.toString())
+            Utils.copyToClipboard(LABEL_RECOGNIZED_TEXT, tvOcrText.text.toString())
         }
         btCopyTranslatedText.clickOnce {
             Utils.copyToClipboard(LABEL_TRANSLATED_TEXT, tvTranslatedText.text.toString())
         }
         btTranslateOCRTextWithGoogleTranslate.clickOnce {
-            GoogleTranslateUtils.launchGoogleTranslateApp(tvOCRText.text.toString())
+            GoogleTranslateUtils.launchGoogleTranslateApp(tvOcrText.text.toString())
             onUserDismiss?.invoke()
         }
         btTranslateTranslatedTextWithGoogleTranslate.clickOnce {
@@ -150,7 +127,9 @@ class ResultView(context: Context) : FloatingView(context) {
             override val layoutFocusable: Boolean
                 get() = true
         }.apply {
-            val etOCRText = View.inflate(context, R.layout.view_edittext, null) as EditText
+            val contentBinding = ViewEdittextBinding.inflate(LayoutInflater.from(context))
+            val etOCRText = contentBinding.root
+
             etOCRText.setText(recognizedText)
             setContentView(etOCRText)
 

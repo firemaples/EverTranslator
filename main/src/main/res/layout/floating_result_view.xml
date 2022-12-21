@@ -20,7 +20,9 @@
         android:focusable="true"
         android:theme="@style/Theme.EverTranslator">
 
-        <include layout="@layout/view_result_panel" />
+        <include
+            android:id="@+id/resultPanel"
+            layout="@layout/view_result_panel" />
 
     </com.google.android.material.card.MaterialCardView>
 
