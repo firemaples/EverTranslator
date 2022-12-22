@@ -92,17 +92,22 @@ class GoogleMLKitTextRecognizer : TextRecognizer {
             recognizer.process(image)
                 .addOnSuccessListener { result ->
                     val joiner = SettingManager.textBlockJoiner.joiner
-                    var text = result.textBlocks
+                    val text = result.textBlocks
                         .joinToString(separator = joiner) {
-                            if (SettingManager.removeLineBreakersInBlock) {
-                                it.text
-                                    .replace("\n ", " ")
-                                    .replace("\n", " ")
-                            } else it.text
+                            it.text
+                                .let { text ->
+                                    if (SettingManager.removeEndDash) {
+                                        text.replace("-\n", "")
+                                            .replace("-$".toRegex(), "")
+                                    } else text
+                                }
+                                .let { text ->
+                                    if (SettingManager.removeLineBreakersInBlock) {
+                                        text.replace("\n ", " ")
+                                            .replace("\n", " ")
+                                    } else text
+                                }
                         }
-                    if (SettingManager.removeEndDash) {
-                        text = text.replace("-\n", "")
-                    }
 
                     it.resume(
                         RecognitionResult(
