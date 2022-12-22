@@ -89,4 +89,6 @@
     <string name="pref_title_remove_end_dash">移除结尾连字号</string>
     <string name="pref_summary_remove_end_dash">移除每行文字结尾的连字符号</string>
     <string name="pref_summary_unrecommended_items_will_show_in_red">非推荐的语言选项将显示为红色</string>
+    <string name="pref_title_remove_line_breaks_in_block">移除文字区块中的换行字元</string>
+    <string name="pref_summary_remove_line_breaks_in_block">避免文字区块中的文字遭到换行字元切断</string>
 </resources>
