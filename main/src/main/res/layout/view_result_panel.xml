@@ -47,6 +47,11 @@
             style="@style/resultPanel_button"
             android:src="@drawable/ic_google_translate" />
 
+        <ImageButton
+            android:id="@+id/bt_shareOCRText"
+            style="@style/resultPanel_button"
+            android:src="@drawable/ic_export" />
+
     </LinearLayout>
 
     <LinearLayout
