@@ -6,6 +6,7 @@ plugins {
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
     id 'com.google.firebase.firebase-perf'
+    id 'com.google.dagger.hilt.android'
 }
 
 def buildParams = getGradle().getStartParameter().toString().toLowerCase()
@@ -100,6 +101,10 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes true
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
@@ -137,6 +142,10 @@ dependencies {
 
     // required to avoid crash on Android 12 API 31
     implementation 'androidx.work:work-runtime-ktx:2.8.1'
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:2.48"
+    kapt "com.google.dagger:hilt-compiler:2.48"
 
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:32.6.0')
