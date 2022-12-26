@@ -123,6 +123,7 @@ class ResultView(context: Context) : FloatingView(context) {
         btShareOCRText.clickOnce {
             val ocrText = viewModel.ocrText.value ?: return@clickOnce
             Utils.shareText(ocrText)
+            viewResultWindow.visibility = View.GONE
         }
     }
 
