@@ -6,43 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".pages.launch.LaunchActivity">
 
-    <!--    <com.mopub.mobileads.MoPubView-->
-    <!--        android:id="@+id/ad_permissionPage"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-    <!--        app:moPubAdSize="height_280" />-->
-
-    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+    <include
         android:id="@+id/admobAd"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        ads:adSize="MEDIUM_RECTANGLE"
-        ads:adUnitId="@string/admob_ad_unit_id_permission_page_banner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        layout="@layout/view_ad_activity_launch" />
 
-    <!--<androidx.constraintlayout.widget.Barrier
-       android:id="@+id/line_ads"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/line_centerVertical"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="admobAd" /> />-->
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
 
     <fragment
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:minHeight="170dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/line_centerVertical"
         app:navGraph="@navigation/launch_graph" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

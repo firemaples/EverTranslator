@@ -24,7 +24,7 @@ class LaunchActivity : AppCompatActivity() {
         binding = ActivityLaunchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        AdManager.loadBanner(binding.admobAd)
+        AdManager.loadBanner(binding.admobAd.root)
 
 //        MoPubAdManager.loadPermissionPageBanner(this, findViewById(R.id.ad_permissionPage))
 
