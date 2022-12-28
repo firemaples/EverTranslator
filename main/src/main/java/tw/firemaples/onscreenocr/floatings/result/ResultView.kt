@@ -125,6 +125,12 @@ class ResultView(context: Context) : FloatingView(context) {
             Utils.shareText(ocrText)
             onUserDismiss?.invoke()
         }
+        btIncreaseSize.clickOnce {
+            tvOcrText.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvOcrText.textSize + 5)
+        }
+        btDecreaseSize.clickOnce {
+            tvOcrText.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvOcrText.textSize - 5)
+        }
     }
 
     private fun showRecognizedTextEditor(recognizedText: String) {
