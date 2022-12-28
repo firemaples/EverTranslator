@@ -7,7 +7,6 @@ import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.pages.launch.LaunchActivity
 import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
@@ -71,6 +70,7 @@ class QuickTileService : TileService() {
     }
 
     private fun updateTileState(isShowing: Boolean) {
+        logger.debug("updateTileState, isShowing: $isShowing")
         val tile = qsTile ?: return
         tile.state = if (isShowing) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
         tile.updateTile()

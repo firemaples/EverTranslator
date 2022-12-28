@@ -4,10 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
@@ -57,10 +54,8 @@ object FloatingStateManager {
         }
     }
 
-    private val _showingStateChangedFlow = MutableSharedFlow<Boolean>(
-        replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-    val showingStateChangedFlow: SharedFlow<Boolean> = _showingStateChangedFlow
+    private val _showingStateChangedFlow = MutableStateFlow(false)
+    val showingStateChangedFlow: StateFlow<Boolean> = _showingStateChangedFlow
     val isMainBarAttached: Boolean
         get() = mainBar.attached
 
