@@ -51,6 +51,16 @@
             android:id="@+id/bt_shareOCRText"
             style="@style/resultPanel_button"
             android:src="@drawable/ic_export" />
+        
+         <ImageButton
+            android:id="@+id/bt_increase_size"
+            style="@style/resultPanel_button"
+            android:src="@drawable/ic_export" />
+
+        <ImageButton
+            android:id="@+id/bt_decrease_size"
+            style="@style/resultPanel_button"
+            android:src="@drawable/ic_export" />
 
     </LinearLayout>
 
