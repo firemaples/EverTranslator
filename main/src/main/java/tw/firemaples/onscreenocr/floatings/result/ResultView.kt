@@ -127,11 +127,11 @@ class ResultView(context: Context) : FloatingView(context) {
         }
         btIncreaseSize.clickOnce {
             tvOcrText.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvOcrText.textSize + 5)
-            tv_translatedText.setTextSize(TypedValue.COMPLEX_UNIT_PX, tv_translatedText.textSize + 5)
+            tvTranslatedText.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvTranslatedText.textSize + 5)
         }
         btDecreaseSize.clickOnce {
             tvOcrText.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvOcrText.textSize - 5)
-            tv_translatedText.setTextSize(TypedValue.COMPLEX_UNIT_PX, tv_translatedText.textSize - 5)
+            tvTranslatedText.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvTranslatedText.textSize - 5)
         }
     }
 
