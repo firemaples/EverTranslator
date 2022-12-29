@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.TypedValue
 import android.widget.FrameLayout
 import com.chibatching.kotpref.livedata.asLiveData
+import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.databinding.ViewFontSizeAdjusterBinding
 import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.pref.AppPref
@@ -14,7 +15,7 @@ class FontSizeAdjuster(context: Context) : DialogView(context) {
     private val binding = ViewFontSizeAdjusterBinding.inflate(context.getThemedLayoutInflater())
 
     init {
-        setTitle("Adjust font size")
+        setTitle(context.getString(R.string.title_result_window_font_size_adjuster))
         setDialogType(DialogType.CONFIRM_CANCEL)
         setContentView(
             binding.root,
