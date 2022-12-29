@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Rect
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.chibatching.kotpref.livedata.asLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -11,6 +12,7 @@ import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.floatings.manager.Result
+import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.repo.GeneralRepository
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
@@ -46,6 +48,8 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
 
     private val _copyRecognizedText = SingleLiveEvent<String>()
     val copyRecognizedText: LiveData<String> = _copyRecognizedText
+
+    val fontSize: LiveData<Float> = AppPref.asLiveData(AppPref::resultWindowFontSize)
 
     private val logger: Logger by lazy { Logger(ResultViewModel::class) }
 

@@ -43,22 +43,17 @@
             android:src="@drawable/ic_copy" />
 
         <ImageButton
+            android:id="@+id/bt_adjust_font_size"
+            style="@style/resultPanel_button"
+            android:src="@drawable/ic_font_size" />
+
+        <ImageButton
             android:id="@+id/bt_translateOCRTextWithGoogleTranslate"
             style="@style/resultPanel_button"
             android:src="@drawable/ic_google_translate" />
 
         <ImageButton
             android:id="@+id/bt_shareOCRText"
-            style="@style/resultPanel_button"
-            android:src="@drawable/ic_export" />
-        
-         <ImageButton
-            android:id="@+id/bt_increase_size"
-            style="@style/resultPanel_button"
-            android:src="@drawable/ic_export" />
-
-        <ImageButton
-            android:id="@+id/bt_decrease_size"
             style="@style/resultPanel_button"
             android:src="@drawable/ic_export" />
 

@@ -3,6 +3,7 @@ package tw.firemaples.onscreenocr.floatings.result
 import android.content.Context
 import android.graphics.Rect
 import android.text.method.ScrollingMovementMethod
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
@@ -100,6 +101,11 @@ class ResultView(context: Context) : FloatingView(context) {
             Utils.copyToClipboard(LABEL_RECOGNIZED_TEXT, it)
         }
 
+        viewModel.fontSize.observe(lifecycleOwner) {
+            tvOcrText.setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
+            tvTranslatedText.setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
+        }
+
         tvOcrText.movementMethod = ScrollingMovementMethod()
         tvTranslatedText.movementMethod = ScrollingMovementMethod()
         viewRoot.clickOnce { onUserDismiss?.invoke() }
@@ -125,13 +131,8 @@ class ResultView(context: Context) : FloatingView(context) {
             Utils.shareText(ocrText)
             onUserDismiss?.invoke()
         }
-        btIncreaseSize.clickOnce {
-            tvOcrText.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvOcrText.textSize + 5)
-            tvTranslatedText.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvTranslatedText.textSize + 5)
-        }
-        btDecreaseSize.clickOnce {
-            tvOcrText.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvOcrText.textSize - 5)
-            tvTranslatedText.setTextSize(TypedValue.COMPLEX_UNIT_PX, tvTranslatedText.textSize - 5)
+        btAdjustFontSize.clickOnce {
+            FontSizeAdjuster(context).attachToScreen()
         }
     }
 
