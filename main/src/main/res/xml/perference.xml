@@ -16,6 +16,10 @@
             android:defaultValue="true"
             android:key="pref_enable_fading_out_while_idle"
             android:title="@string/pref_title_enable_fade_out_while_idle" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_vertical_bar"
+            android:title="@string/pref_title_enable_fade_out_while_idle" />
         <SeekBarPreference
             android:defaultValue="5"
             android:dependency="pref_enable_fading_out_while_idle"
