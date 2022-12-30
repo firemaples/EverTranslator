@@ -3,6 +3,7 @@ package tw.firemaples.onscreenocr.floatings.main
 import android.content.Context
 import android.graphics.Point
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.MovableFloatingView
