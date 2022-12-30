@@ -43,4 +43,6 @@ object AppPref : KotprefModel() {
     var lastMainBarPosition: Point by gsonPref(default = Point(0, 0))
 
     var imageReaderFormat: Int by intPref(default = PixelFormat.RGBA_8888)
+
+    var resultWindowFontSize by floatPref(default = Constants.DEFAULT_RESULT_WINDOW_FONT_SIZE)
 }

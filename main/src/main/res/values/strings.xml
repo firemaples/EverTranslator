@@ -72,6 +72,7 @@
     <string name="title_resources_downloading">Resources downloading</string>
     <string name="title_resouces_downloaded">Resources downloaded</string>
     <string name="title_downloading_resouces_failed">Downloading resources failed</string>
+    <string name="title_result_window_font_size_adjuster">Adjust font size</string>
 
     <string name="error_an_unknown_error_found_while_recognition_text">An unknown error found while recognizing text</string>
     <string name="error_capture_screen_timeout">Capturing screen failed: timeout, please try it again later</string>

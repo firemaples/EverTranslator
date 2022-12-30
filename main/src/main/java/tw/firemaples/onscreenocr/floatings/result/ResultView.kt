@@ -3,6 +3,7 @@ package tw.firemaples.onscreenocr.floatings.result
 import android.content.Context
 import android.graphics.Rect
 import android.text.method.ScrollingMovementMethod
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
@@ -100,6 +101,11 @@ class ResultView(context: Context) : FloatingView(context) {
             Utils.copyToClipboard(LABEL_RECOGNIZED_TEXT, it)
         }
 
+        viewModel.fontSize.observe(lifecycleOwner) {
+            tvOcrText.setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
+            tvTranslatedText.setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
+        }
+
         tvOcrText.movementMethod = ScrollingMovementMethod()
         tvTranslatedText.movementMethod = ScrollingMovementMethod()
         viewRoot.clickOnce { onUserDismiss?.invoke() }
@@ -124,6 +130,9 @@ class ResultView(context: Context) : FloatingView(context) {
             val ocrText = viewModel.ocrText.value ?: return@clickOnce
             Utils.shareText(ocrText)
             onUserDismiss?.invoke()
+        }
+        btAdjustFontSize.clickOnce {
+            FontSizeAdjuster(context).attachToScreen()
         }
     }
 

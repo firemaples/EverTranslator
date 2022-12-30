@@ -7,6 +7,8 @@ import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.view.ContextThemeWrapper
+import android.view.LayoutInflater
 import androidx.core.content.ContextCompat
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.R
@@ -64,3 +66,7 @@ object Utils {
 }
 
 fun String.firstPart(): String = split("-")[0]
+
+fun Context.getThemedLayoutInflater(theme: Int = R.style.Theme_EverTranslator): LayoutInflater =
+    LayoutInflater.from(this)
+        .cloneInContext(ContextThemeWrapper(this, theme))

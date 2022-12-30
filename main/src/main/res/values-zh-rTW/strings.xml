@@ -91,4 +91,5 @@
     <string name="pref_summary_remove_end_dash">移除每行文字結尾的連字符號</string>
     <string name="pref_title_remove_line_breaks_in_block">移除文字區塊中的換行字元</string>
     <string name="pref_summary_remove_line_breaks_in_block">避免文字區塊中的文字遭到換行字元切斷</string>
+    <string name="title_result_window_font_size_adjuster">調整文字大小</string>
 </resources>

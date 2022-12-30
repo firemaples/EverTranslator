@@ -21,4 +21,6 @@ object Constants {
     }
 
     const val errorInputImageIsTooSmall: String = "InputImage width and height should be at least"
+
+    const val DEFAULT_RESULT_WINDOW_FONT_SIZE = 14f
 }
