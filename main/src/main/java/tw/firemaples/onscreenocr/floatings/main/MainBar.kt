@@ -46,6 +46,7 @@ class MainBar(context: Context) : MovableFloatingView(context) {
         get() = SettingManager.opaquePercentageToFadeOut
 
     private val btLangSelector: View = rootView.findViewById(R.id.bt_langSelector)
+    private val mainlinerlayout =  rootView.findViewById<LinearLayout>(R.id.main_liner_layout)
     private val tvLang: TextView = rootView.findViewById(R.id.tv_lang)
     private val ivGoogleTranslator: View = rootView.findViewById(R.id.iv_googleTranslator)
     private val btSelect: View = rootView.findViewById(R.id.bt_select)
