@@ -155,6 +155,15 @@ class MainBar(context: Context) : MovableFloatingView(context) {
     override fun onAttachedToScreen() {
         super.onAttachedToScreen()
         viewModel.onAttachedToScreen()
+        
+        
+        if (SettingManager.verticalbar) {
+            mainlinerlayout.orientation = LinearLayout.VERTICAL;
+        }
+
+        if (!SettingManager.verticalbar) {
+            mainlinerlayout.orientation = LinearLayout.HORIZONTAL
+        }
     }
 
     override fun onDetachedFromScreen() {
