@@ -16,6 +16,7 @@ object SettingManager {
 
     //    private const val PREF_USE_SIMPLE_STYLE = "pref_use_simple_style"
     private const val PREF_ENABLE_FADING_OUT_WHILE_IDLE = "pref_enable_fading_out_while_idle"
+    private const val PREF_VERTICAL_BAR = "pref_vertical_bar"
     private const val PREF_FADE_OUT_AFTER_SECONDS = "pref_fade_out_after_seconds"
     private const val PREF_OPAQUE_PERCENTAGE = "pref_opaque_percentage"
 
@@ -47,6 +48,9 @@ object SettingManager {
 
     val enableFadingOutWhileIdle: Boolean
         get() = preferences.getBoolean(PREF_ENABLE_FADING_OUT_WHILE_IDLE, true)
+        
+    val verticalbar: Boolean
+        get() = preferences.getBoolean(PREF_VERTICAL_BAR, true)
 
     val timeoutToFadeOut: Long
         get() = preferences.getInt(PREF_FADE_OUT_AFTER_SECONDS, 5) * 1000L
