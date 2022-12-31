@@ -31,6 +31,13 @@ class PermissionFloatWindowFragment : Fragment(R.layout.permission_float_window_
                 goPermissionPage()
             }
         }
+        
+        view.findViewById<Button>(R.id.bt_requestBattery).clickOnce {
+
+            val intent = Intent()
+            intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {
