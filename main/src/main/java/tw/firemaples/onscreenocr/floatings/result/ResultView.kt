@@ -145,7 +145,7 @@ class ResultView(context: Context) : FloatingView(context) {
             FontSizeAdjuster(context).attachToScreen()
         }
          btSelectwords.clickOnce {
-            val p: Pattern = Pattern.compile("[^\\s]+")
+            val p: Pattern = Pattern.compile("[\\p{Alnum}]+")
 
             val m: Matcher = p.matcher(tvOcrText.text.toString())
 
