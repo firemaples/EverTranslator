@@ -56,6 +56,10 @@
             android:id="@+id/bt_shareOCRText"
             style="@style/resultPanel_button"
             android:src="@drawable/ic_export" />
+        <ImageButton
+            android:id="@+id/bt_tts"
+            style="@style/resultPanel_button"
+            android:src="@drawable/ic_export" />
 
     </LinearLayout>
 
