@@ -158,6 +158,20 @@ class ResultView(context: Context) : FloatingView(context) {
                         //test if the code work
                         Toast.makeText(context, s.subSequence(start, end),Toast.LENGTH_SHORT).show()
 
+                        // set webview and hide some html elements 
+                         mywebview.webViewClient = object : WebViewClient() {
+                            override fun onPageFinished(view: WebView, url: String) {
+                                view.loadUrl(
+                                    "javascript:(function() { " +
+                                            "var head = document.getElementsByClassName('qlS7ne')[0].style.display='true'; " +
+                                            "var head = document.getElementsByClassName('wQnou')[0].style.display='none'; " +
+                                            "var head = document.getElementsByClassName('iSZmU')[0].style.display='none'; " +
+                                            "var head = document.getElementsByClassName('FAZ4xe FoDaAb')[0].style.display='none'; " +
+                                            "})()"
+                                )                    }            }
+                        mywebview.loadUrl("https://www.google.com/search?tbm=isch&q="+ s.subSequence(start, end) )
+
+                        
                     }
                 }
                 ss.setSpan(clickableSpan, m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
