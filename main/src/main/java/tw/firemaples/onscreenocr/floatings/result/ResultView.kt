@@ -11,6 +11,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
