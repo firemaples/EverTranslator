@@ -73,6 +73,7 @@ class ResultView(context: Context) : FloatingView(context) {
 
         viewModel.ocrText.observe(lifecycleOwner) {
             tvOcrText.text = it
+            mywebview.loadUrl("about:blank")
         }
         viewModel.translatedText.observe(lifecycleOwner) {
             if (it == null) {
