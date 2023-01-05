@@ -2,12 +2,21 @@ package tw.firemaples.onscreenocr.floatings.result
 
 import android.content.Context
 import android.graphics.Rect
+import android.speech.tts.TextToSpeech
+import android.speech.tts.TextToSpeech.QUEUE_FLUSH
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
 import android.text.method.ScrollingMovementMethod
+import android.text.style.ClickableSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.databinding.FloatingResultViewBinding
@@ -19,6 +28,9 @@ import tw.firemaples.onscreenocr.floatings.manager.Result
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.utils.*
+import java.util.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 class ResultView(context: Context) : FloatingView(context) {
     companion object {
@@ -133,6 +145,29 @@ class ResultView(context: Context) : FloatingView(context) {
         }
         btAdjustFontSize.clickOnce {
             FontSizeAdjuster(context).attachToScreen()
+        }
+                 lateinit var ttsLang: TextToSpeech
+
+        btTts.clickOnce {
+            ttsLang = TextToSpeech(context,
+                TextToSpeech.OnInitListener { status ->
+                    if (status == TextToSpeech.SUCCESS) {
+                        val ttsLang = ttsLang.setLanguage(Locale.US)
+
+                        if (ttsLang == TextToSpeech.LANG_MISSING_DATA || ttsLang == TextToSpeech.LANG_NOT_SUPPORTED) {
+                          //  Toast.makeText(context, "The Language is not supported!",Toast.LENGTH_SHORT).show()
+                        } else {
+                          //  Toast.makeText(context, "Language Supported.",Toast.LENGTH_SHORT).show()
+                        }
+                      //  Toast.makeText(context, "Initialization success.",Toast.LENGTH_SHORT).show()
+                    } else {
+                     //   Toast.makeText(context, "TTS Initialization failed!", Toast.LENGTH_SHORT).show()
+                    }
+                    ttsLang.speak(tvOcrText.text.toString(),QUEUE_FLUSH,null,tvOcrText.text.toString())
+                }
+
+            )
+
         }
     }
 
