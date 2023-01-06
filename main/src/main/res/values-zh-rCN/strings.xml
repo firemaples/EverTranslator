@@ -92,4 +92,7 @@
     <string name="pref_title_remove_line_breaks_in_block">移除文字区块中的换行字元</string>
     <string name="pref_summary_remove_line_breaks_in_block">避免文字区块中的文字遭到换行字元切断</string>
     <string name="title_result_window_font_size_adjuster">调整文字大小</string>
+    <string name="text_request_permission_and_start">请求权限并启动</string>
+    <string name="msg_evertranslator_needs_bypass_battery_optimization_to_avoid_being_kill_in_the_background">随处翻译需要[忽略电池优化]来避免在背景时被系统关闭</string>
+    <string name="text_bypass_battery_optimize">忽略电池优化</string>
 </resources>
