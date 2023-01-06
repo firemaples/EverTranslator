@@ -7,9 +7,12 @@ import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
+import android.os.PowerManager
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.R
 
@@ -30,6 +33,13 @@ object Utils {
             logger.warn(t = e)
             null
         }
+
+    fun batteryOptimized(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.getSystemService<PowerManager>()
+                ?.isIgnoringBatteryOptimizations(context.packageName)?.not() ?: false
+        } else false
+    }
 
     fun openBrowser(url: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
