@@ -2,17 +2,12 @@ package tw.firemaples.onscreenocr.floatings.result
 
 import android.content.Context
 import android.graphics.Rect
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.method.LinkMovementMethod
 import android.text.method.ScrollingMovementMethod
-import android.text.style.ClickableSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.RelativeLayout
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.databinding.FloatingResultViewBinding
@@ -24,14 +19,14 @@ import tw.firemaples.onscreenocr.floatings.manager.Result
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.utils.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 class ResultView(context: Context) : FloatingView(context) {
     companion object {
         private const val LABEL_RECOGNIZED_TEXT = "Recognized text"
         private const val LABEL_TRANSLATED_TEXT = "Translated text"
     }
+
+    private val logger: Logger by lazy { Logger(ResultView::class) }
 
     override val layoutId: Int
         get() = R.layout.floating_result_view
@@ -70,7 +65,7 @@ class ResultView(context: Context) : FloatingView(context) {
         }
 
         viewModel.ocrText.observe(lifecycleOwner) {
-            tvOcrText.text = it
+            tvOcrText.setContent(it ?: "")
         }
         viewModel.translatedText.observe(lifecycleOwner) {
             if (it == null) {
@@ -113,20 +108,22 @@ class ResultView(context: Context) : FloatingView(context) {
             tvTranslatedText.setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
         }
 
-        tvOcrText.movementMethod = ScrollingMovementMethod()
+        tvOcrText.onWordClicked = { word ->
+            logger.debug("Selected word: $word")
+        }
         tvTranslatedText.movementMethod = ScrollingMovementMethod()
         viewRoot.clickOnce { onUserDismiss?.invoke() }
         btEditOCRText.clickOnce {
-            showRecognizedTextEditor(tvOcrText.text.toString())
+            showRecognizedTextEditor(viewModel.ocrText.value ?: "")
         }
         btCopyOCRText.clickOnce {
-            Utils.copyToClipboard(LABEL_RECOGNIZED_TEXT, tvOcrText.text.toString())
+            Utils.copyToClipboard(LABEL_RECOGNIZED_TEXT, viewModel.ocrText.value ?: "")
         }
         btCopyTranslatedText.clickOnce {
             Utils.copyToClipboard(LABEL_TRANSLATED_TEXT, tvTranslatedText.text.toString())
         }
         btTranslateOCRTextWithGoogleTranslate.clickOnce {
-            GoogleTranslateUtils.launchGoogleTranslateApp(tvOcrText.text.toString())
+            GoogleTranslateUtils.launchGoogleTranslateApp(viewModel.ocrText.value ?: "")
             onUserDismiss?.invoke()
         }
         btTranslateTranslatedTextWithGoogleTranslate.clickOnce {
@@ -140,30 +137,6 @@ class ResultView(context: Context) : FloatingView(context) {
         }
         btAdjustFontSize.clickOnce {
             FontSizeAdjuster(context).attachToScreen()
-        }
-         btSelectwords.clickOnce {
-            val p: Pattern = Pattern.compile("[a-zA-Z0-9]+")
-
-            val m: Matcher = p.matcher(tvOcrText.text.toString())
-
-            val ss = SpannableString(tvOcrText.text.toString())
-
-            while (m.find()) {
-                val clickableSpan: ClickableSpan = object : ClickableSpan() {
-                    override fun onClick(textView: View) {
-                        val s = tvOcrText.getText() as Spanned
-                        val start = s.getSpanStart(this)
-                        val end = s.getSpanEnd(this)
-
-                        //test if the code work
-                        Toast.makeText(context, s.subSequence(start, end),Toast.LENGTH_SHORT).show()
-
-                    }
-                }
-                ss.setSpan(clickableSpan, m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                tvOcrText.text = ss
-                tvOcrText.setMovementMethod(LinkMovementMethod.getInstance());
-            }
         }
     }
 
