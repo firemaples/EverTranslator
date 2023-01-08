@@ -7,6 +7,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import tw.firemaples.onscreenocr.R
@@ -67,6 +69,8 @@ class ResultView(context: Context) : FloatingView(context) {
 
         viewModel.ocrText.observe(lifecycleOwner) {
             tvOcrText.setContent(it?.text(), it?.locale() ?: Locale.getDefault())
+            mywebview.loadUrl("about:blank")
+
         }
         viewModel.translatedText.observe(lifecycleOwner) {
             if (it == null) {
@@ -111,7 +115,21 @@ class ResultView(context: Context) : FloatingView(context) {
 
         tvOcrText.onWordClicked = { word ->
             logger.debug("Selected word: $word")
+            mywebview.webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView, url: String) {
+                    view.loadUrl(
+                        "javascript:(function() { " +
+                                "var head = document.getElementsByClassName('qlS7ne')[0].style.display='true'; " +
+                                "var head = document.getElementsByClassName('wQnou')[0].style.display='none'; " +
+                                "var head = document.getElementsByClassName('iSZmU')[0].style.display='none'; " +
+                                "var head = document.getElementsByClassName('FAZ4xe FoDaAb')[0].style.display='none'; " +
+                                "})()"
+                    )                    }            }
+            mywebview.loadUrl("https://www.google.com/search?tbm=isch&q="+ word )
+
+
         }
+
         tvTranslatedText.movementMethod = ScrollingMovementMethod()
         viewRoot.clickOnce { onUserDismiss?.invoke() }
         btEditOCRText.clickOnce {
