@@ -125,8 +125,6 @@ class ResultView(context: Context) : FloatingView(context) {
                                 "var head = document.getElementsByClassName('FAZ4xe FoDaAb')[0].style.display='none'; " +
                                 "})()"
                     )                    }            }
-            mywebview.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
-            mywebview.setScrollbarFadingEnabled(false);
             mywebview.loadUrl("https://www.google.com/search?tbm=isch&q="+ word )
 
 
