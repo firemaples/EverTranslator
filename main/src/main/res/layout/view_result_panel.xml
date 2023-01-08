@@ -181,6 +181,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/wrapper_translatedResult"
         tools:visibility="visible" />
+    <WebView
+        android:id="@+id/mywebview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_translatedByGoogle"
+        tools:ignore="WebViewLayout" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_recognitionViews"
