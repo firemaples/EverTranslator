@@ -11,7 +11,8 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import tw.firemaples.onscreenocr.utils.Logger
-import java.text.BreakIterator
+import tw.firemaples.onscreenocr.utils.WordBoundary
+import java.util.*
 
 class WordBreakTextView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -22,12 +23,12 @@ class WordBreakTextView @JvmOverloads constructor(
     private var selectedSpan: WordSpan? = null
     var onWordClicked: ((String?) -> Unit)? = null
 
-    fun setContent(text: String?) {
+    fun setContent(text: String?, locale: Locale) {
         if (text == null) {
             clear()
             return
         }
-        val spannable = breakWords(this, text)
+        val spannable = breakWords(text, locale)
         this.movementMethod = LinkMovementMethod.getInstance()
         this.setText(spannable, BufferType.SPANNABLE)
     }
@@ -44,42 +45,29 @@ class WordBreakTextView @JvmOverloads constructor(
         selectedSpan = null
     }
 
-    private fun breakWords(
-        textView: TextView,
-        text: String,
-    ): SpannableString {
+    private fun breakWords(text: String, locale: Locale): SpannableString {
         wordSpans.clear()
+        val boundaries = WordBoundary.breakWords(text, locale)
+        logger.debug("Text Boundaries: $boundaries")
 
         val spannable = SpannableString(text)
+        boundaries.forEach { boundary ->
+            val span = WordSpan(this, boundary.word,
+                selected = false,
+                onWordClicked = {
+                    if (it.selected) {
+                        it.selected = false
+                        selectedSpan = null
+                    } else {
+                        selectedSpan?.selected = false
+                        selectedSpan = it
+                        it.selected = true
+                    }
 
-        val boundary = BreakIterator.getWordInstance().apply { setText(text) }
-        var start = boundary.first()
-        var end = boundary.next()
-        while (end != BreakIterator.DONE) {
-            val word = text.substring(start, end)
-
-            if (word.isNotBlank()) {
-                logger.debug("$word, $start->$end")
-                val span = WordSpan(textView, word,
-                    selected = false,
-                    onWordClicked = {
-                        if (it.selected) {
-                            it.selected = false
-                            selectedSpan = null
-                        } else {
-                            selectedSpan?.selected = false
-                            selectedSpan = it
-                            it.selected = true
-                        }
-
-                        onWordClicked?.invoke(selectedSpan?.text)
-                    })
-                spannable.setSpan(span, start, end, 0)
-                wordSpans.add(span)
-            }
-
-            start = end
-            end = boundary.next()
+                    onWordClicked?.invoke(selectedSpan?.text)
+                })
+            spannable.setSpan(span, boundary.start, boundary.end, 0)
+            wordSpans.add(span)
         }
 
         return spannable

@@ -19,6 +19,7 @@ import tw.firemaples.onscreenocr.floatings.manager.Result
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.utils.*
+import java.util.*
 
 class ResultView(context: Context) : FloatingView(context) {
     companion object {
@@ -65,7 +66,7 @@ class ResultView(context: Context) : FloatingView(context) {
         }
 
         viewModel.ocrText.observe(lifecycleOwner) {
-            tvOcrText.setContent(it ?: "")
+            tvOcrText.setContent(it?.text(), it?.locale() ?: Locale.getDefault())
         }
         viewModel.translatedText.observe(lifecycleOwner) {
             if (it == null) {
@@ -114,16 +115,16 @@ class ResultView(context: Context) : FloatingView(context) {
         tvTranslatedText.movementMethod = ScrollingMovementMethod()
         viewRoot.clickOnce { onUserDismiss?.invoke() }
         btEditOCRText.clickOnce {
-            showRecognizedTextEditor(viewModel.ocrText.value ?: "")
+            showRecognizedTextEditor(viewModel.ocrText.value?.text() ?: "")
         }
         btCopyOCRText.clickOnce {
-            Utils.copyToClipboard(LABEL_RECOGNIZED_TEXT, viewModel.ocrText.value ?: "")
+            Utils.copyToClipboard(LABEL_RECOGNIZED_TEXT, viewModel.ocrText.value?.text() ?: "")
         }
         btCopyTranslatedText.clickOnce {
             Utils.copyToClipboard(LABEL_TRANSLATED_TEXT, tvTranslatedText.text.toString())
         }
         btTranslateOCRTextWithGoogleTranslate.clickOnce {
-            GoogleTranslateUtils.launchGoogleTranslateApp(viewModel.ocrText.value ?: "")
+            GoogleTranslateUtils.launchGoogleTranslateApp(viewModel.ocrText.value?.text() ?: "")
             onUserDismiss?.invoke()
         }
         btTranslateTranslatedTextWithGoogleTranslate.clickOnce {
@@ -131,7 +132,7 @@ class ResultView(context: Context) : FloatingView(context) {
             onUserDismiss?.invoke()
         }
         btShareOCRText.clickOnce {
-            val ocrText = viewModel.ocrText.value ?: return@clickOnce
+            val ocrText = viewModel.ocrText.value?.text() ?: return@clickOnce
             Utils.shareText(ocrText)
             onUserDismiss?.invoke()
         }
