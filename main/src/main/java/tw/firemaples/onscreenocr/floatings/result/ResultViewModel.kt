@@ -163,7 +163,7 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
 
     fun onOCRTextEdited(text: String) {
         viewScope.launch {
-            _ocrText.value = text to _ocrText.value!!.second
+            _ocrText.value = text to _ocrText.value!!.locale()
 
             val langCode = try {
                 LanguageIdentify.identifyLanguage(text)
@@ -176,6 +176,20 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
                 RecognitionResult(
                     langCode = langCode,
                     result = text,
+                    boundingBoxes = lastTextBoundingBoxes,
+                )
+            )
+        }
+    }
+
+    fun onTextSelected(text: String?) {
+        viewScope.launch {
+            val selectedText = text ?: _ocrText.value!!.text()
+
+            FloatingStateManager.startTranslation(
+                RecognitionResult(
+                    langCode = lastLangCode,
+                    result = selectedText,
                     boundingBoxes = lastTextBoundingBoxes,
                 )
             )

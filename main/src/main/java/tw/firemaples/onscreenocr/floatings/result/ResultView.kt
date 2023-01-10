@@ -110,7 +110,7 @@ class ResultView(context: Context) : FloatingView(context) {
         }
 
         tvOcrText.onWordClicked = { word ->
-            logger.debug("Selected word: $word")
+            viewModel.onTextSelected(word)
         }
         tvTranslatedText.movementMethod = ScrollingMovementMethod()
         viewRoot.clickOnce { onUserDismiss?.invoke() }
@@ -202,7 +202,7 @@ class ResultView(context: Context) : FloatingView(context) {
     private fun reposition() {
         rootView.post {
             val parentRect = viewRoot.getViewRect()
-            val anchorRect = unionRect.apply {
+            val anchorRect = Rect(unionRect).apply {
                 top += parentRect.top
                 left += parentRect.left
                 bottom += parentRect.top
