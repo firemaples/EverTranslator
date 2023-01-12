@@ -16,6 +16,7 @@ import tw.firemaples.onscreenocr.databinding.ViewResultPanelBinding
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.floatings.manager.Result
+import tw.firemaples.onscreenocr.floatings.textInfoSearch.TextInfoSearchView
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.utils.*
@@ -109,8 +110,16 @@ class ResultView(context: Context) : FloatingView(context) {
             tvTranslatedText.setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
         }
 
+        viewModel.displayTextInfoSearchView.observe(lifecycleOwner) {
+            TextInfoSearchView(context, it.text, it.sourceLang, it.targetLang)
+                .attachToScreen()
+        }
+
         tvOcrText.onWordClicked = { word ->
-            viewModel.onTextSelected(word)
+            if (word != null) {
+                viewModel.onWordSelected(word)
+                tvOcrText.clearSelection()
+            }
         }
         tvTranslatedText.movementMethod = ScrollingMovementMethod()
         viewRoot.clickOnce { onUserDismiss?.invoke() }

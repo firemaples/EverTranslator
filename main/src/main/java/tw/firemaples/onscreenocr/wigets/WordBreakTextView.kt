@@ -35,6 +35,7 @@ class WordBreakTextView @JvmOverloads constructor(
 
     fun clearSelection() {
         selectedSpan = null
+        wordSpans.filter { it.selected }.forEach { it.selected = false }
         onWordClicked?.invoke(null)
         invalidate()
     }

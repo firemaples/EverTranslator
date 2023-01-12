@@ -55,6 +55,9 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
     private val _copyRecognizedText = SingleLiveEvent<String>()
     val copyRecognizedText: LiveData<String> = _copyRecognizedText
 
+    private val _displayTextInfoSearchView = SingleLiveEvent<TextInfoSearchViewData>()
+    val displayTextInfoSearchView: LiveData<TextInfoSearchViewData> = _displayTextInfoSearchView
+
     val fontSize: LiveData<Float> = AppPref.asLiveData(AppPref::resultWindowFontSize)
 
     private val logger: Logger by lazy { Logger(ResultViewModel::class) }
@@ -182,17 +185,19 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
         }
     }
 
-    fun onTextSelected(text: String?) {
+    fun onWordSelected(word: String) {
         viewScope.launch {
-            val selectedText = text ?: _ocrText.value!!.text()
-
-            FloatingStateManager.startTranslation(
-                RecognitionResult(
-                    langCode = lastLangCode,
-                    result = selectedText,
-                    boundingBoxes = lastTextBoundingBoxes,
-                )
+            _displayTextInfoSearchView.value = TextInfoSearchViewData(
+                text = word,
+                sourceLang = AppPref.selectedOCRLang,
+                targetLang = AppPref.selectedTranslationLang,
             )
         }
     }
+
+    data class TextInfoSearchViewData(
+        val text: String,
+        val sourceLang: String,
+        val targetLang: String,
+    )
 }
