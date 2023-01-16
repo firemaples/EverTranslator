@@ -37,4 +37,12 @@
         <item name="android:layout_width">200dp</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+
+    <style name="TextInfoSearch" />
+
+    <style name="TextInfoSearch.Button">
+        <item name="android:layout_width">28dp</item>
+        <item name="android:layout_height">28dp</item>
+        <item name="android:background">@drawable/bg_text_info_search_btn</item>
+    </style>
 </resources>

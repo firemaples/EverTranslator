@@ -1,5 +1,6 @@
 package tw.firemaples.onscreenocr.utils
 
+import tw.firemaples.onscreenocr.floatings.textInfoSearch.TextInfoSearchViewModel
 import tw.firemaples.onscreenocr.recognition.TextRecognitionProviderType
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 
@@ -23,4 +24,6 @@ object Constants {
     const val errorInputImageIsTooSmall: String = "InputImage width and height should be at least"
 
     const val DEFAULT_RESULT_WINDOW_FONT_SIZE = 14f
+
+    val DEFAULT_TEXT_INFO_SEARCH_PAGE = TextInfoSearchViewModel.PageType.GoogleTranslate
 }

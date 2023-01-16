@@ -82,6 +82,10 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_other_settings">
+        <Preference
+            android:key="pref_bypass_battery_optimization"
+            android:summary="@string/pref_summary_bypass_battery_optimization"
+            android:title="@string/pref_bypass_battery_optimization" />
         <SwitchPreference
             android:defaultValue="true"
             android:key="pref_save_last_selection_area"
