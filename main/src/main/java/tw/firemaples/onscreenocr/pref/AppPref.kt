@@ -44,5 +44,7 @@ object AppPref : KotprefModel() {
 
     var imageReaderFormat: Int by intPref(default = PixelFormat.RGBA_8888)
 
-    var resultWindowFontSize by floatPref(default = Constants.DEFAULT_RESULT_WINDOW_FONT_SIZE)
+    var resultWindowFontSize: Float by floatPref(default = Constants.DEFAULT_RESULT_WINDOW_FONT_SIZE)
+
+    var lastTextInfoSearchPage: Int by intPref(default = Constants.DEFAULT_TEXT_INFO_SEARCH_PAGE.id)
 }

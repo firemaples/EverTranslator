@@ -17,6 +17,12 @@ import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.repo.GeneralRepository
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.utils.*
+import java.util.*
+
+typealias OCRText = Pair<String, Locale>
+
+fun OCRText.text() = this.first
+fun OCRText.locale() = this.second
 
 class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) {
     private val _displayOCROperationProgress = MutableLiveData<Boolean>()
@@ -25,8 +31,8 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
     private val _displayTranslationProgress = MutableLiveData<Boolean>()
     val displayTranslationProgress: LiveData<Boolean> = _displayTranslationProgress
 
-    private val _ocrText = MutableLiveData<String?>()
-    val ocrText: LiveData<String?> = _ocrText
+    private val _ocrText = MutableLiveData<OCRText?>()
+    val ocrText: LiveData<OCRText?> = _ocrText
 
     private val _translatedText = MutableLiveData<Pair<String, Int>?>()
     val translatedText: LiveData<Pair<String, Int>?> = _translatedText
@@ -48,6 +54,9 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
 
     private val _copyRecognizedText = SingleLiveEvent<String>()
     val copyRecognizedText: LiveData<String> = _copyRecognizedText
+
+    private val _displayTextInfoSearchView = SingleLiveEvent<TextInfoSearchViewData>()
+    val displayTextInfoSearchView: LiveData<TextInfoSearchViewData> = _displayTextInfoSearchView
 
     val fontSize: LiveData<Float> = AppPref.asLiveData(AppPref::resultWindowFontSize)
 
@@ -87,7 +96,7 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
             this@ResultViewModel.lastLangCode = result.langCode
 
             _displayOCROperationProgress.value = false
-            _ocrText.value = result.result
+            _ocrText.value = result.result to Locale.forLanguageTag(result.langCode)
 
             val topOffset = parent.top + selected.top - viewRect.top
             val leftOffset = parent.left + selected.left - viewRect.left
@@ -157,7 +166,7 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
 
     fun onOCRTextEdited(text: String) {
         viewScope.launch {
-            _ocrText.value = text
+            _ocrText.value = text to _ocrText.value!!.locale()
 
             val langCode = try {
                 LanguageIdentify.identifyLanguage(text)
@@ -175,4 +184,20 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
             )
         }
     }
+
+    fun onWordSelected(word: String) {
+        viewScope.launch {
+            _displayTextInfoSearchView.value = TextInfoSearchViewData(
+                text = word,
+                sourceLang = AppPref.selectedOCRLang,
+                targetLang = AppPref.selectedTranslationLang,
+            )
+        }
+    }
+
+    data class TextInfoSearchViewData(
+        val text: String,
+        val sourceLang: String,
+        val targetLang: String,
+    )
 }

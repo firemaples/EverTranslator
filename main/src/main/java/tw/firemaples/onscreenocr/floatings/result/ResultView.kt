@@ -16,15 +16,19 @@ import tw.firemaples.onscreenocr.databinding.ViewResultPanelBinding
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.floatings.manager.Result
+import tw.firemaples.onscreenocr.floatings.textInfoSearch.TextInfoSearchView
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.utils.*
+import java.util.*
 
 class ResultView(context: Context) : FloatingView(context) {
     companion object {
         private const val LABEL_RECOGNIZED_TEXT = "Recognized text"
         private const val LABEL_TRANSLATED_TEXT = "Translated text"
     }
+
+    private val logger: Logger by lazy { Logger(ResultView::class) }
 
     override val layoutId: Int
         get() = R.layout.floating_result_view
@@ -63,7 +67,7 @@ class ResultView(context: Context) : FloatingView(context) {
         }
 
         viewModel.ocrText.observe(lifecycleOwner) {
-            tvOcrText.text = it
+            tvOcrText.setContent(it?.text(), it?.locale() ?: Locale.getDefault())
         }
         viewModel.translatedText.observe(lifecycleOwner) {
             if (it == null) {
@@ -106,20 +110,30 @@ class ResultView(context: Context) : FloatingView(context) {
             tvTranslatedText.setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
         }
 
-        tvOcrText.movementMethod = ScrollingMovementMethod()
+        viewModel.displayTextInfoSearchView.observe(lifecycleOwner) {
+            TextInfoSearchView(context, it.text, it.sourceLang, it.targetLang)
+                .attachToScreen()
+        }
+
+        tvOcrText.onWordClicked = { word ->
+            if (word != null) {
+                viewModel.onWordSelected(word)
+                tvOcrText.clearSelection()
+            }
+        }
         tvTranslatedText.movementMethod = ScrollingMovementMethod()
         viewRoot.clickOnce { onUserDismiss?.invoke() }
         btEditOCRText.clickOnce {
-            showRecognizedTextEditor(tvOcrText.text.toString())
+            showRecognizedTextEditor(viewModel.ocrText.value?.text() ?: "")
         }
         btCopyOCRText.clickOnce {
-            Utils.copyToClipboard(LABEL_RECOGNIZED_TEXT, tvOcrText.text.toString())
+            Utils.copyToClipboard(LABEL_RECOGNIZED_TEXT, viewModel.ocrText.value?.text() ?: "")
         }
         btCopyTranslatedText.clickOnce {
             Utils.copyToClipboard(LABEL_TRANSLATED_TEXT, tvTranslatedText.text.toString())
         }
         btTranslateOCRTextWithGoogleTranslate.clickOnce {
-            GoogleTranslateUtils.launchGoogleTranslateApp(tvOcrText.text.toString())
+            GoogleTranslateUtils.launchGoogleTranslateApp(viewModel.ocrText.value?.text() ?: "")
             onUserDismiss?.invoke()
         }
         btTranslateTranslatedTextWithGoogleTranslate.clickOnce {
@@ -127,7 +141,7 @@ class ResultView(context: Context) : FloatingView(context) {
             onUserDismiss?.invoke()
         }
         btShareOCRText.clickOnce {
-            val ocrText = viewModel.ocrText.value ?: return@clickOnce
+            val ocrText = viewModel.ocrText.value?.text() ?: return@clickOnce
             Utils.shareText(ocrText)
             onUserDismiss?.invoke()
         }
@@ -197,7 +211,7 @@ class ResultView(context: Context) : FloatingView(context) {
     private fun reposition() {
         rootView.post {
             val parentRect = viewRoot.getViewRect()
-            val anchorRect = unionRect.apply {
+            val anchorRect = Rect(unionRect).apply {
                 top += parentRect.top
                 left += parentRect.left
                 bottom += parentRect.top
