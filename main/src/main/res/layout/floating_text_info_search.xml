@@ -11,15 +11,16 @@
         android:id="@+id/swipe_progress"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/line_topOfButtons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_web_view"
+            android:padding="2dp">
 
             <WebView
                 android:id="@+id/webView"
@@ -28,5 +29,83 @@
         </FrameLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/line_topOfButtons"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="top"
+        app:constraint_referenced_ids="close" />
+
+    <ImageButton
+        android:id="@+id/close"
+        style="@style/TextInfoSearch.Button"
+        android:src="@drawable/ic_close"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/nextPage"
+        style="@style/TextInfoSearch.Button"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_arrow_right"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/close" />
+
+    <ImageButton
+        android:id="@+id/prevPage"
+        style="@style/TextInfoSearch.Button"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/ic_arrow_left"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/nextPage" />
+
+    <ImageButton
+        android:id="@+id/refresh"
+        style="@style/TextInfoSearch.Button"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/ic_web_refresh"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/prevPage" />
+
+    <ImageButton
+        android:id="@+id/googleTranslate"
+        style="@style/TextInfoSearch.Button"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_google_translate_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/refresh" />
+
+    <ImageButton
+        android:id="@+id/googleDefinition"
+        style="@style/TextInfoSearch.Button"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/ic_dictionary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/googleTranslate" />
+
+    <ImageButton
+        android:id="@+id/googleImageSearch"
+        style="@style/TextInfoSearch.Button"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/ic_image_search"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/googleDefinition" />
+
+    <ImageButton
+        android:id="@+id/googleSearch"
+        style="@style/TextInfoSearch.Button"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/ic_search_web"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/googleImageSearch" />
+
+    <ImageButton
+        android:id="@+id/wikipedia"
+        style="@style/TextInfoSearch.Button"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/ic_wikipedia"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/googleSearch" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

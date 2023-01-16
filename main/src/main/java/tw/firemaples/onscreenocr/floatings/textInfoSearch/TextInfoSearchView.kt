@@ -1,12 +1,17 @@
 package tw.firemaples.onscreenocr.floatings.textInfoSearch
 
 import android.content.Context
+import android.content.res.Configuration
 import android.view.WindowManager
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF
+import androidx.webkit.WebSettingsCompat.FORCE_DARK_ON
+import androidx.webkit.WebViewFeature
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.databinding.FloatingTextInfoSearchBinding
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
@@ -36,35 +41,47 @@ class TextInfoSearchView(
     override val enableHomeButtonWatcher: Boolean
         get() = true
 
-    private val viewModel: TextInfoSearchViewModel by lazy { TextInfoSearchViewModel(viewScope) }
+    private val viewModel: TextInfoSearchViewModel by lazy {
+        TextInfoSearchViewModel(viewScope, text, sourceLang)
+    }
 
     private val binding: FloatingTextInfoSearchBinding =
         FloatingTextInfoSearchBinding.bind(rootLayout)
 
     init {
-        setViews()
+        binding.setViews()
+        viewModel.onLoad()
     }
 
-    private fun setViews() {
-        binding.viewRoot.clickOnce { detachFromScreen() }
-        binding.webView.apply {
-            setupWebView(this, binding.swipeProgress)
-            val url =
-                "https://translate.google.com/?sl=$sourceLang&tl=$targetLang&text=$text&op=translate"
-            logger.debug("Load web: $url")
-            loadUrl(url)
+    private fun FloatingTextInfoSearchBinding.setViews() {
+        viewModel.loadUrl.observe(lifecycleOwner) {
+            logger.debug("Load web: ${it.url}")
+            webView.loadUrl(it.url)
         }
+
+        viewRoot.clickOnce { detachFromScreen() }
+        close.clickOnce { detachFromScreen() }
+        prevPage.clickOnce { webView.goBack() }
+        nextPage.clickOnce { webView.goForward() }
+        refresh.clickOnce { viewModel.onRefreshClicked() }
+        googleTranslate.clickOnce { viewModel.onGoogleTranslateClicked() }
+        googleDefinition.clickOnce { viewModel.onGoogleDefinitionClicked() }
+        googleImageSearch.clickOnce { viewModel.onGoogleImageSearchClicked() }
+        googleSearch.clickOnce { viewModel.onGoogleSearchClicked() }
+        wikipedia.clickOnce { viewModel.onWikipediaClicked() }
+
+        webView.setupWebView(swipeProgress)
     }
 
-    private fun setupWebView(webView: WebView, swipeRefreshLayout: SwipeRefreshLayout) {
+    private fun WebView.setupWebView(swipeRefreshLayout: SwipeRefreshLayout) {
         WebView.setWebContentsDebuggingEnabled(true)
 
-        webView.webChromeClient = ProgressWebChromeClient(swipeRefreshLayout)
+        webChromeClient = ProgressWebChromeClient(swipeRefreshLayout)
         val webViewClient = MyWebViewClient()
-        webView.webViewClient = webViewClient
+        this.webViewClient = webViewClient
 
         // http://www.coderzheaven.com/2016/12/23/important-steps-to-improve-android-webview-performance/
-        with(webView.settings) {
+        with(settings) {
             javaScriptEnabled = true
             loadWithOverviewMode = true
             useWideViewPort = true
@@ -74,15 +91,29 @@ class TextInfoSearchView(
             cacheMode = WebSettings.LOAD_NO_CACHE
             domStorageEnabled = true
         }
-        webView.scrollBarStyle = WebView.SCROLLBARS_OUTSIDE_OVERLAY
-        webView.isScrollbarFadingEnabled = true
+        scrollBarStyle = WebView.SCROLLBARS_OUTSIDE_OVERLAY
+        isScrollbarFadingEnabled = true
 
-        webView.viewTreeObserver.addOnScrollChangedListener {
-            swipeRefreshLayout.isEnabled = webView.scrollY == 0
+        viewTreeObserver.addOnScrollChangedListener {
+            swipeRefreshLayout.isEnabled = scrollY == 0
         }
 
         swipeRefreshLayout.setOnRefreshListener {
-            webView.reload()
+            reload()
+        }
+
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+            when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+                Configuration.UI_MODE_NIGHT_YES -> {
+                    WebSettingsCompat.setForceDark(this.settings, FORCE_DARK_ON)
+                }
+                Configuration.UI_MODE_NIGHT_NO, Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                    WebSettingsCompat.setForceDark(this.settings, FORCE_DARK_OFF)
+                }
+                else -> {
+                    //
+                }
+            }
         }
     }
 
@@ -92,7 +123,11 @@ class TextInfoSearchView(
     }
 
     override fun onBackButtonPressed(): Boolean {
-        detachFromScreen()
+        if (binding.webView.canGoBack()) {
+            binding.webView.goBack()
+        } else {
+            detachFromScreen()
+        }
         return true
     }
 
