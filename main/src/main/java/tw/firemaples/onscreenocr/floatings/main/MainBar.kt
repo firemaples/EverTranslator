@@ -3,6 +3,7 @@ package tw.firemaples.onscreenocr.floatings.main
 import android.content.Context
 import android.graphics.Point
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.MovableFloatingView
@@ -46,6 +47,7 @@ class MainBar(context: Context) : MovableFloatingView(context) {
         get() = SettingManager.opaquePercentageToFadeOut
 
     private val btLangSelector: View = rootView.findViewById(R.id.bt_langSelector)
+    private val mainlinerlayout =  rootView.findViewById<LinearLayout>(R.id.main_liner_layout)
     private val tvLang: TextView = rootView.findViewById(R.id.tv_lang)
     private val ivGoogleTranslator: View = rootView.findViewById(R.id.iv_googleTranslator)
     private val btSelect: View = rootView.findViewById(R.id.bt_select)
@@ -155,6 +157,15 @@ class MainBar(context: Context) : MovableFloatingView(context) {
     override fun onAttachedToScreen() {
         super.onAttachedToScreen()
         viewModel.onAttachedToScreen()
+        
+        
+        if (SettingManager.verticalbar) {
+            mainlinerlayout.orientation = LinearLayout.VERTICAL;
+        }
+
+        if (!SettingManager.verticalbar) {
+            mainlinerlayout.orientation = LinearLayout.HORIZONTAL
+        }
     }
 
     override fun onDetachedFromScreen() {
