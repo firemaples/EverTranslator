@@ -57,8 +57,6 @@ android {
         dev {
             dimension "tier"
             applicationId "tw.firemaples.onscreenocr_debug"
-            versionCode 100
-            versionName "10.0.0"
 
             buildConfigField "boolean", "DISABLE_LOGGING", "false"
             buildConfigField "boolean", "ENABLE_ADS", "false"
