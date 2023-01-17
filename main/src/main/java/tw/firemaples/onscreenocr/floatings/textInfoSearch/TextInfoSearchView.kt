@@ -59,7 +59,6 @@ class TextInfoSearchView(
             webView.loadUrl(it.url)
         }
 
-        viewRoot.clickOnce { detachFromScreen() }
         close.clickOnce { detachFromScreen() }
         prevPage.clickOnce { webView.goBack() }
         nextPage.clickOnce { webView.goForward() }
