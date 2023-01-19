@@ -169,7 +169,7 @@ object FloatingStateManager {
                     )
                 }
                 logger.debug("On text recognized: $result")
-                croppedBitmap.recycle()
+               // croppedBitmap.recycle()
                 FirebaseEvent.logOCRFinished(recognizer.name)
                 resultView.textRecognized(result, parent, selected)
                 startTranslation(result)
