@@ -4,11 +4,13 @@ import android.content.Context
 import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.coroutines.suspendCancellableCoroutine
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
+import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
 import tw.firemaples.onscreenocr.utils.clickOnce
 import tw.firemaples.onscreenocr.utils.setTextOrGone
 import tw.firemaples.onscreenocr.utils.showOrHide
@@ -31,6 +33,8 @@ open class DialogView(context: Context) :
         rootView.findViewById(R.id.view_contentViewWrapper)
     private val btOk: View = rootView.findViewById(R.id.bt_ok)
     private val btCancel: View = rootView.findViewById(R.id.bt_cancel)
+    private val btOcrimage: View = rootView.findViewById(R.id.bt_ocrimage)
+    private val setImageOcr: ImageView = rootView.findViewById(R.id.imag_setimageocr)
 
     var onButtonOkClicked: (() -> Unit)? = null
     var onButtonCancelClicked: (() -> Unit)? = null
@@ -47,6 +51,11 @@ open class DialogView(context: Context) :
         btCancel.clickOnce {
             detachFromScreen()
             onButtonCancelClicked?.invoke()
+        }
+        btOcrimage.clickOnce {
+
+            setImageOcr.setImageBitmap(ScreenExtractor.getCroppedImage)
+
         }
     }
 
@@ -74,6 +83,7 @@ open class DialogView(context: Context) :
     fun setDialogType(dialogType: DialogType) {
         btOk.showOrHide(dialogType == DialogType.CONFIRM_ONLY || dialogType == DialogType.CONFIRM_CANCEL)
         btCancel.showOrHide(dialogType == DialogType.CANCEL_ONLY || dialogType == DialogType.CONFIRM_CANCEL)
+        btOcrimage.showOrHide(dialogType == DialogType.CANCEL_ONLY || dialogType == DialogType.CONFIRM_CANCEL)
     }
 
     fun setCancelByClickingOutside(cancelByClickingOutside: Boolean) {
