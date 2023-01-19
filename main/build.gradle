@@ -16,8 +16,8 @@ android {
         applicationId "tw.firemaples.onscreenocr"
         minSdkVersion 21
         targetSdkVersion 32
-        versionCode 91
-        versionName "3.1.7"
+        versionCode 92
+        versionName "3.1.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -57,8 +57,6 @@ android {
         dev {
             dimension "tier"
             applicationId "tw.firemaples.onscreenocr_debug"
-            versionCode 100
-            versionName "10.0.0"
 
             buildConfigField "boolean", "DISABLE_LOGGING", "false"
             buildConfigField "boolean", "ENABLE_ADS", "false"
@@ -175,7 +173,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 
     // Tesseract
-    implementation 'cz.adaptech.tesseract4android:tesseract4android:4.1.0'
+    implementation 'cz.adaptech.tesseract4android:tesseract4android:4.3.0'
 //    implementation 'cz.adaptech:tesseract4android:4.1.0'
 
     // Microsoft translator
