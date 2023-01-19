@@ -6,6 +6,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dialogOutside">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/view_croppedimage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/view_menuWrapper"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="129dp"
+        android:minWidth="300dp"
+        android:theme="@style/Theme.EverTranslator">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="341dp"
+            android:layout_height="152dp">
+
+            <androidx.constraintlayout.widget.Barrier
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:barrierDirection="top"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imag_setimageocr"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/guide_1_select_lang"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/view_menuWrapper"
@@ -73,6 +109,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
+                android:background="@null"
+                android:foreground="?selectableItemBackground"
+                android:minWidth="64dp"
+                android:padding="8dp"
+                android:text="@android:string/cancel"
+                android:textColor="@color/borderlessButtonText"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/bt_ok" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/bt_ocrimage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="120dp"
                 android:background="@null"
                 android:foreground="?selectableItemBackground"
                 android:minWidth="64dp"
