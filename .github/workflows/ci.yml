@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "multiple-apk-and-multiple-bundle" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "multiple-apk-and-multiple-bundle" ]
 
 jobs:
   build:
