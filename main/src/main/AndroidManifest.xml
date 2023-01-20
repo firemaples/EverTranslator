@@ -26,6 +26,9 @@
         android:roundIcon="@drawable/icon_launcher_adoptive"
         android:supportsRtl="true"
         android:theme="@style/Theme.EverTranslator">
+        <activity
+            android:name=".floatings.screenCircling.opencvActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -64,7 +67,6 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>

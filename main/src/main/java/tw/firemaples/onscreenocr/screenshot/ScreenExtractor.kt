@@ -20,6 +20,7 @@ import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.floatings.screenCircling.opencvActivity
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.pref.AppPref
@@ -32,8 +33,10 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 object ScreenExtractor {
+    lateinit var getbitmap: Bitmap
     private val context: Context by lazy { Utils.context }
     private val logger: Logger by lazy { Logger(ScreenExtractor::class) }
+
 
     private var mediaProjectionIntent: Intent? = null
 
@@ -73,11 +76,16 @@ object ScreenExtractor {
         logger.debug("extractBitmapFromScreen(), parentRect: $parentRect, cropRect: $cropRect")
 
         val fullBitmap = doCaptureScreen()
+        getbitmap = fullBitmap
+        context.startActivity(Intent(context, opencvActivity::class.java).apply {
+            flags =
+                flags or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NO_HISTORY
+        })
 
         return try {
             cropBitmap(fullBitmap, parentRect, cropRect)
         } finally {
-            fullBitmap.recycle()
+            //fullBitmap.recycle()
         }
     }
 

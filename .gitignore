@@ -33,6 +33,7 @@ Thumbs.db
 .gradle
 build/
 !build.gradle
+opencv/.cxx
 
 #NDK
 obj/
