@@ -23,6 +23,17 @@ android {
 
         buildConfigField "boolean", "DISABLE_LOGGING", "true"
         buildConfigField "boolean", "ENABLE_ADS", "true"
+        splits {
+            density {
+                enable true
+            }
+
+            abi {
+
+                enable true
+            }
+
+        }
     }
 
     namespace 'tw.firemaples.onscreenocr'
@@ -40,15 +51,15 @@ android {
             // configuration APKs for language resources. These
             // resources are instead packaged with each base and
             // dynamic feature APK.
-            enableSplit = false
+            enableSplit = true
         }
         density {
             // This property is set to true by default.
-            enableSplit = false
+            enableSplit = true
         }
         abi {
             // This property is set to true by default.
-            enableSplit = false
+            enableSplit = true
         }
     }
 
