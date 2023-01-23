@@ -15,13 +15,11 @@ import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Handler
 import android.os.HandlerThread
-import androidx.core.content.ContextCompat.startActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import tw.firemaples.onscreenocr.R
-import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.pref.AppPref
@@ -33,12 +31,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-
 object ScreenExtractor {
-    lateinit var getCroppedImage: Bitmap
     private val context: Context by lazy { Utils.context }
     private val logger: Logger by lazy { Logger(ScreenExtractor::class) }
-
 
     private var mediaProjectionIntent: Intent? = null
 
@@ -229,11 +224,8 @@ object ScreenExtractor {
         val width = rect.width().coerceAtMost(bitmap.width - rect.left)
         val height = rect.height().coerceAtMost(bitmap.height - rect.top)
 
-        var cropped = Bitmap.createBitmap(bitmap, rect.left, rect.top, width, height)
+        val cropped = Bitmap.createBitmap(bitmap, rect.left, rect.top, width, height)
         logger.debug("cropped bitmap: ${cropped.width}x${cropped.height}")
-
-
-        getCroppedImage = cropped
 
         return cropped
     }
@@ -274,5 +266,4 @@ object ScreenExtractor {
                 temp.recycle()
             }
         }
-
 }

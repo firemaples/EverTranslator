@@ -1,21 +1,20 @@
 package tw.firemaples.onscreenocr.floatings.result
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Rect
 import android.text.method.ScrollingMovementMethod
 import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.databinding.FloatingResultViewBinding
-import tw.firemaples.onscreenocr.databinding.ViewEdittextBinding
 import tw.firemaples.onscreenocr.databinding.ViewResultPanelBinding
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
-import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.floatings.manager.Result
+import tw.firemaples.onscreenocr.floatings.recognizedTextEditor.RecognizedTextEditor
 import tw.firemaples.onscreenocr.floatings.textInfoSearch.TextInfoSearchView
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
@@ -53,6 +52,8 @@ class ResultView(context: Context) : FloatingView(context) {
     private val viewResultWindow: View = binding.viewResultWindow
 
     private var unionRect: Rect = Rect()
+
+    private var croppedBitmap: Bitmap? = null
 
     init {
         binding.resultPanel.setViews()
@@ -151,30 +152,26 @@ class ResultView(context: Context) : FloatingView(context) {
     }
 
     private fun showRecognizedTextEditor(recognizedText: String) {
-        object : DialogView(context) {
-            override val layoutFocusable: Boolean
-                get() = true
-        }.apply {
-            val contentBinding = ViewEdittextBinding.inflate(LayoutInflater.from(context))
-            val etOCRText = contentBinding.root
-
-            etOCRText.setText(recognizedText)
-            setContentView(etOCRText)
-
-            onButtonOkClicked = {
-                val text = etOCRText.text.toString()
-                if (text.isNotBlank() && text.trim() != recognizedText) {
-                    viewModel.onOCRTextEdited(text)
+        RecognizedTextEditor(
+            context = context,
+            review = croppedBitmap,
+            text = recognizedText,
+            onSubmit = {
+                if (it.isNotBlank() && it.trim() != recognizedText) {
+                    viewModel.onOCRTextEdited(it.trim())
                 }
-            }
-
-            attachToScreen()
-        }
+            },
+        ).attachToScreen()
     }
 
     override fun onAttachedToScreen() {
         super.onAttachedToScreen()
         viewResultWindow.visibility = View.INVISIBLE
+    }
+
+    override fun onDetachedFromScreen() {
+        super.onDetachedFromScreen()
+        this.croppedBitmap = null
     }
 
     override fun onHomeButtonPressed() {
@@ -187,7 +184,13 @@ class ResultView(context: Context) : FloatingView(context) {
         viewModel.startRecognition()
     }
 
-    fun textRecognized(result: RecognitionResult, parent: Rect, selected: Rect) {
+    fun textRecognized(
+        result: RecognitionResult,
+        parent: Rect,
+        selected: Rect,
+        croppedBitmap: Bitmap
+    ) {
+        this.croppedBitmap = croppedBitmap
         viewModel.textRecognized(result, parent, selected, rootView.getViewRect())
     }
 

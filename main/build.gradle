@@ -205,4 +205,7 @@ dependencies {
     implementation 'com.google.ads.mediation:facebook:6.12.0.0'
     // Adcolony Ad network
     implementation 'com.google.ads.mediation:adcolony:4.8.0.0'
+
+    // TouchImageView
+    implementation 'com.github.MikeOrtiz:TouchImageView:3.2.1'  // newer version needs API 33 (Android 13)
 }

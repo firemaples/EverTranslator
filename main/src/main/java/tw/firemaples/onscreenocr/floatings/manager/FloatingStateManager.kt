@@ -169,9 +169,9 @@ object FloatingStateManager {
                     )
                 }
                 logger.debug("On text recognized: $result")
-               // croppedBitmap.recycle()
+//                croppedBitmap.recycle() // to be used in the text editor view
                 FirebaseEvent.logOCRFinished(recognizer.name)
-                resultView.textRecognized(result, parent, selected)
+                resultView.textRecognized(result, parent, selected, croppedBitmap)
                 startTranslation(result)
             } catch (e: Exception) {
                 val error =
@@ -286,9 +286,10 @@ object FloatingStateManager {
         }
     }
 
-    fun backToIdle() =
+    private fun backToIdle() =
         scope.launch {
             if (currentState != State.Idle) changeState(State.Idle)
+            croppedBitmap?.recycle()
             resultView.backToIdle()
             showMainBar()
         }
