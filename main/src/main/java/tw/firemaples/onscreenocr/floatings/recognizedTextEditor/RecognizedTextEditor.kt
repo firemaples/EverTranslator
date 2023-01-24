@@ -4,11 +4,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.view.WindowManager
 import androidx.constraintlayout.widget.ConstraintSet
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.databinding.ViewRecognizedTextEditorBinding
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.utils.clickOnce
 import tw.firemaples.onscreenocr.utils.hideKeyboard
+import tw.firemaples.onscreenocr.utils.showKeyboard
 
 class RecognizedTextEditor(
     context: Context,
@@ -67,6 +70,12 @@ class RecognizedTextEditor(
         this.ok.clickOnce {
             onSubmit.invoke(editor.text.toString())
             detachFromScreen()
+        }
+
+        editor.requestFocus()
+        viewScope.launch {
+            delay(1L)
+            editor.showKeyboard()
         }
     }
 

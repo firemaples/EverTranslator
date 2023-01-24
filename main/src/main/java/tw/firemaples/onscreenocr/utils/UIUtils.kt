@@ -180,6 +180,10 @@ fun View.clickOnce(threshold: Long = 500L, action: () -> Unit) {
     }
 }
 
+fun View.showKeyboard() =
+    ViewCompat.getWindowInsetsController(this)
+        ?.show(WindowInsetsCompat.Type.ime())
+
 fun View.hideKeyboard() =
     ViewCompat.getWindowInsetsController(this)
         ?.hide(WindowInsetsCompat.Type.ime())
