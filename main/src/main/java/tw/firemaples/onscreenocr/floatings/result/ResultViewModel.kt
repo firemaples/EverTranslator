@@ -78,6 +78,8 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
 
     fun startRecognition() {
         viewScope.launch {
+            _displayRecognizedTextAreas.value = emptyList<Rect>() to Rect()
+
             _displayOCROperationProgress.value = true
             _displayTranslationProgress.value = false
 
