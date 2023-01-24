@@ -79,7 +79,9 @@
 
         <ScrollView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical">
 
             <tw.firemaples.onscreenocr.wigets.WordBreakTextView
                 android:id="@+id/tv_ocrText"
