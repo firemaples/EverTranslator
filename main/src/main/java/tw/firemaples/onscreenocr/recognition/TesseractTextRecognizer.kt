@@ -75,6 +75,7 @@ class TesseractTextRecognizer : TextRecognizer {
         tess.setImage(bitmap)
         val resultText = tess.utF8Text
         val boxes = tess.regions.boxRects
+        tess.recycle()
 
         return RecognitionResult(lang.code, resultText, boxes)
     }
