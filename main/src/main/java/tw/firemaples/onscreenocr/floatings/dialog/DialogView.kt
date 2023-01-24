@@ -8,12 +8,10 @@ import android.widget.TextView
 import kotlinx.coroutines.suspendCancellableCoroutine
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
-import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.utils.clickOnce
 import tw.firemaples.onscreenocr.utils.setTextOrGone
 import tw.firemaples.onscreenocr.utils.showOrHide
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 open class DialogView(context: Context) :
     FloatingView(context) {

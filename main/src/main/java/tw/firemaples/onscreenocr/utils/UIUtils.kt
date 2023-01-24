@@ -11,6 +11,8 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.widget.TextView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
 object UIUtils {
     private val context by lazy { Utils.context }
@@ -177,3 +179,11 @@ fun View.clickOnce(threshold: Long = 500L, action: () -> Unit) {
         }, threshold)
     }
 }
+
+fun View.showKeyboard() =
+    ViewCompat.getWindowInsetsController(this)
+        ?.show(WindowInsetsCompat.Type.ime())
+
+fun View.hideKeyboard() =
+    ViewCompat.getWindowInsetsController(this)
+        ?.hide(WindowInsetsCompat.Type.ime())
