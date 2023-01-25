@@ -43,11 +43,8 @@
     <string name="title_error">خطأ</string>
     <string name="title_guide">طريقة الأستخدام</string>
     <string name="title_failed_to_check_resources">فشل التحقق من الموارد</string>
-    <string name="title_failed_to_check_resources">فشل التحقق من الموارد</string>
     <string name="title_download">تنزيل</string>
     <string name="title_resources_downloading">تنزيل الموارد</string>
-    <string name="title_resouces_downloaded">تم تنزيل الموارد</string>
-    <string name="title_resouces_downloaded">تم تنزيل الموارد</string>
     <string name="title_downloading_resouces_failed">فشل تنزيل الموارد</string>
     <string name="title_result_window_font_size_adjuster">ضبط حجم الخط</string>
     <string name="error_an_unknown_error_found_while_recognition_text">خطأ غير معروف أثناء التعرف على النص</string>
