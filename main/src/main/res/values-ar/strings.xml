@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EverTranslator (ترجمة الشاشة)</string>
+    <string name="channel_default">قناة الإشعارات الافتراضية</string>
     <string name="translation_provider_microsoft_azure">"مايكروسوفت أزور "</string>
     <string name="translation_provider_google_ml_kit">Google MLKit</string>
-    <string name="translation_provider_google_translate_app">تطبيق ترجمة جوجل</string>
-    <string name="translation_provider_none">استخراج النص فقط</string>
-    <string name="translation_provider_none">"استخراج النص "</string>
+    <string name="translation_provider_google_translate_app">تطبيق ترجمة جوجل</string>>
     <string name="ocr_provider_google_ml_kit">Google MLKit (موصى به)</string>
     <string name="ocr_provider_tesseract">Tesseract</string>
     <string name="pref_title_use_simple_style">استخدم الأسلوبًا البسيطًا</string>
@@ -23,6 +22,8 @@
     <string name="menu_exit">خروج</string>
     <string name="text_ocr_language">" اللغات المدعومة لاستخراج النصوص"</string>
     <string name="text_translation">الترجمة</string>
+    <string name="error_selected_area_too_small">المساحة المختارة صغيرة جدًا، يرجى تكبيرها.</string>
+    <string name="error_can_not_connect_to_translation_server">لا يمكن الاتصال بخادم الترجمة ، يرجى التحقق من اتصالك بالإنترنت</string>
     <string name="text_field_provider">"المزود: "</string>
     <string name="text_field_language">اللغة:</string>
     <string name="text_close">أغلاق</string>
@@ -39,7 +40,15 @@
     <string name="msg_evertranslator_needs_capture_screen_to_find_the_text_from_the_screen_for_you">EverTranslator يحتاج الى الإذن  [تصوير الشاشة] للعثور على النص من الشاشة من أجلك..</string>
     <string name="msg_textHasBeenCopied">تم نسخ النص</string>
     <string name="title_version_history">التغيرات في الإصدارات السابقة</string>
+    <string name="title_error">خطأ</string>
     <string name="title_guide">طريقة الأستخدام</string>
+    <string name="title_failed_to_check_resources">فشل التحقق من الموارد</string>
+    <string name="title_failed_to_check_resources">فشل التحقق من الموارد</string>
+    <string name="title_download">تنزيل</string>
+    <string name="title_resources_downloading">تنزيل الموارد</string>
+    <string name="title_resouces_downloaded">تم تنزيل الموارد</string>
+    <string name="title_resouces_downloaded">تم تنزيل الموارد</string>
+    <string name="title_downloading_resouces_failed">فشل تنزيل الموارد</string>
     <string name="title_result_window_font_size_adjuster">ضبط حجم الخط</string>
     <string name="error_an_unknown_error_found_while_recognition_text">خطأ غير معروف أثناء التعرف على النص</string>
     <string name="error_unknown_error_capturing_screen">خطأ غير معروف أثناء التقاط الشاشة</string>
