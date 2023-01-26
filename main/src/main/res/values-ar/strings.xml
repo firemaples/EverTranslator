@@ -9,7 +9,7 @@
     <string name="translation_provider_none">التعرف على النص فقط</string>
     <string name="ocr_provider_google_ml_kit">Google MLKit (موصى به)</string>
     <string name="ocr_provider_tesseract">Tesseract</string>
-    <string name="pref_title_use_simple_style">استخدم الأسلوبًا البسيطًا</string>
+    <string name="pref_title_use_simple_style">استخدم الأسلوب البسيط</string>
     <string name="pref_title_enable_fade_out_while_idle">تمكين التلاشي أثناء الخمول</string>
     <string name="pref_title_fade_out_after_seconds">يتلاشى بعد (ثوان)</string>
     <string name="pref_title_opaque_percentage">نسبة الشفاشفية (%)</string>
