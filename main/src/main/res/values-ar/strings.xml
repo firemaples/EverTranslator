@@ -22,13 +22,13 @@
     <string name="pref_member_last_main_bar_position">تذكر موضع الشريط الرئيسي الأخير</string>
     <string name="pref_result_panel">لوحة النتائج</string>
     <string name="pref_auto_copy_the_recognized_result">نسخ تلقائي للنص المستخرج</string>
-    <string name="pref_hide_recognized_result_after_translated">إخفاء النتيجة النص المتعرف عليه بعد الترجمة</string>
+    <string name="pref_hide_recognized_result_after_translated">إخفاء نتيجة النص المتعرف عليه بعد الترجمة</string>
     <string name="pref_category_text_recognition">النص المتعرف عليه</string>
     <string name="pref_capturing_screen_timeout">مهلة التقاط الشاشة (بالثواني)</string>
     <string name="pref_title_enable_unrecommended_lang_items">عرض خيارات اللغات غير المستحسنة</string>
     <string name="pref_title_remove_end_dash">"إزالة  الشرطة من النهاية "</string>
-    <string name="pref_summary_remove_end_dash">إزالة علامة الشؤطة في نهاية السطور</string>
-    <string name="pref_summary_unrecommended_items_will_show_in_red">ستظهر الخيارات غير المستحسنة باللون الأحمر</string>
+    <string name="pref_summary_remove_end_dash">إزالة علامة الشرطة في نهاية السطور</string>
+    <string name="pref_summary_unrecommended_items_will_show_in_red">ستظهر اللغات الغير مستحسنة باللون الأحمر</string>
     <string name="pref_title_remove_line_breaks_in_block">قم بإزالة السطر الجديد داخل كتل النصوص</string>
     <string name="pref_summary_remove_line_breaks_in_block">أستبدال فواصل الفقرات بواسطة فواصل الأسطر</string>
     <string name="pref_bypass_battery_optimization">تجاوز تحسين البطارية</string>
@@ -64,7 +64,7 @@
     <string name="msg_click_to_show_the_floating_bar">انقر لإظهار الشريط العائم</string>
     <string name="msg_click_to_hide_the_floating_bar">انقر لإخفاء الشريط العائم</string>
     <string name="msg_recreate_selection_area">اسحب هنا لإعادة إنشاء منطقة ترجمة، إبعاد إصبعين عن بعضهما او جمعها لتكبير المنطقة المحددة</string>
-    <string name="msg_create_selection_area">اسحب هنا لإنشاء منطقة ترجمة</string>
+    <string name="msg_create_selection_area">اسحب هنا لإنشاء منطقة الترجمة</string>
     <string name="msg_image_reader_format_unmatched">, please try it again. (Image reader format)</string>
     <string name="msg_translator_provider_does_not_support_the_ocr_lang">مزود الترجمة هذا لا يدعم لغة التعرف المختارة.</string>
     <string name="title_version_history">التغيرات في الإصدارات السابقة</string>
