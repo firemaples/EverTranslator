@@ -13,7 +13,7 @@
      <string name="pref_summary_use_simple_style">أسلوب بسيط: يستخدم زرًا واحدًا فقط لتصغير الشريط العائم, نقرة واحدة للعثور على النص,  نقرة مطولة لعرض القائمة السحب للتحريك  أسلوب كالمل: زرين أحدهما للبحث عن النصوص والآخر لعرض القائمة والتحريك عن طريق سحبه.</string>
     <string name="pref_title_enable_fade_out_while_idle">تمكين التلاشي أثناء الخمول</string>
     <string name="pref_title_fade_out_after_seconds">يتلاشى بعد (ثوان)</string>
-    <string name="pref_title_opaque_percentage">نسبة الشفاشفية (%)</string>
+    <string name="pref_title_opaque_percentage">نسبة الشفافية (%)</string>
     <string name="pref_category_floating_bar">شريط عائم</string>
     <string name="pref_category_text_blocks_selector">محدد كتل النص</string>
     <string name="pref_joiner_between_text_blocks">رابط بين كتل النص</string>
