@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Guide text -->
+    <string name="guide_select_source_language_and_translation_destination_language">1. انقر لتحديد لغة المصدر ولغة المراد الترجمة لها</string>
+    <string name="guide_lang_selector">2. (1) موقع لتحميل الملفات ، (2) لغة المصدر ، (3) خدمة الترجمة ، (4) لغة الترجمة</string>
+    <string name="guide_click_selection_button">3. انقر فوق زر التحديد</string>
+    <string name="guide_tap_and_drag_on_screen_to_create_selection_area_for_translation">4. اسحب على الشاشة بإصبع واحد لإنشاء منطقة ترجمة ، ثم اسحب بإصبعين للتحرك وتغيير الحجم</string>
+    <string name="guide_click_translation_button">5. انقر فوق زر الترجمة</string>
+    <string name="guide_get_the_result">6. احصل على النتيجة</string>
+    <string name="guide_clear_result">7. اضغط خارج نافذة النتيجة أو انقر فوق زر العودة لمسح النتيجة</string>
+    <string name="guide_menu">** اسحب زر القائمة للتحرك أو انقر فوق زر القائمة لفتح القائمة **</string>
+</resources>
