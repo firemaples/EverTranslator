@@ -30,7 +30,7 @@
     <string name="pref_title_remove_end_dash">"إزالة  الشرطة من النهاية "</string>
     <string name="pref_summary_remove_end_dash">إزالة علامة الشرطة في نهاية السطور</string>
     <string name="pref_summary_unrecommended_items_will_show_in_red">ستظهر اللغات الغير مستحسنة باللون الأحمر</string>
-    <string name="pref_title_remove_line_breaks_in_block">قم بإزالة السطر الجديد داخل كتل النصوص</string>
+    <string name="pref_title_remove_line_breaks_in_block">قم بإزالة فواصل الأسطر داخل كتل النصوص</string>
     <string name="pref_summary_remove_line_breaks_in_block">أستبدال فواصل الفقرات بواسطة فواصل الأسطر</string>
     <string name="pref_bypass_battery_optimization">تجاوز تحسين البطارية</string>
     <string name="pref_summary_bypass_battery_optimization">يحتاج EverTranslator إلى [تجاوز تحسين البطارية] لتجنب اغلاق في الخلفية.</string>
@@ -82,4 +82,9 @@
     <string name="error_unknown_error_capturing_screen">خطأ غير معروف أثناء التقاط الشاشة</string>
     <string name="error_unknown">خطأ غير معروف</string>
     <string name="guide_menu">** اسحب زر القائمة للتحرك أو انقر فوق زر القائمة لفتح القائمة **</string>
+      <string-array name="textBlockJoinersNames">
+        <item>فواصل الأسطر</item>
+        <item>مسافة</item>
+        <item>لا شيء</item>
+    </string-array>
 </resources>
