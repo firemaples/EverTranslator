@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The elements in this array must match to the iso6393 array. -->
+    <string-array name="lang_ocr_tesseract_name">
+        <item>الأفريقانية</item>
+        <item>الألبانية</item>
+        <item>العربية</item>
+        <item>الأزيرية</item>
+        <item>الباسكية</item>
+        <item>البيلاروسية</item>
+        <item>البنغالية</item>
+        <item>البلغارية</item>
+        <item>الكتالانية</item>
+        <!-- <item>شيروكي</item> -->
+        <item>الصينية (المبسطة)</item>
+        <item>الصينية (التقليدية)</item>
+        <item>الكرواتية</item>
+        <item>التشيكية</item>
+        <item>الدانماركية</item>
+        <item>الهولندية</item>
+        <item>الإنكليزية</item>
+        <item>الإستونية</item>
+        <item>الفنلندية</item>
+        <item>الفرنسية</item>
+        <item>الغاليشية</item>
+        <item>الألمانية</item>
+        <item>اليونانية</item>
+        <item>العبرية</item>
+        <item>الهندية</item>
+        <item>المجرية</item>
+        <item>الأيسلندية</item>
+        <item>الإندونيسية</item>
+        <item>الإيطالية</item>
+        <item>اليابانية</item>
+        <item>الكندية</item>
+        <item>الكورية</item>
+        <item>اللاتفية</item>
+        <item>الليتوانية</item>
+        <item>مقدوني</item>
+        <item>الماليزية</item>
+        <item>المالايلامية</item>
+        <item>المالطية</item>
+        <item>النرويجية</item>
+        <item>البولندية</item>
+        <item>البرتغالية</item>
+        <item>الرومانية</item>
+        <item>الروسية</item>
+        <item>الصربية (اللاتينية)</item>
+        <item>السلوفاكية</item>
+        <item>السلوفينية</item>
+        <item>الإسبانية</item>
+        <item>السواحلية</item>
+        <item>السويدية</item>
+        <item>التغالوغيه</item>
+        <item>التاميلية</item>
+        <item>التيلوغية</item>
+        <item>التايلندية</item>
+        <item>التركية</item>
+        <item>الأوكرانية</item>
+        <item>الفيتنامية</item>
+    </string-array>
+
+
+</resources>
