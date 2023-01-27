@@ -81,7 +81,6 @@
     <string name="error_capture_screen_timeout">فشل التقاط الشاشة: انتهت المهلة ، يرجى المحاولة مرة أخرى لاحقًا</string>
     <string name="error_unknown_error_capturing_screen">خطأ غير معروف أثناء التقاط الشاشة</string>
     <string name="error_unknown">خطأ غير معروف</string>
-    <string name="guide_menu">** اسحب زر القائمة للتحرك أو انقر فوق زر القائمة لفتح القائمة **</string>
       <string-array name="textBlockJoinersNames">
         <item>فواصل الأسطر</item>
         <item>مسافة</item>
