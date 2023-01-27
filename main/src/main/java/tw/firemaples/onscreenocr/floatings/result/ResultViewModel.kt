@@ -138,6 +138,9 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
                 TranslationProviderType.GoogleMLKit ->
                     _displayTranslatedByGoogle.value = true
                 TranslationProviderType.GoogleTranslateApp,
+                TranslationProviderType.BingTranslateApp,
+                TranslationProviderType.PapagoTranslateApp,
+                TranslationProviderType.yandexTranslateApp,
                 TranslationProviderType.OCROnly -> {
                 }
             }

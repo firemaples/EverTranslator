@@ -20,6 +20,9 @@ interface Translator {
                 TranslationProviderType.MicrosoftAzure -> MicrosoftAzureTranslator
                 TranslationProviderType.GoogleMLKit -> GoogleMLKitTranslator
                 TranslationProviderType.GoogleTranslateApp -> GoogleTranslateAppTranslator
+                TranslationProviderType.BingTranslateApp -> BingTranslateAppTranslator
+                TranslationProviderType.PapagoTranslateApp -> PapagoTranslateAppTranslator
+                TranslationProviderType.yandexTranslateApp -> yandexTranslateAppTranslator
                 TranslationProviderType.OCROnly -> OCROnlyTranslator
             }
     }
@@ -60,7 +63,20 @@ enum class TranslationProviderType(
         2, "google_translate_app", R.string.translation_provider_google_translate_app,
         nonTranslation = true
     ),
-    OCROnly(3, "ocr_only", R.string.translation_provider_none, nonTranslation = true);
+    BingTranslateApp(
+        3, "Bing_translate_app", R.string.translation_provider_Bing_translate_app,
+        nonTranslation = true
+    ),
+    PapagoTranslateApp(
+        4, "Papago_translate_app", R.string.translation_provider_Papago_translate_app,
+        nonTranslation = true
+    ),
+    yandexTranslateApp(
+        5, "  yandex_translate_app", R.string.translation_provider_yandex_translate_app,
+        nonTranslation = true
+    ),
+
+    OCROnly(6, "ocr_only", R.string.translation_provider_none, nonTranslation = true);
 
     companion object {
         fun fromKey(key: String): TranslationProviderType =
