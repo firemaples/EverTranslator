@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="lang_ocr_google_mlkit_name">
+        <!-- table (Supported languages) -->
+        <item>الأفريكانية</item>
+        <item>الألبانية</item>
+        <item>الكاتالونية</item>
+        <item>الصينية</item>
+        <item>الكرواتية</item>
+        <item>التشيكية</item>
+        <item>الدنماركية</item>
+        <item>الهولندية</item>
+        <item>الإنجليزية</item>
+        <item>الإستونية</item>
+        <item>الفلبينية</item>
+        <item>الفنلندية</item>
+        <item>الفرنسية</item>
+        <item>الألمانية</item>
+        <item>الهندية</item>
+        <item>الهنغارية</item>
+        <item>الأيسلندية</item>
+        <item>الإندونيسية</item>
+        <item>الإيطالية</item>
+        <item>اليابانية</item>
+        <item>الكورية</item>
+        <item>اللاتفية</item>
+        <item>الليتوانية</item>
+        <item>الملايو</item>
+        <item>المهاراتية</item>
+        <item>النيبالية</item>
+        <item>النرويجية</item>
+        <item>البولندية</item>
+        <item>البرتغالية</item>
+        <item>الرومانية</item>
+        <item>الصربية</item>
+        <item>السلوفاكية</item>
+        <item>السلوفينية</item>
+        <item>الإسبانية</item>
+        <item>السويدية</item>
+        <item>التركية</item>
+        <item>الفيتنامية</item>
+
+        <!-- table (Experimental languages) -->
+        <item>الأذربيجانية</item>
+        <item>الباسك</item>
+        <item>البوسنية</item>
+        <item>سيبوانو</item>
+        <item>الاسبرانتو</item>
+        <item>الجاليكية</item>
+        <item>الكريولية الهايتية</item>
+        <item>الأيرلندية</item>
+        <item>الجاوية</item>
+        <item>اللاتينية</item>
+        <item>المالطية</item>
+        <item>السنسكريتية</item>
+        <item>السواحيلية</item>
+        <item>الأوزبكية</item>
+        <item>الويلزية</item>
+        <item>الزولو</item>
+
+        <!-- table (Mapped languages) -->
+        <item>آتشيهين</item>
+        <item>أشولي</item>
+        <item>أدانغمي</item>
+        <item>أكان</item>
+        <item>ألجونكوينيان</item>
+        <item>أراوكاني / مابوتشي</item>
+        <item>أستوريان</item>
+        <item>أثاباسكان</item>
+        <item>أيمارا</item>
+        <item>البالية</item>
+        <item>بامبارا</item>
+        <item>البانتو</item>
+        <item>باتاك</item>
+        <item>بيمبا</item>
+        <item>بيكول</item>
+        <item>بيسلاما</item>
+        <item>بريتون</item>
+        <item>الصينية</item>
+        <item>الصينية</item>
+        <item>الصينية</item>
+        <item>شوكتاو</item>
+        <item>كري</item>
+        <item>الخور</item>
+        <item>داكوتا</item>
+        <item>دوالا</item>
+        <item>إفيك</item>
+        <item>الإنجليزية</item>
+        <item>نعجة</item>
+        <item>جزر فارو</item>
+        <item>الفيجية</item>
+        <item>فون</item>
+        <item>الفرنسية</item>
+        <item>فولة</item>
+        <item>جا</item>
+        <item>غاندا</item>
+        <item>غايو</item>
+        <item>جيلبرتيز</item>
+        <item>القوطية</item>
+        <item>غواراني</item>
+        <item>الهوسا</item>
+        <item>هاواي</item>
+        <item>هيريرو</item>
+        <item>هيليجايينون</item>
+        <item>إيبان</item>
+        <item>الإيغبو</item>
+        <item>إيلوكو</item>
+        <item>القبائل</item>
+        <item>كاشين</item>
+        <item>كالاليسوت</item>
+        <item>كامبا</item>
+        <item>كانوري</item>
+        <item>خاسي</item>
+        <item>كيكويو</item>
+        <item>كينيارواندا</item>
+        <item>كونغو</item>
+        <item>كوسرايان</item>
+        <item>كوانياما</item>
+        <item>لينغالا</item>
+        <item>الألمانية الدنيا</item>
+        <item>لوزي</item>
+        <item>لوبا كاتانغا</item>
+        <item>لو</item>
+        <item>مادوريسي</item>
+        <item>مدغشقر</item>
+        <item>ماندينغو</item>
+        <item>مانكس</item>
+        <item>الماوري</item>
+        <item>مارشال</item>
+        <item>ميندي</item>
+        <item>اللغة الإنجليزية الوسطى</item>
+        <item>الألمانية العليا الوسطى</item>
+        <item>مينانجكاباو</item>
+        <item>الموهوك</item>
+        <item>مونجو</item>
+        <item>الناهواتل</item>
+        <item>نافاجو</item>
+        <item>ندونغا</item>
+        <item>نيوي</item>
+        <item>شمال نديبيلي</item>
+        <item>شمال سوثو</item>
+        <item>نيانجا</item>
+        <item>نيانكولي</item>
+        <item>نياسا تونغا</item>
+        <item>نزيما</item>
+        <item>أوكسيتان</item>
+        <item>أوجيبوا</item>
+        <item>الإنجليزية القديمة</item>
+        <item>الفرنسية القديمة</item>
+        <item>الألمانية العليا القديمة</item>
+        <item>الإسكندنافية القديمة</item>
+        <item>بروفنسال القديمة</item>
+        <item>العظمية</item>
+        <item>بامبانجا</item>
+        <item>بانجاسينان</item>
+        <item>بابيامنتو</item>
+        <item>البرتغالية</item>
+        <item>كيتشوا</item>
+        <item>الرومانشية</item>
+        <item>الغجر</item>
+        <item>روندي</item>
+        <item>ساموا</item>
+        <item>سانغو</item>
+        <item>الاسكتلنديين</item>
+        <item>الغيلية الاسكتلندية</item>
+        <item>شونا</item>
+        <item>سونغاي</item>
+        <item>جنوب سوثو</item>
+        <item>الإسبانية</item>
+        <item>السوندية</item>
+        <item>سواتي</item>
+        <item>تاهيتيان</item>
+        <item>تمن</item>
+        <item>تونغان</item>
+        <item>تسونجا</item>
+        <item>تسوانا</item>
+        <item>التركمان</item>
+        <item>فيندا</item>
+        <item>الفريزية الغربية</item>
+        <item>الولوف</item>
+        <item>خوسا</item>
+        <item>اليوروبا</item>
+        <item>زابوتيك</item>
+    </string-array>
+</resources>
