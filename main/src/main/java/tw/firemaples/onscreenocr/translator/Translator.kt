@@ -22,7 +22,7 @@ interface Translator {
                 TranslationProviderType.GoogleTranslateApp -> GoogleTranslateAppTranslator
                 TranslationProviderType.BingTranslateApp -> BingTranslateAppTranslator
                 TranslationProviderType.PapagoTranslateApp -> PapagoTranslateAppTranslator
-                TranslationProviderType.yandexTranslateApp -> yandexTranslateAppTranslator
+                TranslationProviderType.YandexTranslateApp -> YandexTranslateAppTranslator
                 TranslationProviderType.OCROnly -> OCROnlyTranslator
             }
     }
@@ -71,7 +71,7 @@ enum class TranslationProviderType(
         4, "Papago_translate_app", R.string.translation_provider_Papago_translate_app,
         nonTranslation = true
     ),
-    yandexTranslateApp(
+    YandexTranslateApp(
         5, "  yandex_translate_app", R.string.translation_provider_yandex_translate_app,
         nonTranslation = true
     ),

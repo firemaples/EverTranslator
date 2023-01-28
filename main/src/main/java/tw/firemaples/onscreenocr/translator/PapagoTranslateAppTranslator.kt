@@ -3,7 +3,6 @@ package tw.firemaples.onscreenocr.translator
 import android.content.ClipDescription
 import android.content.ComponentName
 import android.content.Intent
-import com.google.android.datatransport.runtime.scheduling.persistence.EventStoreModule_PackageNameFactory.packageName
 
 
 object PapagoTranslateAppTranslator: Translator {
