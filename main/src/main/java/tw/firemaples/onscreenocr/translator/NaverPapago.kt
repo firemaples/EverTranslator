@@ -17,7 +17,7 @@ object NaverPapago : Translator {
 
         //https://developers.naver.com/docs/papago/papago-nmt-api-reference.md
 
-
+        //https://github.com/HyerinKaya/Realtime_Translation/blob/main/frontend/app/src/main/java/com/jyh/realtimetranslation/presentation/offlinetranslation/Papago.kt
         val source = ""  // ex en
         val target = "" // ex zh-TW
 
