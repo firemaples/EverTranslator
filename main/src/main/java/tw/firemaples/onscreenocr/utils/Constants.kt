@@ -16,6 +16,9 @@ object Constants {
     const val MIN_SCREEN_CROP_SIZE = 32
 
     const val PACKAGE_NAME_GOOGLE_TRANSLATE = "com.google.android.apps.translate"
+    const val PACKAGE_NAME_PAPAGO_TRANSLATE = "com.naver.labs.translator"
+    const val PACKAGE_NAME_BING_TRANSLATE = "com.microsoft.translator"
+    const val PACKAGE_NAME_YANDEX_TRANSLATE = "ru.yandex.translate"
 
     val regexForImageReaderFormatError: Regex by lazy {
         "The producer output buffer format 0x(\\d+) doesn't match the ImageReader's configured buffer format 0x\\d+".toRegex()

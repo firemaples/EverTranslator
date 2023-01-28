@@ -1,26 +1,24 @@
-package tw.firemaples.onscreenocr.utils
+package tw.firemaples.onscreenocr.translator.utils
 
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
-import tw.firemaples.onscreenocr.CoreApplication
-import tw.firemaples.onscreenocr.R
-import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.log.FirebaseEvent
+import tw.firemaples.onscreenocr.translator.TranslationProviderType
+import tw.firemaples.onscreenocr.utils.Constants
+import tw.firemaples.onscreenocr.utils.Utils
 import java.util.*
 
-object GoogleTranslateUtils {
-    private val logger: Logger by lazy { Logger(GoogleTranslateUtils::class) }
+object GoogleTranslateUtils : TranslatorUtils() {
 
-    val context: Context by lazy { CoreApplication.instance }
+    override val packageName: String
+        get() = Constants.PACKAGE_NAME_GOOGLE_TRANSLATE
 
-    fun launchGoogleTranslateApp(text: String) {
-        if (!checkGoogleTranslateInstalled()) {
-            return
-        }
+    override val type: TranslationProviderType
+        get() = TranslationProviderType.GoogleTranslateApp
 
+    override fun launch(context: Context, text: String) {
         val langTo = Locale.getDefault().language
 
         val intent = Intent().apply {
@@ -60,49 +58,16 @@ object GoogleTranslateUtils {
         }
     }
 
-    fun checkGoogleTranslateInstalled(): Boolean {
-        if (Utils.isPackageInstalled(Constants.PACKAGE_NAME_GOOGLE_TRANSLATE)) {
-            return true
-        }
-
-        DialogView(context).apply {
-            setTitle(context.getString(R.string.title_error))
-            setMessage(context.getString(R.string.error_google_translate_is_not_found))
-            setDialogType(DialogView.DialogType.CONFIRM_CANCEL)
-
-            onButtonOkClicked = {
-                launchPlayStoreInstallPage()
-            }
-        }.attachToScreen()
-
-        return false
-    }
-
-    fun launchPlayStoreInstallPage() {
-        val url = "market://details?id=${Constants.PACKAGE_NAME_GOOGLE_TRANSLATE}"
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse(url)
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        }
-
-        try {
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            logger.warn(t = e)
-            Utils.openBrowser(url)
-            //TODO show error message
-        }
-    }
-
     fun getGoogleTranslateInfo(): GoogleTranslateInfo? =
         Utils.getPackageInfo(Constants.PACKAGE_NAME_GOOGLE_TRANSLATE)?.let {
             @Suppress("DEPRECATION")
-            GoogleTranslateInfo(
+            (GoogleTranslateInfo(
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                     it.longVersionCode
                 else
                     it.versionCode.toLong(),
-                it.versionName)
+                it.versionName
+            ))
         }
 
     data class GoogleTranslateInfo(val versionCode: Long, val versionName: String)

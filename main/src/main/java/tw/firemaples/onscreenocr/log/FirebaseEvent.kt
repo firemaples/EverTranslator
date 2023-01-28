@@ -12,7 +12,7 @@ import tw.firemaples.onscreenocr.translator.GoogleTranslateAppTranslator
 import tw.firemaples.onscreenocr.translator.MicrosoftAzureTranslator
 import tw.firemaples.onscreenocr.translator.OCROnlyTranslator
 import tw.firemaples.onscreenocr.translator.Translator
-import tw.firemaples.onscreenocr.utils.GoogleTranslateUtils
+import tw.firemaples.onscreenocr.translator.utils.GoogleTranslateUtils
 import tw.firemaples.onscreenocr.utils.SignatureUtil
 import tw.firemaples.onscreenocr.utils.Utils
 import java.io.FileNotFoundException

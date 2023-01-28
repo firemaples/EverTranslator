@@ -18,6 +18,7 @@ import tw.firemaples.onscreenocr.floatings.recognizedTextEditor.RecognizedTextEd
 import tw.firemaples.onscreenocr.floatings.textInfoSearch.TextInfoSearchView
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
+import tw.firemaples.onscreenocr.translator.utils.GoogleTranslateUtils
 import tw.firemaples.onscreenocr.utils.*
 import java.util.*
 
@@ -134,11 +135,11 @@ class ResultView(context: Context) : FloatingView(context) {
             Utils.copyToClipboard(LABEL_TRANSLATED_TEXT, tvTranslatedText.text.toString())
         }
         btTranslateOCRTextWithGoogleTranslate.clickOnce {
-            GoogleTranslateUtils.launchGoogleTranslateApp(viewModel.ocrText.value?.text() ?: "")
+            GoogleTranslateUtils.launchTranslator(viewModel.ocrText.value?.text() ?: "")
             onUserDismiss?.invoke()
         }
         btTranslateTranslatedTextWithGoogleTranslate.clickOnce {
-            GoogleTranslateUtils.launchGoogleTranslateApp(tvTranslatedText.text.toString())
+            GoogleTranslateUtils.launchTranslator(tvTranslatedText.text.toString())
             onUserDismiss?.invoke()
         }
         btShareOCRText.clickOnce {
