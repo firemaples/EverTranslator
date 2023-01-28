@@ -3,11 +3,15 @@ package tw.firemaples.onscreenocr.translator
 import android.content.ClipDescription
 import android.content.ComponentName
 import android.content.Intent
+import tw.firemaples.onscreenocr.R
 
 
 object PapagoTranslateAppTranslator: Translator {
     override val type: TranslationProviderType
         get() = TranslationProviderType.PapagoTranslateApp
+
+    override val translationHint: String
+        get() = context.getString(R.string.msg_select_lang_in_papago_translate)
 
     override suspend fun translate(text: String, sourceLangCode: String): TranslationResult {
 

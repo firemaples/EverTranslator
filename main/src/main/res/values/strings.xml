@@ -56,6 +56,9 @@
     <string name="msg_wait_for_resources_downloading">The following resources is downloading, please wait.</string>
     <string name="msg_resouces_downloaded">Resources downloaded, please click OK to continue.</string>
     <string name="msg_select_lang_in_google_translate">Select the translation language in Google Translate app</string>
+    <string name="msg_select_lang_in_bing_translate">Select the translation language in Bing Translate app</string>
+    <string name="msg_select_lang_in_yandex_translate">Select the translation language in Yandex Translate app</string>
+    <string name="msg_select_lang_in_papago_translate">Select the translation language in Papago Translate app</string>
     <string name="msg_ocr_only_mode_hint">Translation language selection is not available for OCR only mode</string>
     <string name="text_request_permission">Request permission</string>
 
