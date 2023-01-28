@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Translation target names for Google Translate. -->
+    <!-- The elements in this array must match to the google_translationLangCode_iso6391 array. -->
+    <string-array name="google_translationLangName">
+        <item>الأفريقانية</item>
+        <item>الألبانية</item>
+        <item>العربية</item>
+        <item>الأزيرية</item>
+        <item>الباسكية</item>
+        <item>البيلاروسية</item>
+        <item>البنغالية</item>
+        <item>البوسنية</item>
+        <item>البلغارية</item>
+        <item>الكتالانية</item>
+        <item>سيبوانو</item>
+        <item>الصينية</item>
+        <item>الصينية (المبسطة)</item>
+        <item>الصينية (التقليدية)</item>
+        <item>الكرواتية</item>
+        <item>التشيكية</item>
+        <item>الدانماركية</item>
+        <item>الهولندية</item>
+        <item>الإنجليزية</item>
+        <item>الإستونية</item>
+        <item>الفنلندية</item>
+        <item>الفرنسية</item>
+        <item>الغاليشية</item>
+        <item>الجورجية</item>
+        <item>الألمانية</item>
+        <item>اليونانية</item>
+        <item>الجوجاراتية</item>
+        <item>هايتي</item>
+        <item>العبرية</item>
+        <item>الهندية</item>
+        <item>الهمونغ</item>
+        <item>المجرية</item>
+        <item>الأيسلندية</item>
+        <item>الإندونيسية</item>
+        <item>الأيرلندية</item>
+        <item>الإيطالية</item>
+        <item>اليابانية</item>
+        <item>الجاويه</item>
+        <item>الكندية</item>
+        <!-- <item>الخمير</item> -->
+        <item>الكورية</item>
+        <item>اللاو</item>
+        <item>اللاتفية</item>
+        <item>الليتوانية</item>
+        <item>مقدوني</item>
+        <item>الماليزية</item>
+        <item>المالطية</item>
+        <item>الماراثية</item>
+        <item>النرويجية</item>
+        <item>الفارسية</item>
+        <item>البولندية</item>
+        <item>البرتغالية</item>
+        <item>الرومانية</item>
+        <item>الروسية</item>
+        <item>الصربية</item>
+        <item>السلوفاكية</item>
+        <item>السلوفينية</item>
+        <item>الإسبانية</item>
+        <item>السواحلية</item>
+        <item>السويدية</item>
+        <item>التغالوغيه</item>
+        <item>التاميلية</item>
+        <item>التيلوغية</item>
+        <item>التايلندية</item>
+        <item>التركية</item>
+        <item>الأوكرانية</item>
+        <item>الأوردية</item>
+        <item>الفيتنامية</item>
+        <item>الويلزية</item>
+        <item>الييديه</item>
+    </string-array>
+</resources>

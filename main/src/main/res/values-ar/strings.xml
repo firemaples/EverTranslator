@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EverTranslator (ترجمة الشاشة)</string>
+    <string name="channel_default">قناة الإشعارات الافتراضية</string>
+    <string name="translation_provider_microsoft_azure">"مايكروسوفت Azure "</string>
+    <string name="translation_provider_google_ml_kit">Google MLKit</string>
+    <string name="translation_provider_google_translate_app">تطبيق ترجمة Google</string><![CDATA[>
+    ]]>
+    <string name="translation_provider_none">التعرف على النص فقط</string>
+    <string name="ocr_provider_google_ml_kit">Google MLKit (موصى به)</string>
+    <string name="ocr_provider_tesseract">Tesseract</string>
+    <string name="pref_title_use_simple_style">استخدم الأسلوب البسيط</string>
+     <string name="pref_summary_use_simple_style">أسلوب بسيط: يستخدم زرًا واحدًا فقط لتصغير الشريط العائم, نقرة واحدة للعثور على النص,  نقرة مطولة لعرض القائمة السحب للتحريك  أسلوب كالمل: زرين أحدهما للبحث عن النصوص والآخر لعرض القائمة والتحريك عن طريق سحبه.</string>
+    <string name="pref_title_enable_fade_out_while_idle">تمكين التلاشي أثناء الخمول</string>
+    <string name="pref_title_fade_out_after_seconds">يتلاشى بعد (ثوان)</string>
+    <string name="pref_title_opaque_percentage">نسبة الشفافية (%)</string>
+    <string name="pref_category_floating_bar">شريط عائم</string>
+    <string name="pref_category_text_blocks_selector">محدد كتل النص</string>
+    <string name="pref_joiner_between_text_blocks">رابط بين كتل النص</string>
+    <string name="pref_other_settings">اعدادات اخرى</string>
+    <string name="pref_save_last_selected_area">حفظ آخر منطقة محددة</string>
+    <string name="pref_exit_app_while_spen_inserted">الخروج من التطبيق أثناء أستعمال قلم S Pen (سامسونج فقط)</string>
+    <string name="pref_member_last_main_bar_position">تذكر موضع الشريط الرئيسي الأخير</string>
+    <string name="pref_result_panel">لوحة النتائج</string>
+    <string name="pref_auto_copy_the_recognized_result">نسخ تلقائي للنص المستخرج</string>
+    <string name="pref_hide_recognized_result_after_translated">إخفاء نتيجة النص المتعرف عليه بعد الترجمة</string>
+    <string name="pref_category_text_recognition">النص المتعرف عليه</string>
+    <string name="pref_capturing_screen_timeout">مهلة التقاط الشاشة (بالثواني)</string>
+    <string name="pref_title_enable_unrecommended_lang_items">عرض خيارات اللغات غير المستحسنة</string>
+    <string name="pref_title_remove_end_dash">"إزالة  الشرطة من النهاية "</string>
+    <string name="pref_summary_remove_end_dash">إزالة علامة الشرطة في نهاية السطور</string>
+    <string name="pref_summary_unrecommended_items_will_show_in_red">ستظهر اللغات الغير مستحسنة باللون الأحمر</string>
+    <string name="pref_title_remove_line_breaks_in_block">قم بإزالة فواصل الأسطر داخل كتل النصوص</string>
+    <string name="pref_summary_remove_line_breaks_in_block">أستبدال فواصل الفقرات بواسطة فواصل الأسطر</string>
+    <string name="pref_bypass_battery_optimization">تجاوز تحسين البطارية</string>
+    <string name="pref_summary_bypass_battery_optimization">يحتاج EverTranslator إلى [تجاوز تحسين البطارية] لتجنب اغلاق في الخلفية.</string>
+    <string name="menu_setting">إعدادات</string>
+    <string name="menu_privacy_policy">سياسة الخصوصية</string>
+    <string name="menu_about">حول</string>
+    <string name="menu_version_history">التغيرات في الإصدارات السابقة</string>
+    <string name="menu_readme">كيفية الاستخدام</string>
+    <string name="menu_hide">إخفاء</string>
+    <string name="menu_exit">خروج</string>
+    <string name="text_ocr_language">" اللغات المدعومة لاستخراج النصوص"</string>
+    <string name="text_translation">الترجمة</string>
+    <string name="error_google_translate_is_not_found">لا يوجد تطبيق Google ترجمة على جهازك، يعتمد هذا المزود على التطبيق، ويرجى النقر فوق زر OK لتثبيته على متجر Play أو التغيير إلى مزود ترجمة آخر.</string>
+    <string name="error_selected_area_too_small">المساحة المختارة صغيرة جدًا، يرجى تكبيرها.</string>
+    <string name="error_microsoft_translation_out_of_quota">سف، حصة ترجمة من Microsoft Azure تنفد. سيتم إعادة ضبطه في الشهر المقبل، يرجى استخدام مزود ترجمة آخر.   (%1$s/%2$s)</string>
+    <string name="error_can_not_connect_to_translation_server">لا يمكن الاتصال بخادم الترجمة ، يرجى التحقق من اتصالك بالإنترنت</string>
+    <string name="text_field_provider">"المزود: "</string>
+    <string name="text_field_language">اللغة:</string>
+    <string name="text_close">أغلاق</string>
+    <string name="text_ocr_text">النص المتعرف عليه</string>
+    <string name="text_translated_text">النص المترجم</string>
+    <string name="text_translated_by">"ترجم من قبل "</string>
+    <string name="msg_models_to_download">لم يتم تنزيل موارد اللغة التالية، هل تريد تنزيلها الآن ؟</string>
+    <string name="msg_wait_for_resources_downloading">يتم تنزيل الموارد، يرجى الانتظار.</string>
+    <string name="msg_resouces_downloaded">تم تنزيل الموارد ، يرجى النقر فوق \"موافق\" للمتابعة.</string>
+    <string name="msg_select_lang_in_google_translate">حدد لغة الترجمة في تطبيق تطبيق ترجمة google</string>
+    <string name="msg_ocr_only_mode_hint">اختيار لغة الترجمة غير متاح في وضع ااستخراج النص</string>
+    <string name="text_request_permission">طلب الإذن</string>
+    <string name="msg_evertranslator_needs_display_over_other_apps_permission_to_show_a_floating_window_for_easily_using">EverTranslator يحتاج الى الإذن  [التطبيقات التي قد تظهر فوق تطبيقات أخرى] لإظهار النافذة عائمة على الشاشة.</string>
+    <string name="msg_evertranslator_needs_capture_screen_to_find_the_text_from_the_screen_for_you">EverTranslator يحتاج الى الإذن  [تصوير الشاشة] للعثور على النص من الشاشة من أجلك..</string>
+    <string name="msg_textHasBeenCopied">تم نسخ النص</string>
+    <string name="msg_click_to_show_the_floating_bar">انقر لإظهار الشريط العائم</string>
+    <string name="msg_click_to_hide_the_floating_bar">انقر لإخفاء الشريط العائم</string>
+    <string name="msg_recreate_selection_area">اسحب هنا لإعادة إنشاء منطقة ترجمة، إبعاد إصبعين عن بعضهما او جمعها لتكبير المنطقة المحددة</string>
+    <string name="msg_create_selection_area">اسحب هنا لإنشاء منطقة الترجمة</string>
+    <string name="msg_image_reader_format_unmatched">, please try it again. (Image reader format)</string>
+    <string name="msg_translator_provider_does_not_support_the_ocr_lang">مزود الترجمة هذا لا يدعم لغة التعرف المختارة.</string>
+    <string name="title_version_history">التغيرات في الإصدارات السابقة</string>
+    <string name="title_error">خطأ</string>
+    <string name="title_guide">طريقة الأستخدام</string>
+    <string name="title_failed_to_check_resources">فشل التحقق من الموارد</string>
+    <string name="title_download">تنزيل</string>
+    <string name="title_resources_downloading">تنزيل الموارد</string>
+    <string name="title_resouces_downloaded">تم تنزيل الموارد</string>
+    <string name="title_downloading_resouces_failed">فشل تنزيل الموارد</string>
+    <string name="title_result_window_font_size_adjuster">ضبط حجم الخط</string>
+    <string name="error_an_unknown_error_found_while_recognition_text">خطأ غير معروف أثناء التعرف على النص</string>
+    <string name="error_capture_screen_timeout">فشل التقاط الشاشة: انتهت المهلة ، يرجى المحاولة مرة أخرى لاحقًا</string>
+    <string name="error_unknown_error_capturing_screen">خطأ غير معروف أثناء التقاط الشاشة</string>
+    <string name="error_unknown">خطأ غير معروف</string>
+      <string-array name="textBlockJoinersNames">
+        <item>فواصل الأسطر</item>
+        <item>مسافة</item>
+        <item>لا شيء</item>
+    </string-array>
+</resources>
