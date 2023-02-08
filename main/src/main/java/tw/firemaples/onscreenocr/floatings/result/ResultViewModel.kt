@@ -141,6 +141,7 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
                 TranslationProviderType.BingTranslateApp,
                 TranslationProviderType.PapagoTranslateApp,
                 TranslationProviderType.YandexTranslateApp,
+                TranslationProviderType.OtherTranslateApp,
                 TranslationProviderType.OCROnly -> {
                 }
             }

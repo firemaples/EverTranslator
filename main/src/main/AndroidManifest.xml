@@ -12,6 +12,9 @@
 
     <queries>
         <package android:name="com.google.android.apps.translate" />
+        <package android:name="com.microsoft.translator" />
+        <package android:name="com.naver.labs.translator" />
+        <package android:name="ru.yandex.translate" />
 
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT" />

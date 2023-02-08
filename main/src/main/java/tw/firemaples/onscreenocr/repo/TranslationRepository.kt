@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.repo
 
 import android.content.Context
+import android.os.Build
 import androidx.lifecycle.asFlow
 import com.chibatching.kotpref.livedata.asLiveData
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +32,7 @@ class TranslationRepository {
         val selected = AppPref.selectedTranslationProvider
 
         val result = TranslationProviderType.values()
+            .filter { it.minSDKVersion <= Build.VERSION.SDK_INT }
             .sortedBy { it.index }
             .map {
                 TranslationProvider.fromType(
