@@ -37,8 +37,8 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
     private val _languageText = MutableLiveData<String>()
     val languageText: LiveData<String> = _languageText
 
-    private val _displayGoogleTranslateIcon = MutableLiveData<Boolean>()
-    val displayGoogleTranslateIcon: LiveData<Boolean> = _displayGoogleTranslateIcon
+    private val _displayTranslatorIcon = MutableLiveData<Int?>()
+    val displayTranslatorIcon: LiveData<Int?> = _displayTranslatorIcon
 
     private val _displaySelectButton = MutableLiveData<Boolean>()
     val displaySelectButton: LiveData<Boolean> = _displaySelectButton
@@ -156,17 +156,27 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
             .getRecognizer(AppPref.selectedOCRProvider)
             .parseToDisplayLangCode(_ocrLang)
 
-        val displayGoogleTranslateIcon =
-            translationProviderType == TranslationProviderType.GoogleTranslateApp
-
-        val langText = when (translationProviderType) {
-            TranslationProviderType.GoogleTranslateApp -> "$ocrLang>"
-            TranslationProviderType.OCROnly -> " $ocrLang "
-            else -> "$ocrLang>$translationLang"
+        _displayTranslatorIcon.value = when (translationProviderType) {
+            TranslationProviderType.GoogleTranslateApp -> R.drawable.ic_google_translate_dark_grey
+            TranslationProviderType.BingTranslateApp -> R.drawable.ic_microsoft_bing
+            TranslationProviderType.OtherTranslateApp -> R.drawable.ic_open_in_app
+            TranslationProviderType.MicrosoftAzure,
+            TranslationProviderType.GoogleMLKit,
+            TranslationProviderType.PapagoTranslateApp,
+            TranslationProviderType.YandexTranslateApp,
+            TranslationProviderType.OCROnly -> null
         }
 
-        _displayGoogleTranslateIcon.value = displayGoogleTranslateIcon
-        _languageText.value = langText
+        _languageText.value = when (translationProviderType) {
+            TranslationProviderType.GoogleTranslateApp,
+            TranslationProviderType.BingTranslateApp,
+            TranslationProviderType.OtherTranslateApp -> "$ocrLang>"
+            TranslationProviderType.YandexTranslateApp -> "$ocrLang > Y"
+            TranslationProviderType.PapagoTranslateApp -> "$ocrLang > P"
+            TranslationProviderType.OCROnly -> " $ocrLang "
+            TranslationProviderType.MicrosoftAzure,
+            TranslationProviderType.GoogleMLKit -> "$ocrLang>$translationLang"
+        }
     }
 
     fun onMenuButtonClicked() {
