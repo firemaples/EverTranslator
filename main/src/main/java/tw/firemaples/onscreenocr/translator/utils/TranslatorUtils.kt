@@ -69,10 +69,10 @@ abstract class TranslatorUtils {
 
         try {
             context.startActivity(intent)
-            FirebaseEvent.logShow3rdPartyTranslateWindow(type.name)
+            FirebaseEvent.logShow3rdPartyTranslator(type.name)
         } catch (e: Exception) {
             logger.warn("Launch ${type.name} failed", e)
-            FirebaseEvent.logShow3rdPartyTranslateWindowFailed(
+            FirebaseEvent.logShow3rdPartyTranslatorFailed(
                 name = type.name, info = getPackageInfo(), e,
             )
         }

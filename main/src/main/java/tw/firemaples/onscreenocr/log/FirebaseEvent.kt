@@ -46,9 +46,9 @@ private const val EVENT_MICROSOFT_TRANSLATION_OUT_OF_QUOTA =
     "event_microsoft_translation_out_of_quota"
 
 private const val EVENT_SHOW_RESULT_WINDOW = "show_result_window"
-private const val EVENT_SHOW_3RD_PARTY_TRANSLATE_WINDOW = "show_3rd_party_translate_window"
-private const val EVENT_SHOW_3RD_PARTY_TRANSLATE_WINDOW_FAILED =
-    "show_3rd_party_translate_window_failed"
+private const val EVENT_SHOW_3RD_PARTY_TRANSLATOR = "show_3rd_party_translator"
+private const val EVENT_SHOW_3RD_PARTY_TRANSLATOR_FAILED =
+    "show_3rd_party_translator_failed"
 
 private const val EVENT_AD_SHOW_SUCCESS = "admob_show_success"
 private const val EVENT_AD_SHOW_FAILED = "admob_show_failed"
@@ -244,15 +244,15 @@ object FirebaseEvent {
         }
     }
 
-    fun logShow3rdPartyTranslateWindow(name: String) {
+    fun logShow3rdPartyTranslator(name: String) {
         val params = Bundle().apply {
             putString("name", name)
         }
 
-        logEvent(EVENT_SHOW_3RD_PARTY_TRANSLATE_WINDOW, params)
+        logEvent(EVENT_SHOW_3RD_PARTY_TRANSLATOR, params)
     }
 
-    fun logShow3rdPartyTranslateWindowFailed(name: String, info: String?, e: Throwable) {
+    fun logShow3rdPartyTranslatorFailed(name: String, info: String?, e: Throwable) {
         logException(
             IllegalStateException(
                 "$name not found or version is too old, info: $info",
@@ -264,7 +264,7 @@ object FirebaseEvent {
             putString("name", name)
         }
 
-        logEvent(EVENT_SHOW_3RD_PARTY_TRANSLATE_WINDOW_FAILED, params)
+        logEvent(EVENT_SHOW_3RD_PARTY_TRANSLATOR_FAILED, params)
     }
 
     fun logEventAdShowSuccess(unitId: String) {
