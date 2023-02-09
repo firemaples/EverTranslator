@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.translator
 
 import android.content.Context
+import android.os.Build
 import androidx.annotation.StringRes
 import kotlinx.coroutines.CoroutineScope
 import tw.firemaples.onscreenocr.R
@@ -20,6 +21,10 @@ interface Translator {
                 TranslationProviderType.MicrosoftAzure -> MicrosoftAzureTranslator
                 TranslationProviderType.GoogleMLKit -> GoogleMLKitTranslator
                 TranslationProviderType.GoogleTranslateApp -> GoogleTranslateAppTranslator
+                TranslationProviderType.BingTranslateApp -> BingTranslateAppTranslator
+                TranslationProviderType.PapagoTranslateApp -> PapagoTranslateAppTranslator
+                TranslationProviderType.YandexTranslateApp -> YandexTranslateAppTranslator
+                TranslationProviderType.OtherTranslateApp -> OtherTranslateAppTranslator
                 TranslationProviderType.OCROnly -> OCROnlyTranslator
             }
     }
@@ -52,15 +57,36 @@ enum class TranslationProviderType(
     val index: Int,
     val key: String,
     @StringRes val nameRes: Int,
-    val nonTranslation: Boolean = false
+    val nonTranslation: Boolean = false,
+    val minSDKVersion: Int = Build.VERSION_CODES.BASE,
 ) {
     MicrosoftAzure(0, "microsoft_azure", R.string.translation_provider_microsoft_azure),
     GoogleMLKit(1, "google_ml_kit", R.string.translation_provider_google_ml_kit),
     GoogleTranslateApp(
         2, "google_translate_app", R.string.translation_provider_google_translate_app,
-        nonTranslation = true
+        nonTranslation = true,
+        minSDKVersion = Build.VERSION_CODES.M,
     ),
-    OCROnly(3, "ocr_only", R.string.translation_provider_none, nonTranslation = true);
+    BingTranslateApp(
+        3, "Bing_translate_app", R.string.translation_provider_Bing_translate_app,
+        nonTranslation = true,
+    ),
+    PapagoTranslateApp(
+        4, "Papago_translate_app", R.string.translation_provider_Papago_translate_app,
+        nonTranslation = true,
+    ),
+    YandexTranslateApp(
+        5, "yandex_translate_app", R.string.translation_provider_yandex_translate_app,
+        nonTranslation = true,
+        minSDKVersion = Build.VERSION_CODES.M,
+    ),
+    OtherTranslateApp(
+        6, "other_translate_app", R.string.translation_provider_other_translate_app,
+        nonTranslation = true,
+        minSDKVersion = Build.VERSION_CODES.M,
+    ),
+
+    OCROnly(7, "ocr_only", R.string.translation_provider_none, nonTranslation = true);
 
     companion object {
         fun fromKey(key: String): TranslationProviderType =

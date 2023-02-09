@@ -53,7 +53,7 @@
     <string name="msg_models_to_download">下列语言资源尚未下载，要现在下载吗？ </string>
     <string name="msg_wait_for_resources_downloading">下列语言资源正在下载中，请稍等。</string>
     <string name="msg_resouces_downloaded">下列语言资源已下载完成，请点击完成以继续。</string>
-    <string name="msg_select_lang_in_google_translate">请在 Google 翻译 app 中选择欲翻译的语言。</string>
+    <string name="msg_select_lang_in_translate_app">请在 [%s] 中选择欲翻译的语言。</string>
     <string name="msg_ocr_only_mode_hint">仅辨识文字模式时，无翻译服务。</string>
     <string name="msg_click_to_show_the_floating_bar">点击以显示浮动视窗</string>
     <string name="msg_click_to_hide_the_floating_bar">点击隐藏浮动视窗</string>
@@ -75,7 +75,7 @@
     <string name="error_capture_screen_timeout">撷取萤幕超时，请稍后重试。</string>
     <string name="error_unknown_error_capturing_screen">撷取萤幕时发生未知错误。</string>
     <string name="error_unknown">未知错误</string>
-    <string name="error_google_translate_is_not_found">您尚未安装 Google 翻译 app，当前选择的翻译引擎需要此 app 来翻译，请点击确认开启 Play 商店下载，或改用其他翻译引擎。</string>
+    <string name="error_translator_app_is_not_found">您尚未安装 [%s]，当前选择的翻译引擎需要此 app 来翻译，请点击确认开启 Play 商店下载，或改用其他翻译引擎。</string>
     <string name="error_selected_area_too_small">选择的区域过小，请加大选择区域。</string>
     <string name="error_microsoft_translation_out_of_quota">很抱歉，微软 Azure 翻译功能的翻译字数已用尽，将会在下个月重置，请选用其他的翻译引擎。\n\n(%1$s/%2$s)</string>
     <string name="error_can_not_connect_to_translation_server">无法连接翻译伺服器，请确认您的网路连接</string>
