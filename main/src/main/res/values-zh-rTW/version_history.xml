@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="version_3_1_12">● 支援透過 Papago, Bing, Yandex 及其他第三方翻譯軟體翻譯\n● UI 支援阿拉伯文\n● 結果視窗上的文字可調整\n● 可從已辨識的文字上取得更多資訊\n● 增加更多文字區塊相關的選項\n● 調整 UI/UX.</string>
     <string name="version_3_1_0">● 新增支援辨識語言: 阿拉伯語, 白俄羅斯文, 孟加拉語, 保加利亞文, 希臘文, 希伯來語文, 卡納達語, 馬其頓文, 俄羅斯文, 佢加禄語, 泰米爾語, 泰盧固語, 泰文, 烏克蘭文.</string>
     <string name="version_3_0_10">● 新增文字區塊連結符號選項\n● 新增螢幕擷取超時設定\n● 修正主浮動視窗位置以避免被系統介面遮蔽或超出螢幕外\n● 現在你可以將 EverTranalstor 移動到外接記憶卡\n● 修正錯誤訊息</string>
     <string name="version_3_0_0">● 提升辨識速度及準確度\n● 增加更多選項至設定\n● 重新設計介面\n● 支援夜間模式\n● 增加廣告在啟動頁及設定頁</string>
