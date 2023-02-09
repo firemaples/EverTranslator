@@ -16,8 +16,8 @@ android {
         applicationId "tw.firemaples.onscreenocr"
         minSdkVersion 21
         targetSdkVersion 32
-        versionCode 95
-        versionName "3.1.11"
+        versionCode 96
+        versionName "3.1.12"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
