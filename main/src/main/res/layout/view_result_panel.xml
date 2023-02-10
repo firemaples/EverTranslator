@@ -30,32 +30,38 @@
             android:id="@+id/bt_readOutOCRText"
             style="@style/resultPanel_button"
             android:src="@drawable/ic_play"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:contentDescription="TODO" />
 
         <ImageButton
             android:id="@+id/bt_editOCRText"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_square_edit_outline" />
+            android:src="@drawable/ic_square_edit_outline"
+            android:contentDescription="TODO" />
 
         <ImageButton
             android:id="@+id/bt_copyOCRText"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_copy" />
+            android:src="@drawable/ic_copy"
+            android:contentDescription="TODO" />
 
         <ImageButton
             android:id="@+id/bt_adjust_font_size"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_font_size" />
+            android:src="@drawable/ic_font_size"
+            android:contentDescription="TODO" />
 
         <ImageButton
             android:id="@+id/bt_translateOCRTextWithGoogleTranslate"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_google_translate" />
+            android:src="@drawable/ic_google_translate"
+            android:contentDescription="TODO" />
 
         <ImageButton
             android:id="@+id/bt_shareOCRText"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_export" />
+            android:src="@drawable/ic_export"
+            android:contentDescription="TODO" />
 
     </LinearLayout>
 
@@ -116,17 +122,20 @@
             android:id="@+id/bt_readOutTranslatedText"
             style="@style/resultPanel_button"
             android:src="@drawable/ic_play"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:contentDescription="TODO" />
 
         <ImageButton
             android:id="@+id/bt_copyTranslatedText"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_copy" />
+            android:src="@drawable/ic_copy"
+            android:contentDescription="TODO" />
 
         <ImageButton
             android:id="@+id/bt_translateTranslatedTextWithGoogleTranslate"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_google_translate" />
+            android:src="@drawable/ic_google_translate"
+            android:contentDescription="TODO" />
 
     </LinearLayout>
 
@@ -182,7 +191,8 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/wrapper_translatedResult"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        android:contentDescription="TODO" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_recognitionViews"

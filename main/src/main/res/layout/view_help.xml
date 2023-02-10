@@ -16,7 +16,8 @@
 
         <ImageView
             style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_1_select_lang" />
+            android:src="@drawable/guide_1_select_lang"
+            android:contentDescription="TODO" />
 
         <TextView
             style="@style/helpPage.stepText"
@@ -24,7 +25,8 @@
 
         <ImageView
             style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_2_lang_selector" />
+            android:src="@drawable/guide_2_lang_selector"
+            android:contentDescription="TODO" />
 
         <TextView
             style="@style/helpPage.stepText"
@@ -32,7 +34,8 @@
 
         <ImageView
             style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_3_click_to_start_selection" />
+            android:src="@drawable/guide_3_click_to_start_selection"
+            android:contentDescription="TODO" />
 
         <TextView
             style="@style/helpPage.stepText"
@@ -48,7 +51,8 @@
 
         <ImageView
             style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_5_click_to_translate" />
+            android:src="@drawable/guide_5_click_to_translate"
+            android:contentDescription="TODO" />
 
         <TextView
             style="@style/helpPage.stepText"
@@ -56,7 +60,8 @@
 
         <ImageView
             style="@style/helpPage.stepPicture"
-            android:src="@drawable/guide_6_result_window" />
+            android:src="@drawable/guide_6_result_window"
+            android:contentDescription="TODO" />
 
         <TextView
             style="@style/helpPage.stepText"

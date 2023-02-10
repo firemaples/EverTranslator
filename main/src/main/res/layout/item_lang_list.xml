@@ -9,4 +9,5 @@
     android:gravity="center_vertical"
     android:paddingHorizontal="4dp"
     android:paddingVertical="1dp"
-    tools:text="English" />
+    tools:text="English"
+    tools:targetApi="m" />

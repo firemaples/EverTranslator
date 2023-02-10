@@ -43,7 +43,8 @@
         style="@style/TextInfoSearch.Button"
         android:src="@drawable/ic_close"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="TODO" />
 
     <ImageButton
         android:id="@+id/nextPage"
@@ -51,7 +52,8 @@
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_arrow_right"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/close" />
+        app:layout_constraintEnd_toStartOf="@id/close"
+        android:contentDescription="TODO" />
 
     <ImageButton
         android:id="@+id/prevPage"
@@ -59,7 +61,8 @@
         android:layout_marginEnd="4dp"
         android:src="@drawable/ic_arrow_left"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/nextPage" />
+        app:layout_constraintEnd_toStartOf="@id/nextPage"
+        android:contentDescription="TODO" />
 
     <ImageButton
         android:id="@+id/refresh"
@@ -67,7 +70,8 @@
         android:layout_marginEnd="4dp"
         android:src="@drawable/ic_web_refresh"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/prevPage" />
+        app:layout_constraintEnd_toStartOf="@id/prevPage"
+        android:contentDescription="TODO" />
 
     <ImageButton
         android:id="@+id/googleTranslate"
@@ -75,7 +79,8 @@
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_google_translate_white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/refresh" />
+        app:layout_constraintEnd_toStartOf="@id/refresh"
+        android:contentDescription="TODO" />
 
     <ImageButton
         android:id="@+id/googleDefinition"
@@ -83,7 +88,8 @@
         android:layout_marginEnd="4dp"
         android:src="@drawable/ic_dictionary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/googleTranslate" />
+        app:layout_constraintEnd_toStartOf="@id/googleTranslate"
+        android:contentDescription="TODO" />
 
     <ImageButton
         android:id="@+id/googleImageSearch"
@@ -91,7 +97,8 @@
         android:layout_marginEnd="4dp"
         android:src="@drawable/ic_image_search"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/googleDefinition" />
+        app:layout_constraintEnd_toStartOf="@id/googleDefinition"
+        android:contentDescription="TODO" />
 
     <ImageButton
         android:id="@+id/googleSearch"
@@ -99,7 +106,8 @@
         android:layout_marginEnd="4dp"
         android:src="@drawable/ic_search_web"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/googleImageSearch" />
+        app:layout_constraintEnd_toStartOf="@id/googleImageSearch"
+        android:contentDescription="TODO" />
 
     <ImageButton
         android:id="@+id/wikipedia"
@@ -107,6 +115,7 @@
         android:layout_marginEnd="4dp"
         android:src="@drawable/ic_wikipedia"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/googleSearch" />
+        app:layout_constraintEnd_toStartOf="@id/googleSearch"
+        android:contentDescription="TODO" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

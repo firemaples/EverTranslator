@@ -104,7 +104,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/line_centerVertical"
                 app:layout_constraintTop_toBottomOf="@id/tv_labelTranslationProvider"
-                tools:text="@string/translation_provider_google_ml_kit" />
+                tools:text="@string/translation_provider_google_ml_kit"
+                tools:targetApi="m" />
 
             <TextView
                 android:id="@+id/tv_labelTranslationLang"

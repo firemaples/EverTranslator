@@ -11,4 +11,5 @@
     android:textColor="@color/foregroundSecond"
     android:theme="@style/Theme.EverTranslator"
     tools:checked="true"
-    tools:text="Selection" />
+    tools:text="Selection"
+    tools:targetApi="m" />
