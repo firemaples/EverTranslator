@@ -85,7 +85,7 @@ class GeneralRepository {
         emit(result)
     }.flowOn(Dispatchers.Default)
 
-    suspend fun saveLastMainBarPosition(x: Int, y: Int) {
+    fun saveLastMainBarPosition(x: Int, y: Int) {
         AppPref.lastMainBarPosition = Point(x, y)
     }
 
