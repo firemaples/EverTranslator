@@ -12,7 +12,7 @@ import tw.firemaples.onscreenocr.utils.firstPart
 
 interface Translator {
     companion object {
-        suspend fun getTranslator(
+         fun getTranslator(
             type: TranslationProviderType = TranslationProviderType.fromKey(
                 AppPref.selectedTranslationProvider
             )
