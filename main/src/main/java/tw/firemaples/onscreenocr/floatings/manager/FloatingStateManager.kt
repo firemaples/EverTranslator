@@ -33,10 +33,10 @@ object FloatingStateManager {
     private val context: Context by lazy { Utils.context }
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
-    private val _currentState = MutableStateFlow<State>(State.Idle)
-    val currentStateFlow: StateFlow<State> = _currentState
+    private val a_currentState = MutableStateFlow<State>(State.Idle)
+    val currentStateFlow: StateFlow<State> = a_currentState
     val currentState: State
-        get() = _currentState.value
+        get() = a_currentState.value
 
     private val mainBar: MainBar by lazy { MainBar(context) }
     private val screenCirclingView: ScreenCirclingView by lazy {
@@ -54,8 +54,8 @@ object FloatingStateManager {
         }
     }
 
-    private val _showingStateChangedFlow = MutableStateFlow(false)
-    val showingStateChangedFlow: StateFlow<Boolean> = _showingStateChangedFlow
+    private val a_showingStateChangedFlow = MutableStateFlow(false)
+    val showingStateChangedFlow: StateFlow<Boolean> = a_showingStateChangedFlow
     val isMainBarAttached: Boolean
         get() = mainBar.attached
 
@@ -69,15 +69,15 @@ object FloatingStateManager {
         if (isMainBarAttached) return
         mainBar.attachToScreen()
         scope.launch {
-            _showingStateChangedFlow.emit(true)
+            a_showingStateChangedFlow.emit(true)
         }
     }
 
-    fun hideMainBar() {
+    private fun hideMainBar() {
         if (!isMainBarAttached) return
         mainBar.detachFromScreen()
         scope.launch {
-            _showingStateChangedFlow.emit(false)
+            a_showingStateChangedFlow.emit(false)
         }
     }
 
@@ -303,7 +303,7 @@ object FloatingStateManager {
         } else logger.error(t = IllegalStateException("The state should be in ${states.toList()}, current is $currentState"))
     }
 
-    private suspend fun changeState(newState: State) {
+    private fun changeState(newState: State) {
         val allowedNextStates = when (currentState) {
             State.Idle -> arrayOf(State.ScreenCircling::class)
             State.ScreenCircling -> arrayOf(State.Idle::class, State.ScreenCircled::class)
@@ -326,7 +326,7 @@ object FloatingStateManager {
 
         if (allowedNextStates.contains(newState::class)) {
             logger.debug("Change state $currentState > $newState")
-            _currentState.value = newState
+            a_currentState.value = newState
         } else {
             logger.error("Change state from $currentState to $newState is not allowed")
         }

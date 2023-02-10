@@ -30,10 +30,10 @@ object UIUtils {
     val displayMetrics: DisplayMetrics
         get() = DisplayMetrics().also { windowManager.defaultDisplay.getMetrics(it) }
 
-    val realDisplayMetrics: DisplayMetrics
+    private val realDisplayMetrics: DisplayMetrics
         get() = DisplayMetrics().also { windowManager.defaultDisplay.getRealMetrics(it) }
 
-    val orientation: Int
+    private val orientation: Int
         get() = windowManager.defaultDisplay.orientation
 
     val orientationDegree: Int
@@ -42,7 +42,7 @@ object UIUtils {
     val readSize: Point
         get() = Point().also { windowManager.defaultDisplay.getRealSize(it) }
 
-    val isPortrait: Boolean
+    private val isPortrait: Boolean
         get() = readSize.let { it.y > it.x }
 
     val screenSize: IntArray

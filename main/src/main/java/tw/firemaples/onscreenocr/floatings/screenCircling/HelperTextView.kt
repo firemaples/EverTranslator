@@ -19,7 +19,7 @@ class HelperTextView @JvmOverloads constructor(
         private const val TIME_TEXT_HIDDEN_ANIM: Long = 800
         private const val INTERVAL_TEXT_HIDDEN_ANIM: Long = 10
 
-        private val MAX_ALPHA = 200
+        private const val MAX_ALPHA = 200
     }
 
     private val logger: Logger by lazy { Logger(HelperTextView::class) }

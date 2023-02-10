@@ -98,11 +98,11 @@ class CircleGestureAdapter(view: View, private val callback: OnGesture) {
         return true
     }
 
-    var leftIndex: Int = -1
-    var rightIndex: Int = -1
-    var topIndex: Int = -1
-    var bottomIndex: Int = -1
-    val fingerMoved: MutableMap<Int, Boolean> = mutableMapOf(0 to false, 1 to false)
+    private var leftIndex: Int = -1
+    private var rightIndex: Int = -1
+    private var topIndex: Int = -1
+    private var bottomIndex: Int = -1
+    private val fingerMoved: MutableMap<Int, Boolean> = mutableMapOf(0 to false, 1 to false)
     private fun handleTwoFingersTouch(event: MotionEvent): Boolean {
         if (isOneFinger) return true
 

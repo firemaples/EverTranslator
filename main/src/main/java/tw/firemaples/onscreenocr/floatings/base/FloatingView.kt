@@ -192,7 +192,7 @@ abstract class FloatingView(protected val context: Context) {
         updateViewLayout()
     }
 
-    fun updateViewLayout() {
+    private fun updateViewLayout() {
         try {
             windowManager.updateViewLayout(rootView, params)
         } catch (e: Exception) {

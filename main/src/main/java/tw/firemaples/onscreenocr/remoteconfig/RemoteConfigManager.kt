@@ -76,7 +76,7 @@ object RemoteConfigManager {
 
     val microsoftTranslationKey: String
         get() = context.getString(R.string.microsoftSubscriptionKey).let {
-            if (it.isBlank()) getString(KEY_MICROSOFT_KEY) else it
+            it.ifBlank { getString(KEY_MICROSOFT_KEY) }
         }
 
     val trainedDataSites: List<TrainedDataSite>

@@ -138,7 +138,7 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         viewModel.displayTranslateProviders.observe(lifecycleOwner) {
             translationProviderMenuView.apply {
                 updateData(
-                    itemList = it.map { it.key to it.displayName }.toMap(),
+                    itemList = it.associate { it.key to it.displayName },
                     selectedKey = it.firstOrNull { it.selected }?.key
                 )
             }.attachToScreen()
