@@ -303,7 +303,7 @@ object FloatingStateManager {
         } else logger.error(t = IllegalStateException("The state should be in ${states.toList()}, current is $currentState"))
     }
 
-    private suspend fun changeState(newState: State) {
+    private fun changeState(newState: State) {
         val allowedNextStates = when (currentState) {
             State.Idle -> arrayOf(State.ScreenCircling::class)
             State.ScreenCircling -> arrayOf(State.Idle::class, State.ScreenCircled::class)
