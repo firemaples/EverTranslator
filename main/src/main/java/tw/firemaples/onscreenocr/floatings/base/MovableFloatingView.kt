@@ -61,7 +61,7 @@ abstract class MovableFloatingView(context: Context) : FloatingView(context) {
     private var initTouchY: Float = 0f
     private var hasMoved: Boolean = false
 
-    protected var touchInterceptor: ((view: View, motionEvent: MotionEvent, hasMoved: Boolean) -> Boolean)? =
+    private var touchInterceptor: ((view: View, motionEvent: MotionEvent, hasMoved: Boolean) -> Boolean)? =
         null
 
     private val onTouchListener: (View, MotionEvent) -> Boolean =

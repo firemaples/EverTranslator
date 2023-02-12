@@ -17,7 +17,7 @@ object AppPref : KotprefModel() {
         Kotpref.gson = Gson()
     }
 
-    var selectedOCRProviderKey by stringPref(
+    private var selectedOCRProviderKey by stringPref(
         default = Constants.DEFAULT_OCR_PROVIDER.key
     )
     var selectedOCRProvider: TextRecognitionProviderType

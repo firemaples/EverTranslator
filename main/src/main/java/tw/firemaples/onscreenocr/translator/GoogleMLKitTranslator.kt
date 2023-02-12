@@ -148,7 +148,7 @@ object GoogleMLKitTranslator : Translator {
         suspendCoroutine {
             remoteModelManager.getDownloadedModels(TranslateRemoteModel::class.java)
                 .addOnSuccessListener { modelList ->
-                    it.resume(langList - modelList.map { it.language })
+                    it.resume(langList - modelList.map { it.language }.toSet())
                 }
                 .addOnFailureListener { e ->
                     it.resumeWithException(e)
@@ -157,7 +157,7 @@ object GoogleMLKitTranslator : Translator {
 
     private suspend fun downloadResources(langList: List<String>) {
         for (lang in langList) {
-            suspendCoroutine<Any> { c ->
+            suspendCoroutine { c ->
                 remoteModelManager.download(
                     TranslateRemoteModel.Builder(lang).build(),
                     DownloadConditions.Builder().build()

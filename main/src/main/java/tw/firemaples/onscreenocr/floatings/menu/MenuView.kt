@@ -27,7 +27,7 @@ class MenuView(context: Context, private val checkable: Boolean) : FloatingView(
 
     private var anchorView: View? = null
 
-    var marginDp = 0f
+    private var marginDp = 0f
     private val layoutMargin
         get() = marginDp.dpToPx()
 

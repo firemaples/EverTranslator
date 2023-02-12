@@ -9,7 +9,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.pref.AppPref
@@ -64,7 +63,7 @@ object UserInfoUtils {
         )
     }
 
-    fun updatePlayServiceInfo() {
+    private fun updatePlayServiceInfo() {
         val isPlayServiceAvailable = GoogleApiAvailability.getInstance()
             .isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
 
