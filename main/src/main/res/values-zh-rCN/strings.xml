@@ -76,6 +76,7 @@
     <string name="error_unknown_error_capturing_screen">撷取萤幕时发生未知错误。</string>
     <string name="error_unknown">未知错误</string>
     <string name="error_translator_app_is_not_found">您尚未安装 [%s]，当前选择的翻译引擎需要此 app 来翻译，请点击确认开启 Play 商店下载，或改用其他翻译引擎。</string>
+    <string name="error_no_translator_app_is_not_found">您需要安装任一个第三方翻译 App 来使用此引擎，请从商店下载任意翻译 App 或使用其他引擎翻译</string>
     <string name="error_selected_area_too_small">选择的区域过小，请加大选择区域。</string>
     <string name="error_microsoft_translation_out_of_quota">很抱歉，微软 Azure 翻译功能的翻译字数已用尽，将会在下个月重置，请选用其他的翻译引擎。\n\n(%1$s/%2$s)</string>
     <string name="error_can_not_connect_to_translation_server">无法连接翻译伺服器，请确认您的网路连接</string>
@@ -94,4 +95,8 @@
     <string name="title_result_window_font_size_adjuster">调整文字大小</string>
     <string name="pref_summary_bypass_battery_optimization">随处翻译需要[忽略电池优化]来避免在背景时被系统关闭</string>
     <string name="pref_bypass_battery_optimization">忽略电池优化</string>
+    <string name="translation_provider_Bing_translate_app">微软翻译 App</string>
+    <string name="translation_provider_Papago_translate_app">Papago 翻译 App</string>
+    <string name="translation_provider_yandex_translate_app">Yandex 翻译 App</string>
+    <string name="translation_provider_other_translate_app">其他翻译 App</string>
 </resources>
