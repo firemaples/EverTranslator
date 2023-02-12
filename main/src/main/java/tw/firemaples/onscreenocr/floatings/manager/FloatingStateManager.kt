@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.Rect
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.floatings.dialog.showErrorDialog
@@ -33,10 +32,9 @@ object FloatingStateManager {
     private val context: Context by lazy { Utils.context }
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
-    private val a_currentState = MutableStateFlow<State>(State.Idle)
-    val currentStateFlow: StateFlow<State> = a_currentState
+    val currentStateFlow = MutableStateFlow<State>(State.Idle)
     val currentState: State
-        get() = a_currentState.value
+        get() = currentStateFlow.value
 
     private val mainBar: MainBar by lazy { MainBar(context) }
     private val screenCirclingView: ScreenCirclingView by lazy {
@@ -54,8 +52,7 @@ object FloatingStateManager {
         }
     }
 
-    private val a_showingStateChangedFlow = MutableStateFlow(false)
-    val showingStateChangedFlow: StateFlow<Boolean> = a_showingStateChangedFlow
+    val showingStateChangedFlow = MutableStateFlow(false)
     val isMainBarAttached: Boolean
         get() = mainBar.attached
 
@@ -69,7 +66,7 @@ object FloatingStateManager {
         if (isMainBarAttached) return
         mainBar.attachToScreen()
         scope.launch {
-            a_showingStateChangedFlow.emit(true)
+            showingStateChangedFlow.emit(true)
         }
     }
 
@@ -77,7 +74,7 @@ object FloatingStateManager {
         if (!isMainBarAttached) return
         mainBar.detachFromScreen()
         scope.launch {
-            a_showingStateChangedFlow.emit(false)
+            showingStateChangedFlow.emit(false)
         }
     }
 
@@ -326,7 +323,7 @@ object FloatingStateManager {
 
         if (allowedNextStates.contains(newState::class)) {
             logger.debug("Change state $currentState > $newState")
-            a_currentState.value = newState
+            currentStateFlow.value = newState
         } else {
             logger.error("Change state from $currentState to $newState is not allowed")
         }
