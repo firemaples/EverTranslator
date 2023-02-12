@@ -30,7 +30,7 @@
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="admobAd" />
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_setting"
         android:name="tw.firemaples.onscreenocr.pages.setting.SettingFragment"
         android:layout_width="0dp"

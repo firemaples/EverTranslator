@@ -80,7 +80,8 @@
                 android:text="@android:string/cancel"
                 android:textColor="@color/borderlessButtonText"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/bt_ok" />
+                app:layout_constraintEnd_toStartOf="@id/bt_ok"
+                tools:targetApi="m" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/bt_ok"
@@ -94,7 +95,8 @@
                 android:text="@android:string/ok"
                 android:textColor="@color/borderlessButtonText"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:targetApi="m" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/line_topOfButtons"

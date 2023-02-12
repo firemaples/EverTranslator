@@ -40,7 +40,8 @@
         app:layout_constraintBottom_toTopOf="@id/editor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:src="@drawable/guide_6_result_window" />
+        tools:src="@drawable/guide_6_result_window"
+        tools:targetApi="m" />
 
     <EditText
         android:id="@+id/editor"
@@ -59,7 +60,8 @@
         app:layout_constraintBottom_toTopOf="@id/ok"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="test\nLine2" />
+        tools:text="test\nLine2"
+        android:autofillHints="" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/cancel"
@@ -73,7 +75,8 @@
         android:text="@android:string/cancel"
         android:textColor="@color/borderlessButtonText"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/ok" />
+        app:layout_constraintEnd_toStartOf="@id/ok"
+        tools:targetApi="m" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/ok"
@@ -87,6 +90,7 @@
         android:text="@android:string/ok"
         android:textColor="@color/borderlessButtonText"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:targetApi="m" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

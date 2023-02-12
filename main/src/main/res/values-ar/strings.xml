@@ -57,7 +57,6 @@
     <string name="msg_models_to_download">لم يتم تنزيل موارد اللغة التالية، هل تريد تنزيلها الآن ؟</string>
     <string name="msg_wait_for_resources_downloading">يتم تنزيل الموارد، يرجى الانتظار.</string>
     <string name="msg_resouces_downloaded">تم تنزيل الموارد ، يرجى النقر فوق \"موافق\" للمتابعة.</string>
-    <string name="msg_select_lang_in_google_translate">حدد لغة الترجمة في تطبيق تطبيق ترجمة google</string>
     <string name="msg_select_lang_in_translate_app">حدد لغة الترجمة في [%s]</string>
     <string name="msg_ocr_only_mode_hint">اختيار لغة الترجمة غير متاح في وضع ااستخراج النص</string>
     <string name="text_request_permission">طلب الإذن</string>

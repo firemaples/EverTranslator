@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -28,7 +27,8 @@
                 android:background="@drawable/bg_spinner"
                 android:foreground="?selectableItemBackgroundBorderless"
                 android:orientation="horizontal"
-                android:paddingHorizontal="4dp">
+                android:paddingHorizontal="4dp"
+                tools:targetApi="m">
 
                 <TextView
                     android:id="@+id/tv_lang"
@@ -46,7 +46,8 @@
                     android:layout_height="match_parent"
                     android:visibility="gone"
                     tools:src="@drawable/ic_google_translate_dark_grey"
-                    tools:visibility="visible" />
+                    tools:visibility="visible"
+                    android:contentDescription="TODO" />
 
             </LinearLayout>
 
@@ -55,7 +56,8 @@
                 style="@style/MainBar_Buttons"
                 android:src="@drawable/ic_selection"
                 android:visibility="gone"
-                tools:visibility="visible" />
+                tools:visibility="visible"
+                android:contentDescription="TODO" />
 
             <!--            <ImageButton-->
             <!--                android:id="@+id/bt_ocrOnly"-->
@@ -70,14 +72,16 @@
                 style="@style/MainBar_Buttons"
                 android:src="@drawable/ic_translate"
                 android:visibility="gone"
-                tools:visibility="visible" />
+                tools:visibility="visible"
+                android:contentDescription="TODO" />
 
             <ImageButton
                 android:id="@+id/bt_close"
                 style="@style/MainBar_Buttons"
                 android:src="@drawable/ic_close"
                 android:visibility="gone"
-                tools:visibility="visible" />
+                tools:visibility="visible"
+                android:contentDescription="TODO" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/bt_menu"
