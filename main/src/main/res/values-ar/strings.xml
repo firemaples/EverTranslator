@@ -43,7 +43,8 @@
     <string name="menu_exit">خروج</string>
     <string name="text_ocr_language">" اللغات المدعومة لاستخراج النصوص"</string>
     <string name="text_translation">الترجمة</string>
-    <string name="error_google_translate_is_not_found">لا يوجد تطبيق Google ترجمة على جهازك، يعتمد هذا المزود على التطبيق، ويرجى النقر فوق زر OK لتثبيته على متجر Play أو التغيير إلى مزود ترجمة آخر.</string>
+    <string name="error_translator_app_is_not_found">لم يتم العثور على [%s] في جهازك ، يعتمد هذا المزود على هذا التطبيق ، يرجى النقر فوق \"موافق\" لتثبيته من متجر قوقل أو التغيير إلى مزود ترجمة آخر.</string>
+    <string name="error_no_translator_app_is_not_found">تحتاج إلى تثبيت أي تطبيق ترجمة مدعوم آخر لاستخدام هذا المزود ، يرجى تثبيت أي تطبيق ترجمة آخر من أي متجر أو استخدام مزود آخر بدلاً من ذلك</string>
     <string name="error_selected_area_too_small">المساحة المختارة صغيرة جدًا، يرجى تكبيرها.</string>
     <string name="error_microsoft_translation_out_of_quota">سف، حصة ترجمة من Microsoft Azure تنفد. سيتم إعادة ضبطه في الشهر المقبل، يرجى استخدام مزود ترجمة آخر.   (%1$s/%2$s)</string>
     <string name="error_can_not_connect_to_translation_server">لا يمكن الاتصال بخادم الترجمة ، يرجى التحقق من اتصالك بالإنترنت</string>
@@ -57,6 +58,7 @@
     <string name="msg_wait_for_resources_downloading">يتم تنزيل الموارد، يرجى الانتظار.</string>
     <string name="msg_resouces_downloaded">تم تنزيل الموارد ، يرجى النقر فوق \"موافق\" للمتابعة.</string>
     <string name="msg_select_lang_in_google_translate">حدد لغة الترجمة في تطبيق تطبيق ترجمة google</string>
+    <string name="msg_select_lang_in_translate_app">حدد لغة الترجمة في [%s]</string>
     <string name="msg_ocr_only_mode_hint">اختيار لغة الترجمة غير متاح في وضع ااستخراج النص</string>
     <string name="text_request_permission">طلب الإذن</string>
     <string name="msg_evertranslator_needs_display_over_other_apps_permission_to_show_a_floating_window_for_easily_using">EverTranslator يحتاج الى الإذن  [التطبيقات التي قد تظهر فوق تطبيقات أخرى] لإظهار النافذة عائمة على الشاشة.</string>
@@ -86,4 +88,8 @@
         <item>مسافة</item>
         <item>لا شيء</item>
     </string-array>
+    <string name="translation_provider_Bing_translate_app">تطبيق Bing translate</string>
+    <string name="translation_provider_Papago_translate_app">تطبيق Papago translate</string>
+    <string name="translation_provider_yandex_translate_app">تطبيق Yandex translate</string>
+    <string name="translation_provider_other_translate_app">تطبيقات ترجمة آخر</string>
 </resources>
