@@ -76,6 +76,7 @@
     <string name="error_unknown_error_capturing_screen">擷取螢幕時發生未知錯誤。</string>
     <string name="error_unknown">未知錯誤</string>
     <string name="error_translator_app_is_not_found">您尚未安裝 [%s]，當前選擇的翻譯引擎需要此 app 來翻譯，請點擊確認開啟 Play 商店下載，或改用其他翻譯引擎。</string>
+    <string name="error_no_translator_app_is_not_found">您需要安裝任一個第三方翻譯 App 來使用此引擎，請從商店下載任意翻譯 App 或使用其他引擎翻譯</string>
     <string name="error_selected_area_too_small">選擇的區域過小，請加大選擇區域。</string>
     <string name="error_microsoft_translation_out_of_quota">很抱歉，微軟 Azure 翻譯功能的翻譯字數已用盡，將會在下個月重置，請選用其他的翻譯引擎。\n\n(%1$s/%2$s)</string>
     <string name="error_can_not_connect_to_translation_server">無法連接翻譯伺服器，請確認您的網路連接</string>
@@ -94,4 +95,8 @@
     <string name="title_result_window_font_size_adjuster">調整文字大小</string>
     <string name="pref_summary_bypass_battery_optimization">隨處翻譯需要[忽略電池最佳化]來避免在背景時被系統關閉</string>
     <string name="pref_bypass_battery_optimization">忽略電池最佳化</string>
+    <string name="translation_provider_Bing_translate_app">微軟翻譯 App</string>
+    <string name="translation_provider_Papago_translate_app">Papago 翻譯 App</string>
+    <string name="translation_provider_yandex_translate_app">Yandex 翻譯 App</string>
+    <string name="translation_provider_other_translate_app">其他翻譯 App</string>
 </resources>
