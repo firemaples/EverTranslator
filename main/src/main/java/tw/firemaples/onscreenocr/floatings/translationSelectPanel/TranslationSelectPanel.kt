@@ -5,13 +5,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.databinding.FloatingTranslationSelectPanelBinding
 import tw.firemaples.onscreenocr.databinding.ItemLangListBinding
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.floatings.menu.MenuView
 import tw.firemaples.onscreenocr.utils.Logger
+import tw.firemaples.onscreenocr.utils.UIUtils
 import tw.firemaples.onscreenocr.utils.clickOnce
 import tw.firemaples.onscreenocr.utils.setTextOrGone
 
@@ -46,6 +51,12 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         }
     }
 
+    private val ocrLangListLayoutManager by lazy {
+        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    }
+    private val translationLangListLayoutManager by lazy {
+        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    }
     private lateinit var ocrLangListAdapter: LangListAdapter<OCRLangItem>
     private lateinit var translationLangListAdapter: LangListAdapter<TranslateLangItem>
 
@@ -59,7 +70,7 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         binding.btClose.clickOnce { detachFromScreen() }
 
         with(binding.rvOcrLang) {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = ocrLangListLayoutManager
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             ocrLangListAdapter = LangListAdapter(
                 context = context,
@@ -75,14 +86,18 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
                 },
                 onItemClicked = {
                     logger.debug("on OCR lang checked, $it")
-
                     viewModel.onOCRLangSelected(it)
-                })
+                },
+                onLongClicked = {
+                    logger.debug("on OCR lang long clicked: $it")
+                    viewModel.onOCRLangLongClicked(it.code)
+                }
+            )
             adapter = ocrLangListAdapter
         }
 
         with(binding.rvTranslationLang) {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = translationLangListLayoutManager
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             translationLangListAdapter = LangListAdapter(
                 context = context,
@@ -100,6 +115,10 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
                     logger.debug("on translation lang checked, $it")
 
                     viewModel.onTranslationLangChecked(it.code)
+                },
+                onLongClicked = {
+                    logger.debug("on translation lang long clicked: $it")
+                    viewModel.onTranslationLangLongClicked(it.code)
                 })
             adapter = translationLangListAdapter
         }
@@ -109,12 +128,22 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         }
 
         viewModel.ocrLanguageList.observe(lifecycleOwner) {
-            logger.debug("on ocrLanguageList changed: $it")
+            val (list, scrollToPosition) = it
+            logger.debug("on ocrLanguageList changed, scrollToPosition: $scrollToPosition, list: $list")
 
-            ocrLangListAdapter.submitList(it) {
-                binding.rvOcrLang.scrollToPosition(
-                    it.indexOfFirst { item -> item.selected }
-                        .coerceAtLeast(0))
+            ocrLangListAdapter.submitList(list) {
+                if (scrollToPosition) {
+                    val indices = list.mapIndexedNotNull { index, item ->
+                        if (item.selected) index else null
+                    }
+                    val first = ocrLangListLayoutManager.findFirstCompletelyVisibleItemPosition()
+                    val last = ocrLangListLayoutManager.findLastCompletelyVisibleItemPosition()
+                    if (!indices.any { index -> index in first..last }) {
+                        binding.rvOcrLang.scrollToPosition(
+                            list.indexOfFirst { item -> item.selected }
+                                .coerceAtLeast(0))
+                    }
+                }
             }
         }
 
@@ -123,11 +152,23 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         }
 
         viewModel.translationLangList.observe(lifecycleOwner) {
-            translationLangListAdapter.submitList(it) {
-                binding.rvTranslationLang.scrollToPosition(
-                    it.indexOfFirst { item -> item.selected }
-                        .coerceAtLeast(0)
-                )
+            val (list, scrollToPosition) = it
+            translationLangListAdapter.submitList(list) {
+                if (scrollToPosition) {
+                    val indices = list.mapIndexedNotNull { index, item ->
+                        if (item.selected) index else null
+                    }
+                    val first =
+                        translationLangListLayoutManager.findFirstCompletelyVisibleItemPosition()
+                    val last =
+                        translationLangListLayoutManager.findLastCompletelyVisibleItemPosition()
+                    if (!indices.any { index -> index in first..last }) {
+                        binding.rvTranslationLang.scrollToPosition(
+                            list.indexOfFirst { item -> item.selected }
+                                .coerceAtLeast(0)
+                        )
+                    }
+                }
             }
         }
 
@@ -158,6 +199,7 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         private val context: Context,
         diffCallback: DiffUtil.ItemCallback<T>,
         private val onItemClicked: (lang: T) -> Unit,
+        private val onLongClicked: (lang: T) -> Unit,
     ) :
         ListAdapter<T, LangListAdapter.ViewHolder>(diffCallback) {
         class ViewHolder(val binding: ItemLangListBinding) : RecyclerView.ViewHolder(binding.root)
@@ -171,11 +213,22 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
             with(holder.binding.lang) {
                 text = item.displayName
                 isChecked = item.selected
-                val drawable =
+                val drawableDownload =
                     if (item.showDownloadIcon)
                         ContextCompat.getDrawable(context, R.drawable.ic_download)
                     else null
-                setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, drawable, null)
+                val drawableFavorite =
+                    if (item.favorite)
+                        ContextCompat.getDrawable(context, R.drawable.ic_heart)
+                    else null
+
+                setCompoundDrawablesRelativeWithIntrinsicBounds(
+                    drawableFavorite,
+                    null,
+                    drawableDownload,
+                    null
+                )
+                compoundDrawablePadding = UIUtils.dpToPx(1f)
                 setTextColor(
                     ContextCompat.getColor(
                         context,
@@ -185,6 +238,10 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
             }
 
             holder.itemView.clickOnce { onItemClicked.invoke(item) }
+            holder.itemView.setOnLongClickListener {
+                onLongClicked.invoke(item)
+                true
+            }
         }
     }
 }
