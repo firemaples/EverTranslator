@@ -24,6 +24,7 @@ object SettingManager {
     private const val PREF_TEXT_BLOCK_JOINER = "pref_text_block_joiner"
     private const val PREF_REMOVE_END_DASH = "pref_remove_end_dash"
     private const val PREF_REMOVE_LINE_BREAKS_IN_BLOCK = "pref_remove_line_breaks_in_block"
+    private const val PREF_REMOVE_SPACES_IN_CJK = "pref_remove_spaces_in_cjk"
 
     private const val PREF_AUTO_COPY_OCR_RESULT = "pref_auto_copy_ocr_result"
     private const val PREF_HIDE_RECOGNIZED_RESULT_AFTER_TRANSLATED =
@@ -86,6 +87,9 @@ object SettingManager {
     val removeLineBreakersInBlock: Boolean
         get() = preferences.getBoolean(PREF_REMOVE_LINE_BREAKS_IN_BLOCK, true)
 
+    val removeSpacesInCJK: Boolean
+        get() = preferences.getBoolean(PREF_REMOVE_SPACES_IN_CJK, false)
+
     val autoCopyOCRResult: Boolean
         get() = preferences.getBoolean(PREF_AUTO_COPY_OCR_RESULT, false)
 
@@ -110,6 +114,7 @@ object SettingManager {
                         }
                     }
                 }
+
                 PREF_ENABLE_UNRECOMMENDED_LANG_ITEMS -> {
                     TextRecognizer.invalidSupportLanguages()
                 }
