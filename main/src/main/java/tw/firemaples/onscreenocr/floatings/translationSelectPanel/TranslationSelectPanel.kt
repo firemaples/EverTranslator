@@ -5,13 +5,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.databinding.FloatingTranslationSelectPanelBinding
 import tw.firemaples.onscreenocr.databinding.ItemLangListBinding
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.floatings.menu.MenuView
 import tw.firemaples.onscreenocr.utils.Logger
+import tw.firemaples.onscreenocr.utils.UIUtils
 import tw.firemaples.onscreenocr.utils.clickOnce
 import tw.firemaples.onscreenocr.utils.setTextOrGone
 
@@ -75,9 +80,13 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
                 },
                 onItemClicked = {
                     logger.debug("on OCR lang checked, $it")
-
                     viewModel.onOCRLangSelected(it)
-                })
+                },
+                onLongClicked = {
+                    logger.debug("on OCR lang long clicked: $it")
+                    viewModel.onOCRLangLongClicked(it.code)
+                }
+            )
             adapter = ocrLangListAdapter
         }
 
@@ -100,6 +109,10 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
                     logger.debug("on translation lang checked, $it")
 
                     viewModel.onTranslationLangChecked(it.code)
+                },
+                onLongClicked = {
+                    logger.debug("on translation lang long clicked: $it")
+                    viewModel.onTranslationLangLongClicked(it.code)
                 })
             adapter = translationLangListAdapter
         }
@@ -158,6 +171,7 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         private val context: Context,
         diffCallback: DiffUtil.ItemCallback<T>,
         private val onItemClicked: (lang: T) -> Unit,
+        private val onLongClicked: (lang: T) -> Unit,
     ) :
         ListAdapter<T, LangListAdapter.ViewHolder>(diffCallback) {
         class ViewHolder(val binding: ItemLangListBinding) : RecyclerView.ViewHolder(binding.root)
@@ -171,11 +185,22 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
             with(holder.binding.lang) {
                 text = item.displayName
                 isChecked = item.selected
-                val drawable =
+                val drawableDownload =
                     if (item.showDownloadIcon)
                         ContextCompat.getDrawable(context, R.drawable.ic_download)
                     else null
-                setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, drawable, null)
+                val drawableFavorite =
+                    if (item.favorite)
+                        ContextCompat.getDrawable(context, R.drawable.ic_heart)
+                    else null
+
+                setCompoundDrawablesRelativeWithIntrinsicBounds(
+                    drawableFavorite,
+                    null,
+                    drawableDownload,
+                    null
+                )
+                compoundDrawablePadding = UIUtils.dpToPx(1f)
                 setTextColor(
                     ContextCompat.getColor(
                         context,
@@ -185,6 +210,10 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
             }
 
             holder.itemView.clickOnce { onItemClicked.invoke(item) }
+            holder.itemView.setOnLongClickListener {
+                onLongClicked.invoke(item)
+                true
+            }
         }
     }
 }

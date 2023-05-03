@@ -4,13 +4,16 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
 import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.floatings.dialog.showDialog
 import tw.firemaples.onscreenocr.floatings.dialog.showErrorDialog
+import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.recognition.RecognitionLanguage
 import tw.firemaples.onscreenocr.recognition.TextRecognitionProviderType
 import tw.firemaples.onscreenocr.recognition.TextRecognizer
@@ -48,18 +51,7 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
 
     fun load() {
         viewScope.launch {
-            val ocrLanguages = ocrRepo.getAllOCRLanguages().first()
-            _ocrLanguageList.value = ocrLanguages
-                .map {
-                    OCRLangItem(
-                        code = it.code,
-                        displayName = it.displayName,
-                        selected = it.selected,
-                        showDownloadIcon = !it.downloaded,
-                        unrecommended = it.unrecommended,
-                        ocrLang = it,
-                    )
-                }
+            loadOCRLanguageList()
 
             val selectedTranslationProvider =
                 translationRepo.getSelectedProvider().first()
@@ -67,6 +59,25 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
 
             loadTranslationLanguageList(selectedTranslationProvider.key)
         }
+    }
+
+    private suspend fun loadOCRLanguageList() {
+        val favorites = withContext(Dispatchers.IO) { AppPref.favoriteOCRLang }
+        val ocrLanguages = ocrRepo.getAllOCRLanguages().first()
+        val list = ocrLanguages
+            .map {
+                OCRLangItem(
+                    code = it.code,
+                    displayName = it.displayName,
+                    selected = it.selected,
+                    showDownloadIcon = !it.downloaded,
+                    unrecommended = it.unrecommended,
+                    favorite = favorites.contains(it.code),
+                    ocrLang = it,
+                )
+            }
+        val favoriteList = list.filter { it.favorite }
+        _ocrLanguageList.value = favoriteList + list
     }
 
     private suspend fun loadTranslationLanguageList(providerKey: String) {
@@ -82,9 +93,19 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
             if (translationLanguages.any {
                     it.code.firstPart() == selectedOCRLang.firstPart()
                 }) {
+                val favorites = AppPref.favoriteTranslationLang
                 _displayTranslationHint.value = null
-                _translationLangList.value = translationLanguages
-                    .map { TranslateLangItem(it.code, it.displayName, it.selected) }
+                val list = translationLanguages
+                    .map {
+                        TranslateLangItem(
+                            code = it.code,
+                            displayName = it.displayName,
+                            selected = it.selected,
+                            favorite = favorites.contains(it.code),
+                        )
+                    }
+                val favoriteList = list.filter { it.favorite }
+                _translationLangList.value = favoriteList + list
             } else {
                 _displayTranslationHint.value =
                     context.getString(R.string.msg_translator_provider_does_not_support_the_ocr_lang)
@@ -109,13 +130,27 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
                 when {
                     it.code == langItem.code && it.recognizer == langItem.recognizer ->
                         it.copy(selected = true, showDownloadIcon = false)
+
                     it.selected ->
                         it.copy(selected = false)
+
                     else -> it
                 }
             }
 
             loadTranslationLanguageList(translationRepo.selectedProviderTypeFlow.first().key)
+        }
+    }
+
+    fun onOCRLangLongClicked(langCode: String) {
+        viewScope.launch {
+            val favorites = AppPref.favoriteOCRLang
+            if (favorites.contains(langCode)) {
+                favorites.remove(langCode)
+            } else {
+                favorites.add(langCode)
+            }
+            loadOCRLanguageList()
         }
     }
 
@@ -160,6 +195,7 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
                         }
                     }
                 }
+
                 else -> {
                     logger.warn("The recognizer [$recognizer] does not implement the model downloader")
                 }
@@ -192,6 +228,22 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
             }
         }
     }
+
+    fun onTranslationLangLongClicked(langCode: String) {
+        viewScope.launch {
+            val favorites = AppPref.favoriteTranslationLang
+            if (favorites.contains(langCode)) {
+                favorites.remove(langCode)
+            } else {
+                favorites.add(langCode)
+            }
+
+            val selectedTranslationProvider =
+                translationRepo.getSelectedProvider().first()
+
+            loadTranslationLanguageList(selectedTranslationProvider.key)
+        }
+    }
 }
 
 sealed class LangItem(
@@ -200,6 +252,7 @@ sealed class LangItem(
     open val selected: Boolean,
     open val showDownloadIcon: Boolean = false,
     open val unrecommended: Boolean = false,
+    open val favorite: Boolean,
 )
 
 data class OCRLangItem(
@@ -208,8 +261,16 @@ data class OCRLangItem(
     override val selected: Boolean,
     override val showDownloadIcon: Boolean = false,
     override val unrecommended: Boolean = false,
+    override val favorite: Boolean,
     val ocrLang: RecognitionLanguage,
-) : LangItem(code, displayName, selected, showDownloadIcon, unrecommended) {
+) : LangItem(
+    code = code,
+    displayName = displayName,
+    selected = selected,
+    showDownloadIcon = showDownloadIcon,
+    unrecommended = unrecommended,
+    favorite = favorite,
+) {
     val recognizer: TextRecognitionProviderType get() = ocrLang.recognizer
 }
 
@@ -217,4 +278,10 @@ data class TranslateLangItem(
     override val code: String,
     override val displayName: String,
     override val selected: Boolean,
-) : LangItem(code, displayName, selected)
+    override val favorite: Boolean,
+) : LangItem(
+    code = code,
+    displayName = displayName,
+    selected = selected,
+    favorite = favorite,
+)

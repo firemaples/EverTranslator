@@ -47,4 +47,7 @@ object AppPref : KotprefModel() {
     var resultWindowFontSize: Float by floatPref(default = Constants.DEFAULT_RESULT_WINDOW_FONT_SIZE)
 
     var lastTextInfoSearchPage: Int by intPref(default = Constants.DEFAULT_TEXT_INFO_SEARCH_PAGE.id)
+
+    val favoriteOCRLang: MutableSet<String> by stringSetPref(default = mutableSetOf())
+    val favoriteTranslationLang: MutableSet<String> by stringSetPref(default = mutableSetOf())
 }
