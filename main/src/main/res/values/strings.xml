@@ -39,6 +39,8 @@
     <string name="pref_summary_remove_line_breaks_in_block">Avoid paragraph breaks by line breakers</string>
     <string name="pref_bypass_battery_optimization">Bypass battery optimization</string>
     <string name="pref_summary_bypass_battery_optimization">EverTranslator needs [Bypass Battery Optimization] to avoid being killed in the background.</string>
+    <string name="pref_title_remove_spaces_in_cjk">Remove spaces in Chinese, Japanese and Korean text</string>
+    <string name="pref_summary_remove_spaces_in_cjk">Remove spaces while the ORC language is Chinese, Japanese or Korean</string>
 
     <string name="menu_setting">Setting</string>
     <string name="menu_privacy_policy">Privacy Policy</string>

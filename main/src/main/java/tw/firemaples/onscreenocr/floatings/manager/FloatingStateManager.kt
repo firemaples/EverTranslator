@@ -3,8 +3,16 @@ package tw.firemaples.onscreenocr.floatings.manager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
-import kotlinx.coroutines.*
+import java.io.IOException
+import kotlin.reflect.KClass
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.floatings.dialog.showErrorDialog
@@ -12,6 +20,7 @@ import tw.firemaples.onscreenocr.floatings.main.MainBar
 import tw.firemaples.onscreenocr.floatings.result.ResultView
 import tw.firemaples.onscreenocr.floatings.screenCircling.ScreenCirclingView
 import tw.firemaples.onscreenocr.log.FirebaseEvent
+import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.recognition.TextRecognitionProviderType
@@ -24,8 +33,6 @@ import tw.firemaples.onscreenocr.translator.Translator
 import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.Utils
-import java.io.IOException
-import kotlin.reflect.KClass
 
 object FloatingStateManager {
     private val logger: Logger by lazy { Logger(FloatingStateManager::class) }
@@ -159,7 +166,7 @@ object FloatingStateManager {
                 resultView.startRecognition()
                 val recognizer = TextRecognizer.getRecognizer(selectedOCRProvider)
                 FirebaseEvent.logStartOCR(recognizer.name)
-                val result = withContext(Dispatchers.Default) {
+                var result = withContext(Dispatchers.Default) {
                     recognizer.recognize(
                         TextRecognizer.getLanguage(selectedOCRLang, selectedOCRProvider)!!,
                         croppedBitmap
@@ -167,6 +174,15 @@ object FloatingStateManager {
                 }
                 logger.debug("On text recognized: $result")
 //                croppedBitmap.recycle() // to be used in the text editor view
+                if (SettingManager.removeSpacesInCJK) {
+                    val cjkLang = arrayOf("zh", "ja", "ko")
+                    if (cjkLang.contains(selectedOCRLang.split("-").getOrNull(0))) {
+                        result = result.copy(
+                            result = result.result.replace(" ", "")
+                        )
+                    }
+                    logger.debug("Remove CJK spaces: $result")
+                }
                 FirebaseEvent.logOCRFinished(recognizer.name)
                 resultView.textRecognized(result, parent, selected, croppedBitmap)
                 startTranslation(result)
@@ -209,6 +225,7 @@ object FloatingStateManager {
                         FirebaseEvent.logTranslationTextFinished(translator)
                         backToIdle()
                     }
+
                     is TranslationResult.SourceLangNotSupport -> {
                         FirebaseEvent.logTranslationSourceLangNotSupport(
                             translator, recognitionResult.langCode,
@@ -221,6 +238,7 @@ object FloatingStateManager {
                             )
                         )
                     }
+
                     TranslationResult.OCROnlyResult -> {
                         FirebaseEvent.logTranslationTextFinished(translator)
                         showResult(
@@ -230,6 +248,7 @@ object FloatingStateManager {
                             )
                         )
                     }
+
                     is TranslationResult.TranslatedResult -> {
                         FirebaseEvent.logTranslationTextFinished(translator)
                         showResult(
@@ -241,6 +260,7 @@ object FloatingStateManager {
                             )
                         )
                     }
+
                     is TranslationResult.TranslationFailed -> {
                         FirebaseEvent.logTranslationTextFailed(translator)
                         val error = translationResult.error
@@ -309,14 +329,17 @@ object FloatingStateManager {
                 arrayOf(
                     State.Idle::class, State.TextRecognizing::class, State.ErrorDisplaying::class
                 )
+
             State.TextRecognizing ->
                 arrayOf(
                     State.Idle::class, State.TextTranslating::class, State.ErrorDisplaying::class
                 )
+
             State.TextTranslating ->
                 arrayOf(
                     State.ResultDisplaying::class, State.ErrorDisplaying::class, State.Idle::class
                 )
+
             State.ResultDisplaying -> arrayOf(State.Idle::class, State.TextTranslating::class)
             is State.ErrorDisplaying -> arrayOf(State.Idle::class)
         }

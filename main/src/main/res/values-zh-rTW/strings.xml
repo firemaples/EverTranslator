@@ -29,6 +29,8 @@
     <string name="pref_category_text_recognition">文字辨識</string>
     <string name="pref_capturing_screen_timeout">擷取螢幕超時（秒）</string>
 
+    <string name="pref_title_remove_spaces_in_cjk">辨識中日韓文時移除空格</string>
+    <string name="pref_summary_remove_spaces_in_cjk">在辨識中文、日文及韓文時移除空格</string>
     <string name="menu_setting">設定</string>
     <string name="menu_privacy_policy">隱私聲明</string>
     <string name="menu_about">關於</string>
