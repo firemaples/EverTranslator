@@ -51,6 +51,12 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         }
     }
 
+    private val ocrLangListLayoutManager by lazy {
+        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    }
+    private val translationLangListLayoutManager by lazy {
+        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    }
     private lateinit var ocrLangListAdapter: LangListAdapter<OCRLangItem>
     private lateinit var translationLangListAdapter: LangListAdapter<TranslateLangItem>
 
@@ -64,7 +70,7 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         binding.btClose.clickOnce { detachFromScreen() }
 
         with(binding.rvOcrLang) {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = ocrLangListLayoutManager
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             ocrLangListAdapter = LangListAdapter(
                 context = context,
@@ -91,7 +97,7 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         }
 
         with(binding.rvTranslationLang) {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = translationLangListLayoutManager
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             translationLangListAdapter = LangListAdapter(
                 context = context,
@@ -122,12 +128,22 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         }
 
         viewModel.ocrLanguageList.observe(lifecycleOwner) {
-            logger.debug("on ocrLanguageList changed: $it")
+            val (list, scrollToPosition) = it
+            logger.debug("on ocrLanguageList changed, scrollToPosition: $scrollToPosition, list: $list")
 
-            ocrLangListAdapter.submitList(it) {
-                binding.rvOcrLang.scrollToPosition(
-                    it.indexOfFirst { item -> item.selected }
-                        .coerceAtLeast(0))
+            ocrLangListAdapter.submitList(list) {
+                if (scrollToPosition) {
+                    val indices = list.mapIndexedNotNull { index, item ->
+                        if (item.selected) index else null
+                    }
+                    val first = ocrLangListLayoutManager.findFirstCompletelyVisibleItemPosition()
+                    val last = ocrLangListLayoutManager.findLastCompletelyVisibleItemPosition()
+                    if (!indices.any { index -> index in first..last }) {
+                        binding.rvOcrLang.scrollToPosition(
+                            list.indexOfFirst { item -> item.selected }
+                                .coerceAtLeast(0))
+                    }
+                }
             }
         }
 
@@ -136,11 +152,23 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         }
 
         viewModel.translationLangList.observe(lifecycleOwner) {
-            translationLangListAdapter.submitList(it) {
-                binding.rvTranslationLang.scrollToPosition(
-                    it.indexOfFirst { item -> item.selected }
-                        .coerceAtLeast(0)
-                )
+            val (list, scrollToPosition) = it
+            translationLangListAdapter.submitList(list) {
+                if (scrollToPosition) {
+                    val indices = list.mapIndexedNotNull { index, item ->
+                        if (item.selected) index else null
+                    }
+                    val first =
+                        translationLangListLayoutManager.findFirstCompletelyVisibleItemPosition()
+                    val last =
+                        translationLangListLayoutManager.findLastCompletelyVisibleItemPosition()
+                    if (!indices.any { index -> index in first..last }) {
+                        binding.rvTranslationLang.scrollToPosition(
+                            list.indexOfFirst { item -> item.selected }
+                                .coerceAtLeast(0)
+                        )
+                    }
+                }
             }
         }
 

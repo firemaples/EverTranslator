@@ -27,8 +27,8 @@ import tw.firemaples.onscreenocr.utils.firstPart
 class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
     FloatingViewModel(viewScope) {
 
-    private val _ocrLanguageList = MutableLiveData<List<OCRLangItem>>()
-    val ocrLanguageList: LiveData<List<OCRLangItem>> = _ocrLanguageList
+    private val _ocrLanguageList = MutableLiveData<Pair<List<OCRLangItem>, Boolean>>()
+    val ocrLanguageList: LiveData<Pair<List<OCRLangItem>, Boolean>> = _ocrLanguageList
 
     private val _selectedTranslationProviderName = MutableLiveData<String>()
     val selectedTranslationProviderName: LiveData<String> = _selectedTranslationProviderName
@@ -37,8 +37,8 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
     val displayTranslateProviders: LiveData<List<TranslationProvider>> =
         _displayTranslationProviders
 
-    private val _translationLangList = MutableLiveData<List<TranslateLangItem>>()
-    val translationLangList: LiveData<List<TranslateLangItem>> = _translationLangList
+    private val _translationLangList = MutableLiveData<Pair<List<TranslateLangItem>, Boolean>>()
+    val translationLangList: LiveData<Pair<List<TranslateLangItem>, Boolean>> = _translationLangList
 
     private val _displayTranslationHint = MutableLiveData<String?>()
     val displayTranslationHint: LiveData<String?> = _displayTranslationHint
@@ -51,17 +51,20 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
 
     fun load() {
         viewScope.launch {
-            loadOCRLanguageList()
+            loadOCRLanguageList(true)
 
             val selectedTranslationProvider =
                 translationRepo.getSelectedProvider().first()
             _selectedTranslationProviderName.value = selectedTranslationProvider.displayName
 
-            loadTranslationLanguageList(selectedTranslationProvider.key)
+            loadTranslationLanguageList(
+                providerKey = selectedTranslationProvider.key,
+                scrollToPosition = true,
+            )
         }
     }
 
-    private suspend fun loadOCRLanguageList() {
+    private suspend fun loadOCRLanguageList(scrollToPosition: Boolean) {
         val favorites = withContext(Dispatchers.IO) { AppPref.favoriteOCRLang }
         val ocrLanguages = ocrRepo.getAllOCRLanguages().first()
         val list = ocrLanguages
@@ -77,16 +80,19 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
                 )
             }
         val favoriteList = list.filter { it.favorite }
-        _ocrLanguageList.value = favoriteList + list
+        _ocrLanguageList.value = favoriteList + list to scrollToPosition
     }
 
-    private suspend fun loadTranslationLanguageList(providerKey: String) {
+    private suspend fun loadTranslationLanguageList(
+        providerKey: String,
+        scrollToPosition: Boolean,
+    ) {
         val translationLanguages =
             translationRepo.getTranslationLanguageList(providerKey).first()
 
         if (translationLanguages.isEmpty()) {
             _displayTranslationHint.value = translationRepo.getTranslationHint(providerKey).first()
-            _translationLangList.value = emptyList()
+            _translationLangList.value = emptyList<TranslateLangItem>() to false
         } else {
             val selectedOCRLang = ocrRepo.selectedOCRLangFlow.first()
 
@@ -105,11 +111,11 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
                         )
                     }
                 val favoriteList = list.filter { it.favorite }
-                _translationLangList.value = favoriteList + list
+                _translationLangList.value = favoriteList + list to scrollToPosition
             } else {
                 _displayTranslationHint.value =
                     context.getString(R.string.msg_translator_provider_does_not_support_the_ocr_lang)
-                _translationLangList.value = emptyList()
+                _translationLangList.value = emptyList<TranslateLangItem>() to scrollToPosition
             }
         }
     }
@@ -126,7 +132,7 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
 
             ocrRepo.setSelectedOCRLanguage(langItem.code, langItem.recognizer)
             val ocrLangList = _ocrLanguageList.value ?: return@launch
-            _ocrLanguageList.value = ocrLangList.map {
+            _ocrLanguageList.value = ocrLangList.first.map {
                 when {
                     it.code == langItem.code && it.recognizer == langItem.recognizer ->
                         it.copy(selected = true, showDownloadIcon = false)
@@ -136,9 +142,12 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
 
                     else -> it
                 }
-            }
+            } to true
 
-            loadTranslationLanguageList(translationRepo.selectedProviderTypeFlow.first().key)
+            loadTranslationLanguageList(
+                providerKey = translationRepo.selectedProviderTypeFlow.first().key,
+                scrollToPosition = true,
+            )
         }
     }
 
@@ -150,7 +159,7 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
             } else {
                 favorites.add(langCode)
             }
-            loadOCRLanguageList()
+            loadOCRLanguageList(false)
         }
     }
 
@@ -215,7 +224,10 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
         viewScope.launch {
             val selectedProvider = translationRepo.setSelectedProvider(key).first()
             _selectedTranslationProviderName.value = selectedProvider.displayName
-            loadTranslationLanguageList(selectedProvider.key)
+            loadTranslationLanguageList(
+                providerKey = selectedProvider.key,
+                scrollToPosition = true,
+            )
         }
     }
 
@@ -223,9 +235,9 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
         viewScope.launch {
             translationRepo.setSelectedTranslationLang(langCode)
             val translationLangList = _translationLangList.value ?: return@launch
-            _translationLangList.value = translationLangList.map {
+            _translationLangList.value = translationLangList.first.map {
                 it.copy(selected = it.code == langCode)
-            }
+            } to true
         }
     }
 
@@ -241,7 +253,10 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
             val selectedTranslationProvider =
                 translationRepo.getSelectedProvider().first()
 
-            loadTranslationLanguageList(selectedTranslationProvider.key)
+            loadTranslationLanguageList(
+                providerKey = selectedTranslationProvider.key,
+                scrollToPosition = false,
+            )
         }
     }
 }
