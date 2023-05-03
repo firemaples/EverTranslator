@@ -52,7 +52,7 @@ object SettingManager {
         get() = preferences.getInt(PREF_FADE_OUT_AFTER_SECONDS, 5) * 1000L
 
     val opaquePercentageToFadeOut: Float
-        get() = preferences.getInt(PREF_OPAQUE_PERCENTAGE, 20).toFloat() / 100f
+        get() = preferences.getInt(PREF_OPAQUE_PERCENTAGE, 60).toFloat() / 100f
 
     val enableUnrecommendedLangItems: Boolean
         get() = preferences.getBoolean(PREF_ENABLE_UNRECOMMENDED_LANG_ITEMS, false)
