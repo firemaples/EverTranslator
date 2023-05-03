@@ -73,11 +73,11 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         viewBinding true
@@ -97,8 +97,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1' // newer version needs API 33 (Android 13)
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1' // newer version needs API 33 (Android 13)
     implementation "androidx.preference:preference-ktx:1.2.0"
     implementation 'androidx.webkit:webkit:1.5.0' // newer version needs API 33 (Android 13)
     //noinspection GradleDynamicVersion
@@ -111,7 +111,7 @@ dependencies {
     // For runBlockingTest, CoroutineDispatcher etc.
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
     // For InstantTaskExecutorRule
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation "androidx.arch.core:core-testing:2.2.0"
 
     // Data store - preference
     implementation("androidx.datastore:datastore-preferences:1.0.0")
@@ -125,7 +125,7 @@ dependencies {
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 
     // required to avoid crash on Android 12 API 31
-    implementation 'androidx.work:work-runtime-ktx:2.7.1'
+    implementation 'androidx.work:work-runtime-ktx:2.7.1' // newer version needs API 33 (Android 13)
 
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:30.5.0')
@@ -137,15 +137,15 @@ dependencies {
 
     // Google MLKit - Text recognition v2
     // To recognize Latin script
-    implementation 'com.google.mlkit:text-recognition:16.0.0-beta6'
+    implementation 'com.google.mlkit:text-recognition:16.0.0'
     // To recognize Chinese script
-    implementation 'com.google.mlkit:text-recognition-chinese:16.0.0-beta6'
+    implementation 'com.google.mlkit:text-recognition-chinese:16.0.0'
     // To recognize Devanagari script
-    implementation 'com.google.mlkit:text-recognition-devanagari:16.0.0-beta6'
+    implementation 'com.google.mlkit:text-recognition-devanagari:16.0.0'
     // To recognize Japanese script
-    implementation 'com.google.mlkit:text-recognition-japanese:16.0.0-beta6'
+    implementation 'com.google.mlkit:text-recognition-japanese:16.0.0'
     // To recognize Korean script
-    implementation 'com.google.mlkit:text-recognition-korean:16.0.0-beta6'
+    implementation 'com.google.mlkit:text-recognition-korean:16.0.0'
 
     // Google MLKit - Text translate
     implementation 'com.google.mlkit:translate:17.0.1'
@@ -200,9 +200,9 @@ dependencies {
 //    implementation 'com.mopub.mediation:adcolony:4.5.0.1'
 
     // Admob
-    implementation 'com.google.android.gms:play-services-ads:21.5.0'
+    implementation 'com.google.android.gms:play-services-ads:22.0.0'
     // Facebook Ad network
-    implementation 'com.google.ads.mediation:facebook:6.12.0.0'
+    implementation 'com.google.ads.mediation:facebook:6.14.0.0'
     // Adcolony Ad network
     implementation 'com.google.ads.mediation:adcolony:4.8.0.0'
 
