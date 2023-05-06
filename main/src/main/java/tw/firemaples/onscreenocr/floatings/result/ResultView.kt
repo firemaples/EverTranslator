@@ -9,6 +9,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
+import java.util.Locale
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.databinding.FloatingResultViewBinding
 import tw.firemaples.onscreenocr.databinding.ViewResultPanelBinding
@@ -19,8 +20,14 @@ import tw.firemaples.onscreenocr.floatings.textInfoSearch.TextInfoSearchView
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.translator.utils.GoogleTranslateUtils
-import tw.firemaples.onscreenocr.utils.*
-import java.util.*
+import tw.firemaples.onscreenocr.utils.Logger
+import tw.firemaples.onscreenocr.utils.UIUtils
+import tw.firemaples.onscreenocr.utils.Utils
+import tw.firemaples.onscreenocr.utils.clickOnce
+import tw.firemaples.onscreenocr.utils.dpToPx
+import tw.firemaples.onscreenocr.utils.getViewRect
+import tw.firemaples.onscreenocr.utils.setTextOrGone
+import tw.firemaples.onscreenocr.utils.showOrHide
 
 class ResultView(context: Context) : FloatingView(context) {
     companion object {
@@ -67,9 +74,14 @@ class ResultView(context: Context) : FloatingView(context) {
         viewModel.displayTranslationProgress.observe(lifecycleOwner) {
             pbTranslationOperating.showOrHide(it)
         }
-
+        viewModel.displaySelectableText.observe(lifecycleOwner) {
+            textSelectable.isChecked = it
+            tvOcrText.showOrHide(!it)
+            tvWordBreakOcrText.showOrHide(it)
+        }
         viewModel.ocrText.observe(lifecycleOwner) {
-            tvOcrText.setContent(it?.text(), it?.locale() ?: Locale.getDefault())
+            tvWordBreakOcrText.setContent(it?.text(), it?.locale() ?: Locale.getDefault())
+            tvOcrText.text = it?.text()
         }
         viewModel.translatedText.observe(lifecycleOwner) {
             if (it == null) {
@@ -109,6 +121,7 @@ class ResultView(context: Context) : FloatingView(context) {
 
         viewModel.fontSize.observe(lifecycleOwner) {
             tvOcrText.setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
+            tvWordBreakOcrText.setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
             tvTranslatedText.setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
         }
 
@@ -117,12 +130,16 @@ class ResultView(context: Context) : FloatingView(context) {
                 .attachToScreen()
         }
 
-        tvOcrText.onWordClicked = { word ->
+        textSelectable.setOnCheckedChangeListener { _, checked ->
+            viewModel.onTextSelectableChecked(checked)
+        }
+        tvWordBreakOcrText.onWordClicked = { word ->
             if (word != null) {
                 viewModel.onWordSelected(word)
-                tvOcrText.clearSelection()
+                tvWordBreakOcrText.clearSelection()
             }
         }
+        tvOcrText.movementMethod = ScrollingMovementMethod()
         tvTranslatedText.movementMethod = ScrollingMovementMethod()
         viewRoot.clickOnce { onUserDismiss?.invoke() }
         btEditOCRText.clickOnce {

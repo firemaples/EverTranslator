@@ -29,39 +29,49 @@
         <ImageButton
             android:id="@+id/bt_readOutOCRText"
             style="@style/resultPanel_button"
+            android:contentDescription="TODO"
             android:src="@drawable/ic_play"
-            android:visibility="gone"
+            android:visibility="gone" />
+
+        <CheckBox
+            android:id="@+id/textSelectable"
+            style="@style/resultPanel_button"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/ic_text_search"
+            android:backgroundTint="@color/icon_result_panel_checkable"
+            android:button="@null"
             android:contentDescription="TODO" />
 
         <ImageButton
             android:id="@+id/bt_editOCRText"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_square_edit_outline"
-            android:contentDescription="TODO" />
+            android:contentDescription="TODO"
+            android:src="@drawable/ic_square_edit_outline" />
 
         <ImageButton
             android:id="@+id/bt_copyOCRText"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_copy"
-            android:contentDescription="TODO" />
+            android:contentDescription="TODO"
+            android:src="@drawable/ic_copy" />
 
         <ImageButton
             android:id="@+id/bt_adjust_font_size"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_font_size"
-            android:contentDescription="TODO" />
+            android:contentDescription="TODO"
+            android:src="@drawable/ic_font_size" />
 
         <ImageButton
             android:id="@+id/bt_translateOCRTextWithGoogleTranslate"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_google_translate"
-            android:contentDescription="TODO" />
+            android:contentDescription="TODO"
+            android:src="@drawable/ic_google_translate" />
 
         <ImageButton
             android:id="@+id/bt_shareOCRText"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_export"
-            android:contentDescription="TODO" />
+            android:contentDescription="TODO"
+            android:src="@drawable/ic_export" />
 
     </LinearLayout>
 
@@ -90,14 +100,24 @@
             android:scrollbars="vertical">
 
             <tw.firemaples.onscreenocr.wigets.WordBreakTextView
-                android:id="@+id/tv_ocrText"
+                android:id="@+id/tv_wordBreakOcrText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fadeScrollbars="false"
                 android:scrollbars="vertical"
                 android:textColor="@color/foregroundSecond"
+                android:visibility="gone"
                 tools:text="The original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \n\nThe original text \n\nThe original text \n\nThe original text \n\nThe original text \n\nThe original text \n\nThe original text \n" />
         </ScrollView>
+
+        <TextView
+            android:id="@+id/tv_ocrText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical"
+            android:textColor="@color/foregroundSecond"
+            tools:text="The original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \nThe original text \n\nThe original text \n\nThe original text \n\nThe original text \n\nThe original text \n\nThe original text \n\nThe original text \n" />
 
     </LinearLayout>
 
@@ -121,21 +141,21 @@
         <ImageButton
             android:id="@+id/bt_readOutTranslatedText"
             style="@style/resultPanel_button"
+            android:contentDescription="TODO"
             android:src="@drawable/ic_play"
-            android:visibility="gone"
-            android:contentDescription="TODO" />
+            android:visibility="gone" />
 
         <ImageButton
             android:id="@+id/bt_copyTranslatedText"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_copy"
-            android:contentDescription="TODO" />
+            android:contentDescription="TODO"
+            android:src="@drawable/ic_copy" />
 
         <ImageButton
             android:id="@+id/bt_translateTranslatedTextWithGoogleTranslate"
             style="@style/resultPanel_button"
-            android:src="@drawable/ic_google_translate"
-            android:contentDescription="TODO" />
+            android:contentDescription="TODO"
+            android:src="@drawable/ic_google_translate" />
 
     </LinearLayout>
 
@@ -187,12 +207,12 @@
         android:layout_height="16dp"
         android:layout_marginTop="2dp"
         android:adjustViewBounds="true"
+        android:contentDescription="TODO"
         android:src="@drawable/img_translated_by_google"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/wrapper_translatedResult"
-        tools:visibility="visible"
-        android:contentDescription="TODO" />
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_recognitionViews"
