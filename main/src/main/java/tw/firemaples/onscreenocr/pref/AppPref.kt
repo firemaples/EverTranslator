@@ -50,4 +50,6 @@ object AppPref : KotprefModel() {
 
     val favoriteOCRLang: MutableSet<String> by stringSetPref(default = mutableSetOf())
     val favoriteTranslationLang: MutableSet<String> by stringSetPref(default = mutableSetOf())
+
+    var displaySelectedTextOnResultWindow: Boolean by booleanPref(default = false)
 }

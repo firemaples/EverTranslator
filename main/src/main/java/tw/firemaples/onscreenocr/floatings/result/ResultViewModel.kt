@@ -5,6 +5,7 @@ import android.graphics.Rect
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.chibatching.kotpref.livedata.asLiveData
+import java.util.Locale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -16,8 +17,11 @@ import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.repo.GeneralRepository
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
-import tw.firemaples.onscreenocr.utils.*
-import java.util.*
+import tw.firemaples.onscreenocr.utils.Constants
+import tw.firemaples.onscreenocr.utils.LanguageIdentify
+import tw.firemaples.onscreenocr.utils.Logger
+import tw.firemaples.onscreenocr.utils.SingleLiveEvent
+import tw.firemaples.onscreenocr.utils.Utils
 
 typealias OCRText = Pair<String, Locale>
 
@@ -36,6 +40,9 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
 
     private val _translatedText = MutableLiveData<Pair<String, Int>?>()
     val translatedText: LiveData<Pair<String, Int>?> = _translatedText
+
+    val displaySelectableText: LiveData<Boolean> =
+        AppPref.asLiveData(AppPref::displaySelectedTextOnResultWindow)
 
     private val _displayRecognitionBlock = MutableLiveData<Boolean>()
     val displayRecognitionBlock: LiveData<Boolean> = _displayRecognitionBlock
@@ -135,8 +142,10 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
                     _translationProviderText.value =
                         "${context.getString(R.string.text_translated_by)} " +
                                 context.getString(translationProviderType.nameRes)
+
                 TranslationProviderType.GoogleMLKit ->
                     _displayTranslatedByGoogle.value = true
+
                 TranslationProviderType.GoogleTranslateApp,
                 TranslationProviderType.BingTranslateApp,
                 TranslationProviderType.PapagoTranslateApp,
@@ -160,10 +169,12 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
                         _displayRecognitionBlock.value = false
                     }
                 }
+
                 is Result.SourceLangNotSupport -> {
                     _translatedText.value =
                         context.getString(R.string.msg_translator_provider_does_not_support_the_ocr_lang) to R.color.alert
                 }
+
                 is Result.OCROnly -> {
                 }
             }
@@ -188,6 +199,12 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
                     boundingBoxes = lastTextBoundingBoxes,
                 )
             )
+        }
+    }
+
+    fun onTextSelectableChecked(checked: Boolean) {
+        viewScope.launch {
+            AppPref.displaySelectedTextOnResultWindow = checked
         }
     }
 

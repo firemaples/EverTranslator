@@ -89,7 +89,7 @@ object UIUtils {
     ): Pair<Int, Int> {
 
         val parentHeight = parentRect.height()
-        val needHeight = itemHeight + layoutMargin * 2
+        val needHeight = itemHeight + layoutMargin * 2 + parentRect.top
 
         val topMargin: Int = when {
             // anchor on bottom
@@ -105,7 +105,7 @@ object UIUtils {
         } - parentRect.top
 
         val parentWidth = parentRect.width()
-        val needWidth = itemWidth + layoutMargin
+        val needWidth = itemWidth + layoutMargin + parentRect.left
 
         val leftMargin: Int =
             when {
