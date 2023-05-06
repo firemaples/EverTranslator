@@ -48,8 +48,8 @@ object AppPref : KotprefModel() {
 
     var lastTextInfoSearchPage: Int by intPref(default = Constants.DEFAULT_TEXT_INFO_SEARCH_PAGE.id)
 
-    val favoriteOCRLang: MutableSet<String> by stringSetPref(default = mutableSetOf())
-    val favoriteTranslationLang: MutableSet<String> by stringSetPref(default = mutableSetOf())
+    val favoriteOCRLang: MutableSet<String> by stringSetPref(default = mutableSetOf("en"))
+    val favoriteTranslationLang: MutableSet<String> by stringSetPref(default = mutableSetOf("en"))
 
     var displaySelectedTextOnResultWindow: Boolean by booleanPref(default = false)
 }
