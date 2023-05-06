@@ -205,6 +205,10 @@ dependencies {
     implementation 'com.google.ads.mediation:facebook:6.14.0.0'
     // Adcolony Ad network
     implementation 'com.google.ads.mediation:adcolony:4.8.0.0'
+    // To fix build failed with issue
+    // Missing class com.facebook.infer.annotation.Nullsafe (referenced from: com.facebook.ads.NativeAdBase)
+    // https://stackoverflow.com/a/74718984/2906153
+    implementation 'com.facebook.infer.annotation:infer-annotation:0.18.0'
 
     // TouchImageView
     implementation 'com.github.MikeOrtiz:TouchImageView:3.2.1'  // newer version needs API 33 (Android 13)
