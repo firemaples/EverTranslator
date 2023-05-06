@@ -67,6 +67,6 @@ Translate any text on screen, even in games!
 
 ## Contact
 
-If you encounter a bug, please open an issue.  
+If you encounter a bug, please [raise an issue here](https://github.com/firemaples/EverTranslator/issues/new/choose).  
 
-For general questions, you can also open an issue or send an email firemaples@gmail.com.
+For general questions, you can [raise an issue](https://github.com/firemaples/EverTranslator/issues/new/choose) or send an email firemaples@gmail.com.
