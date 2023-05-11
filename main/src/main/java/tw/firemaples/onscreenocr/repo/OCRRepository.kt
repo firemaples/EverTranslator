@@ -102,4 +102,8 @@ class OCRRepository {
             }
             return@withContext true
         }
+
+    fun setSelectedOCRLanguage(langCode: String) {
+
+    }
 }
