@@ -230,10 +230,10 @@ abstract class FloatingView(protected val context: Context) {
     }
 
     protected class FloatingViewLifecycleOwner : LifecycleOwner {
-        private val lifecycleRegistry = LifecycleRegistry(this)
+        private val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(this)
 
-        override fun getLifecycle(): Lifecycle = lifecycleRegistry
-
+        override val lifecycle: Lifecycle
+            get() = lifecycleRegistry
         fun onStateChanged(state: Lifecycle.State) {
             lifecycleRegistry.currentState = state
         }
