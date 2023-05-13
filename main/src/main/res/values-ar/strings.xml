@@ -34,6 +34,8 @@
     <string name="pref_summary_remove_line_breaks_in_block">أستبدال فواصل الفقرات بواسطة فواصل الأسطر</string>
     <string name="pref_bypass_battery_optimization">تجاوز تحسين البطارية</string>
     <string name="pref_summary_bypass_battery_optimization">يحتاج EverTranslator إلى [تجاوز تحسين البطارية] لتجنب اغلاق في الخلفية.</string>
+    <string name="pref_title_remove_spaces_in_cjk">أزل المسافات في النص الصيني والياباني والكوري</string>
+    <string name="pref_summary_remove_spaces_in_cjk">أزل المسافات عندما تكون لغة مستخرج النصوص هي الصينية أو اليابانية أو الكورية</string>
     <string name="menu_setting">إعدادات</string>
     <string name="menu_privacy_policy">سياسة الخصوصية</string>
     <string name="menu_about">حول</string>
