@@ -92,17 +92,15 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
-    implementation 'androidx.core:core-ktx:1.10.1' // newer version needs API 33 (Android 13)
-    implementation 'androidx.appcompat:appcompat:1.6.1' // newer version needs API 33 (Android 13)
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
-    // newer version needs API 33 (Android 13)
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
-    // newer version needs API 33 (Android 13)
     implementation "androidx.preference:preference-ktx:1.2.0"
-    implementation 'androidx.webkit:webkit:1.6.1' // newer version needs API 33 (Android 13)
+    implementation 'androidx.webkit:webkit:1.7.0'
     //noinspection GradleDynamicVersion
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -127,15 +125,15 @@ dependencies {
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 
     // required to avoid crash on Android 12 API 31
-    implementation 'androidx.work:work-runtime-ktx:2.8.1' // newer version needs API 33 (Android 13)
+    implementation 'androidx.work:work-runtime-ktx:2.8.1'
 
     // Firebase
-    implementation platform('com.google.firebase:firebase-bom:32.0.0')
-    implementation 'com.google.firebase:firebase-crashlytics:18.3.7'
-    implementation 'com.google.firebase:firebase-analytics:21.2.2'
+    implementation platform('com.google.firebase:firebase-bom:32.2.0')
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
   //  implementation 'com.google.firebase:firebase-core'
-    implementation 'com.google.firebase:firebase-config:21.4.0'
-    implementation 'com.google.firebase:firebase-perf:20.3.2'
+    implementation 'com.google.firebase:firebase-config'
+    implementation 'com.google.firebase:firebase-perf'
 
     // Google MLKit - Text recognition v2
     // To recognize Latin script
@@ -202,7 +200,7 @@ dependencies {
 //    implementation 'com.mopub.mediation:adcolony:4.5.0.1'
 
     // Admob
-    implementation 'com.google.android.gms:play-services-ads:22.0.0'
+    implementation 'com.google.android.gms:play-services-ads:22.2.0'
     // Facebook Ad network
     implementation 'com.google.ads.mediation:facebook:6.14.0.0'
     // Adcolony Ad network
