@@ -5,20 +5,29 @@ import android.graphics.PixelFormat
 import android.graphics.Point
 import android.os.Build
 import android.os.Looper
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.OrientationEventListener
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
-import kotlinx.coroutines.*
+import java.io.Closeable
+import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelChildren
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.PermissionUtil
 import tw.firemaples.onscreenocr.utils.UIUtils
 import tw.firemaples.onscreenocr.wigets.BackButtonTrackerView
 import tw.firemaples.onscreenocr.wigets.HomeButtonWatcher
-import java.io.Closeable
-import kotlin.coroutines.CoroutineContext
 
 abstract class FloatingView(protected val context: Context) {
 
@@ -234,6 +243,7 @@ abstract class FloatingView(protected val context: Context) {
 
         override val lifecycle: Lifecycle
             get() = lifecycleRegistry
+
         fun onStateChanged(state: Lifecycle.State) {
             lifecycleRegistry.currentState = state
         }
