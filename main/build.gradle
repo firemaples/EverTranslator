@@ -9,13 +9,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "tw.firemaples.onscreenocr"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 100
         versionName "3.1.15"
 
@@ -73,11 +73,11 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         viewBinding true
@@ -92,24 +92,24 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
-    implementation 'androidx.core:core-ktx:1.8.0' // newer version needs API 33 (Android 13)
-    implementation 'androidx.appcompat:appcompat:1.5.1' // newer version needs API 33 (Android 13)
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1' // newer version needs API 33 (Android 13)
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1' // newer version needs API 33 (Android 13)
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
     implementation "androidx.preference:preference-ktx:1.2.0"
-    implementation 'androidx.webkit:webkit:1.5.0' // newer version needs API 33 (Android 13)
+    implementation 'androidx.webkit:webkit:1.7.0'
     //noinspection GradleDynamicVersion
-    testImplementation 'junit:junit:4.+'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0'
     // For using coroutines in tests
     // For runBlockingTest, CoroutineDispatcher etc.
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0'
     // For InstantTaskExecutorRule
     testImplementation "androidx.arch.core:core-testing:2.2.0"
 
@@ -125,13 +125,13 @@ dependencies {
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 
     // required to avoid crash on Android 12 API 31
-    implementation 'androidx.work:work-runtime-ktx:2.7.1' // newer version needs API 33 (Android 13)
+    implementation 'androidx.work:work-runtime-ktx:2.8.1'
 
     // Firebase
-    implementation platform('com.google.firebase:firebase-bom:30.5.0')
+    implementation platform('com.google.firebase:firebase-bom:32.2.0')
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.google.firebase:firebase-core'
+  //  implementation 'com.google.firebase:firebase-core'
     implementation 'com.google.firebase:firebase-config'
     implementation 'com.google.firebase:firebase-perf'
 
@@ -155,16 +155,16 @@ dependencies {
 
     // Kotpref
     // core
-    implementation 'com.chibatching.kotpref:kotpref:2.13.1'
+    implementation 'com.chibatching.kotpref:kotpref:2.13.2'
     // optional, auto initialization module
-    implementation 'com.chibatching.kotpref:initializer:2.13.1'
+    implementation 'com.chibatching.kotpref:initializer:2.13.2'
     // optional, support saving enum value and ordinal
-    implementation 'com.chibatching.kotpref:enum-support:2.13.1'
+    implementation 'com.chibatching.kotpref:enum-support:2.13.2'
     // optional, support saving json string through Gson
-    implementation 'com.chibatching.kotpref:gson-support:2.13.1'
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.chibatching.kotpref:gson-support:2.13.2'
+    implementation 'com.google.code.gson:gson:2.10.1'
     // optional, support LiveData observable preference
-    implementation 'com.chibatching.kotpref:livedata-support:2.13.1'
+    implementation 'com.chibatching.kotpref:livedata-support:2.13.2'
 //    implementation 'androidx.lifecycle:lifecycle-livedata:2.2.0'
 //    // experimental, preference screen build dsl
 //    implementation 'com.chibatching.kotpref:preference-screen-dsl:2.13.1'
@@ -173,14 +173,14 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 
     // Tesseract
-    implementation 'cz.adaptech.tesseract4android:tesseract4android:4.3.0'
+    implementation 'cz.adaptech.tesseract4android:tesseract4android:4.4.0'
 //    implementation 'cz.adaptech:tesseract4android:4.1.0'
 
     // Microsoft translator
     implementation 'io.github.firemaples:microsoft-translator-java-api:0.8.8.1'
 
     // koral--/android-gif-drawable
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.23'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.25'
 
 //    // Ad network mediation - Mopub
 //    implementation('com.mopub:mopub-sdk:+@aar') {
@@ -200,7 +200,7 @@ dependencies {
 //    implementation 'com.mopub.mediation:adcolony:4.5.0.1'
 
     // Admob
-    implementation 'com.google.android.gms:play-services-ads:22.0.0'
+    implementation 'com.google.android.gms:play-services-ads:22.2.0'
     // Facebook Ad network
     implementation 'com.google.ads.mediation:facebook:6.14.0.0'
     // Adcolony Ad network
@@ -211,5 +211,5 @@ dependencies {
     implementation 'com.facebook.infer.annotation:infer-annotation:0.18.0'
 
     // TouchImageView
-    implementation 'com.github.MikeOrtiz:TouchImageView:3.2.1'  // newer version needs API 33 (Android 13)
+    implementation 'com.github.MikeOrtiz:TouchImageView:3.3'  // newer version needs API 33 (Android 13)
 }
