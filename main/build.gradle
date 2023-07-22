@@ -8,6 +8,17 @@ plugins {
     id 'com.google.firebase.firebase-perf'
 }
 
+def buildParams = getGradle().getStartParameter().toString().toLowerCase()
+
+task ensureFiles {
+    if (buildParams.contains("ProdRelease".toLowerCase())) {
+        println("#### Checking must-have files ####")
+        assert file("./src/prod/google-services.json").exists()
+        assert file("./src/prod/res/values/config_ad.xml").exists()
+        println("#### Must-have files included ####")
+    }
+}
+
 android {
     compileSdkVersion 33
     buildToolsVersion "30.0.3"
