@@ -3,14 +3,10 @@ package tw.firemaples.onscreenocr.remoteconfig
 import android.content.Context
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
-import io.github.firemaples.utils.JsonUtil
-import io.github.firemaples.utils.TypeReference
 import tw.firemaples.onscreenocr.BuildConfig
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.pref.AppPref
-import tw.firemaples.onscreenocr.remoteconfig.data.TrainedDataFileNames
-import tw.firemaples.onscreenocr.remoteconfig.data.TrainedDataSite
 import tw.firemaples.onscreenocr.utils.Logger
 
 internal const val KEY_VERSION = "version"
@@ -79,24 +75,28 @@ object RemoteConfigManager {
             it.ifBlank { getString(KEY_MICROSOFT_KEY) }
         }
 
-    val trainedDataSites: List<TrainedDataSite>
-        get() = JsonUtil<List<TrainedDataSite>>()
-            .parseJson(getString(KEY_TRAINED_DATA_URL),
-                object : TypeReference<List<TrainedDataSite>>() {}) ?: listOf()
-
-    fun trainedDataFileSubs(ocrLang: String): Array<String> {
-        val fileSubNameString = getString(KEY_TRAINED_DATA_FILES)
-        val fileSubNames = JsonUtil<TrainedDataFileNames>()
-            .parseJson(fileSubNameString, object : TypeReference<TrainedDataFileNames>() {})
-
-        val subNames = mutableListOf<String>()
-        subNames.addAll(fileSubNames.default)
-        fileSubNames.others[ocrLang]?.also {
-            subNames.addAll(it)
-        }
-
-        return subNames.toTypedArray()
-    }
+//    val trainedDataSites: List<TrainedDataSite>
+//        get() = JsonUtil.fromJsonOrNull(
+//            getString(KEY_TRAINED_DATA_URL),
+//            object : TypeToken<List<TrainedDataSite>>() {}.type
+//        ) ?: listOf()
+//
+//    fun trainedDataFileSubs(ocrLang: String): Array<String> {
+//        val fileSubNameString = getString(KEY_TRAINED_DATA_FILES)
+//        val fileSubNames: TrainedDataFileNames =
+//            JsonUtil.fromJsonOrNull(
+//                fileSubNameString,
+//                object : TypeToken<TrainedDataFileNames>() {}.type
+//            ) ?: return arrayOf()
+//
+//        val subNames = mutableListOf<String>()
+//        subNames.addAll(fileSubNames.default)
+//        fileSubNames.others[ocrLang]?.also {
+//            subNames.addAll(it)
+//        }
+//
+//        return subNames.toTypedArray()
+//    }
 
     val privacyPolicyUrl: String
         get() = getString(KEY_PRIVACY_POLICY_URL)

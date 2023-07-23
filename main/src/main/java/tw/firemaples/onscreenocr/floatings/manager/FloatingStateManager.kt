@@ -298,6 +298,7 @@ object FloatingStateManager {
     private fun showError(error: String) {
         scope.launch {
             changeState(State.ErrorDisplaying(error))
+            logger.error(error)
             context.showErrorDialog(error)
             backToIdle()
         }
