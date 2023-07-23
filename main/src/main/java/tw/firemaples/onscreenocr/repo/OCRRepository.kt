@@ -3,6 +3,8 @@ package tw.firemaples.onscreenocr.repo
 import android.content.Context
 import androidx.lifecycle.asFlow
 import com.chibatching.kotpref.livedata.asLiveData
+import java.io.File
+import java.io.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -18,8 +20,6 @@ import tw.firemaples.onscreenocr.recognition.TextRecognitionProviderType
 import tw.firemaples.onscreenocr.recognition.TextRecognizer
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.Utils
-import java.io.File
-import java.io.IOException
 
 class OCRRepository {
     private val logger: Logger by lazy { Logger(OCRRepository::class) }

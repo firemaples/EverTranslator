@@ -4,6 +4,7 @@ import junit.framework.TestCase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import tw.firemaples.onscreenocr.pref.AppPref
+import tw.firemaples.onscreenocr.recognition.TextRecognitionProviderType
 
 class OCRRepositoryTest : TestCase() {
 
@@ -13,18 +14,9 @@ class OCRRepositoryTest : TestCase() {
         super.setUp()
     }
 
-    public override fun tearDown() {}
-
-    fun testGetSelectedOCRLangFlow() = runBlocking {
-        val lang = "zh"
-        repo.setSelectedOCRLanguage(lang)
-
-        assertEquals(lang, repo.selectedOCRLangFlow.first())
-    }
-
     fun testSetSelectedOCRLanguage() = runBlocking {
         val lang = "zh"
-        repo.setSelectedOCRLanguage(lang)
+        repo.setSelectedOCRLanguage(lang, TextRecognitionProviderType.GoogleMLKit)
 
         assertEquals(lang, AppPref.selectedOCRLang)
     }
