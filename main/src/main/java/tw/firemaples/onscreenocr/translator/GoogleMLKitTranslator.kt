@@ -6,6 +6,9 @@ import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.TranslateRemoteModel
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
@@ -13,9 +16,6 @@ import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.utils.firstPart
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 object GoogleMLKitTranslator : Translator {
     private const val DOWNLOAD_SITE = "GoogleMLKit"
@@ -173,7 +173,10 @@ object GoogleMLKitTranslator : Translator {
     private suspend fun downloadTranslationResources(langList: List<String>) {
         val dialog = DialogView(context).apply {
             setTitle(context.getString(R.string.title_resources_downloading))
-            setMessage(context.getString(R.string.msg_wait_for_resources_downloading))
+            setMessage(
+                context.getString(R.string.msg_wait_for_resources_downloading) +
+                        "\n\n${langList.joinToString(", ")}"
+            )
             setDialogType(DialogView.DialogType.CANCEL_ONLY)
 
             attachToScreen()

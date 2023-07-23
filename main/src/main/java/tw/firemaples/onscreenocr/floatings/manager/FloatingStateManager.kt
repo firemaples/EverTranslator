@@ -127,6 +127,10 @@ object FloatingStateManager {
     }
 
     fun startScreenCapturing(selectedOCRLang: String) = stateIn(State.ScreenCircled::class) {
+        if (!Translator.getTranslator().checkEnvironment(scope)) {
+            return@stateIn
+        }
+
         this@FloatingStateManager.selectedOCRLang = selectedOCRLang
         val parent = parentRect ?: return@stateIn
         val selected = selectedRect ?: return@stateIn
