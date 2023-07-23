@@ -1,15 +1,15 @@
 package tw.firemaples.onscreenocr.translator
 
-import io.github.firemaples.language.Language
-import io.github.firemaples.translate.Translate
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
+import tw.firemaples.onscreenocr.translator.api.MicrosoftAzureTranslatorAPI
+import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.firstPart
 
 object MicrosoftAzureTranslator : Translator {
+    private val logger: Logger by lazy { Logger(this::class) }
+
     private val errorRegex = "\"code\":(\\d+)".toRegex()
     private const val errorOutOfQuota = 403001
 
@@ -51,17 +51,15 @@ object MicrosoftAzureTranslator : Translator {
             return TranslationResult.TranslatedResult(result = text, type)
         }
 
-        val targetLang = targetLangCode.let { Language.fromString(it) }
+        return doTranslate(text, targetLangCode)
+    }
 
-        Translate.setSubscriptionKey(RemoteConfigManager.microsoftTranslationKey)
-
+    private suspend fun doTranslate(text: String, lang: String): TranslationResult {
         return try {
-            val result = withContext(Dispatchers.IO) {
-                Translate.execute(text, targetLang)
-            }
-
+            val result = MicrosoftAzureTranslatorAPI.translate(text = text, targetLang = lang)
             TranslationResult.TranslatedResult(result, type)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
+            logger.error(t = e)
             var error: Throwable? = null
             val message = e.message
             if (!message.isNullOrBlank()) {
@@ -77,6 +75,7 @@ object MicrosoftAzureTranslator : Translator {
                             type = ErrorType.OutOfQuota,
                             cause = e,
                         )
+
                     else -> null
                 }
             }

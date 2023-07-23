@@ -182,13 +182,11 @@ dependencies {
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     // Tesseract
     implementation 'cz.adaptech.tesseract4android:tesseract4android:4.4.0'
 //    implementation 'cz.adaptech:tesseract4android:4.1.0'
-
-    // Microsoft translator
-    implementation 'io.github.firemaples:microsoft-translator-java-api:0.8.8.1'
 
     // koral--/android-gif-drawable
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.25'
