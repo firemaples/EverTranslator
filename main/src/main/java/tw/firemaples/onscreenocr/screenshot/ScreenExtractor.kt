@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.Point
 import android.graphics.Rect
 import android.hardware.display.DisplayManager
@@ -42,9 +41,10 @@ object ScreenExtractor {
         get() = mediaProjectionIntent != null
 
     private val handler: Handler by lazy {
-        val thread = HandlerThread("Thread-${ScreenExtractor::class.simpleName}")
-        thread.start()
-        Handler(thread.looper)
+        Handler(HandlerThread("Thread-${ScreenExtractor::class.simpleName}").run {
+            start()
+            looper
+        })
     }
 
     private var virtualDisplay: VirtualDisplay? = null
@@ -135,19 +135,22 @@ object ScreenExtractor {
                     DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC,
                     imageReader.surface, null, null
                 )
-                val captured = withTimeout(SettingManager.timeoutForCapturingScreen) {
-                    logger.debug("awaitForBitmap")
-                    imageReader.awaitForBitmap(size)
+
+                logger.debug("waitForImage")
+                image = withTimeout(SettingManager.timeoutForCapturingScreen) {
+                    imageReader.waitForImage()
                 }
 
                 virtualDisplay?.release()
 
-                if (captured == null) {
+                val image = image
+                if (image == null) {
                     logger.warn("The captured image is null")
                     releaseAllResources()
                     throw IllegalStateException("No image data found")
                 }
-                bitmap = captured
+
+                bitmap = image.decodeBitmap(size)
 
                 releaseAllResources()
 
@@ -227,32 +230,18 @@ object ScreenExtractor {
         return cropped
     }
 
-    private suspend fun ImageReader.awaitForBitmap(size: Point): Bitmap? =
+    private suspend fun ImageReader.waitForImage(): Image? =
         suspendCoroutine {
-            var counter = 0
             setOnImageAvailableListener({ reader ->
-                var image: Image? = null
                 try {
+                    reader.setOnImageAvailableListener(null, null)
                     logger.info("onImageAvailable()")
-                    image = reader.acquireLatestImage()
-                    val bitmap = image.decodeBitmap(size)
-                    if (!bitmap.isWholeBlack()) {
-                        reader.setOnImageAvailableListener(null, null)
-                        it.resume(bitmap)
-                    } else {
-                        logger.info("Image is whole black, increase counter: $counter")
-                        if (counter >= Constants.EXTRACT_SCREEN_MAX_RETRY) {
-                            reader.setOnImageAvailableListener(null, null)
-                            it.resume(null)
-                        } else {
-                            counter++
-                        }
-                    }
-                } catch (e: Throwable) {
+                    val image = reader.acquireLatestImage()
+                    it.resume(image)
+                } catch (e: Exception) {
                     logger.warn(t = e)
                     it.resumeWithException(e)
                 } finally {
-                    image?.close()
                 }
             }, handler)
         }
@@ -277,20 +266,4 @@ object ScreenExtractor {
                 temp.recycle()
             }
         }
-
-    private fun Bitmap.isWholeBlack(): Boolean {
-        for (x in 0 until width) {
-            for (y in 0 until height) {
-                val color = getPixel(x, y)
-                val red = Color.red(color)
-                val green = Color.green(color)
-                val blue = Color.blue(color)
-                val alpha = Color.alpha(color)
-                if (red or green or blue or alpha != 0)
-                    return false
-            }
-        }
-
-        return true
-    }
 }

@@ -12,7 +12,6 @@ object Constants {
 
     const val PATH_SCREENSHOT: String = "screenshot"
     const val TIMEOUT_EXTRACT_SCREEN = 5
-    const val EXTRACT_SCREEN_MAX_RETRY = 10
 
     const val MIN_SCREEN_CROP_SIZE = 32
 
