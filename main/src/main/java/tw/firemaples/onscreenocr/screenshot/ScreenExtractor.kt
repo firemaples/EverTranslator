@@ -233,35 +233,39 @@ object ScreenExtractor {
     private suspend fun ImageReader.awaitForBitmap(screenSize: Point): Bitmap? =
         suspendCoroutine {
             var counter = 0
+            val resumed = AtomicBoolean(false)
             setOnImageAvailableListener({ reader ->
+                logger.info("onImageAvailable()")
+                if (resumed.get()){
+                    reader.setOnImageAvailableListener(null, null)
+                    return@setOnImageAvailableListener
+                }
                 var image: Image? = null
-                val resumed = AtomicBoolean(false)
                 try {
-                    logger.info("onImageAvailable()")
                     image = reader.acquireLatestImage()
                     val bitmap = image.decodeBitmap(screenSize)
                     if (!bitmap.isWholeBlack()) {
                         reader.setOnImageAvailableListener(null, null)
-                        if (!resumed.getAndSet(true)) {
-                            it.resume(bitmap)
-                        }
+                        if (resumed.getAndSet(true))
+                            return@setOnImageAvailableListener
+                        it.resume(bitmap)
                     } else {
                         logger.info("Image is whole black, increase counter: $counter")
                         if (counter >= Constants.EXTRACT_SCREEN_MAX_RETRY) {
                             reader.setOnImageAvailableListener(null, null)
-                            if (!resumed.getAndSet(true)) {
-                                it.resume(null)
-                            }
+                            if (resumed.getAndSet(true))
+                                return@setOnImageAvailableListener
+                            it.resume(null)
                         } else {
                             counter++
                         }
                     }
                 } catch (e: Throwable) {
-                    logger.warn(t = e)
-                    if (!resumed.getAndSet(true)) {
-                        reader.setOnImageAvailableListener(null, null)
-                        it.resumeWithException(e)
-                    }
+                    logger.warn("Error when acquire image", t = e)
+                    reader.setOnImageAvailableListener(null, null)
+                    if (resumed.getAndSet(true))
+                        return@setOnImageAvailableListener
+                    it.resumeWithException(e)
                 } finally {
                     image?.close()
                 }
