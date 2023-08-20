@@ -103,93 +103,93 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
-    implementation 'androidx.core:core-ktx:1.10.1'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
-    implementation "androidx.preference:preference-ktx:1.2.1"
-    implementation 'androidx.webkit:webkit:1.7.0'
+    implementation AndroidX.core.ktx
+    implementation AndroidX.appCompat
+    implementation Google.android.material
+    implementation AndroidX.constraintLayout
+    implementation libs.legacy.support.v4
+    implementation AndroidX.lifecycle.liveDataKtx
+    implementation AndroidX.lifecycle.viewModelKtx
+    implementation AndroidX.preference.ktx
+    implementation AndroidX.webkit
     //noinspection GradleDynamicVersion
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    testImplementation Testing.junit4
+    androidTestImplementation AndroidX.test.ext.junit
+    androidTestImplementation AndroidX.test.espresso.core
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0'
+    implementation KotlinX.coroutines.android
     // For using coroutines in tests
     // For runBlockingTest, CoroutineDispatcher etc.
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0'
+    testImplementation KotlinX.coroutines.test
     // For InstantTaskExecutorRule
-    testImplementation "androidx.arch.core:core-testing:2.2.0"
+    testImplementation AndroidX.archCore.testing
 
     // Data store - preference
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation(AndroidX.dataStore.preferences)
 
     // Navigation component
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation AndroidX.navigation.fragmentKtx
+    implementation AndroidX.navigation.uiKtx
     // Feature module Support
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+    implementation AndroidX.navigation.dynamicFeaturesFragment
     // Testing Navigation
-    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+    androidTestImplementation AndroidX.navigation.testing
 
     // required to avoid crash on Android 12 API 31
-    implementation 'androidx.work:work-runtime-ktx:2.8.1'
+    implementation AndroidX.work.runtimeKtx
 
     // Firebase
-    implementation platform('com.google.firebase:firebase-bom:32.2.2')
-    implementation 'com.google.firebase:firebase-crashlytics'
-    implementation 'com.google.firebase:firebase-analytics'
-    //  implementation 'com.google.firebase:firebase-core'
-    implementation 'com.google.firebase:firebase-config'
-    implementation 'com.google.firebase:firebase-perf'
+    implementation platform(Firebase.bom)
+    implementation Firebase.crashlytics
+    implementation Firebase.analytics
+    //  implementation 'com.google.firebase:firebase-core:_'
+    implementation Firebase.remoteConfig
+    implementation Firebase.performanceMonitoring
 
     // Google MLKit - Text recognition v2
     // To recognize Latin script
-    implementation 'com.google.mlkit:text-recognition:16.0.0'
+    implementation Google.mlKit.vision.textRecognition
     // To recognize Chinese script
-    implementation 'com.google.mlkit:text-recognition-chinese:16.0.0'
+    implementation Google.mlKit.vision.textRecognition.chinese
     // To recognize Devanagari script
-    implementation 'com.google.mlkit:text-recognition-devanagari:16.0.0'
+    implementation Google.mlKit.vision.textRecognition.devanagari
     // To recognize Japanese script
-    implementation 'com.google.mlkit:text-recognition-japanese:16.0.0'
+    implementation Google.mlKit.vision.textRecognition.japanese
     // To recognize Korean script
-    implementation 'com.google.mlkit:text-recognition-korean:16.0.0'
+    implementation Google.mlKit.vision.textRecognition.korean
 
     // Google MLKit - Text translate
-    implementation 'com.google.mlkit:translate:17.0.1'
+    implementation Google.mlKit.naturalLanguage.translate
 
     // Google MLKit - Identify Languages
-    implementation 'com.google.mlkit:language-id:17.0.4'
+    implementation Google.mlKit.naturalLanguage.languageIdentification
 
     // Kotpref
     // core
-    implementation 'com.chibatching.kotpref:kotpref:2.13.2'
+    implementation libs.kotpref
     // optional, auto initialization module
-    implementation 'com.chibatching.kotpref:initializer:2.13.2'
+    implementation libs.initializer
     // optional, support saving enum value and ordinal
-    implementation 'com.chibatching.kotpref:enum-support:2.13.2'
+    implementation libs.enum.support
     // optional, support saving json string through Gson
-    implementation 'com.chibatching.kotpref:gson-support:2.13.2'
-    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation libs.gson.support
+    implementation libs.gson
     // optional, support LiveData observable preference
-    implementation 'com.chibatching.kotpref:livedata-support:2.13.2'
-//    implementation 'androidx.lifecycle:lifecycle-livedata:2.2.0'
+    implementation libs.livedata.support
+//    implementation AndroidX.lifecycle.liveData
 //    // experimental, preference screen build dsl
-//    implementation 'com.chibatching.kotpref:preference-screen-dsl:2.13.1'
+//    implementation 'com.chibatching.kotpref:preference-screen-dsl:_'
 
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation Square.retrofit2
+    implementation Square.retrofit2.converter.gson
 
     // Tesseract
-    implementation 'cz.adaptech.tesseract4android:tesseract4android:4.4.0'
-//    implementation 'cz.adaptech:tesseract4android:4.1.0'
+    implementation libs.tesseract4android
+//    implementation 'cz.adaptech:tesseract4android:_'
 
     // koral--/android-gif-drawable
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.25'
+    implementation libs.android.gif.drawable
 
 //    // Ad network mediation - Mopub
 //    implementation('com.mopub:mopub-sdk:+@aar') {
@@ -199,26 +199,26 @@ dependencies {
 //        transitive = true
 //    }
 //    // Facebook Ad network - Audience network
-//    implementation 'com.facebook.android:audience-network-sdk:6.5.0'
-//    implementation 'com.mopub.mediation:facebookaudiencenetwork:6.5.0.0'
+//    implementation 'com.facebook.android:audience-network-sdk:_'
+//    implementation 'com.mopub.mediation:facebookaudiencenetwork:_'
 //    // Google Ad network - Admob
-//    implementation 'com.google.android.gms:play-services-ads:20.6.0'
-//    implementation 'com.mopub.mediation:admob:20.2.0.0'
+//    implementation libs.play.services.ads
+//    implementation 'com.mopub.mediation:admob:_'
 //    // Adcolony Ad network
-//    implementation 'com.adcolony:sdk:4.5.0'
-//    implementation 'com.mopub.mediation:adcolony:4.5.0.1'
+//    implementation 'com.adcolony:sdk:_'
+//    implementation 'com.mopub.mediation:adcolony:_'
 
     // Admob
-    implementation 'com.google.android.gms:play-services-ads:22.2.0'
+    implementation libs.play.services.ads
     // Facebook Ad network
-    implementation 'com.google.ads.mediation:facebook:6.15.0.0'
+    implementation libs.facebook
     // Adcolony Ad network
-    implementation 'com.google.ads.mediation:adcolony:4.8.0.2'
+    implementation libs.adcolony
     // To fix build failed with issue
     // Missing class com.facebook.infer.annotation.Nullsafe (referenced from: com.facebook.ads.NativeAdBase)
     // https://stackoverflow.com/a/74718984/2906153
-    implementation 'com.facebook.infer.annotation:infer-annotation:0.18.0'
+    implementation libs.infer.annotation
 
     // TouchImageView
-    implementation 'com.github.MikeOrtiz:TouchImageView:3.5'
+    implementation libs.touchimageview
 }
