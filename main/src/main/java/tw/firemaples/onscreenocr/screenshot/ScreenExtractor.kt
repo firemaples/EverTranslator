@@ -18,6 +18,7 @@ import android.os.Handler
 import android.os.HandlerThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import tw.firemaples.onscreenocr.R
@@ -231,12 +232,13 @@ object ScreenExtractor {
     }
 
     private suspend fun ImageReader.awaitForBitmap(screenSize: Point): Bitmap? =
-        suspendCoroutine {
+        suspendCancellableCoroutine {
+            logger.debug("suspendCancellableCoroutine: Started")
             var counter = 0
             val resumed = AtomicBoolean(false)
             setOnImageAvailableListener({ reader ->
                 logger.info("onImageAvailable()")
-                if (resumed.get()){
+                if (resumed.get()) {
                     reader.setOnImageAvailableListener(null, null)
                     return@setOnImageAvailableListener
                 }
@@ -270,6 +272,11 @@ object ScreenExtractor {
                     image?.close()
                 }
             }, handler)
+            it.invokeOnCancellation {
+                logger.warn("awaitForBitmap cancelled")
+                resumed.set(true)
+                setOnImageAvailableListener(null, null)
+            }
         }
 
     @Throws(IllegalArgumentException::class)
