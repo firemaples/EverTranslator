@@ -20,8 +20,8 @@ task ensureFiles {
 }
 
 android {
-    compileSdkVersion 33
-    buildToolsVersion "30.0.3"
+    compileSdk 33
+    buildToolsVersion = "30.0.3"
 
     defaultConfig {
         applicationId "tw.firemaples.onscreenocr"
@@ -63,7 +63,7 @@ android {
         }
     }
 
-    flavorDimensions "tier"
+    flavorDimensions += "tier"
     productFlavors {
         dev {
             dimension "tier"
@@ -110,7 +110,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
-    implementation "androidx.preference:preference-ktx:1.2.0"
+    implementation "androidx.preference:preference-ktx:1.2.1"
     implementation 'androidx.webkit:webkit:1.7.0'
     //noinspection GradleDynamicVersion
     testImplementation 'junit:junit:4.13.2'
@@ -139,10 +139,10 @@ dependencies {
     implementation 'androidx.work:work-runtime-ktx:2.8.1'
 
     // Firebase
-    implementation platform('com.google.firebase:firebase-bom:32.2.0')
+    implementation platform('com.google.firebase:firebase-bom:32.2.2')
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
-  //  implementation 'com.google.firebase:firebase-core'
+    //  implementation 'com.google.firebase:firebase-core'
     implementation 'com.google.firebase:firebase-config'
     implementation 'com.google.firebase:firebase-perf'
 
@@ -211,14 +211,14 @@ dependencies {
     // Admob
     implementation 'com.google.android.gms:play-services-ads:22.2.0'
     // Facebook Ad network
-    implementation 'com.google.ads.mediation:facebook:6.14.0.0'
+    implementation 'com.google.ads.mediation:facebook:6.15.0.0'
     // Adcolony Ad network
-    implementation 'com.google.ads.mediation:adcolony:4.8.0.0'
+    implementation 'com.google.ads.mediation:adcolony:4.8.0.2'
     // To fix build failed with issue
     // Missing class com.facebook.infer.annotation.Nullsafe (referenced from: com.facebook.ads.NativeAdBase)
     // https://stackoverflow.com/a/74718984/2906153
     implementation 'com.facebook.infer.annotation:infer-annotation:0.18.0'
 
     // TouchImageView
-    implementation 'com.github.MikeOrtiz:TouchImageView:3.3'  // newer version needs API 33 (Android 13)
+    implementation 'com.github.MikeOrtiz:TouchImageView:3.5'
 }
