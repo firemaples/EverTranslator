@@ -39,11 +39,11 @@ object UIUtils {
     val orientationDegree: Int
         get() = orientations.get(orientation + 90)
 
-    val readSize: Point
+    val realSize: Point
         get() = Point().also { windowManager.defaultDisplay.getRealSize(it) }
 
     private val isPortrait: Boolean
-        get() = readSize.let { it.y > it.x }
+        get() = realSize.let { it.y > it.x }
 
     val screenSize: IntArray
         get() {

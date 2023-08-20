@@ -24,10 +24,13 @@ import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.pref.AppPref
+import tw.firemaples.onscreenocr.utils.BitmapCache
 import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.UIUtils
 import tw.firemaples.onscreenocr.utils.Utils
+import tw.firemaples.onscreenocr.utils.setReusable
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -77,7 +80,7 @@ object ScreenExtractor {
         return try {
             cropBitmap(fullBitmap, parentRect, cropRect)
         } finally {
-            fullBitmap.recycle()
+            fullBitmap.setReusable()
         }
     }
 
@@ -115,9 +118,9 @@ object ScreenExtractor {
                     throw IllegalStateException("Retrieving media projection failed")
                 }
 
-                val size = UIUtils.readSize
-                val width = size.x
-                val height = size.y
+                val screenSize = UIUtils.realSize
+                val width = screenSize.x
+                val height = screenSize.y
 
                 imageReader =
                     ImageReader.newInstance(width, height, AppPref.imageReaderFormat, 2)
@@ -137,7 +140,7 @@ object ScreenExtractor {
                 )
                 val captured = withTimeout(SettingManager.timeoutForCapturingScreen) {
                     logger.debug("awaitForBitmap")
-                    imageReader.awaitForBitmap(size)
+                    imageReader.awaitForBitmap(screenSize)
                 }
 
                 virtualDisplay?.release()
@@ -227,30 +230,38 @@ object ScreenExtractor {
         return cropped
     }
 
-    private suspend fun ImageReader.awaitForBitmap(size: Point): Bitmap? =
+    private suspend fun ImageReader.awaitForBitmap(screenSize: Point): Bitmap? =
         suspendCoroutine {
             var counter = 0
             setOnImageAvailableListener({ reader ->
                 var image: Image? = null
+                val resumed = AtomicBoolean(false)
                 try {
                     logger.info("onImageAvailable()")
                     image = reader.acquireLatestImage()
-                    val bitmap = image.decodeBitmap(size)
+                    val bitmap = image.decodeBitmap(screenSize)
                     if (!bitmap.isWholeBlack()) {
                         reader.setOnImageAvailableListener(null, null)
-                        it.resume(bitmap)
+                        if (!resumed.getAndSet(true)) {
+                            it.resume(bitmap)
+                        }
                     } else {
                         logger.info("Image is whole black, increase counter: $counter")
                         if (counter >= Constants.EXTRACT_SCREEN_MAX_RETRY) {
                             reader.setOnImageAvailableListener(null, null)
-                            it.resume(null)
+                            if (!resumed.getAndSet(true)) {
+                                it.resume(null)
+                            }
                         } else {
                             counter++
                         }
                     }
                 } catch (e: Throwable) {
                     logger.warn(t = e)
-                    it.resumeWithException(e)
+                    if (!resumed.getAndSet(true)) {
+                        reader.setOnImageAvailableListener(null, null)
+                        it.resumeWithException(e)
+                    }
                 } finally {
                     image?.close()
                 }
@@ -258,23 +269,23 @@ object ScreenExtractor {
         }
 
     @Throws(IllegalArgumentException::class)
-    private fun Image.decodeBitmap(size: Point): Bitmap =
+    private fun Image.decodeBitmap(screenSize: Point): Bitmap =
         with(planes[0]) {
-            val width = size.x
-            val height = size.y
+            val screenWidth = screenSize.x
+            val screenHeight = screenSize.y
 //            val deviceWidth = screenWidth
 //            val rowPadding = rowStride - pixelStride * deviceWidth
-            val temp = Bitmap.createBitmap(
-                rowStride / pixelStride,
-//                screenWidth + rowPadding / pixelStride,
-                height,
-                Bitmap.Config.ARGB_8888
+            val bufferedBitmap = BitmapCache.getReusableBitmapOrCreate(
+                width = rowStride / pixelStride,
+//                width = screenWidth + rowPadding / pixelStride,
+                height = screenHeight,
+                config = Bitmap.Config.ARGB_8888,
             ).apply {
                 copyPixelsFromBuffer(buffer)
             }
 
-            Bitmap.createBitmap(temp, 0, 0, width, height).also {
-                temp.recycle()
+            Bitmap.createBitmap(bufferedBitmap, 0, 0, screenWidth, screenHeight).also {
+                bufferedBitmap.setReusable()
             }
         }
 
