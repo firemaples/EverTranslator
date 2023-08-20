@@ -15,7 +15,7 @@ jobs:
         name: check-out
         uses: actions/checkout@v3
         with:
-          ref: main
+          ref: master
       - id: step-1
         name: setup-java
         uses: actions/setup-java@v3
@@ -28,7 +28,7 @@ jobs:
         with:
           branch: dependency-update
         env:
-          GITHUB_TOKEN: {{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - id: step-3
         name: gradle refreshVersions
         uses: gradle/gradle-build-action@v2
@@ -48,8 +48,8 @@ jobs:
         uses: repo-sync/pull-request@v2
         with:
           source_branch: dependency-update
-          destination_branch: main
+          destination_branch: master
           pr_title: Upgrade gradle dependencies
           pr_body: '[refreshVersions](https://github.com/jmfayard/refreshVersions) has found those library updates!'
           pr_draft: true
-          github_token: {{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
