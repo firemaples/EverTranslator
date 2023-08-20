@@ -33,6 +33,7 @@ import tw.firemaples.onscreenocr.translator.Translator
 import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.Utils
+import tw.firemaples.onscreenocr.utils.setReusable
 
 object FloatingStateManager {
     private val logger: Logger by lazy { Logger(FloatingStateManager::class) }
@@ -311,7 +312,7 @@ object FloatingStateManager {
     private fun backToIdle() =
         scope.launch {
             if (currentState != State.Idle) changeState(State.Idle)
-            croppedBitmap?.recycle()
+            croppedBitmap?.setReusable()
             resultView.backToIdle()
             showMainBar()
         }

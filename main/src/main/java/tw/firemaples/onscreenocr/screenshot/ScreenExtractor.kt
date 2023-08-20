@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.Point
 import android.graphics.Rect
 import android.hardware.display.DisplayManager
@@ -17,16 +18,20 @@ import android.os.Handler
 import android.os.HandlerThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.pref.AppPref
+import tw.firemaples.onscreenocr.utils.BitmapCache
 import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.UIUtils
 import tw.firemaples.onscreenocr.utils.Utils
+import tw.firemaples.onscreenocr.utils.setReusable
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -41,10 +46,9 @@ object ScreenExtractor {
         get() = mediaProjectionIntent != null
 
     private val handler: Handler by lazy {
-        Handler(HandlerThread("Thread-${ScreenExtractor::class.simpleName}").run {
-            start()
-            looper
-        })
+        val thread = HandlerThread("Thread-${ScreenExtractor::class.simpleName}")
+        thread.start()
+        Handler(thread.looper)
     }
 
     private var virtualDisplay: VirtualDisplay? = null
@@ -77,7 +81,7 @@ object ScreenExtractor {
         return try {
             cropBitmap(fullBitmap, parentRect, cropRect)
         } finally {
-            fullBitmap.recycle()
+            fullBitmap.setReusable()
         }
     }
 
@@ -115,9 +119,9 @@ object ScreenExtractor {
                     throw IllegalStateException("Retrieving media projection failed")
                 }
 
-                val size = UIUtils.readSize
-                val width = size.x
-                val height = size.y
+                val screenSize = UIUtils.realSize
+                val width = screenSize.x
+                val height = screenSize.y
 
                 imageReader =
                     ImageReader.newInstance(width, height, AppPref.imageReaderFormat, 2)
@@ -135,22 +139,19 @@ object ScreenExtractor {
                     DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC,
                     imageReader.surface, null, null
                 )
-
-                logger.debug("waitForImage")
-                image = withTimeout(SettingManager.timeoutForCapturingScreen) {
-                    imageReader.waitForImage()
+                val captured = withTimeout(SettingManager.timeoutForCapturingScreen) {
+                    logger.debug("awaitForBitmap")
+                    imageReader.awaitForBitmap(screenSize)
                 }
 
                 virtualDisplay?.release()
 
-                val image = image
-                if (image == null) {
+                if (captured == null) {
                     logger.warn("The captured image is null")
                     releaseAllResources()
                     throw IllegalStateException("No image data found")
                 }
-
-                bitmap = image.decodeBitmap(size)
+                bitmap = captured
 
                 releaseAllResources()
 
@@ -230,40 +231,88 @@ object ScreenExtractor {
         return cropped
     }
 
-    private suspend fun ImageReader.waitForImage(): Image? =
-        suspendCoroutine {
+    private suspend fun ImageReader.awaitForBitmap(screenSize: Point): Bitmap? =
+        suspendCancellableCoroutine {
+            logger.debug("suspendCancellableCoroutine: Started")
+            var counter = 0
+            val resumed = AtomicBoolean(false)
             setOnImageAvailableListener({ reader ->
-                try {
+                logger.info("onImageAvailable()")
+                if (resumed.get()) {
                     reader.setOnImageAvailableListener(null, null)
-                    logger.info("onImageAvailable()")
-                    val image = reader.acquireLatestImage()
-                    it.resume(image)
-                } catch (e: Exception) {
-                    logger.warn(t = e)
+                    return@setOnImageAvailableListener
+                }
+                var image: Image? = null
+                try {
+                    image = reader.acquireLatestImage()
+                    val bitmap = image.decodeBitmap(screenSize)
+                    if (!bitmap.isWholeBlack()) {
+                        reader.setOnImageAvailableListener(null, null)
+                        if (resumed.getAndSet(true))
+                            return@setOnImageAvailableListener
+                        it.resume(bitmap)
+                    } else {
+                        logger.info("Image is whole black, increase counter: $counter")
+                        if (counter >= Constants.EXTRACT_SCREEN_MAX_RETRY) {
+                            reader.setOnImageAvailableListener(null, null)
+                            if (resumed.getAndSet(true))
+                                return@setOnImageAvailableListener
+                            it.resume(null)
+                        } else {
+                            counter++
+                        }
+                    }
+                } catch (e: Throwable) {
+                    logger.warn("Error when acquire image", t = e)
+                    reader.setOnImageAvailableListener(null, null)
+                    if (resumed.getAndSet(true))
+                        return@setOnImageAvailableListener
                     it.resumeWithException(e)
                 } finally {
+                    image?.close()
                 }
             }, handler)
+            it.invokeOnCancellation {
+                logger.warn("awaitForBitmap cancelled")
+                resumed.set(true)
+                setOnImageAvailableListener(null, null)
+            }
         }
 
     @Throws(IllegalArgumentException::class)
-    private fun Image.decodeBitmap(size: Point): Bitmap =
+    private fun Image.decodeBitmap(screenSize: Point): Bitmap =
         with(planes[0]) {
-            val width = size.x
-            val height = size.y
+            val screenWidth = screenSize.x
+            val screenHeight = screenSize.y
 //            val deviceWidth = screenWidth
 //            val rowPadding = rowStride - pixelStride * deviceWidth
-            val temp = Bitmap.createBitmap(
-                rowStride / pixelStride,
-//                screenWidth + rowPadding / pixelStride,
-                height,
-                Bitmap.Config.ARGB_8888
+            val bufferedBitmap = BitmapCache.getReusableBitmapOrCreate(
+                width = rowStride / pixelStride,
+//                width = screenWidth + rowPadding / pixelStride,
+                height = screenHeight,
+                config = Bitmap.Config.ARGB_8888,
             ).apply {
                 copyPixelsFromBuffer(buffer)
             }
 
-            Bitmap.createBitmap(temp, 0, 0, width, height).also {
-                temp.recycle()
+            Bitmap.createBitmap(bufferedBitmap, 0, 0, screenWidth, screenHeight).also {
+                bufferedBitmap.setReusable()
             }
         }
+
+    private fun Bitmap.isWholeBlack(): Boolean {
+        for (x in 0 until width) {
+            for (y in 0 until height) {
+                val color = getPixel(x, y)
+                val red = Color.red(color)
+                val green = Color.green(color)
+                val blue = Color.blue(color)
+                val alpha = Color.alpha(color)
+                if (red or green or blue or alpha != 0)
+                    return false
+            }
+        }
+
+        return true
+    }
 }
