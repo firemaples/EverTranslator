@@ -225,6 +225,14 @@ object ScreenExtractor {
         val width = rect.width().coerceAtMost(bitmap.width - rect.left)
         val height = rect.height().coerceAtMost(bitmap.height - rect.top)
 
+        if (width <= 0) {
+            val msg = "Crop width is less than 0, " +
+                    "bitmap size: ${bitmap.width}x${bitmap.height}, " +
+                    "parentRect: $parentRect, cropRect: $cropRect"
+            logger.warn(msg)
+            FirebaseEvent.logException(IllegalStateException(msg))
+        }
+
         val cropped = Bitmap.createBitmap(bitmap, rect.left, rect.top, width, height)
         logger.debug("cropped bitmap: ${cropped.width}x${cropped.height}")
 
