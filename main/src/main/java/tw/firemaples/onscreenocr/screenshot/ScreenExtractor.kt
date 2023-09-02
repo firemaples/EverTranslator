@@ -295,8 +295,20 @@ object ScreenExtractor {
                 copyPixelsFromBuffer(buffer)
             }
 
-            Bitmap.createBitmap(bufferedBitmap, 0, 0, screenWidth, screenHeight).also {
-                bufferedBitmap.setReusable()
+            if (bufferedBitmap.width > screenWidth) {
+                Bitmap.createBitmap(bufferedBitmap, 0, 0, screenWidth, screenHeight).also {
+                    bufferedBitmap.setReusable()
+                }
+            } else {
+                if (bufferedBitmap.width < screenWidth) {
+                    val msg =
+                        "BufferedBitmap is less than screenWidth, " +
+                                "buffer size: ${bufferedBitmap.width}x${bufferedBitmap.height}, " +
+                                "screenSize: ${screenWidth}x$screenHeight "
+                    logger.warn(msg)
+                    FirebaseEvent.logException(IllegalStateException(msg))
+                }
+                bufferedBitmap
             }
         }
 
