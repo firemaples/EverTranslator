@@ -26,6 +26,7 @@ import tw.firemaples.onscreenocr.utils.Utils
 import tw.firemaples.onscreenocr.utils.clickOnce
 import tw.firemaples.onscreenocr.utils.dpToPx
 import tw.firemaples.onscreenocr.utils.getViewRect
+import tw.firemaples.onscreenocr.utils.setReusable
 import tw.firemaples.onscreenocr.utils.setTextOrGone
 import tw.firemaples.onscreenocr.utils.showOrHide
 
@@ -189,6 +190,7 @@ class ResultView(context: Context) : FloatingView(context) {
 
     override fun onDetachedFromScreen() {
         super.onDetachedFromScreen()
+        this.croppedBitmap?.setReusable()
         this.croppedBitmap = null
     }
 

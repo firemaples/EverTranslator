@@ -34,7 +34,6 @@ import tw.firemaples.onscreenocr.utils.setReusable
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 object ScreenExtractor {
     private val context: Context by lazy { Utils.context }
@@ -225,6 +224,14 @@ object ScreenExtractor {
         val width = rect.width().coerceAtMost(bitmap.width - rect.left)
         val height = rect.height().coerceAtMost(bitmap.height - rect.top)
 
+        if (width <= 0) {
+            val msg = "Crop width is less than 0, " +
+                    "bitmap size: ${bitmap.width}x${bitmap.height}, " +
+                    "parentRect: $parentRect, cropRect: $cropRect"
+            logger.warn(msg)
+            FirebaseEvent.logException(IllegalStateException(msg))
+        }
+
         val cropped = Bitmap.createBitmap(bitmap, rect.left, rect.top, width, height)
         logger.debug("cropped bitmap: ${cropped.width}x${cropped.height}")
 
@@ -253,6 +260,7 @@ object ScreenExtractor {
                         it.resume(bitmap)
                     } else {
                         logger.info("Image is whole black, increase counter: $counter")
+                        bitmap.setReusable()
                         if (counter >= Constants.EXTRACT_SCREEN_MAX_RETRY) {
                             reader.setOnImageAvailableListener(null, null)
                             if (resumed.getAndSet(true))
@@ -262,14 +270,20 @@ object ScreenExtractor {
                             counter++
                         }
                     }
-                } catch (e: Throwable) {
+                } catch (@Suppress("TooGenericExceptionCaught") e: Throwable) {
                     logger.warn("Error when acquire image", t = e)
                     reader.setOnImageAvailableListener(null, null)
                     if (resumed.getAndSet(true))
                         return@setOnImageAvailableListener
                     it.resumeWithException(e)
                 } finally {
-                    image?.close()
+                    try {
+                        image?.close()
+                    } catch (@Suppress("TooGenericExceptionCaught") e: Throwable) {
+                        // Ignore closing failed
+                        logger.warn("Error while closing image", e)
+                        FirebaseEvent.logException(e)
+                    }
                 }
             }, handler)
             it.invokeOnCancellation {
@@ -292,11 +306,26 @@ object ScreenExtractor {
                 height = screenHeight,
                 config = Bitmap.Config.ARGB_8888,
             ).apply {
+                // rewind() before using the buffer to fix:
+                // RuntimeException: Buffer not large enough for pixels
+                buffer.rewind()
                 copyPixelsFromBuffer(buffer)
             }
 
-            Bitmap.createBitmap(bufferedBitmap, 0, 0, screenWidth, screenHeight).also {
-                bufferedBitmap.setReusable()
+            if (bufferedBitmap.width > screenWidth) {
+                Bitmap.createBitmap(bufferedBitmap, 0, 0, screenWidth, screenHeight).also {
+                    bufferedBitmap.setReusable()
+                }
+            } else {
+                if (bufferedBitmap.width < screenWidth) {
+                    val msg =
+                        "BufferedBitmap is less than screenWidth, " +
+                                "buffer size: ${bufferedBitmap.width}x${bufferedBitmap.height}, " +
+                                "screenSize: ${screenWidth}x$screenHeight "
+                    logger.warn(msg)
+                    FirebaseEvent.logException(IllegalStateException(msg))
+                }
+                bufferedBitmap
             }
         }
 
