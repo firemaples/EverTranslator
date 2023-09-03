@@ -34,7 +34,6 @@ import tw.firemaples.onscreenocr.utils.setReusable
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 object ScreenExtractor {
     private val context: Context by lazy { Utils.context }
@@ -270,14 +269,20 @@ object ScreenExtractor {
                             counter++
                         }
                     }
-                } catch (e: Throwable) {
+                } catch (@Suppress("TooGenericExceptionCaught") e: Throwable) {
                     logger.warn("Error when acquire image", t = e)
                     reader.setOnImageAvailableListener(null, null)
                     if (resumed.getAndSet(true))
                         return@setOnImageAvailableListener
                     it.resumeWithException(e)
                 } finally {
-                    image?.close()
+                    try {
+                        image?.close()
+                    } catch (@Suppress("TooGenericExceptionCaught") e: Throwable) {
+                        // Ignore closing failed
+                        logger.warn("Error while closing image", e)
+                        FirebaseEvent.logException(e)
+                    }
                 }
             }, handler)
             it.invokeOnCancellation {
