@@ -260,6 +260,7 @@ object ScreenExtractor {
                         it.resume(bitmap)
                     } else {
                         logger.info("Image is whole black, increase counter: $counter")
+                        bitmap.setReusable()
                         if (counter >= Constants.EXTRACT_SCREEN_MAX_RETRY) {
                             reader.setOnImageAvailableListener(null, null)
                             if (resumed.getAndSet(true))
