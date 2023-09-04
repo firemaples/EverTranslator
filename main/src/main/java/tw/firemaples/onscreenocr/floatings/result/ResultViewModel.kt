@@ -5,7 +5,6 @@ import android.graphics.Rect
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.chibatching.kotpref.livedata.asLiveData
-import java.util.Locale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -18,15 +17,16 @@ import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.repo.GeneralRepository
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.utils.Constants
-import tw.firemaples.onscreenocr.utils.LanguageIdentify
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.SingleLiveEvent
 import tw.firemaples.onscreenocr.utils.Utils
+import java.util.Locale
 
-typealias OCRText = Pair<String, Locale>
+typealias OCRText = Pair<String, String>
 
-fun OCRText.text() = this.first
-fun OCRText.locale() = this.second
+fun OCRText.text(): String = this.first
+fun OCRText.locale(): Locale = Locale.forLanguageTag(this.second)
+fun OCRText.langCode(): String = this.second
 
 class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) {
     private val _displayOCROperationProgress = MutableLiveData<Boolean>()
@@ -105,7 +105,7 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
             this@ResultViewModel.lastLangCode = result.langCode
 
             _displayOCROperationProgress.value = false
-            _ocrText.value = result.result to Locale.forLanguageTag(result.langCode)
+            _ocrText.value = result.result to result.langCode
 
             val topOffset = parent.top + selected.top - viewRect.top
             val leftOffset = parent.left + selected.left - viewRect.left
@@ -183,14 +183,15 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
 
     fun onOCRTextEdited(text: String) {
         viewScope.launch {
-            _ocrText.value = text to _ocrText.value!!.locale()
+            val langCode = _ocrText.value!!.langCode()
+            _ocrText.value = text to langCode
 
-            val langCode = try {
-                LanguageIdentify.identifyLanguage(text)
-            } catch (e: Exception) {
-                logger.debug(t = e)
-                null
-            } ?: lastLangCode
+//            val langCode = try {
+//                LanguageIdentify.identifyLanguage(text)
+//            } catch (e: Exception) {
+//                logger.debug(t = e)
+//                null
+//            } ?: lastLangCode
 
             FloatingStateManager.startTranslation(
                 RecognitionResult(
