@@ -42,8 +42,10 @@ class ScreenCirclingView(context: Context) : FloatingView(context) {
 
         viewModel.lastSelectedArea.observe(lifecycleOwner) { selected ->
             selected ?: return@observe
-            circlingView.selectedBox = selected
-            onAreaSelected?.invoke(circlingView.getViewRect(), selected)
+            if (circlingView.getViewRect().contains(selected)) {
+                circlingView.selectedBox = selected
+                onAreaSelected?.invoke(circlingView.getViewRect(), selected)
+            }
         }
     }
 
