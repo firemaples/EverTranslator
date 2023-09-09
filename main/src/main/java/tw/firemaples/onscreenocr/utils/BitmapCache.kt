@@ -26,14 +26,26 @@ object BitmapCache {
     fun getBitmapFromReusableSet(options: BitmapFactory.Options): Bitmap? {
         val width = options.outWidth / options.inSampleSize
         val height = options.outHeight / options.inSampleSize
-        return getBitmapFromReusableSet(width = width, height = height, config = null)
+        return getBitmapFromReusableSet(
+            width = width,
+            height = height,
+            config = null,
+            fixedSize = false,
+        )
     }
 
-    fun getReusableBitmapOrCreate(width: Int, height: Int, config: Bitmap.Config): Bitmap =
-        getBitmapFromReusableSet(width = width, height = height, config = config)
-            ?: Bitmap.createBitmap(width, height, config)
+    fun getReusableBitmapOrCreate(
+        width: Int, height: Int, config: Config, fixedSize: Boolean,
+    ): Bitmap = getBitmapFromReusableSet(
+        width = width,
+        height = height,
+        config = config,
+        fixedSize = fixedSize,
+    ) ?: Bitmap.createBitmap(width, height, config)
 
-    fun getBitmapFromReusableSet(width: Int, height: Int, config: Bitmap.Config?): Bitmap? {
+    fun getBitmapFromReusableSet(
+        width: Int, height: Int, config: Config?, fixedSize: Boolean,
+    ): Bitmap? {
         reusableBitmaps
             .takeIf { it.isNotEmpty() }
             ?.also { reusableBitmaps ->
@@ -46,6 +58,7 @@ object BitmapCache {
                                         width = width,
                                         height = height,
                                         config = config,
+                                        fixedSize = fixedSize,
                                     )
                                 ) {
                                     iterator.remove()
@@ -63,17 +76,23 @@ object BitmapCache {
         return null
     }
 
-    private fun Bitmap.canUseForInBitmap(width: Int, height: Int, config: Config?): Boolean {
+    private fun Bitmap.canUseForInBitmap(
+        width: Int, height: Int, config: Config?, fixedSize: Boolean,
+    ): Boolean {
+        if (fixedSize && this.width != width && this.height != height) {
+            return false
+        }
+
         val targetConfig = config ?: this.config
         val byteCount = width * height * targetConfig.getBytesPerPixel()
         return byteCount <= this.allocationByteCount
     }
 
-    private fun Bitmap.Config.getBytesPerPixel(): Int =
+    private fun Config.getBytesPerPixel(): Int =
         when (this) {
-            Bitmap.Config.ARGB_8888 -> 4
-            Bitmap.Config.RGB_565, Bitmap.Config.ARGB_4444 -> 2
-            Bitmap.Config.ALPHA_8 -> 1
+            Config.ARGB_8888 -> 4
+            Config.RGB_565, Config.ARGB_4444 -> 2
+            Config.ALPHA_8 -> 1
             else -> 1
         }
 }

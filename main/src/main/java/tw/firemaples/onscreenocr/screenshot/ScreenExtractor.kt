@@ -307,6 +307,7 @@ object ScreenExtractor {
 //                width = screenWidth + rowPadding / pixelStride,
                 height = screenHeight,
                 config = Bitmap.Config.ARGB_8888,
+                fixedSize = true,
             ).apply {
                 // rewind() before using the buffer to fix:
                 // RuntimeException: Buffer not large enough for pixels
