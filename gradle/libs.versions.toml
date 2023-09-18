@@ -10,6 +10,7 @@ androidx-legacy = "1.0.0"
 
 google-android-play-services-ads = "22.2.0"
 ##                            ⬆ = "22.3.0"
+##                            ⬆ = "22.4.0"
 
 kotlin = "1.8.20"
 ##  ⬆ = "1.8.21"
