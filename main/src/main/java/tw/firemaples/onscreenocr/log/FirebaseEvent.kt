@@ -121,7 +121,13 @@ object FirebaseEvent {
         }
         val msg = e.localizedMessage ?: e.message
 
-        logException(Exception("Capture screen failed", e))
+        when (e) {
+            is TimeoutCancellationException -> {
+                /* Ignore timeout exception */
+            }
+
+            else -> logException(Exception("Capture screen failed", e))
+        }
 
         PerformanceTracer.putAttr(TRACE_CAPTURE_SCREENSHOT, "error_type", errorType)
         msg?.also { PerformanceTracer.putAttr(TRACE_CAPTURE_SCREENSHOT, "error_msg", msg) }
