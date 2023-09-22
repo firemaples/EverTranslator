@@ -186,22 +186,22 @@ object ScreenExtractor {
         try {
             imageReader?.setOnImageAvailableListener(null, handler)
         } catch (e: Exception) {
-            FirebaseEvent.logException(e)
+            // ignore exceptions
         }
         try {
             imageReader?.close()
         } catch (e: Exception) {
-            FirebaseEvent.logException(e)
+            // ignore exceptions
         }
         try {
             projection?.stop()
         } catch (e: Exception) {
-            FirebaseEvent.logException(e)
+            // ignore exceptions
         }
         try {
             image?.close()
         } catch (e: Exception) {
-            FirebaseEvent.logException(e)
+            // ignore exceptions
         }
     }
 
