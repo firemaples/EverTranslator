@@ -2,21 +2,13 @@
 
 [versions]
 
-androidx-databinding = "8.0.2"
-##                ⬆ = "8.1.0"
-##                ⬆ = "8.1.1"
+androidx-databinding = "8.1.1"
 
 androidx-legacy = "1.0.0"
 
-google-android-play-services-ads = "22.2.0"
-##                            ⬆ = "22.3.0"
-##                            ⬆ = "22.4.0"
+google-android-play-services-ads = "22.4.0"
 
-kotlin = "1.8.20"
-##  ⬆ = "1.8.21"
-##  ⬆ = "1.8.22"
-##  ⬆ = "1.9.0"
-##  ⬆ = "1.9.10"
+kotlin = "1.9.10"
 
 [libraries]
 
