@@ -3,8 +3,5 @@
   "extends": [
     "config:base"
   ],
-  "prHourlyLimit": 3,
-  "ignorePaths": [
-      "deprecated/"
-  ]
+  "prHourlyLimit": 3
 }
