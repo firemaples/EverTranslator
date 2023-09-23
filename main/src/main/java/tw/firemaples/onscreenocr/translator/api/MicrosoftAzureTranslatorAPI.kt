@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
 import tw.firemaples.onscreenocr.utils.Logger
 
@@ -16,7 +16,7 @@ object MicrosoftAzureTranslatorAPI {
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl("http://localhost/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create())
             .build()
     }
 
