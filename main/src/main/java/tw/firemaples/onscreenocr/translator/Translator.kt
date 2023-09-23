@@ -13,6 +13,7 @@ import tw.firemaples.onscreenocr.translator.app.PapagoTranslateAppTranslator
 import tw.firemaples.onscreenocr.translator.app.YandexTranslateAppTranslator
 import tw.firemaples.onscreenocr.translator.azure.MicrosoftAzureTranslator
 import tw.firemaples.onscreenocr.translator.googlemlkit.GoogleMLKitTranslator
+import tw.firemaples.onscreenocr.translator.mymemory.MyMemoryTranslator
 import tw.firemaples.onscreenocr.translator.ocronly.OCROnlyTranslator
 import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Utils
@@ -28,6 +29,7 @@ interface Translator {
             when (type) {
                 TranslationProviderType.MicrosoftAzure -> MicrosoftAzureTranslator
                 TranslationProviderType.GoogleMLKit -> GoogleMLKitTranslator
+                TranslationProviderType.MyMemory -> MyMemoryTranslator
                 TranslationProviderType.GoogleTranslateApp -> GoogleTranslateAppTranslator
                 TranslationProviderType.BingTranslateApp -> BingTranslateAppTranslator
                 TranslationProviderType.PapagoTranslateApp -> PapagoTranslateAppTranslator
@@ -42,6 +44,8 @@ interface Translator {
         get() = Utils.context
     val translationHint: String?
         get() = null
+    val defaultLanguage: String
+        get() = Constants.DEFAULT_TRANSLATION_LANG
 
     suspend fun checkEnvironment(coroutineScope: CoroutineScope): Boolean = true
 
@@ -55,8 +59,7 @@ interface Translator {
 
         return if (supportedLangList.any { it == selectedLangCode }) selectedLangCode
         else {
-            AppPref.selectedTranslationLang = Constants.DEFAULT_TRANSLATION_LANG
-            Constants.DEFAULT_TRANSLATION_LANG
+            defaultLanguage.also { AppPref.selectedTranslationLang = it }
         }
     }
 }
@@ -70,31 +73,32 @@ enum class TranslationProviderType(
 ) {
     MicrosoftAzure(0, "microsoft_azure", R.string.translation_provider_microsoft_azure),
     GoogleMLKit(1, "google_ml_kit", R.string.translation_provider_google_ml_kit),
+    MyMemory(3, "my_memory", R.string.translation_provider_my_memory),
     GoogleTranslateApp(
-        2, "google_translate_app", R.string.translation_provider_google_translate_app,
+        10, "google_translate_app", R.string.translation_provider_google_translate_app,
         nonTranslation = true,
         minSDKVersion = Build.VERSION_CODES.M,
     ),
     BingTranslateApp(
-        3, "Bing_translate_app", R.string.translation_provider_Bing_translate_app,
+        11, "Bing_translate_app", R.string.translation_provider_Bing_translate_app,
         nonTranslation = true,
     ),
     PapagoTranslateApp(
-        4, "Papago_translate_app", R.string.translation_provider_Papago_translate_app,
+        12, "Papago_translate_app", R.string.translation_provider_Papago_translate_app,
         nonTranslation = true,
     ),
     YandexTranslateApp(
-        5, "yandex_translate_app", R.string.translation_provider_yandex_translate_app,
+        13, "yandex_translate_app", R.string.translation_provider_yandex_translate_app,
         nonTranslation = true,
         minSDKVersion = Build.VERSION_CODES.M,
     ),
     OtherTranslateApp(
-        6, "other_translate_app", R.string.translation_provider_other_translate_app,
+        14, "other_translate_app", R.string.translation_provider_other_translate_app,
         nonTranslation = true,
         minSDKVersion = Build.VERSION_CODES.M,
     ),
 
-    OCROnly(7, "ocr_only", R.string.translation_provider_none, nonTranslation = true);
+    OCROnly(20, "ocr_only", R.string.translation_provider_none, nonTranslation = true);
 
     companion object {
         fun fromKey(key: String): TranslationProviderType =

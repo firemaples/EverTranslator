@@ -162,6 +162,7 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
             TranslationProviderType.OtherTranslateApp -> R.drawable.ic_open_in_app
             TranslationProviderType.MicrosoftAzure,
             TranslationProviderType.GoogleMLKit,
+            TranslationProviderType.MyMemory,
             TranslationProviderType.PapagoTranslateApp,
             TranslationProviderType.YandexTranslateApp,
             TranslationProviderType.OCROnly -> null
@@ -171,11 +172,13 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
             TranslationProviderType.GoogleTranslateApp,
             TranslationProviderType.BingTranslateApp,
             TranslationProviderType.OtherTranslateApp -> "$ocrLang>"
+
             TranslationProviderType.YandexTranslateApp -> "$ocrLang > Y"
             TranslationProviderType.PapagoTranslateApp -> "$ocrLang > P"
             TranslationProviderType.OCROnly -> " $ocrLang "
             TranslationProviderType.MicrosoftAzure,
-            TranslationProviderType.GoogleMLKit -> "$ocrLang>$translationLang"
+            TranslationProviderType.GoogleMLKit,
+            TranslationProviderType.MyMemory -> "$ocrLang>$translationLang"
         }
     }
 
@@ -193,21 +196,27 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
             MENU_SETTING -> {
                 _showSettingPage.value = true
             }
+
             MENU_PRIVACY_POLICY -> {
                 _openBrowser.value = RemoteConfigManager.privacyPolicyUrl
             }
+
             MENU_ABOUT -> {
                 _openBrowser.value = RemoteConfigManager.aboutUrl
             }
+
             MENU_VERSION_HISTORY -> {
                 _showVersionHistory.value = true
             }
+
             MENU_README -> {
                 _showReadme.value = true
             }
+
             MENU_HIDE -> {
                 ViewHolderService.hideViews(context)
             }
+
             MENU_EXIT -> {
                 ViewHolderService.exit(context)
             }

@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Translation target language codes for the Microsoft Translate API. -->
+    <!-- The elements in this array must match to the mymemory_translationLangName array. -->
+    <string-array name="mymemory_translationLangCode_iso639_iso3166" translatable="false">
+        <item>ace-ID</item> <!-- Acehnese -->
+        <item>af-ZA</item> <!-- Afrikaans -->
+        <item>ak-GH</item> <!-- Akan -->
+        <item>sq-AL</item> <!-- Albanian -->
+        <item>am-ET</item> <!-- Amharic -->
+        <item>aig-AG</item> <!-- Antigua and Barbuda Creole English -->
+        <item>ar-SA</item> <!-- Arabic -->
+        <item>ar-EG</item> <!-- Arabic Egyptian -->
+        <item>an-ES</item> <!-- Aragonese -->
+        <item>hy-AM</item> <!-- Armenian -->
+        <item>as-IN</item> <!-- Assamese -->
+        <item>ast-ES</item> <!-- Asturian -->
+        <item>de-AT</item> <!-- Austrian German -->
+        <item>awa-IN</item> <!-- Awadhi -->
+        <item>quy-PE</item> <!-- Ayacucho Quechua -->
+        <item>az-AZ</item> <!-- Azerbaijani -->
+        <item>bah-BS</item> <!-- Bahamas Creole English -->
+        <item>bjs-BB</item> <!-- Bajan -->
+        <item>ban-ID</item> <!-- Balinese -->
+        <item>rm-RO</item> <!-- Balkan Gipsy -->
+        <item>bm-ML</item> <!-- Bambara -->
+        <item>bjn-ID</item> <!-- Banjar -->
+        <item>ba-RU</item> <!-- Bashkir -->
+        <item>eu-ES</item> <!-- Basque -->
+        <item>be-BY</item> <!-- Belarusian -->
+        <item>fr-BE</item> <!-- Belgian French -->
+        <item>bem-ZM</item> <!-- Bemba -->
+        <item>bn-IN</item> <!-- Bengali -->
+        <item>bho-IN</item> <!-- Bhojpuri -->
+        <item>bh-IN</item> <!-- Bihari -->
+        <item>bi-VU</item> <!-- Bislama -->
+        <item>gax-KE</item> <!-- Borana -->
+        <item>bs-BA</item> <!-- Bosnian -->
+        <item>bs-Cyrl-BA</item> <!-- Bosnian (Cyrillic) -->
+        <item>br-FR</item> <!-- Breton -->
+        <item>bug-ID</item> <!-- Buginese -->
+        <item>bg-BG</item> <!-- Bulgarian -->
+        <item>my-MM</item> <!-- Burmese -->
+        <item>ca-ES</item> <!-- Catalan -->
+        <item>cav-ES</item> <!-- Catalan Valencian -->
+        <item>ceb-PH</item> <!-- Cebuano -->
+        <item>tzm-MA</item> <!-- Central Atlas Tamazight -->
+        <item>ayr-BO</item> <!-- Central Aymara -->
+        <item>knc-NG</item> <!-- Central Kanuri (Latin script) -->
+        <item>shu-TD</item> <!-- Chadian Arabic -->
+        <item>ch-GU</item> <!-- Chamorro -->
+        <item>chr-US</item> <!-- Cherokee -->
+        <item>hne-IN</item> <!-- Chhattisgarhi -->
+        <item>zh-CN</item> <!-- Chinese Simplified -->
+        <item>zh-HK</item> <!-- Chinese Trad. (Hong Kong) -->
+        <item>zh-TW</item> <!-- Chinese Traditional -->
+        <item>zh-MO</item> <!-- Chinese Traditional Macau -->
+        <item>ctg-BD</item> <!-- Chittagonian -->
+        <item>cjk-AO</item> <!-- Chokwe -->
+        <item>grc-GR</item> <!-- Classical Greek -->
+        <item>zdj-KM</item> <!-- Comorian Ngazidja -->
+        <item>cop-EG</item> <!-- Coptic -->
+        <item>crh-RU</item> <!-- Crimean Tatar -->
+        <item>pov-GW</item> <!-- Crioulo Upper Guinea -->
+        <item>hr-HR</item> <!-- Croatian -->
+        <item>cs-CZ</item> <!-- Czech -->
+        <item>da-DK</item> <!-- Danish -->
+        <item>prs-AF</item> <!-- Dari -->
+        <item>diq-TR</item> <!-- Dimli -->
+        <item>nl-NL</item> <!-- Dutch -->
+        <item>dyu-CI</item> <!-- Dyula -->
+        <item>dz-BT</item> <!-- Dzongkha -->
+        <item>ydd-US</item> <!-- Eastern Yiddish -->
+        <item>vmw-MZ</item> <!-- Emakhuwa -->
+        <item>en-GB</item> <!-- English -->
+        <item>en-AU</item> <!-- English Australia -->
+        <item>en-CA</item> <!-- English Canada -->
+        <item>en-IN</item> <!-- English India -->
+        <item>en-IE</item> <!-- English Ireland -->
+        <item>en-NZ</item> <!-- English New Zealand -->
+        <item>en-SG</item> <!-- English Singapore -->
+        <item>en-ZA</item> <!-- English South Africa -->
+        <item>en-US</item> <!-- English US -->
+        <item>eo-EU</item> <!-- Esperanto -->
+        <item>et-EE</item> <!-- Estonian -->
+        <item>ee-GH</item> <!-- Ewe -->
+        <item>fn-FNG</item> <!-- Fanagalo -->
+        <item>fo-FO</item> <!-- Faroese -->
+        <item>fj-FJ</item> <!-- Fijian -->
+        <item>fil-PH</item> <!-- Filipino -->
+        <item>fi-FI</item> <!-- Finnish -->
+        <item>nl-BE</item> <!-- Flemish -->
+        <item>fon-BJ</item> <!-- Fon -->
+        <item>fr-FR</item> <!-- French -->
+        <item>fr-CA</item> <!-- French Canada -->
+        <item>fr-CH</item> <!-- French Swiss -->
+        <item>fur-IT</item> <!-- Friulian -->
+        <item>ff-FUL</item> <!-- Fula -->
+        <item>gl-ES</item> <!-- Galician -->
+        <item>mfi-NG</item> <!-- Gamargu -->
+        <item>grt-IN</item> <!-- Garo -->
+        <item>ka-GE</item> <!-- Georgian -->
+        <item>de-DE</item> <!-- German -->
+        <item>gil-KI</item> <!-- Gilbertese -->
+        <item>glw-NG</item> <!-- Glavda -->
+        <item>el-GR</item> <!-- Greek -->
+        <item>gcl-GD</item> <!-- Grenadian Creole English -->
+        <item>gn-PY</item> <!-- Guarani -->
+        <item>gu-IN</item> <!-- Gujarati -->
+        <item>gyn-GY</item> <!-- Guyanese Creole English -->
+        <item>ht-HT</item> <!-- Haitian Creole French -->
+        <item>khk-MN</item> <!-- Halh Mongolian -->
+        <item>ha-NE</item> <!-- Hausa -->
+        <item>haw-US</item> <!-- Hawaiian -->
+        <item>he-IL</item> <!-- Hebrew -->
+        <item>hig-NG</item> <!-- Higi -->
+        <item>hil-PH</item> <!-- Hiligaynon -->
+        <item>mrj-RU</item> <!-- Hill Mari -->
+        <item>hi-IN</item> <!-- Hindi -->
+        <item>hmn-CN</item> <!-- Hmong -->
+        <item>hu-HU</item> <!-- Hungarian -->
+        <item>is-IS</item> <!-- Icelandic -->
+        <item>ibo-NG</item> <!-- Igbo -->
+        <item>ig-NG</item> <!-- Igbo -->
+        <item>ilo-PH</item> <!-- Ilocano -->
+        <item>id-ID</item> <!-- Indonesian -->
+        <item>kl-GL</item> <!-- Inuktitut Greenlandic -->
+        <item>ga-IE</item> <!-- Irish Gaelic -->
+        <item>it-IT</item> <!-- Italian -->
+        <item>it-CH</item> <!-- Italian Swiss -->
+        <item>jam-JM</item> <!-- Jamaican Creole English -->
+        <item>ja-JP</item> <!-- Japanese -->
+        <item>jv-ID</item> <!-- Javanese -->
+        <item>kac-MM</item> <!-- Jingpho -->
+        <item>quc-GT</item> <!-- K'iche' -->
+        <item>kbp-TG</item> <!-- Kabiyè -->
+        <item>kea-CV</item> <!-- Kabuverdianu -->
+        <item>kab-DZ</item> <!-- Kabylian -->
+        <item>kln-KE</item> <!-- Kalenjin -->
+        <item>kam-KE</item> <!-- Kamba -->
+        <item>kn-IN</item> <!-- Kannada -->
+        <item>kr-KAU</item> <!-- Kanuri -->
+        <item>kar-MM</item> <!-- Karen -->
+        <item>ks-IN</item> <!-- Kashmiri (Devanagari script) -->
+        <item>kas-IN</item> <!-- Kashmiri (Arabic script) -->
+        <item>kk-KZ</item> <!-- Kazakh -->
+        <item>kha-IN</item> <!-- Khasi -->
+        <item>km-KH</item> <!-- Khmer -->
+        <item>kik-KE</item> <!-- Kikuyu -->
+        <item>ki-KE</item> <!-- Kikuyu -->
+        <item>kmb-AO</item> <!-- Kimbundu -->
+        <item>rw-RW</item> <!-- Kinyarwanda -->
+        <item>rn-BI</item> <!-- Kirundi -->
+        <item>guz-KE</item> <!-- Kisii -->
+        <item>kg-CG</item> <!-- Kongo -->
+        <item>kok-IN</item> <!-- Konkani -->
+        <item>ko-KR</item> <!-- Korean -->
+        <item>kmr-TR</item> <!-- Northern Kurdish -->
+        <item>ckb-IQ</item> <!-- Kurdish Sorani -->
+        <item>ky-KG</item> <!-- Kyrgyz -->
+        <item>lo-LA</item> <!-- Lao -->
+        <item>ltg-LV</item> <!-- Latgalian -->
+        <item>la-XN</item> <!-- Latin -->
+        <item>lv-LV</item> <!-- Latvian -->
+        <item>lij-IT</item> <!-- Ligurian -->
+        <item>li-NL</item> <!-- Limburgish -->
+        <item>ln-LIN</item> <!-- Lingala -->
+        <item>lt-LT</item> <!-- Lithuanian -->
+        <item>lmo-IT</item> <!-- Lombard -->
+        <item>lua-CD</item> <!-- Luba-Kasai -->
+        <item>lg-UG</item> <!-- Luganda -->
+        <item>luy-KE</item> <!-- Luhya -->
+        <item>luo-KE</item> <!-- Luo -->
+        <item>lb-LU</item> <!-- Luxembourgish -->
+        <item>mas-KE</item> <!-- Maa -->
+        <item>mk-MK</item> <!-- Macedonian -->
+        <item>mag-IN</item> <!-- Magahi -->
+        <item>mai-IN</item> <!-- Maithili -->
+        <item>mg-MG</item> <!-- Malagasy -->
+        <item>ms-MY</item> <!-- Malay -->
+        <item>ml-IN</item> <!-- Malayalam -->
+        <item>dv-MV</item> <!-- Maldivian -->
+        <item>mt-MT</item> <!-- Maltese -->
+        <item>mfi-CM</item> <!-- Mandara -->
+        <item>mni-IN</item> <!-- Manipuri -->
+        <item>gv-IM</item> <!-- Manx Gaelic -->
+        <item>mi-NZ</item> <!-- Maori -->
+        <item>mr-IN</item> <!-- Marathi -->
+        <item>mrt-NG</item> <!-- Margi -->
+        <item>mhr-RU</item> <!-- Mari -->
+        <item>mh-MH</item> <!-- Marshallese -->
+        <item>men-SL</item> <!-- Mende -->
+        <item>mer-KE</item> <!-- Meru -->
+        <item>nyf-KE</item> <!-- Mijikenda -->
+        <item>min-ID</item> <!-- Minangkabau -->
+        <item>lus-IN</item> <!-- Mizo -->
+        <item>mn-MN</item> <!-- Mongolian -->
+        <item>sr-ME</item> <!-- Montenegrin -->
+        <item>mfe-MU</item> <!-- Morisyen -->
+        <item>ar-MA</item> <!-- Moroccan Arabic -->
+        <item>mos-BF</item> <!-- Mossi -->
+        <item>ndc-MZ</item> <!-- Ndau -->
+        <item>nr-ZA</item> <!-- Ndebele -->
+        <item>ne-NP</item> <!-- Nepali -->
+        <item>fuv-NG</item> <!-- Nigerian Fulfulde -->
+        <item>niu-NU</item> <!-- Niuean -->
+        <item>azj-AZ</item> <!-- North Azerbaijani -->
+        <item>nso-ZA</item> <!-- Sesotho -->
+        <item>uzn-UZ</item> <!-- Northern Uzbek -->
+        <item>nb-NO</item> <!-- Norwegian Bokmål -->
+        <item>nn-NO</item> <!-- Norwegian Nynorsk -->
+        <item>nus-SS</item> <!-- Nuer -->
+        <item>ny-MW</item> <!-- Nyanja -->
+        <item>oc-FR</item> <!-- Occitan -->
+        <item>oc-ES</item> <!-- Occitan Aran -->
+        <item>or-IN</item> <!-- Odia -->
+        <item>ory-IN</item> <!-- Oriya -->
+        <item>ur-PK</item> <!-- Urdu -->
+        <item>pau-PW</item> <!-- Palauan -->
+        <item>pi-IN</item> <!-- Pali -->
+        <item>pag-PH</item> <!-- Pangasinan -->
+        <item>pap-CW</item> <!-- Papiamentu -->
+        <item>ps-PK</item> <!-- Pashto -->
+        <item>fa-IR</item> <!-- Persian -->
+        <item>pis-SB</item> <!-- Pijin -->
+        <item>plt-MG</item> <!-- Plateau Malagasy -->
+        <item>pl-PL</item> <!-- Polish -->
+        <item>pt-PT</item> <!-- Portuguese -->
+        <item>pt-BR</item> <!-- Portuguese Brazil -->
+        <item>pot-US</item> <!-- Potawatomi -->
+        <item>pa-IN</item> <!-- Punjabi -->
+        <item>pnb-PK</item> <!-- Punjabi (Pakistan) -->
+        <item>qu-PE</item> <!-- Quechua -->
+        <item>rhg-MM</item> <!-- Rohingya -->
+        <item>rhl-MM</item> <!-- Rohingyaish -->
+        <item>ro-RO</item> <!-- Romanian -->
+        <item>roh-CH</item> <!-- Romansh -->
+        <item>run-BI</item> <!-- Rundi -->
+        <item>ru-RU</item> <!-- Russian -->
+        <item>acf-LC</item> <!-- Saint Lucian Creole French -->
+        <item>sm-WS</item> <!-- Samoan -->
+        <item>sg-CF</item> <!-- Sango -->
+        <item>sa-IN</item> <!-- Sanskrit -->
+        <item>sat-IN</item> <!-- Santali -->
+        <item>sc-IT</item> <!-- Sardinian -->
+        <item>gd-GB</item> <!-- Scots Gaelic -->
+        <item>seh-ZW</item> <!-- Sena -->
+        <item>sr-Cyrl-RS</item> <!-- Serbian Cyrillic -->
+        <item>sr-Latn-RS</item> <!-- Serbian Latin -->
+        <item>crs-SC</item> <!-- Seselwa Creole French -->
+        <item>tn-ZA</item> <!-- Setswana (South Africa) -->
+        <item>shn-MM</item> <!-- Shan -->
+        <item>sn-ZW</item> <!-- Shona -->
+        <item>scn-IT</item> <!-- Sicilian -->
+        <item>szl-PL</item> <!-- Silesian -->
+        <item>snd-PK</item> <!-- Sindhi -->
+        <item>sd-PK</item> <!-- Sindhi -->
+        <item>si-LK</item> <!-- Sinhala -->
+        <item>sk-SK</item> <!-- Slovak -->
+        <item>sl-SI</item> <!-- Slovenian -->
+        <item>so-SO</item> <!-- Somali -->
+        <item>st-LS</item> <!-- Sotho Southern -->
+        <item>azb-AZ</item> <!-- South Azerbaijani -->
+        <item>pbt-PK</item> <!-- Southern Pashto -->
+        <item>dik-SS</item> <!-- Southwestern Dinka -->
+        <item>es-ES</item> <!-- Spanish -->
+        <item>es-AR</item> <!-- Spanish Argentina -->
+        <item>es-CO</item> <!-- Spanish Colombia -->
+        <item>es-419</item> <!-- Spanish Latin America -->
+        <item>es-MX</item> <!-- Spanish Mexico -->
+        <item>es-US</item> <!-- Spanish United States -->
+        <item>srn-SR</item> <!-- Sranan Tongo -->
+        <item>lvs-LV</item> <!-- Standard Latvian -->
+        <item>zsm-MY</item> <!-- Standard Malay -->
+        <item>su-ID</item> <!-- Sundanese -->
+        <item>sw-KE</item> <!-- Swahili -->
+        <item>ss-SZ</item> <!-- Swati -->
+        <item>sv-SE</item> <!-- Swedish -->
+        <item>de-CH</item> <!-- Swiss German -->
+        <item>syc-TR</item> <!-- Syriac (Aramaic) -->
+        <item>tl-PH</item> <!-- Tagalog -->
+        <item>ty-PF</item> <!-- Tahitian -->
+        <item>tg-TJ</item> <!-- Tajik -->
+        <item>tmh-DZ</item> <!-- Tamashek (Tuareg) -->
+        <item>taq-ML</item> <!-- Tamasheq -->
+        <item>ta-IN</item> <!-- Tamil India -->
+        <item>ta-LK</item> <!-- Tamil Sri Lanka -->
+        <item>trv-TW</item> <!-- Taroko -->
+        <item>tt-RU</item> <!-- Tatar -->
+        <item>te-IN</item> <!-- Telugu -->
+        <item>tet-TL</item> <!-- Tetum -->
+        <item>th-TH</item> <!-- Thai -->
+        <item>bo-CN</item> <!-- Tibetan -->
+        <item>ti-ET</item> <!-- Tigrinya -->
+        <item>tpi-PG</item> <!-- Tok Pisin -->
+        <item>tkl-TK</item> <!-- Tokelauan -->
+        <item>to-TO</item> <!-- Tongan -->
+        <item>als-AL</item> <!-- Tosk Albanian -->
+        <item>ts-ZA</item> <!-- Tsonga -->
+        <item>tsc-MZ</item> <!-- Tswa -->
+        <item>tn-BW</item> <!-- Tswana -->
+        <item>tum-MW</item> <!-- Tumbuka -->
+        <item>tr-TR</item> <!-- Turkish -->
+        <item>tk-TM</item> <!-- Turkmen -->
+        <item>tvl-TV</item> <!-- Tuvaluan -->
+        <item>tw-GH</item> <!-- Twi -->
+        <item>udm-RU</item> <!-- Udmurt -->
+        <item>uk-UA</item> <!-- Ukrainian -->
+        <item>ppk-ID</item> <!-- Uma -->
+        <item>umb-AO</item> <!-- Umbundu -->
+        <item>uig-CN</item> <!-- Uyghur -->
+        <item>ug-CN</item> <!-- Uyghur -->
+        <item>uz-UZ</item> <!-- Uzbek -->
+        <item>vec-IT</item> <!-- Venetian -->
+        <item>vi-VN</item> <!-- Vietnamese -->
+        <item>svc-VC</item> <!-- Vincentian Creole English -->
+        <item>vic-US</item> <!-- Virgin Islands Creole English -->
+        <item>wls-WF</item> <!-- Wallisian -->
+        <item>war-PH</item> <!-- Waray (Philippines) -->
+        <item>cy-GB</item> <!-- Welsh -->
+        <item>gaz-ET</item> <!-- West Central Oromo -->
+        <item>pes-IR</item> <!-- Western Persian -->
+        <item>wo-SN</item> <!-- Wolof -->
+        <item>xh-ZA</item> <!-- Xhosa -->
+        <item>yi-YD</item> <!-- Yiddish -->
+        <item>yo-NG</item> <!-- Yoruba -->
+        <item>zu-ZA</item> <!-- Zulu -->
+    </string-array>
+</resources>

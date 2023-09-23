@@ -2,7 +2,7 @@
 <resources>
     <!-- Translation target language codes for the Microsoft Translate API. -->
     <!-- The elements in this array must match to the translationtargetlanguagenames_microsoft array. -->
-    <string-array name="microsoft_translationLangCode_iso6391" translatable="false">
+    <string-array name="microsoft_translationLangCode_iso639_iso3166" translatable="false">
         <item>ar</item> <!-- Arabic -->
         <item>bg</item> <!-- Bulgarian -->
         <item>ca</item> <!-- Catalan -->

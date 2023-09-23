@@ -138,7 +138,8 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
             }
 
             when (translationProviderType) {
-                TranslationProviderType.MicrosoftAzure ->
+                TranslationProviderType.MicrosoftAzure,
+                TranslationProviderType.MyMemory ->
                     _translationProviderText.value =
                         "${context.getString(R.string.text_translated_by)} " +
                                 context.getString(translationProviderType.nameRes)

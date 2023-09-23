@@ -5,6 +5,7 @@
 
     <string name="translation_provider_microsoft_azure">Microsoft Azure</string>
     <string name="translation_provider_google_ml_kit">Google MLKit</string>
+    <string name="translation_provider_my_memory" translatable="false">MyMemory</string>
     <string name="translation_provider_google_translate_app">Google Translate App</string>
     <string name="translation_provider_Bing_translate_app">Microsoft Translator App</string>
     <string name="translation_provider_Papago_translate_app">Papago Translator App</string>

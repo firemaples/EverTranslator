@@ -21,7 +21,7 @@ object MicrosoftAzureTranslator : Translator {
 
     override suspend fun supportedLanguages(): List<TranslationLanguage> {
         val langCodeList =
-            context.resources.getStringArray(R.array.microsoft_translationLangCode_iso6391)
+            context.resources.getStringArray(R.array.microsoft_translationLangCode_iso639_iso3166)
         val langNameList = context.resources.getStringArray(R.array.microsoft_translationLangName)
 
         val selectedLangCode = selectedLangCode(langCodeList)
