@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.translator.api
+package tw.firemaples.onscreenocr.translator.azure
 
 import java.io.IOException
 import java.text.SimpleDateFormat

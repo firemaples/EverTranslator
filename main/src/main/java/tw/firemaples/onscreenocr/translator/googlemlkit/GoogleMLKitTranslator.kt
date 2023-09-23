@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.translator
+package tw.firemaples.onscreenocr.translator.googlemlkit
 
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.common.model.RemoteModelManager
@@ -15,6 +15,10 @@ import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.dialog.DialogView
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.pref.AppPref
+import tw.firemaples.onscreenocr.translator.TranslationLanguage
+import tw.firemaples.onscreenocr.translator.TranslationProviderType
+import tw.firemaples.onscreenocr.translator.TranslationResult
+import tw.firemaples.onscreenocr.translator.Translator
 import tw.firemaples.onscreenocr.utils.firstPart
 
 object GoogleMLKitTranslator : Translator {
@@ -73,7 +77,7 @@ object GoogleMLKitTranslator : Translator {
             else {
                 if (lastTranslator != null) {
                     lastTranslator.close()
-                    this.lastTranslator = null
+                    GoogleMLKitTranslator.lastTranslator = null
                 }
 
                 Translation.getClient(
@@ -82,8 +86,8 @@ object GoogleMLKitTranslator : Translator {
                         .setTargetLanguage(targetLang)
                         .build()
                 ).also {
-                    this.lastTranslatorLangKey = langKey
-                    this.lastTranslator = it
+                    GoogleMLKitTranslator.lastTranslatorLangKey = langKey
+                    GoogleMLKitTranslator.lastTranslator = it
                 }
             }
 

@@ -1,9 +1,12 @@
-package tw.firemaples.onscreenocr.translator
+package tw.firemaples.onscreenocr.translator.azure
 
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
-import tw.firemaples.onscreenocr.translator.api.MicrosoftAzureTranslatorAPI
+import tw.firemaples.onscreenocr.translator.TranslationLanguage
+import tw.firemaples.onscreenocr.translator.TranslationProviderType
+import tw.firemaples.onscreenocr.translator.TranslationResult
+import tw.firemaples.onscreenocr.translator.Translator
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.firstPart
 

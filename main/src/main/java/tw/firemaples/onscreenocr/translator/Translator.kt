@@ -6,6 +6,14 @@ import androidx.annotation.StringRes
 import kotlinx.coroutines.CoroutineScope
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.pref.AppPref
+import tw.firemaples.onscreenocr.translator.app.BingTranslateAppTranslator
+import tw.firemaples.onscreenocr.translator.app.GoogleTranslateAppTranslator
+import tw.firemaples.onscreenocr.translator.app.OtherTranslateAppTranslator
+import tw.firemaples.onscreenocr.translator.app.PapagoTranslateAppTranslator
+import tw.firemaples.onscreenocr.translator.app.YandexTranslateAppTranslator
+import tw.firemaples.onscreenocr.translator.azure.MicrosoftAzureTranslator
+import tw.firemaples.onscreenocr.translator.googlemlkit.GoogleMLKitTranslator
+import tw.firemaples.onscreenocr.translator.ocronly.OCROnlyTranslator
 import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Utils
 import tw.firemaples.onscreenocr.utils.firstPart

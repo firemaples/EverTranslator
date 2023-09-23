@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.translator.api
+package tw.firemaples.onscreenocr.translator.azure
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
