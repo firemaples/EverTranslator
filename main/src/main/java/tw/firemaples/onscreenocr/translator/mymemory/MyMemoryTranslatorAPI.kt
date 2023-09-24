@@ -2,7 +2,6 @@ package tw.firemaples.onscreenocr.translator.mymemory
 
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.Utils
-import java.io.IOException
 
 object MyMemoryTranslatorAPI {
     private val logger: Logger by lazy { Logger(this::class) }
@@ -21,7 +20,9 @@ object MyMemoryTranslatorAPI {
 
         if (!result.isSuccessful) {
             return Result.failure(
-                IOException("API failed: ${result.errorBody()?.toString()}")
+                IllegalStateException(
+                    "API failed(${result.code()}): ${result.errorBody()?.toString()}"
+                )
             )
         }
 
@@ -31,7 +32,11 @@ object MyMemoryTranslatorAPI {
                 logger.debug("Got translation result: $translatedText")
                 Result.success(translatedText)
             } else {
-                Result.failure(Exception("Translate failed: ${response.responseDetails}"))
+                Result.failure(
+                    Exception(
+                        "Got response failed status(${response.responseStatus}): ${response.responseDetails}"
+                    )
+                )
             }
         } ?: Result.failure(IllegalStateException("Got null body"))
     }
