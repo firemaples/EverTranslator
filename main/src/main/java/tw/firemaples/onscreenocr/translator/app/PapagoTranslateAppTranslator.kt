@@ -1,5 +1,7 @@
-package tw.firemaples.onscreenocr.translator
+package tw.firemaples.onscreenocr.translator.app
 
+import tw.firemaples.onscreenocr.translator.BaseAppTranslator
+import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.translator.utils.PapagoTranslateUtils
 import tw.firemaples.onscreenocr.translator.utils.TranslatorUtils
 

@@ -13,6 +13,8 @@ import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.R
 
@@ -20,6 +22,13 @@ object Utils {
     private val logger: Logger by lazy { Logger(Utils::class) }
 
     val context: Context by lazy { CoreApplication.instance }
+
+    val retrofit: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl("http://localhost/")
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+    }
 
     @Throws(PackageManager.NameNotFoundException::class)
     fun isPackageInstalled(packageName: String): Boolean =

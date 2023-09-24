@@ -1,9 +1,12 @@
-package tw.firemaples.onscreenocr.translator
+package tw.firemaples.onscreenocr.translator.azure
 
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
-import tw.firemaples.onscreenocr.translator.api.MicrosoftAzureTranslatorAPI
+import tw.firemaples.onscreenocr.translator.TranslationLanguage
+import tw.firemaples.onscreenocr.translator.TranslationProviderType
+import tw.firemaples.onscreenocr.translator.TranslationResult
+import tw.firemaples.onscreenocr.translator.Translator
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.firstPart
 
@@ -18,7 +21,7 @@ object MicrosoftAzureTranslator : Translator {
 
     override suspend fun supportedLanguages(): List<TranslationLanguage> {
         val langCodeList =
-            context.resources.getStringArray(R.array.microsoft_translationLangCode_iso6391)
+            context.resources.getStringArray(R.array.microsoft_translationLangCode_iso639_iso3166)
         val langNameList = context.resources.getStringArray(R.array.microsoft_translationLangName)
 
         val selectedLangCode = selectedLangCode(langCodeList)

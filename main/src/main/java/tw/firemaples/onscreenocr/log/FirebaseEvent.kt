@@ -8,9 +8,9 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.TimeoutCancellationException
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
-import tw.firemaples.onscreenocr.translator.GoogleTranslateAppTranslator
-import tw.firemaples.onscreenocr.translator.MicrosoftAzureTranslator
-import tw.firemaples.onscreenocr.translator.OCROnlyTranslator
+import tw.firemaples.onscreenocr.translator.app.GoogleTranslateAppTranslator
+import tw.firemaples.onscreenocr.translator.azure.MicrosoftAzureTranslator
+import tw.firemaples.onscreenocr.translator.ocronly.OCROnlyTranslator
 import tw.firemaples.onscreenocr.translator.Translator
 import tw.firemaples.onscreenocr.utils.SignatureUtil
 import tw.firemaples.onscreenocr.utils.Utils

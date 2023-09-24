@@ -1,6 +1,9 @@
-package tw.firemaples.onscreenocr.translator
+package tw.firemaples.onscreenocr.translator.ocronly
 
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.translator.TranslationProviderType
+import tw.firemaples.onscreenocr.translator.TranslationResult
+import tw.firemaples.onscreenocr.translator.Translator
 
 object OCROnlyTranslator : Translator {
     override val type: TranslationProviderType

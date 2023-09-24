@@ -1,27 +1,19 @@
-package tw.firemaples.onscreenocr.translator.api
+package tw.firemaples.onscreenocr.translator.azure
 
+import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
+import tw.firemaples.onscreenocr.utils.Logger
+import tw.firemaples.onscreenocr.utils.Utils
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.TimeUnit
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
-import tw.firemaples.onscreenocr.utils.Logger
 
 object MicrosoftAzureTranslatorAPI {
     private val logger: Logger by lazy { Logger(this::class) }
     private val dateFormat = SimpleDateFormat("mm/dd HH:mm:ss", Locale.US)
 
-    private val retrofit: Retrofit by lazy {
-        Retrofit.Builder()
-            .baseUrl("http://localhost/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
     private val apiService: MicrosoftAzureAPIService by lazy {
-        retrofit.create(MicrosoftAzureAPIService::class.java)
+        Utils.retrofit.create(MicrosoftAzureAPIService::class.java)
     }
 
     private var token: String = ""

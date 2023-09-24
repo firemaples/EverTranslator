@@ -101,4 +101,7 @@
     <string name="translation_provider_Papago_translate_app">Papago 翻译 App</string>
     <string name="translation_provider_yandex_translate_app">Yandex 翻译 App</string>
     <string name="translation_provider_other_translate_app">其他翻译 App</string>
+    <string name="pref_category_translation">翻译</string>
+    <string name="pref_summary_mymemory_email">提供 MyMemory 翻译你的电子邮件以获取每日五万个字元的翻译额度。随处翻译将不会使用此电子邮件作为其他用途。</string>
+    <string name="pref_title_mymemory_email">MyMemory 电子邮件</string>
 </resources>
