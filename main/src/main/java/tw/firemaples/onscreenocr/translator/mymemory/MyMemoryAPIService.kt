@@ -9,9 +9,9 @@ import retrofit2.http.Query
 interface MyMemoryAPIService {
     @GET("https://api.mymemory.translated.net/get")
     suspend fun translate(
-        @Query("q") text: String,
         @Query("langpair") langPair: String,
         @Query("de") email: String? = null,
+        @Query("q") text: String,
     ): Response<TranslateResponse>
 }
 

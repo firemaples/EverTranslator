@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.translator.mymemory
 
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.translator.TranslationLanguage
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
@@ -57,6 +58,7 @@ object MyMemoryTranslator : Translator {
             text = text,
             sourceLangCode = sourceLangCode,
             targetLangCode = targetLangCode,
+            email = SettingManager.myMemoryEmail,
         )
     }
 
@@ -64,12 +66,13 @@ object MyMemoryTranslator : Translator {
         text: String,
         sourceLangCode: String,
         targetLangCode: String,
+        email: String?,
     ): TranslationResult {
         MyMemoryTranslatorAPI.translate(
             text = text,
             from = sourceLangCode,
             to = targetLangCode,
-            email = null,
+            email = email,
         ).onSuccess {
             return TranslationResult.TranslatedResult(it, type)
         }.onFailure {

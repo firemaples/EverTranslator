@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.pages.setting
 
 import android.content.Context
+import androidx.core.util.PatternsCompat
 import androidx.preference.PreferenceManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +33,8 @@ object SettingManager {
 
     private const val PREF_SAVE_LAST_SELECTION_AREA = "pref_save_last_selection_area"
     private const val PREF_EXIT_APP_WHILE_SPEN_INSERTED = "pref_exit_app_while_spen_inserted"
+
+    private const val PREF_MYMEMORY_EMAIL = "pref_mymemory_email"
 
     private val DEFAULT_JOINER = TextBlockJoiner.Space
 
@@ -101,6 +104,12 @@ object SettingManager {
 
     val exitAppWhileSPenInserted: Boolean
         get() = preferences.getBoolean(PREF_EXIT_APP_WHILE_SPEN_INSERTED, true)
+
+    val myMemoryEmail: String?
+        get() = preferences.getString(PREF_MYMEMORY_EMAIL, null)
+            ?.takeIf {
+                it.isNotEmpty() && PatternsCompat.EMAIL_ADDRESS.matcher(it).matches()
+            }
 
     init {
         preferences.registerOnSharedPreferenceChangeListener { _, key ->

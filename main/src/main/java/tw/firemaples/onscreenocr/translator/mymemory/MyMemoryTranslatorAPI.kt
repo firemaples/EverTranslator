@@ -34,7 +34,7 @@ object MyMemoryTranslatorAPI {
             } else {
                 Result.failure(
                     Exception(
-                        "Got response failed status(${response.responseStatus}): ${response.responseDetails}"
+                        "Got response failed status(${response.responseStatus}), quota finished: ${response.quotaFinished}, detail: ${response.responseDetails}"
                     )
                 )
             }

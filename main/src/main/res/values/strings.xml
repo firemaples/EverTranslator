@@ -42,6 +42,9 @@
     <string name="pref_summary_bypass_battery_optimization">EverTranslator needs [Bypass Battery Optimization] to avoid being killed in the background.</string>
     <string name="pref_title_remove_spaces_in_cjk">Remove spaces in Chinese, Japanese and Korean text</string>
     <string name="pref_summary_remove_spaces_in_cjk">Remove spaces while the ORC language is Chinese, Japanese or Korean</string>
+    <string name="pref_category_translation">Translation</string>
+    <string name="pref_summary_mymemory_email">You can Provide a valid email to MyMemory translation for 50000 chars a day quota.\nEverTranslator will never use the email for other usages.</string>
+    <string name="pref_title_mymemory_email">MyMemory email</string>
 
     <string name="menu_setting">Setting</string>
     <string name="menu_privacy_policy">Privacy Policy</string>

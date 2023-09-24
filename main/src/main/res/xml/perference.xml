@@ -71,6 +71,13 @@
             android:title="@string/pref_title_remove_spaces_in_cjk" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/pref_category_translation">
+        <EditTextPreference
+            android:key="pref_mymemory_email"
+            android:summary="@string/pref_summary_mymemory_email"
+            android:title="@string/pref_title_mymemory_email" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/pref_result_panel">
         <SwitchPreference
             android:defaultValue="false"
