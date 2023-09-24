@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.translator.mymemory
 
-import com.squareup.moshi.JsonClass
+import com.google.errorprone.annotations.Keep
+import com.google.gson.annotations.SerializedName
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -14,38 +15,40 @@ interface MyMemoryAPIService {
     ): Response<TranslateResponse>
 }
 
+@Keep
 data class ResponseData(
-    val translatedText: String,
-    val match: Float?,
+    @SerializedName("translatedText") val translatedText: String,
+    @SerializedName("match") val match: Float?,
 )
 
-//@JsonClass(generateAdapter = true)
+//@Keep
 //data class Match(
-//    val id: String,
-//    val segment: String,
-//    val translation: String,
-//    val source: String,
-//    val target: String,
-//    val quality: Int,
-//    val reference: Any?,
-//    val usageCount: Int,
-//    val subject: String?,
-//    val createdBy: String?,
-//    val lastUpdatedBy: String?,
-//    val createDate: String,
-//    val lastUpdateDate: String,
-//    val match: Float,
+//    @SerializedName("id") val id: String,
+//    @SerializedName("segment") val segment: String,
+//    @SerializedName("translation") val translation: String,
+//    @SerializedName("source") val source: String,
+//    @SerializedName("target") val target: String,
+//    @SerializedName("quality") val quality: Int,
+//    @SerializedName("reference") val reference: Any?,
+//    @SerializedName("usageCount") val usageCount: Int,
+//    @SerializedName("subject") val subject: String?,
+//    @SerializedName("createdBy") val createdBy: String?,
+//    @SerializedName("lastUpdatedBy") val lastUpdatedBy: String?,
+//    @SerializedName("createDate") val createDate: String,
+//    @SerializedName("lastUpdateDate") val lastUpdateDate: String,
+//    @SerializedName("match") val match: Float,
 //)
 
+@Keep
 data class TranslateResponse(
-    val responseData: ResponseData,
-    val quotaFinished: Boolean?,
-    val mtLangSupported: Any?,
-    val responseDetails: String,
-    val responseStatus: Any, // this field can be a number or string
-    val responderId: Any?,
-    val exceptionCode: Any?,
-//    val matches: List<Match>, // this field can be an empty string while the API failed
+    @SerializedName("responseData") val responseData: ResponseData,
+    @SerializedName("quotaFinished") val quotaFinished: Boolean?,
+    @SerializedName("mtLangSupported") val mtLangSupported: Any?,
+    @SerializedName("responseDetails") val responseDetails: String,
+    @SerializedName("responseStatus") val responseStatus: Any?, // this field can be a number or string
+    @SerializedName("responderId") val responderId: Any?,
+    @SerializedName("exceptionCode") val exceptionCode: Any?,
+//   @SerializedName("matches") val matches: List<Match>, // this field can be an empty string while the API failed
 ) {
     fun isSuccess(): Boolean = responseStatus.toString().toDoubleOrNull() == 200.0
 }
