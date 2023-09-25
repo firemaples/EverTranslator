@@ -2,8 +2,15 @@
 layout: post
 title:  "Version History"
 date:   2023-09-23 19:20:12 +0900
-categories: versions
 ---
+
+[中文版本](./version_history_zh_tw.html)
+
+## v3.1.20
+- Fix screenshot errors
+
+## v3.1.19
+- Fix error after editing OCR text
 
 ## v3.1.14
 - Add an option in settings to remove spaces when the OCR language is Chinese, Japanese or Korean.  
