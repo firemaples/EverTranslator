@@ -1,22 +1,18 @@
 package tw.firemaples.onscreenocr.floatings.textInfoSearch
 
 import android.content.Context
-import android.content.res.Configuration
 import android.view.WindowManager
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.webkit.WebSettingsCompat
-import androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF
-import androidx.webkit.WebSettingsCompat.FORCE_DARK_ON
-import androidx.webkit.WebViewFeature
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.databinding.FloatingTextInfoSearchBinding
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.clickOnce
+import tw.firemaples.onscreenocr.utils.setAutoDarkMode
 
 class TextInfoSearchView(
     context: Context,
@@ -101,19 +97,7 @@ class TextInfoSearchView(
             reload()
         }
 
-        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-            when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-                Configuration.UI_MODE_NIGHT_YES -> {
-                    WebSettingsCompat.setForceDark(this.settings, FORCE_DARK_ON)
-                }
-                Configuration.UI_MODE_NIGHT_NO, Configuration.UI_MODE_NIGHT_UNDEFINED -> {
-                    WebSettingsCompat.setForceDark(this.settings, FORCE_DARK_OFF)
-                }
-                else -> {
-                    //
-                }
-            }
-        }
+        setAutoDarkMode()
     }
 
     override fun onHomeButtonPressed() {

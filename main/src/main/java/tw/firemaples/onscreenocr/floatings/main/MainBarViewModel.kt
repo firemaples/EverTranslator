@@ -119,7 +119,7 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
                 _showReadme.value = true
             }
 
-            if (!repo.isVersionHistoryAlreadyShown().first()) {
+            if (repo.showVersionHistory().first()) {
                 _showVersionHistory.value = true
             }
         }

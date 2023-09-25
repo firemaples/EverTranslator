@@ -8,13 +8,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.readme.ReadmeView
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.Utils
-import java.util.*
 
 class GeneralRepository {
     companion object {
@@ -50,40 +48,17 @@ class GeneralRepository {
         }
     }
 
-    fun isVersionHistoryAlreadyShown(): Flow<Boolean> = flow {
-        val lastVersionName = context.resources.getStringArray(R.array.versionCodes).firstOrNull()
+    fun showVersionHistory(): Flow<Boolean> = flow {
         val lastShownName = AppPref.lastVersionHistoryShownVersion
+        val version = Utils.getPackageInfo(context.packageName)?.versionName
 
-        if (lastVersionName != null && lastVersionName != lastShownName) {
-            AppPref.lastVersionHistoryShownVersion = lastVersionName
-            emit(false)
-        } else {
+        if (lastShownName != version) {
+            AppPref.lastVersionHistoryShownVersion = version
             emit(true)
+        } else {
+            emit(false)
         }
     }
-
-    fun getVersionHistory(): Flow<List<Record>> = flow {
-        val packageName = context.packageName
-        val versionCodes = context.resources.getStringArray(R.array.versionCodes)
-
-        val result = versionCodes.mapNotNull { versionCode ->
-            val resName = String.format(
-                Locale.US,
-                FORMAT_VERSION_MESSAGE_KEY, versionCode.replace(".", "_")
-            )
-            try {
-                val resId = context.resources.getIdentifier(resName, "string", packageName)
-                val desc = context.getString(resId)
-
-                Record(version = versionCode, desc = desc)
-            } catch (e: Exception) {
-                logger.debug(t = e)
-                null
-            }
-        }.toList()
-
-        emit(result)
-    }.flowOn(Dispatchers.Default)
 
     fun saveLastMainBarPosition(x: Int, y: Int) {
         AppPref.lastMainBarPosition = Point(x, y)

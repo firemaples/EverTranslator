@@ -6,7 +6,6 @@ import android.graphics.Point
 import android.os.Build
 import android.os.Looper
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.OrientationEventListener
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +15,6 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
-import java.io.Closeable
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -26,8 +23,11 @@ import kotlinx.coroutines.cancelChildren
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.PermissionUtil
 import tw.firemaples.onscreenocr.utils.UIUtils
+import tw.firemaples.onscreenocr.utils.getThemedLayoutInflater
 import tw.firemaples.onscreenocr.wigets.BackButtonTrackerView
 import tw.firemaples.onscreenocr.wigets.HomeButtonWatcher
+import java.io.Closeable
+import kotlin.coroutines.CoroutineContext
 
 abstract class FloatingView(protected val context: Context) {
 
@@ -92,7 +92,7 @@ abstract class FloatingView(protected val context: Context) {
             onDetachedFromWindow = { onDetachedFromScreen() },
             onBackButtonPressed = { onBackButtonPressed() },
         ).apply {
-            rootLayout = LayoutInflater.from(context).inflate(layoutId, null)
+            rootLayout = context.getThemedLayoutInflater().inflate(layoutId, null)
             addView(
                 rootLayout,
                 ViewGroup.LayoutParams(

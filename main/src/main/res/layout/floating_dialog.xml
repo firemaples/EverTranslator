@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_margin="1dp"
-        android:minWidth="300dp"
+        android:minWidth="360dp"
         android:theme="@style/Theme.EverTranslator">
 
         <androidx.constraintlayout.widget.ConstraintLayout
