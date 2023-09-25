@@ -6,20 +6,24 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
+import android.webkit.WebView
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebViewFeature
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.R
 
 object Utils {
-    private val logger: Logger by lazy { Logger(Utils::class) }
+    val logger: Logger by lazy { Logger(Utils::class) }
 
     val context: Context by lazy { CoreApplication.instance }
 
@@ -89,3 +93,31 @@ fun String.firstPart(): String = split("-")[0]
 fun Context.getThemedLayoutInflater(theme: Int = R.style.Theme_EverTranslator): LayoutInflater =
     LayoutInflater.from(this)
         .cloneInContext(ContextThemeWrapper(this, theme))
+
+fun WebView.setAutoDarkMode() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) {
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.ALGORITHMIC_DARKENING)) {
+            try {
+                WebSettingsCompat.setAlgorithmicDarkeningAllowed(settings, true)
+            } catch (e: Exception) {
+                Utils.logger.warn(t = e)
+            }
+        }
+    } else {
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+            when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+                Configuration.UI_MODE_NIGHT_YES -> {
+                    WebSettingsCompat.setForceDark(settings, WebSettingsCompat.FORCE_DARK_ON)
+                }
+
+                Configuration.UI_MODE_NIGHT_NO, Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                    WebSettingsCompat.setForceDark(settings, WebSettingsCompat.FORCE_DARK_OFF)
+                }
+
+                else -> {
+                    //
+                }
+            }
+        }
+    }
+}

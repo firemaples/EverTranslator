@@ -35,12 +35,8 @@ class GeneralRepositoryTest : TestCase() {
     fun testIsVersionHistoryAlreadyShown() = runBlocking {
         AppPref.lastVersionHistoryShownVersion = null
 
-        assertFalse(repo.isVersionHistoryAlreadyShown().first())
+        assertTrue(repo.showVersionHistory().first())
 
-        assertTrue(repo.isVersionHistoryAlreadyShown().first())
-    }
-
-    fun testGetVersionHistory() = runBlocking {
-        assertTrue(repo.getVersionHistory().first().isNotEmpty())
+        assertFalse(repo.showVersionHistory().first())
     }
 }
