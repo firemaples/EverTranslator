@@ -4,6 +4,8 @@
 
     <string name="channel_default">預設通知</string>
 
+    <string name="version_history_url">https://firemaples.github.io/EverTranslator/version_history_zh_tw.html</string>
+
     <string name="translation_provider_microsoft_azure">微軟 Azure</string>
     <string name="translation_provider_google_ml_kit">Google MLKit</string>
     <string name="translation_provider_google_translate_app">Google 翻譯 App</string>
