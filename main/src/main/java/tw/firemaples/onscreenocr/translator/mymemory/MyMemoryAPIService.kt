@@ -1,7 +1,7 @@
 package tw.firemaples.onscreenocr.translator.mymemory
 
 import com.google.errorprone.annotations.Keep
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -17,38 +17,47 @@ interface MyMemoryAPIService {
 
 @Keep
 data class ResponseData(
-    @SerializedName("translatedText") val translatedText: String,
-    @SerializedName("match") val match: Float?,
+    @Json(name = "translatedText")
+    val translatedText: String,
+    @Json(name = "match")
+    val match: Float?,
 )
 
 //@Keep
 //data class Match(
-//    @SerializedName("id") val id: String,
-//    @SerializedName("segment") val segment: String,
-//    @SerializedName("translation") val translation: String,
-//    @SerializedName("source") val source: String,
-//    @SerializedName("target") val target: String,
-//    @SerializedName("quality") val quality: Int,
-//    @SerializedName("reference") val reference: Any?,
-//    @SerializedName("usageCount") val usageCount: Int,
-//    @SerializedName("subject") val subject: String?,
-//    @SerializedName("createdBy") val createdBy: String?,
-//    @SerializedName("lastUpdatedBy") val lastUpdatedBy: String?,
-//    @SerializedName("createDate") val createDate: String,
-//    @SerializedName("lastUpdateDate") val lastUpdateDate: String,
-//    @SerializedName("match") val match: Float,
+//    @Json(name = "id") val id: String,
+//    @Json(name = "segment") val segment: String,
+//    @Json(name = "translation") val translation: String,
+//    @Json(name = "source") val source: String,
+//    @Json(name = "target") val target: String,
+//    @Json(name = "quality") val quality: Int,
+//    @Json(name = "reference") val reference: Any?,
+//    @Json(name = "usageCount") val usageCount: Int,
+//    @Json(name = "subject") val subject: String?,
+//    @Json(name = "createdBy") val createdBy: String?,
+//    @Json(name = "lastUpdatedBy") val lastUpdatedBy: String?,
+//    @Json(name = "createDate") val createDate: String,
+//    @Json(name = "lastUpdateDate") val lastUpdateDate: String,
+//    @Json(name = "match") val match: Float,
 //)
 
 @Keep
 data class TranslateResponse(
-    @SerializedName("responseData") val responseData: ResponseData,
-    @SerializedName("quotaFinished") val quotaFinished: Boolean?,
-    @SerializedName("mtLangSupported") val mtLangSupported: Any?,
-    @SerializedName("responseDetails") val responseDetails: String,
-    @SerializedName("responseStatus") val responseStatus: Any?, // this field can be a number or string
-    @SerializedName("responderId") val responderId: Any?,
-    @SerializedName("exceptionCode") val exceptionCode: Any?,
-//   @SerializedName("matches") val matches: List<Match>, // this field can be an empty string while the API failed
+    @Json(name = "responseData")
+    val responseData: ResponseData,
+    @Json(name = "quotaFinished")
+    val quotaFinished: Boolean?,
+    @Json(name = "mtLangSupported")
+    val mtLangSupported: Any?,
+    @Json(name = "responseDetails")
+    val responseDetails: String,
+    @Json(name = "responseStatus")
+    val responseStatus: Any?, // this field can be a number or string
+    @Json(name = "responderId")
+    val responderId: Any?,
+    @Json(name = "exceptionCode")
+    val exceptionCode: Any?,
+//   @Json(name = "matches") val matches: List<Match>, // this field can be an empty string while the API failed
 ) {
     fun isSuccess(): Boolean = responseStatus.toString().toDoubleOrNull() == 200.0
 }

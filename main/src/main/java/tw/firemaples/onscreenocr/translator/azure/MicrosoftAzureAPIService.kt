@@ -1,7 +1,7 @@
 package tw.firemaples.onscreenocr.translator.azure
 
 import androidx.annotation.Keep
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -32,7 +32,7 @@ interface MicrosoftAzureAPIService {
 
 @Keep
 data class TranslateRequest(
-    @SerializedName("Text")
+    @Json(name = "Text")
     val text: String
 ) {
     companion object {
@@ -42,24 +42,24 @@ data class TranslateRequest(
 
 @Keep
 data class TranslateResponse(
-    @SerializedName("detectedLanguage")
+    @Json(name = "detectedLanguage")
     val detectedLanguage: DetectedLanguage,
-    @SerializedName("translations")
+    @Json(name = "translations")
     val translations: List<Translation>,
 )
 
 @Keep
 data class DetectedLanguage(
-    @SerializedName("language")
+    @Json(name = "language")
     val language: String,
-    @SerializedName("score")
+    @Json(name = "score")
     val score: Float,
 )
 
 @Keep
 data class Translation(
-    @SerializedName("text")
+    @Json(name = "text")
     val text: String,
-    @SerializedName("to")
+    @Json(name = "to")
     val to: String,
 )
