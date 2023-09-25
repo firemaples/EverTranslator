@@ -1,7 +1,6 @@
 package tw.firemaples.onscreenocr.floatings.translationSelectPanel
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.core.content.ContextCompat
@@ -18,6 +17,7 @@ import tw.firemaples.onscreenocr.floatings.menu.MenuView
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.UIUtils
 import tw.firemaples.onscreenocr.utils.clickOnce
+import tw.firemaples.onscreenocr.utils.getThemedLayoutInflater
 import tw.firemaples.onscreenocr.utils.setTextOrGone
 
 class TranslationSelectPanel(context: Context) : FloatingView(context) {
@@ -205,7 +205,9 @@ class TranslationSelectPanel(context: Context) : FloatingView(context) {
         class ViewHolder(val binding: ItemLangListBinding) : RecyclerView.ViewHolder(binding.root)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
-            ViewHolder(ItemLangListBinding.inflate(LayoutInflater.from(context), parent, false))
+            ViewHolder(
+                ItemLangListBinding.inflate(context.getThemedLayoutInflater(), parent, false)
+            )
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = getItem(position)

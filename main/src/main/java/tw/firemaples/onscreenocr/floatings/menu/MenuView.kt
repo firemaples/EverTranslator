@@ -1,17 +1,25 @@
 package tw.firemaples.onscreenocr.floatings.menu
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RelativeLayout
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
-import tw.firemaples.onscreenocr.utils.*
+import tw.firemaples.onscreenocr.utils.UIUtils
+import tw.firemaples.onscreenocr.utils.clickOnce
+import tw.firemaples.onscreenocr.utils.dpToPx
+import tw.firemaples.onscreenocr.utils.getThemedLayoutInflater
+import tw.firemaples.onscreenocr.utils.getViewRect
+import tw.firemaples.onscreenocr.utils.onViewPrepared
 
 class MenuView(context: Context, private val checkable: Boolean) : FloatingView(context) {
     override val layoutId: Int
@@ -127,7 +135,7 @@ class MenuView(context: Context, private val checkable: Boolean) : FloatingView(
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
             ViewHolder(
-                LayoutInflater.from(context).inflate(
+                context.getThemedLayoutInflater().inflate(
                     if (checkable) R.layout.item_menu_checkable else R.layout.item_menu,
                     parent, false
                 )
