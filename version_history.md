@@ -6,6 +6,9 @@ date:   2023-09-23 19:20:12 +0900
 
 [中文版本](./version_history_zh_tw.html)
 
+## v3.1.21
+- Add MyMemory translator. You can set your email in settings to increase the translation quota of MyMemory translation service (the email will not be used in other usages), for more details: [https://mymemory.translated.net/doc/usagelimits.php](https://mymemory.translated.net/doc/usagelimits.php)
+
 ## v3.1.20
 - Fix screenshot errors
 

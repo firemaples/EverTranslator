@@ -5,6 +5,9 @@ date:   2023-09-23 19:20:12 +0900
 ---
 [English version](./version_history.html)
 
+## v3.1.21
+- 新增 MyMemory 翻譯引擎。可以在設定中設置自己的電子郵件以取得更多的每日翻譯字數 (電子郵件不會被用做其他用途)，詳情請見：[https://mymemory.translated.net/doc/usagelimits.php](https://mymemory.translated.net/doc/usagelimits.php)
+
 ## v3.1.20
 - 修正擷取畫面時發生的錯誤
 
