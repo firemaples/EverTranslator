@@ -3,6 +3,7 @@ package tw.firemaples.onscreenocr.floatings.dialog
 import android.content.Context
 import android.view.View
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -27,8 +28,8 @@ open class DialogView(context: Context) :
     private val tvMessage: TextView = rootView.findViewById(R.id.tv_message)
     private val viewContentViewWrapper: FrameLayout =
         rootView.findViewById(R.id.view_contentViewWrapper)
-    private val btOk: View = rootView.findViewById(R.id.bt_ok)
-    private val btCancel: View = rootView.findViewById(R.id.bt_cancel)
+    private val btOk: Button = rootView.findViewById(R.id.bt_ok)
+    private val btCancel: Button = rootView.findViewById(R.id.bt_cancel)
 
     var onButtonOkClicked: (() -> Unit)? = null
     var onButtonCancelClicked: (() -> Unit)? = null
@@ -54,6 +55,14 @@ open class DialogView(context: Context) :
 
     fun setMessage(message: String) {
         tvMessage.setTextOrGone(message)
+    }
+
+    fun setButtonOkText(text: String) {
+        btOk.text = text
+    }
+
+    fun setButtonCancelText(text: String) {
+        btCancel.text = text
     }
 
     fun setContentView(

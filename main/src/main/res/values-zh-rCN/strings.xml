@@ -106,4 +106,5 @@
     <string name="pref_category_translation">翻译</string>
     <string name="pref_summary_mymemory_email">提供 MyMemory 翻译你的电子邮件以获取每日五万个字元的翻译额度。随处翻译将不会使用此电子邮件作为其他用途。</string>
     <string name="pref_title_mymemory_email">MyMemory 电子邮件</string>
+    <string name="text_open_in_browser">在浏览器中开启</string>
 </resources>
