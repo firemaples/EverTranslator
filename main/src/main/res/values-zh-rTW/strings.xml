@@ -106,4 +106,5 @@
     <string name="pref_category_translation">翻譯</string>
     <string name="pref_summary_mymemory_email">提供 MyMemory 翻譯你的電子郵件以獲取每日五萬個字元的翻譯額度。隨處翻譯將不會使用此電子郵件作為其他用途。</string>
     <string name="pref_title_mymemory_email">MyMemory 電子郵件</string>
+    <string name="text_open_in_browser">在瀏覽器中開啟</string>
 </resources>
