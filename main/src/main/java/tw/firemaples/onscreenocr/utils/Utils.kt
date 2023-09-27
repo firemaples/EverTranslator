@@ -17,8 +17,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import tw.firemaples.onscreenocr.BuildConfig
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.R
 
@@ -27,9 +30,23 @@ object Utils {
 
     val context: Context by lazy { CoreApplication.instance }
 
+    private val okHttpClient: OkHttpClient by lazy {
+        OkHttpClient.Builder()
+            .apply {
+                if (!BuildConfig.DISABLE_LOGGING) {
+                    addInterceptor(HttpLoggingInterceptor { msg ->
+                        logger.debug(msg)
+                    }.apply {
+                        setLevel(HttpLoggingInterceptor.Level.BODY)
+                    })
+                }
+            }.build()
+    }
+
     val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl("http://localhost/")
+            .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
     }
