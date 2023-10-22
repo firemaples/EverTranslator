@@ -8,7 +8,9 @@ import android.text.InputType
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.utils.Toaster
 import tw.firemaples.onscreenocr.utils.Utils
 
 class SettingFragment : PreferenceFragmentCompat() {
@@ -17,7 +19,10 @@ class SettingFragment : PreferenceFragmentCompat() {
         get() = findPreference("pref_bypass_battery_optimization")
 
     private val myMemoryEmail: EditTextPreference?
-        get() = findPreference("pref_mymemory_email")
+        get() = findPreference(SettingManager.PREF_MYMEMORY_EMAIL)
+
+    private val keepMediaProjectionResources: SwitchPreference?
+        get() = findPreference(SettingManager.PREF_KEEP_MEDIA_PROJECTION_RESOURCES)
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.perference, rootKey)
@@ -31,6 +36,11 @@ class SettingFragment : PreferenceFragmentCompat() {
 
         myMemoryEmail?.setOnBindEditTextListener {
             it.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+        }
+
+        keepMediaProjectionResources?.setOnPreferenceChangeListener { _, _ ->
+            Toaster.show(getString(R.string.msg_please_restart_the_app_to_take_effect))
+            true
         }
     }
 

@@ -107,4 +107,9 @@
     <string name="pref_summary_mymemory_email">提供 MyMemory 翻译你的电子邮件以获取每日五万个字元的翻译额度。随处翻译将不会使用此电子邮件作为其他用途。</string>
     <string name="pref_title_mymemory_email">MyMemory 电子邮件</string>
     <string name="text_open_in_browser">在浏览器中开启</string>
+    <string name="msg_please_restart_the_app_to_take_effect">重启程式以生效</string>
+    <string name="pref_title_keep_media_projection_resources">维持萤幕截图相关资源</string>
+    <string name="pref_summary_on_keep_media_projection_resources">维持相关资源直到重启程式</string>
+    <string name="pref_summary_off_keep_media_projection_resources">每次使用后释放相关资源</string>
+    <string name="pref_screenshot">萤幕截图</string>
 </resources>
