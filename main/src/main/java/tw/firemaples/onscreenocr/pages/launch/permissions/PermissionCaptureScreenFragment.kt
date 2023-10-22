@@ -54,7 +54,7 @@ class PermissionCaptureScreenFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             val intent = it.data
             if (it.resultCode == Activity.RESULT_OK && intent != null) {
-                ScreenExtractor.onMediaProjectionGranted(intent)
+                ScreenExtractor.onMediaProjectionGranted(intent, true)
                 startService()
             }
         }

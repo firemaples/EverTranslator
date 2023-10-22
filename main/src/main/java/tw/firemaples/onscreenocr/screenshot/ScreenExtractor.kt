@@ -39,6 +39,8 @@ object ScreenExtractor {
     private val context: Context by lazy { Utils.context }
     private val logger: Logger by lazy { Logger(ScreenExtractor::class) }
 
+    private var keepMediaProjection: Boolean = true
+
     private var mediaProjectionIntent: Intent? = null
 
     val isGranted: Boolean
@@ -50,15 +52,18 @@ object ScreenExtractor {
         Handler(thread.looper)
     }
 
+    private var projection: MediaProjection? = null
+    private var imageReader: ImageReader? = null
     private var virtualDisplay: VirtualDisplay? = null
-//    private val screenshotDir: File by lazy { File(context.cacheDir, Constants.PATH_SCREENSHOT) }
-//    private val screenshotFile: File by lazy { File(screenshotDir, "screenshot.jpg") }
+    private var lastScreenSize: Point = Point()
 
     private val screenDensityDpi: Int
         get() = UIUtils.displayMetrics.densityDpi
 
-    fun onMediaProjectionGranted(intent: Intent) {
+    fun onMediaProjectionGranted(intent: Intent, keepMediaProjection: Boolean) {
+        releaseAllResources()
         mediaProjectionIntent = intent.clone() as Intent
+        this.keepMediaProjection = keepMediaProjection
     }
 
     fun release() {
@@ -84,10 +89,6 @@ object ScreenExtractor {
         }
     }
 
-    private var projection: MediaProjection? = null
-    private var imageReader: ImageReader? = null
-    private var image: Image? = null
-
     @SuppressLint("WrongConstant")
     @Throws(
         IllegalStateException::class,
@@ -97,11 +98,13 @@ object ScreenExtractor {
     private suspend fun doCaptureScreen(): Bitmap {
         var bitmap: Bitmap
         withContext(Dispatchers.Default) {
-            releaseAllResources()
+            if (!keepMediaProjection) {
+                releaseAllResources()
+            }
 
             val mpIntent = mediaProjectionIntent
             if (mpIntent == null) {
-                logger.warn("The mediaProjectionIntent is null: $mpIntent")
+                logger.warn("The mediaProjectionIntent is null")
                 throw IllegalStateException("The media projection intent is not initialized")
             }
 
@@ -109,56 +112,66 @@ object ScreenExtractor {
                 context.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
 
             try {
-                projection =
-                    mpManager.getMediaProjection(Activity.RESULT_OK, mpIntent.clone() as Intent)
+                if (projection == null) {
+                    logger.debug("Create MediaProjection")
+                    projection =
+                        mpManager.getMediaProjection(Activity.RESULT_OK, mpIntent.clone() as Intent)
+                }
 
                 val projection = projection
                 if (projection == null) {
-                    logger.warn("Retrieve projection failed, projection: $projection")
+                    logger.warn("Retrieve projection failed, projection is null")
                     throw IllegalStateException("Retrieving media projection failed")
                 }
 
                 val screenSize = UIUtils.realSize
+                val screenConfigurationChanged = lastScreenSize != screenSize
+                lastScreenSize = screenSize
                 val width = screenSize.x
                 val height = screenSize.y
 
-                imageReader =
-                    ImageReader.newInstance(width, height, AppPref.imageReaderFormat, 2)
-                val imageReader = imageReader
-
-                if (imageReader == null) {
-                    logger.debug("The imageReader is null after initialized")
-                    releaseAllResources()
-                    throw IllegalStateException("No image reader initialized failed")
+                var imageReader: ImageReader? = this@ScreenExtractor.imageReader
+                if (imageReader == null || screenConfigurationChanged) {
+                    logger.debug("Create ImageReader")
+                    imageReader =
+                        ImageReader.newInstance(width, height, AppPref.imageReaderFormat, 2)
+                    imageReaderReady = false
+                    this@ScreenExtractor.imageReader = imageReader
                 }
 
-                virtualDisplay = projection.createVirtualDisplay(
-                    "screen-mirror",
-                    width, height, screenDensityDpi,
-                    DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC,
-                    imageReader.surface, null, null
-                )
+                var virtualDisplay: VirtualDisplay? = virtualDisplay
+                if (virtualDisplay == null) {
+                    logger.debug("Create VirtualDisplay")
+                    virtualDisplay = projection.createVirtualDisplay(
+                        "screen-mirror",
+                        width, height, screenDensityDpi,
+                        DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY or DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC,
+                        imageReader.surface, null, null
+                    )
+                    this@ScreenExtractor.virtualDisplay = virtualDisplay
+                } else if (screenConfigurationChanged) {
+                    // Update configuration changes
+                    logger.debug("screenConfigurationChanged: $lastScreenSize")
+                    virtualDisplay.resize(width, height, screenDensityDpi)
+                    virtualDisplay.surface = imageReader.surface
+                }
                 val captured = withTimeout(SettingManager.timeoutForCapturingScreen) {
                     logger.debug("awaitForBitmap")
                     imageReader.awaitForBitmap(screenSize)
                 }
 
-                virtualDisplay?.release()
-
                 if (captured == null) {
                     logger.warn("The captured image is null")
-                    releaseAllResources()
+                    if (!keepMediaProjection) {
+                        releaseAllResources()
+                    }
                     throw IllegalStateException("No image data found")
                 }
                 bitmap = captured
 
-                releaseAllResources()
-
                 logger.debug("Bitmap size: ${bitmap.width}x${bitmap.height}, screen size: ${width}x$height")
             } catch (e: Throwable) {
                 logger.warn(t = e)
-
-                releaseAllResources()
 
                 val message = e.message ?: e.localizedMessage
                 if (message != null) {
@@ -176,6 +189,10 @@ object ScreenExtractor {
                 }
 
                 throw e
+            } finally {
+                if (!keepMediaProjection) {
+                    releaseAllResources()
+                }
             }
         }
 
@@ -183,8 +200,9 @@ object ScreenExtractor {
     }
 
     private fun releaseAllResources() {
+        logger.debug("releaseAllResources()")
         try {
-            imageReader?.setOnImageAvailableListener(null, handler)
+            imageReader?.setOnImageAvailableListener(null, null)
         } catch (e: Exception) {
             // ignore exceptions
         }
@@ -193,16 +211,19 @@ object ScreenExtractor {
         } catch (e: Exception) {
             // ignore exceptions
         }
+        imageReader = null
+        try {
+            virtualDisplay?.release()
+        } catch (e: Exception) {
+            // ignore exceptions
+        }
+        virtualDisplay = null
         try {
             projection?.stop()
         } catch (e: Exception) {
             // ignore exceptions
         }
-        try {
-            image?.close()
-        } catch (e: Exception) {
-            // ignore exceptions
-        }
+        projection = null
     }
 
     @Throws(IllegalArgumentException::class)
@@ -240,8 +261,19 @@ object ScreenExtractor {
         return cropped
     }
 
+    private var imageReaderReady = false
     private suspend fun ImageReader.awaitForBitmap(screenSize: Point): Bitmap? =
         suspendCancellableCoroutine {
+            if (imageReaderReady) {
+                logger.debug("reader is ready, acquireLatestImage directly")
+                val image = acquireLatestImage()
+                val bitmap = image.decodeBitmap(screenSize)
+                image.close()
+                logger.debug("Latest bitmap: $bitmap")
+                it.resume(bitmap)
+                return@suspendCancellableCoroutine
+            }
+
             logger.debug("suspendCancellableCoroutine: Started")
             var counter = 0
             val resumed = AtomicBoolean(false)
@@ -259,6 +291,9 @@ object ScreenExtractor {
                         reader.setOnImageAvailableListener(null, null)
                         if (resumed.getAndSet(true))
                             return@setOnImageAvailableListener
+                        if (keepMediaProjection) {
+                            imageReaderReady = true
+                        }
                         it.resume(bitmap)
                     } else {
                         logger.info("Image is whole black, increase counter: $counter")
