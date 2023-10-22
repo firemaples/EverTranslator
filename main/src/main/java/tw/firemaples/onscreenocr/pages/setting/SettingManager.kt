@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.pages.setting
 
 import android.content.Context
+import androidx.core.content.edit
 import androidx.core.util.PatternsCompat
 import androidx.preference.PreferenceManager
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +21,8 @@ object SettingManager {
     private const val PREF_FADE_OUT_AFTER_SECONDS = "pref_fade_out_after_seconds"
     private const val PREF_OPAQUE_PERCENTAGE = "pref_opaque_percentage"
 
+    const val PREF_KEEP_MEDIA_PROJECTION_RESOURCES = "pref_keep_media_projection_resources"
+
     private const val PREF_ENABLE_UNRECOMMENDED_LANG_ITEMS = "pref_enable_unrecommended_lang_items"
     private const val PREF_TIMEOUT_FOR_CAPTURING_SCREEN = "pref_timeout_for_capturing_screen"
     private const val PREF_TEXT_BLOCK_JOINER = "pref_text_block_joiner"
@@ -34,7 +37,7 @@ object SettingManager {
     private const val PREF_SAVE_LAST_SELECTION_AREA = "pref_save_last_selection_area"
     private const val PREF_EXIT_APP_WHILE_SPEN_INSERTED = "pref_exit_app_while_spen_inserted"
 
-    private const val PREF_MYMEMORY_EMAIL = "pref_mymemory_email"
+    const val PREF_MYMEMORY_EMAIL = "pref_mymemory_email"
 
     private val DEFAULT_JOINER = TextBlockJoiner.Space
 
@@ -57,6 +60,12 @@ object SettingManager {
 
     val opaquePercentageToFadeOut: Float
         get() = preferences.getInt(PREF_OPAQUE_PERCENTAGE, 60).toFloat() / 100f
+
+    var keepMediaProjectionResources: Boolean
+        get() = preferences.getBoolean(PREF_KEEP_MEDIA_PROJECTION_RESOURCES, false)
+        set(value) {
+            preferences.edit { putBoolean(PREF_KEEP_MEDIA_PROJECTION_RESOURCES, value) }
+        }
 
     val enableUnrecommendedLangItems: Boolean
         get() = preferences.getBoolean(PREF_ENABLE_UNRECOMMENDED_LANG_ITEMS, false)

@@ -47,6 +47,10 @@
     <string name="pref_category_translation">Translation</string>
     <string name="pref_summary_mymemory_email">You can Provide a valid email to MyMemory translation for 50000 chars a day quota.\nEverTranslator will never use the email for other usages.</string>
     <string name="pref_title_mymemory_email">MyMemory email</string>
+    <string name="pref_screenshot">Screenshot</string>
+    <string name="pref_title_keep_media_projection_resources">Keep screenshot resources</string>
+    <string name="pref_summary_on_keep_media_projection_resources">Keep the resources until restart</string>
+    <string name="pref_summary_off_keep_media_projection_resources">Release the resources after used</string>
 
     <string name="menu_setting">Setting</string>
     <string name="menu_privacy_policy">Privacy Policy</string>
@@ -81,6 +85,7 @@
     <string name="msg_create_selection_area">Drag here to create a translation area</string>
     <string name="msg_image_reader_format_unmatched">Found temporary error, please try it again. (Image reader format)</string>
     <string name="msg_translator_provider_does_not_support_the_ocr_lang">This translation provider does not support the selected recognition language.</string>
+    <string name="msg_please_restart_the_app_to_take_effect">Please restart the app to take effect</string>
 
     <string name="title_version_history">Version History</string>
     <string name="title_error">Error</string>

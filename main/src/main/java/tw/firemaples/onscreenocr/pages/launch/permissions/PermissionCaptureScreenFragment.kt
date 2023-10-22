@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import tw.firemaples.onscreenocr.databinding.PermissionCaptureScreenFragmentBinding
 import tw.firemaples.onscreenocr.floatings.ViewHolderService
+import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
 import tw.firemaples.onscreenocr.utils.clickOnce
 
@@ -54,7 +55,10 @@ class PermissionCaptureScreenFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             val intent = it.data
             if (it.resultCode == Activity.RESULT_OK && intent != null) {
-                ScreenExtractor.onMediaProjectionGranted(intent)
+                ScreenExtractor.onMediaProjectionGranted(
+                    intent = intent,
+                    keepMediaProjection = SettingManager.keepMediaProjectionResources,
+                )
                 startService()
             }
         }

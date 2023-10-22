@@ -34,6 +34,15 @@
             app:showSeekBarValue="true" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/pref_screenshot">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_keep_media_projection_resources"
+            android:summaryOff="@string/pref_summary_off_keep_media_projection_resources"
+            android:summaryOn="@string/pref_summary_on_keep_media_projection_resources"
+            android:title="@string/pref_title_keep_media_projection_resources" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/pref_category_text_recognition">
         <SwitchPreference
             android:defaultValue="false"
