@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.pages.setting
 
 import android.content.Context
+import androidx.core.content.edit
 import androidx.core.util.PatternsCompat
 import androidx.preference.PreferenceManager
 import kotlinx.coroutines.CoroutineScope
@@ -60,8 +61,11 @@ object SettingManager {
     val opaquePercentageToFadeOut: Float
         get() = preferences.getInt(PREF_OPAQUE_PERCENTAGE, 60).toFloat() / 100f
 
-    val keepMediaProjectionResources: Boolean
+    var keepMediaProjectionResources: Boolean
         get() = preferences.getBoolean(PREF_KEEP_MEDIA_PROJECTION_RESOURCES, false)
+        set(value) {
+            preferences.edit { putBoolean(PREF_KEEP_MEDIA_PROJECTION_RESOURCES, value) }
+        }
 
     val enableUnrecommendedLangItems: Boolean
         get() = preferences.getBoolean(PREF_ENABLE_UNRECOMMENDED_LANG_ITEMS, false)

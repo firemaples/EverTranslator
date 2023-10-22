@@ -52,4 +52,6 @@ object AppPref : KotprefModel() {
     val favoriteTranslationLang: MutableSet<String> by stringSetPref(default = mutableSetOf("en"))
 
     var displaySelectedTextOnResultWindow: Boolean by booleanPref(default = false)
+
+    var lastDeviceInfo: String by stringPref()
 }
