@@ -5,6 +5,12 @@ date:   2023-09-23 19:20:12 +0900
 ---
 [English version](./version_history.html)
 
+## v3.1.22
+- 增加選項以維持螢幕截圖相關資源來修正在以下裝置上重複翻譯發生的錯誤
+  - Android 14 以上的設備
+  - Android 12 以上的小米設備
+  - Android 12 以上的黑鯊設備
+
 ## v3.1.21
 - 新增 MyMemory 翻譯引擎。可以在設定中設置自己的電子郵件以取得更多的每日翻譯字數 (電子郵件不會被用做其他用途)，詳情請見：[https://mymemory.translated.net/doc/usagelimits.php](https://mymemory.translated.net/doc/usagelimits.php)
 

@@ -6,6 +6,12 @@ date:   2023-09-23 19:20:12 +0900
 
 [中文版本](./version_history_zh_tw.html)
 
+## v3.1.22
+- Add an option to keep the MediaProjection resources to fix the issues when translating again on the following types of devices:
+  - Android OS version is greater or equal to 14.
+  - Xiaomi devices with OS version 12 or higher.
+  - BlackShark devices with OS version 12 or higher.
+
 ## v3.1.21
 - Add MyMemory translator. You can set your email in settings to increase the translation quota of MyMemory translation service (the email will not be used in other usages), for more details: [https://mymemory.translated.net/doc/usagelimits.php](https://mymemory.translated.net/doc/usagelimits.php)
 
