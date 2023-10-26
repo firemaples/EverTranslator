@@ -65,6 +65,12 @@ Translate any text on screen, even in games!
 - **Dev** for development
 - **Prod** for releasing to Google Play
 
+## Version History
+
+[Github Page](https://firemaples.github.io/EverTranslator/version_history.html) (big changes)
+
+[Release](https://github.com/firemaples/EverTranslator/releases)
+
 ## Contact
 
 If you encounter a bug, please [raise an issue here](https://github.com/firemaples/EverTranslator/issues/new/choose).  
