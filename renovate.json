@@ -4,7 +4,10 @@
     "config:recommended",
     ":rebaseStalePrs"
   ],
-  "baseBranches": ["main", "/^dep\\/.*/"],
+  "baseBranches": [
+    "master",
+    "/^dep\\/.*/"
+  ],
   "ignorePaths": [
     "deprecated/",
     "gradle/"
