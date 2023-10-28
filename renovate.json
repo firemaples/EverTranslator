@@ -8,6 +8,12 @@
     "deprecated/",
     "gradle/"
   ],
+  "assignees": [
+    "firemaples@gmail.com"
+  ],
+  "labels": [
+    "dependencies"
+  ],
   "packageRules": [
     {
       "matchPackageNames": [
@@ -15,12 +21,6 @@
       ],
       "enabled": false
     }
-  ],
-  "assignees": [
-    "firemaples"
-  ],
-  "addLabels": [
-    "Renovate Bot"
   ],
   "schedule": [
     "after 6pm every weekday",
