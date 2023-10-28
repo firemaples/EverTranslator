@@ -4,6 +4,7 @@
     "config:recommended",
     ":rebaseStalePrs"
   ],
+  "baseBranches": ["main", "/^dep\\/.*/"],
   "ignorePaths": [
     "deprecated/",
     "gradle/"
