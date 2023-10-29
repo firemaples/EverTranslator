@@ -5,8 +5,7 @@
     ":rebaseStalePrs"
   ],
   "baseBranches": [
-    "master",
-    "/^dep\\/.*/"
+    "/^dep\/.*/"
   ],
   "ignorePaths": [
     "deprecated/",
