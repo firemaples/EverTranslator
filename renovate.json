@@ -5,8 +5,7 @@
     ":rebaseStalePrs"
   ],
   "baseBranches": [
-    "master",
-    "/^dep\\/.*/"
+    "dep/updates"
   ],
   "ignorePaths": [
     "deprecated/",
@@ -24,6 +23,21 @@
         "com.android.tools.build:gradle"
       ],
       "enabled": false
+    },
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
+      "matchDepTypes": [
+        "devDependencies"
+      ],
+      "automerge": true
     }
   ],
   "schedule": [
