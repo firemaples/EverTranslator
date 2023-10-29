@@ -3,6 +3,7 @@ package tw.firemaples.onscreenocr.recognition
 import android.content.Context
 import android.graphics.Bitmap
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.Text.TextBlock
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.chinese.ChineseTextRecognizerOptions
 import com.google.mlkit.vision.text.devanagari.DevanagariTextRecognizerOptions
@@ -12,7 +13,6 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
-import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.utils.Utils
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -27,25 +27,32 @@ class GoogleMLKitTextRecognizer : TextRecognizer {
             val langCodes = res.getStringArray(R.array.lang_ocr_google_mlkit_code_bcp_47)
             val langNames = res.getStringArray(R.array.lang_ocr_google_mlkit_name)
 
-            return langCodes.indices
-                .mapNotNull { i ->
-                    val name = langNames[i]
+            val result = mutableListOf<RecognitionLanguage>()
+            langNames.forEachIndexed { i, name ->
+                if (name.startsWith("old ", ignoreCase = true) ||
+                    name.startsWith("middle ", ignoreCase = true)
+                ) return@forEachIndexed
 
-                    if (name.startsWith("old ", ignoreCase = true) ||
-                        name.startsWith("middle ", ignoreCase = true)
-                    ) null
-                    else {
-                        val code = langCodes[i]
-                        RecognitionLanguage(
-                            code = code,
-                            displayName = name,
-                            selected = false,
-                            downloaded = true,
-                            recognizer = TextRecognitionProviderType.GoogleMLKit,
-                            innerCode = code,
-                        )
-                    }
+                val code = langCodes[i]
+                val item = RecognitionLanguage(
+                    code = code,
+                    displayName = name,
+                    selected = false,
+                    downloaded = true,
+                    recognizer = TextRecognitionProviderType.GoogleMLKit,
+                    innerCode = code,
+                )
+                result.add(item)
+                if (code == "ja" || code.startsWith("zh")) {
+                    val itemRTL = item.copy(
+                        code = item.code + ":RTL",
+                        displayName = item.displayName + "(RTL)",
+                    )
+                    result.add(itemRTL)
                 }
+            }
+
+            return result
                 .distinctBy { it.displayName }
                 .sortedBy { it.displayName }
         }
@@ -63,11 +70,13 @@ class GoogleMLKitTextRecognizer : TextRecognizer {
         mutableMapOf<ScriptType, com.google.mlkit.vision.text.TextRecognizer>()
 
     override suspend fun recognize(lang: RecognitionLanguage, bitmap: Bitmap): RecognitionResult {
-        val lang = AppPref.selectedOCRLang
-        return doRecognize(bitmap, lang)
+        val langInfo = lang.code.split(":")
+        val targetLang = langInfo[0]
+        val rtl = langInfo.getOrNull(1) == "RTL"
+        return doRecognize(bitmap, targetLang, rtl)
     }
 
-    private suspend fun doRecognize(bitmap: Bitmap, lang: String): RecognitionResult =
+    private suspend fun doRecognize(bitmap: Bitmap, lang: String, rtl: Boolean): RecognitionResult =
         suspendCoroutine {
             val script = getScriptType(lang)
 
@@ -94,7 +103,7 @@ class GoogleMLKitTextRecognizer : TextRecognizer {
                     val joiner = SettingManager.textBlockJoiner.joiner
                     val text = result.textBlocks
                         .joinToString(separator = joiner) {
-                            it.text
+                            it.getText(rtl)
                                 .let { text ->
                                     if (SettingManager.removeEndDash) {
                                         text.replace("-\n", "")
@@ -120,6 +129,16 @@ class GoogleMLKitTextRecognizer : TextRecognizer {
                     it.resumeWithException(e)
                 }
         }
+
+    private fun TextBlock.getText(rtl: Boolean): String {
+        return if (rtl) {
+            lines.joinToString(separator = "\n") { line ->
+                line.text.reversed()
+            }
+        } else {
+            this.text
+        }
+    }
 
     override suspend fun parseToDisplayLangCode(langCode: String): String = langCode.toISO639()
 
