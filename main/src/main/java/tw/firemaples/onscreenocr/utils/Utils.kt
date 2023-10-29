@@ -105,7 +105,7 @@ object Utils {
     }
 }
 
-fun String.firstPart(): String = split("-")[0]
+fun String.firstPart(): String = split(":")[0].split("-")[0]
 
 fun Context.getThemedLayoutInflater(theme: Int = R.style.Theme_EverTranslator): LayoutInflater =
     LayoutInflater.from(this)
