@@ -1,10 +1,13 @@
 ---
 layout: post
 title:  "Version History"
-date:   2023-09-23 19:20:12 +0900
+date:   2023-11-02 23:00 +0900
 ---
 
 [中文版本](./version_history_zh_tw.html)
+
+## v3.1.23
+- Support read text from right-to-left in Japanese(RTL) and Chinese(RTL)
 
 ## v3.1.22
 - Add an option to keep the MediaProjection resources to fix the issues when translating again on the following types of devices:
