@@ -139,7 +139,7 @@ dependencies {
     implementation 'androidx.work:work-runtime-ktx:2.8.1'
 
     // Firebase
-    implementation platform('com.google.firebase:firebase-bom:32.3.1')
+    implementation platform('com.google.firebase:firebase-bom:32.6.0')
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
     //  implementation 'com.google.firebase:firebase-core'
@@ -159,7 +159,7 @@ dependencies {
     implementation 'com.google.mlkit:text-recognition-korean:16.0.0'
 
     // Google MLKit - Text translate
-    implementation 'com.google.mlkit:translate:17.0.1'
+    implementation 'com.google.mlkit:translate:17.0.2'
 
     // Google MLKit - Identify Languages
     implementation 'com.google.mlkit:language-id:17.0.4'
@@ -183,7 +183,7 @@ dependencies {
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
 
     // Tesseract
     implementation 'cz.adaptech.tesseract4android:tesseract4android:4.5.0'
@@ -210,7 +210,7 @@ dependencies {
 //    implementation 'com.mopub.mediation:adcolony:4.5.0.1'
 
     // Admob
-    implementation 'com.google.android.gms:play-services-ads:22.4.0'
+    implementation 'com.google.android.gms:play-services-ads:22.5.0'
     // Facebook Ad network
     implementation 'com.google.ads.mediation:facebook:6.16.0.0'
     // Adcolony Ad network
