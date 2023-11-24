@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">EverTranslator (ترجمة الشاشة)</string>
     <string name="channel_default">قناة الإشعارات الافتراضية</string>
+    <string name="version_history_url">https://firemaples.github.io/EverTranslator/version_history.html</string>
+
     <string name="translation_provider_microsoft_azure">"مايكروسوفت Azure "</string>
     <string name="translation_provider_google_ml_kit">Google MLKit</string>
     <string name="translation_provider_google_translate_app">تطبيق ترجمة Google</string><![CDATA[>
@@ -36,6 +38,15 @@
     <string name="pref_summary_bypass_battery_optimization">يحتاج EverTranslator إلى [تجاوز تحسين البطارية] لتجنب اغلاق في الخلفية.</string>
     <string name="pref_title_remove_spaces_in_cjk">أزل المسافات في النص الصيني والياباني والكوري</string>
     <string name="pref_summary_remove_spaces_in_cjk">أزل المسافات عندما تكون لغة مستخرج النصوص هي الصينية أو اليابانية أو الكورية</string>
+    <string name="pref_category_translation">ترجمة</string>
+    <string name="pref_summary_mymemory_email">يمكنك تقديم بريد إلكتروني صالح لMyMemory translation مقابل 50000 حرف في اليوم. لن يقوم EverTranslator أبدًا باستخدام البريد الإلكتروني لاستخدامات أخرى.</string>
+
+    <string name="pref_title_mymemory_email">البريد الإلكتروني MyMemory</string>
+    <string name="pref_screenshot">لقطة شاشة</string>
+    <string name="pref_title_keep_media_projection_resources">الحفاظ على موارد MediaProjection</string>
+
+    <string name="pref_summary_on_keep_media_projection_resources">الحفاظ على الموارد حتى إعادة التشغيل</string>
+    <string name="pref_summary_off_keep_media_projection_resources">الافراج عن الموارد بعد استخدامها</string>
     <string name="menu_setting">إعدادات</string>
     <string name="menu_privacy_policy">سياسة الخصوصية</string>
     <string name="menu_about">حول</string>
@@ -62,6 +73,7 @@
     <string name="msg_select_lang_in_translate_app">حدد لغة الترجمة في [%s]</string>
     <string name="msg_ocr_only_mode_hint">اختيار لغة الترجمة غير متاح في وضع ااستخراج النص</string>
     <string name="text_request_permission">طلب الإذن</string>
+    <string name="text_open_in_browser">فتح في المتصفح</string>
     <string name="msg_evertranslator_needs_display_over_other_apps_permission_to_show_a_floating_window_for_easily_using">EverTranslator يحتاج الى الإذن  [التطبيقات التي قد تظهر فوق تطبيقات أخرى] لإظهار النافذة عائمة على الشاشة.</string>
     <string name="msg_evertranslator_needs_capture_screen_to_find_the_text_from_the_screen_for_you">EverTranslator يحتاج الى الإذن  [تصوير الشاشة] للعثور على النص من الشاشة من أجلك..</string>
     <string name="msg_textHasBeenCopied">تم نسخ النص</string>
@@ -69,8 +81,9 @@
     <string name="msg_click_to_hide_the_floating_bar">انقر لإخفاء الشريط العائم</string>
     <string name="msg_recreate_selection_area">اسحب هنا لإعادة إنشاء منطقة ترجمة، إبعاد إصبعين عن بعضهما او جمعها لتكبير المنطقة المحددة</string>
     <string name="msg_create_selection_area">اسحب هنا لإنشاء منطقة الترجمة</string>
-    <string name="msg_image_reader_format_unmatched">, please try it again. (Image reader format)</string>
+    <string name="msg_image_reader_format_unmatched">تم العثور على خطأ مؤقت، يرجى المحاولة مرة أخرى. (تنسيق قارئ الصور)</string>
     <string name="msg_translator_provider_does_not_support_the_ocr_lang">مزود الترجمة هذا لا يدعم لغة التعرف المختارة.</string>
+    <string name="msg_please_restart_the_app_to_take_effect">يرجى إعادة تشغيل التطبيق ليصبح ساري المفعول</string>
     <string name="title_version_history">التغيرات في الإصدارات السابقة</string>
     <string name="title_error">خطأ</string>
     <string name="title_guide">طريقة الأستخدام</string>

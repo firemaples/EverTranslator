@@ -48,7 +48,6 @@
     <string name="pref_summary_mymemory_email">You can Provide a valid email to MyMemory translation for 50000 chars a day quota.\nEverTranslator will never use the email for other usages.</string>
     <string name="pref_title_mymemory_email">MyMemory email</string>
     <string name="pref_screenshot">Screenshot</string>
-    <string name="pref_title_keep_media_projection_resources">Keep MediaProjection resources</string>
     <string name="pref_summary_on_keep_media_projection_resources">Keep the resources until restart</string>
     <string name="pref_summary_off_keep_media_projection_resources">Release the resources after used</string>
 
@@ -117,4 +116,5 @@
         <item>Space</item>
         <item>None</item>
     </string-array>
+    <string name="pref_title_keep_media_projection_resources">Keep MediaProjection resources</string>
 </resources>
