@@ -2,7 +2,6 @@ name: CI
 
 on:
   push:
-    branches: [ "*" ]
   workflow_dispatch:
 
 jobs:
@@ -25,3 +24,10 @@ jobs:
         env:
           MS_KEY_1: ${{ secrets.MS_KEY_1 }}
         run: ./gradlew :main:testDevDebug --tests "tw.firemaples.onscreenocr.MicrosoftAzureAPIServiceTest"
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+            name: JUnit Tests
+            path: main/build/test-results/testDevDebugUnitTest/TEST-*.xml
+            reporter: java-junit
