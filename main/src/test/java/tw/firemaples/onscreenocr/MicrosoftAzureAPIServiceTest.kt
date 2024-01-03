@@ -34,7 +34,7 @@ class MicrosoftAzureAPIServiceTest {
         testTranslate()
     }
 
-    private fun setupKey(n: Int){
+    private fun setupKey(n: Int) {
         key = System.getenv().getOrDefault("MS_KEY_$n", "")
     }
 
@@ -46,7 +46,7 @@ class MicrosoftAzureAPIServiceTest {
         )
 
         if (!result.isSuccessful)
-            throw Error(result.errorBody()?.toString())
+            throw Error(result.errorBody()?.string() ?: result.message())
 
         val actual = result.body()?.firstOrNull()?.translations?.firstOrNull()?.text
         assertEquals("Bonjour", actual)
