@@ -45,6 +45,9 @@ class MicrosoftAzureAPIServiceTest {
             request = TranslateRequest.single("Hello"),
         )
 
+        if (!result.isSuccessful)
+            throw Error(result.errorBody()?.toString())
+
         val actual = result.body()?.firstOrNull()?.translations?.firstOrNull()?.text
         assertEquals("Bonjour", actual)
     }
