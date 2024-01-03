@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [ "*" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        env:
+          MS_KEY_1: ${{ secrets.MS_KEY_1 }}
+        run: ./gradlew :main:testDevDebug --tests "tw.firemaples.onscreenocr.MicrosoftAzureAPIServiceTest"
