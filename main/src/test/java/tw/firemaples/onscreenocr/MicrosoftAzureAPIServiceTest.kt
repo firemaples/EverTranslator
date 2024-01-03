@@ -20,10 +20,25 @@ class MicrosoftAzureAPIServiceTest {
         retrofit.create(MicrosoftAzureAPIService::class.java)
     }
 
-    @Test
-    fun test() = runTest {
-        val key = System.getenv().getOrDefault("MS_KEY_1", "")
+    private lateinit var key: String
 
+    @Test
+    fun `test ms key 1`() {
+        setupKey(1)
+        testTranslate()
+    }
+
+    @Test
+    fun `test ms key 2`() {
+        setupKey(1)
+        testTranslate()
+    }
+
+    private fun setupKey(n: Int){
+        key = System.getenv().getOrDefault("MS_KEY_$n", "")
+    }
+
+    private fun testTranslate() = runTest {
         val result = apiService.translate(
             subscriptionKey = key,
             to = "fr",
