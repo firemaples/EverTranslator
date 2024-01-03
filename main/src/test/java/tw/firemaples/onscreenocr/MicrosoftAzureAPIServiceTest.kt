@@ -30,7 +30,7 @@ class MicrosoftAzureAPIServiceTest {
 
     @Test
     fun `test ms key 2`() {
-        setupKey(1)
+        setupKey(2)
         testTranslate()
     }
 
