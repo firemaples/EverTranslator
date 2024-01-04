@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.floatings.dialog.showErrorDialog
-import tw.firemaples.onscreenocr.floatings.main.MainBar
+import tw.firemaples.onscreenocr.floatings.mainbar.MainBarFloatingView
 import tw.firemaples.onscreenocr.floatings.result.ResultView
 import tw.firemaples.onscreenocr.floatings.screenCircling.ScreenCirclingView
 import tw.firemaples.onscreenocr.hilt.MainCoroutineScope
@@ -44,7 +44,7 @@ class FloatingViewCoordinator @Inject constructor(
     @ApplicationContext private val context: Context,
     private val stateNavigator: StateNavigator,
     @MainCoroutineScope private val scope: CoroutineScope,
-    private val mainBar: MainBar,
+    private val mainBar: MainBarFloatingView,
     private val resultView: ResultView,
 ) {
     private val logger: Logger by lazy { Logger(FloatingViewCoordinator::class) }
