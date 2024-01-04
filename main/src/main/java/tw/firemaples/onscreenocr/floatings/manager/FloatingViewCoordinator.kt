@@ -3,14 +3,14 @@ package tw.firemaples.onscreenocr.floatings.manager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
-import java.io.IOException
-import kotlin.reflect.KClass
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tw.firemaples.onscreenocr.R
@@ -19,6 +19,7 @@ import tw.firemaples.onscreenocr.floatings.dialog.showErrorDialog
 import tw.firemaples.onscreenocr.floatings.main.MainBar
 import tw.firemaples.onscreenocr.floatings.result.ResultView
 import tw.firemaples.onscreenocr.floatings.screenCircling.ScreenCirclingView
+import tw.firemaples.onscreenocr.hilt.MainCoroutineScope
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.pref.AppPref
@@ -26,36 +27,35 @@ import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.recognition.TextRecognitionProviderType
 import tw.firemaples.onscreenocr.recognition.TextRecognizer
 import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
-import tw.firemaples.onscreenocr.translator.azure.MicrosoftAzureTranslator
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.translator.TranslationResult
 import tw.firemaples.onscreenocr.translator.Translator
+import tw.firemaples.onscreenocr.translator.azure.MicrosoftAzureTranslator
 import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
-import tw.firemaples.onscreenocr.utils.Utils
 import tw.firemaples.onscreenocr.utils.setReusable
+import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
+import kotlin.reflect.KClass
 
-object FloatingStateManager {
-    private val logger: Logger by lazy { Logger(FloatingStateManager::class) }
-    private val context: Context by lazy { Utils.context }
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+@Singleton
+class FloatingViewCoordinator @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val stateNavigator: StateNavigator,
+    @MainCoroutineScope private val scope: CoroutineScope,
+    private val mainBar: MainBar,
+    private val resultView: ResultView,
+) {
+    private val logger: Logger by lazy { Logger(FloatingViewCoordinator::class) }
 
-    val currentStateFlow = MutableStateFlow<State>(State.Idle)
-    val currentState: State
-        get() = currentStateFlow.value
+    private val currentState: State
+        get() = stateNavigator.currentState.value
 
-    private val mainBar: MainBar by lazy { MainBar(context) }
     private val screenCirclingView: ScreenCirclingView by lazy {
         ScreenCirclingView(context).apply {
             onAreaSelected = { parent, selected ->
-                this@FloatingStateManager.onAreaSelected(parent, selected)
-            }
-        }
-    }
-    private val resultView: ResultView by lazy {
-        ResultView(context).apply {
-            onUserDismiss = {
-                this@FloatingStateManager.backToIdle()
+                this@FloatingViewCoordinator.onAreaSelected(parent, selected)
             }
         }
     }
@@ -69,6 +69,53 @@ object FloatingStateManager {
     private var parentRect: Rect? = null
     private var selectedRect: Rect? = null
     private var croppedBitmap: Bitmap? = null
+
+    init {
+        stateNavigator.navigationAction
+            .onEach {
+                when (it) {
+                    NavigationAction.NavigateToIdle ->
+                        backToIdle()
+
+                    NavigationAction.NavigateToScreenCircling ->
+                        startScreenCircling()
+
+                    is NavigationAction.NavigateToScreenCircled ->
+                        onAreaSelected(
+                            parentRect = it.parentRect,
+                            selectedRect = it.selectedRect,
+                        )
+
+
+                    is NavigationAction.NavigateToScreenCapturing ->
+                        startScreenCapturing(it.selectedOCRLang)
+
+                    is NavigationAction.NavigateToTextRecognition ->
+                        startRecognition(
+                            croppedBitmap = it.croppedBitmap,
+                            parent = it.parent,
+                            selected = it.selected,
+                        )
+
+                    is NavigationAction.NavigateToStartTranslation ->
+                        startTranslation(it.recognitionResult)
+
+                    is NavigationAction.NavigateToTranslated ->
+                        showResult(it.result)
+
+                    is NavigationAction.ShowError ->
+                        showError(it.error)
+
+                    NavigationAction.CancelScreenCircling ->
+                        cancelScreenCircling()
+                }
+            }
+            .launchIn(scope)
+
+        resultView.onUserDismiss = {
+            this@FloatingViewCoordinator.backToIdle()
+        }
+    }
 
     fun showMainBar() {
         if (isMainBarAttached) return
@@ -105,7 +152,7 @@ object FloatingStateManager {
         }
 
         logger.debug("startScreenCircling()")
-        changeState(State.ScreenCircling)
+        stateNavigator.updateState(State.ScreenCircling)
         FirebaseEvent.logStartAreaSelection()
         screenCirclingView.attachToScreen()
         arrangeMainBarToTop()
@@ -115,15 +162,15 @@ object FloatingStateManager {
         stateIn(State.ScreenCircling::class, State.ScreenCircled::class) {
             logger.debug("onAreaSelected(), parentRect: $parentRect, selectedRect: $selectedRect, size: ${selectedRect.width()}x${selectedRect.height()}")
             if (currentState != State.ScreenCircled) {
-                changeState(State.ScreenCircled)
+                stateNavigator.updateState(State.ScreenCircled)
             }
-            this@FloatingStateManager.selectedRect = selectedRect
-            this@FloatingStateManager.parentRect = parentRect
+            this@FloatingViewCoordinator.selectedRect = selectedRect
+            this@FloatingViewCoordinator.parentRect = parentRect
         }
 
     fun cancelScreenCircling() = stateIn(State.ScreenCircling::class, State.ScreenCircled::class) {
         logger.debug("cancelScreenCircling()")
-        changeState(State.Idle)
+        stateNavigator.updateState(State.Idle)
         screenCirclingView.detachFromScreen()
     }
 
@@ -132,11 +179,11 @@ object FloatingStateManager {
             return@stateIn
         }
 
-        this@FloatingStateManager.selectedOCRLang = selectedOCRLang
+        this@FloatingViewCoordinator.selectedOCRLang = selectedOCRLang
         val parent = parentRect ?: return@stateIn
         val selected = selectedRect ?: return@stateIn
         logger.debug("startScreenCapturing(), parentRect: $parent, selectedRect: $selected")
-        changeState(State.ScreenCapturing)
+        stateNavigator.updateState(State.ScreenCapturing)
         mainBar.detachFromScreen()
         screenCirclingView.detachFromScreen()
 
@@ -146,7 +193,7 @@ object FloatingStateManager {
             FirebaseEvent.logStartCaptureScreen()
             val croppedBitmap =
                 ScreenExtractor.extractBitmapFromScreen(parentRect = parent, cropRect = selected)
-            this@FloatingStateManager.croppedBitmap = croppedBitmap
+            this@FloatingViewCoordinator.croppedBitmap = croppedBitmap
             FirebaseEvent.logCaptureScreenFinished()
 
             mainBar.attachToScreen()
@@ -166,7 +213,7 @@ object FloatingStateManager {
 
     private fun startRecognition(croppedBitmap: Bitmap, parent: Rect, selected: Rect) =
         stateIn(State.ScreenCapturing::class) {
-            changeState(State.TextRecognizing)
+            stateNavigator.updateState(State.TextRecognizing)
             try {
                 resultView.startRecognition()
                 val recognizer = TextRecognizer.getRecognizer(selectedOCRProvider)
@@ -210,7 +257,7 @@ object FloatingStateManager {
     fun startTranslation(recognitionResult: RecognitionResult) =
         stateIn(State.TextRecognizing::class, State.ResultDisplaying::class) {
             try {
-                changeState(State.TextTranslating)
+                stateNavigator.updateState(State.TextTranslating)
 
                 val translator = Translator.getTranslator()
 
@@ -295,14 +342,14 @@ object FloatingStateManager {
     private fun showResult(result: Result) =
         stateIn(State.TextTranslating::class) {
             logger.debug("showResult(), $result")
-            changeState(State.ResultDisplaying)
+            stateNavigator.updateState(State.ResultDisplaying)
 
             resultView.textTranslated(result)
         }
 
     private fun showError(error: String) {
         scope.launch {
-            changeState(State.ErrorDisplaying(error))
+            stateNavigator.updateState(State.ErrorDisplaying(error))
             logger.error(error)
             context.showErrorDialog(error)
             backToIdle()
@@ -311,7 +358,7 @@ object FloatingStateManager {
 
     private fun backToIdle() =
         scope.launch {
-            if (currentState != State.Idle) changeState(State.Idle)
+            if (currentState != State.Idle) stateNavigator.updateState(State.Idle)
             croppedBitmap?.setReusable()
             resultView.backToIdle()
             showMainBar()
@@ -325,53 +372,6 @@ object FloatingStateManager {
             scope.launch { block.invoke(this) }
         } else logger.error(t = IllegalStateException("The state should be in ${states.toList()}, current is $currentState"))
     }
-
-    private fun changeState(newState: State) {
-        val allowedNextStates = when (currentState) {
-            State.Idle -> arrayOf(State.ScreenCircling::class)
-            State.ScreenCircling -> arrayOf(State.Idle::class, State.ScreenCircled::class)
-            State.ScreenCircled -> arrayOf(State.Idle::class, State.ScreenCapturing::class)
-            State.ScreenCapturing ->
-                arrayOf(
-                    State.Idle::class, State.TextRecognizing::class, State.ErrorDisplaying::class
-                )
-
-            State.TextRecognizing ->
-                arrayOf(
-                    State.Idle::class, State.TextTranslating::class, State.ErrorDisplaying::class
-                )
-
-            State.TextTranslating ->
-                arrayOf(
-                    State.ResultDisplaying::class, State.ErrorDisplaying::class, State.Idle::class
-                )
-
-            State.ResultDisplaying -> arrayOf(State.Idle::class, State.TextTranslating::class)
-            is State.ErrorDisplaying -> arrayOf(State.Idle::class)
-        }
-
-        if (allowedNextStates.contains(newState::class)) {
-            logger.debug("Change state $currentState > $newState")
-            currentStateFlow.value = newState
-        } else {
-            logger.error("Change state from $currentState to $newState is not allowed")
-        }
-    }
-}
-
-sealed class State {
-    override fun toString(): String {
-        return this::class.simpleName ?: super.toString()
-    }
-
-    object Idle : State()
-    object ScreenCircling : State()
-    object ScreenCircled : State()
-    object ScreenCapturing : State()
-    object TextRecognizing : State()
-    object TextTranslating : State()
-    object ResultDisplaying : State()
-    data class ErrorDisplaying(val error: String) : State()
 }
 
 sealed class Result(

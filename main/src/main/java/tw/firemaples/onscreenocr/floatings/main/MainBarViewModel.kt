@@ -9,8 +9,10 @@ import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.ViewHolderService
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
-import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
+import tw.firemaples.onscreenocr.floatings.manager.NavigationAction
 import tw.firemaples.onscreenocr.floatings.manager.State
+import tw.firemaples.onscreenocr.floatings.manager.StateNavigator
+import tw.firemaples.onscreenocr.hilt.MainImmediateCoroutineScope
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.recognition.TextRecognizer
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
@@ -22,8 +24,13 @@ import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.SingleLiveEvent
 import tw.firemaples.onscreenocr.utils.Utils
+import javax.inject.Inject
 
-class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) {
+class MainBarViewModel @Inject constructor(
+    @MainImmediateCoroutineScope viewScope: CoroutineScope,
+    private val stateNavigator: StateNavigator,
+) : FloatingViewModel(viewScope) {
+
     companion object {
         private const val MENU_SETTING = "setting"
         private const val MENU_PRIVACY_POLICY = "privacy_policy"
@@ -97,7 +104,7 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
         logger.debug("onAttachedToScreen()")
         viewScope.launch {
             logger.debug("register FloatingStateManager.onStateChanged")
-            FloatingStateManager.currentStateFlow.collect { onStateChanged(it) }
+            stateNavigator.currentState.collect { onStateChanged(it) }
         }
         viewScope.launch {
             ocrRepo.selectedOCRLangFlow.collect { onSelectedLangChanged(_ocrLang = it) }
@@ -113,7 +120,7 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
             }
         }
         viewScope.launch {
-            setupButtons(FloatingStateManager.currentState)
+//            setupButtons(floatingStateManager.currentState)
 
             if (!repo.isReadmeAlreadyShown().first()) {
                 _showReadme.value = true
@@ -226,6 +233,24 @@ class MainBarViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope)
     fun saveLastPosition(x: Int, y: Int) {
         viewScope.launch {
             repo.saveLastMainBarPosition(x, y)
+        }
+    }
+
+    fun onSelectClicked() {
+        viewScope.launch {
+            stateNavigator.navigate(NavigationAction.NavigateToScreenCircling)
+        }
+    }
+
+    fun onTranslateClicked() {
+        viewScope.launch {
+            stateNavigator.navigate(NavigationAction.NavigateToScreenCapturing(selectedOCRLang))
+        }
+    }
+
+    fun onCloseClicked() {
+        viewScope.launch {
+            stateNavigator.navigate(NavigationAction.CancelScreenCircling)
         }
     }
 }

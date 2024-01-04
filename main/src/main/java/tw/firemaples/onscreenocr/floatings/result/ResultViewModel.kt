@@ -10,8 +10,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
-import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
+import tw.firemaples.onscreenocr.floatings.manager.NavigationAction
 import tw.firemaples.onscreenocr.floatings.manager.Result
+import tw.firemaples.onscreenocr.floatings.manager.StateNavigator
+import tw.firemaples.onscreenocr.hilt.MainImmediateCoroutineScope
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.repo.GeneralRepository
@@ -21,6 +23,7 @@ import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.SingleLiveEvent
 import tw.firemaples.onscreenocr.utils.Utils
 import java.util.Locale
+import javax.inject.Inject
 
 typealias OCRText = Pair<String, String>
 
@@ -28,7 +31,10 @@ fun OCRText.text(): String = this.first
 fun OCRText.locale(): Locale = Locale.forLanguageTag(this.second)
 fun OCRText.langCode(): String = this.second
 
-class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) {
+class ResultViewModel @Inject constructor(
+    @MainImmediateCoroutineScope viewScope: CoroutineScope,
+    private val stateNavigator: StateNavigator,
+) : FloatingViewModel(viewScope) {
     private val _displayOCROperationProgress = MutableLiveData<Boolean>()
     val displayOCROperationProgress: LiveData<Boolean> = _displayOCROperationProgress
 
@@ -194,11 +200,13 @@ class ResultViewModel(viewScope: CoroutineScope) : FloatingViewModel(viewScope) 
 //                null
 //            } ?: lastLangCode
 
-            FloatingStateManager.startTranslation(
-                RecognitionResult(
-                    langCode = langCode,
-                    result = text,
-                    boundingBoxes = lastTextBoundingBoxes,
+            stateNavigator.navigate(
+                NavigationAction.NavigateToStartTranslation(
+                    RecognitionResult(
+                        langCode = langCode,
+                        result = text,
+                        boundingBoxes = lastTextBoundingBoxes,
+                    )
                 )
             )
         }

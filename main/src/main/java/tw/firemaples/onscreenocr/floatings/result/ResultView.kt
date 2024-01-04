@@ -9,7 +9,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
-import java.util.Locale
+import dagger.hilt.android.qualifiers.ApplicationContext
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.databinding.FloatingResultViewBinding
 import tw.firemaples.onscreenocr.databinding.ViewResultPanelBinding
@@ -29,8 +29,13 @@ import tw.firemaples.onscreenocr.utils.getViewRect
 import tw.firemaples.onscreenocr.utils.setReusable
 import tw.firemaples.onscreenocr.utils.setTextOrGone
 import tw.firemaples.onscreenocr.utils.showOrHide
+import java.util.Locale
+import javax.inject.Inject
 
-class ResultView(context: Context) : FloatingView(context) {
+class ResultView @Inject constructor(
+    @ApplicationContext context: Context,
+    private val viewModel: ResultViewModel,
+) : FloatingView(context) {
     companion object {
         private const val LABEL_RECOGNIZED_TEXT = "Recognized text"
         private const val LABEL_TRANSLATED_TEXT = "Translated text"
@@ -49,8 +54,6 @@ class ResultView(context: Context) : FloatingView(context) {
 
     override val enableHomeButtonWatcher: Boolean
         get() = true
-
-    private val viewModel: ResultViewModel by lazy { ResultViewModel(viewScope) }
 
     private val binding: FloatingResultViewBinding = FloatingResultViewBinding.bind(rootLayout)
 

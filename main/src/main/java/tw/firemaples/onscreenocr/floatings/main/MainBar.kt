@@ -2,12 +2,13 @@ package tw.firemaples.onscreenocr.floatings.main
 
 import android.content.Context
 import android.graphics.Point
+import dagger.hilt.android.qualifiers.ApplicationContext
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.databinding.FloatingMainBarBinding
 import tw.firemaples.onscreenocr.floatings.base.MovableFloatingView
 import tw.firemaples.onscreenocr.floatings.history.VersionHistoryView
-import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
 import tw.firemaples.onscreenocr.floatings.manager.State
+import tw.firemaples.onscreenocr.floatings.manager.StateNavigator
 import tw.firemaples.onscreenocr.floatings.menu.MenuView
 import tw.firemaples.onscreenocr.floatings.readme.ReadmeView
 import tw.firemaples.onscreenocr.floatings.translationSelectPanel.TranslationSelectPanel
@@ -15,9 +16,19 @@ import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.pages.setting.SettingActivity
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.pref.AppPref
-import tw.firemaples.onscreenocr.utils.*
+import tw.firemaples.onscreenocr.utils.Utils
+import tw.firemaples.onscreenocr.utils.clickOnce
+import tw.firemaples.onscreenocr.utils.hide
+import tw.firemaples.onscreenocr.utils.show
+import tw.firemaples.onscreenocr.utils.showOrHide
+import javax.inject.Inject
 
-class MainBar(context: Context) : MovableFloatingView(context) {
+class MainBar @Inject constructor(
+    @ApplicationContext context: Context,
+    private val stateNavigator: StateNavigator,
+    private val viewModel: MainBarViewModel,
+) : MovableFloatingView(context) {
+
     override val layoutId: Int
         get() = R.layout.floating_main_bar
 
@@ -34,7 +45,7 @@ class MainBar(context: Context) : MovableFloatingView(context) {
 
     override val fadeOutAfterMoved: Boolean
         get() = !arrayOf(State.ScreenCircling, State.ScreenCircled)
-            .contains(FloatingStateManager.currentState)
+            .contains(stateNavigator.currentState.value)
                 && !menuView.attached
                 && SettingManager.enableFadingOutWhileIdle
     override val fadeOutDelay: Long
@@ -58,8 +69,6 @@ class MainBar(context: Context) : MovableFloatingView(context) {
         }
     }
 
-    private val viewModel: MainBarViewModel by lazy { MainBarViewModel(viewScope) }
-
     init {
         binding.setViews()
         setDragView(binding.btMenu)
@@ -72,16 +81,16 @@ class MainBar(context: Context) : MovableFloatingView(context) {
         }
 
         btSelect.clickOnce {
-            FloatingStateManager.startScreenCircling()
+            viewModel.onSelectClicked()
         }
 
         btTranslate.clickOnce {
             FirebaseEvent.logClickTranslationStartButton()
-            FloatingStateManager.startScreenCapturing(viewModel.selectedOCRLang)
+            viewModel.onTranslateClicked()
         }
 
         btClose.clickOnce {
-            FloatingStateManager.cancelScreenCircling()
+            viewModel.onCloseClicked()
         }
 
         btMenu.clickOnce {
