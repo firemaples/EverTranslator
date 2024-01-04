@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.ViewHolderService
@@ -100,12 +102,15 @@ class MainBarViewModel @Inject constructor(
         Constants.DEFAULT_TRANSLATION_PROVIDER
     private var selectedTranslationLang: String = Constants.DEFAULT_TRANSLATION_LANG
 
+    init {
+        logger.debug("register FloatingStateManager.onStateChanged")
+        stateNavigator.currentState
+            .onEach { onStateChanged(it) }
+            .launchIn(viewScope)
+    }
+
     fun onAttachedToScreen() {
         logger.debug("onAttachedToScreen()")
-        viewScope.launch {
-            logger.debug("register FloatingStateManager.onStateChanged")
-            stateNavigator.currentState.collect { onStateChanged(it) }
-        }
         viewScope.launch {
             ocrRepo.selectedOCRLangFlow.collect { onSelectedLangChanged(_ocrLang = it) }
         }

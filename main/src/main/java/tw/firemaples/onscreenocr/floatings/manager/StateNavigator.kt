@@ -11,11 +11,14 @@ import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.utils.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.reflect.KClass
 
 interface StateNavigator {
     val navigationAction: SharedFlow<NavigationAction>
     val currentState: StateFlow<State>
     suspend fun navigate(action: NavigationAction)
+
+    fun allowedNextState(nextState: KClass<out State>): Boolean
 
     fun updateState(newState: State)
 }
@@ -28,36 +31,36 @@ class StateNavigatorImpl @Inject constructor() : StateNavigator {
 
     override val currentState = MutableStateFlow<State>(State.Idle)
 
+    private val nextStates: Map<KClass<out State>, Set<KClass<out State>>> = mapOf(
+        State.Idle::class to setOf(State.ScreenCircling::class),
+        State.ScreenCircling::class to setOf(State.Idle::class, State.ScreenCircled::class),
+        State.ScreenCircled::class to setOf(State.Idle::class, State.ScreenCapturing::class),
+        State.ScreenCapturing::class to setOf(
+            State.Idle::class, State.TextRecognizing::class, State.ErrorDisplaying::class,
+        ),
+        State.TextRecognizing::class to setOf(
+            State.Idle::class, State.TextTranslating::class, State.ErrorDisplaying::class,
+        ),
+        State.TextTranslating::class to setOf(
+            State.ResultDisplaying::class, State.ErrorDisplaying::class, State.Idle::class,
+        ),
+        State.ResultDisplaying::class to setOf(State.Idle::class, State.TextTranslating::class),
+        State.ErrorDisplaying::class to setOf(State.Idle::class),
+    )
+
     override suspend fun navigate(action: NavigationAction) {
+        logger.debug("Receive NavigationAction: $action")
         navigationAction.subscriptionCount.first { it > 0 }
         navigationAction.emit(action)
     }
 
+    override fun allowedNextState(nextState: KClass<out State>): Boolean =
+        nextStates[currentState.value::class]?.contains(nextState) == true
+
     override fun updateState(newState: State) {
-        val allowedNextStates = when (currentState.value) {
-            State.Idle -> arrayOf(State.ScreenCircling::class)
-            State.ScreenCircling -> arrayOf(State.Idle::class, State.ScreenCircled::class)
-            State.ScreenCircled -> arrayOf(State.Idle::class, State.ScreenCapturing::class)
-            State.ScreenCapturing ->
-                arrayOf(
-                    State.Idle::class, State.TextRecognizing::class, State.ErrorDisplaying::class
-                )
+        val allowedNextStates = nextStates[currentState.value::class]
 
-            State.TextRecognizing ->
-                arrayOf(
-                    State.Idle::class, State.TextTranslating::class, State.ErrorDisplaying::class
-                )
-
-            State.TextTranslating ->
-                arrayOf(
-                    State.ResultDisplaying::class, State.ErrorDisplaying::class, State.Idle::class
-                )
-
-            State.ResultDisplaying -> arrayOf(State.Idle::class, State.TextTranslating::class)
-            is State.ErrorDisplaying -> arrayOf(State.Idle::class)
-        }
-
-        if (allowedNextStates.contains(newState::class)) {
+        if (allowedNextStates?.contains(newState::class) == true) {
             logger.debug("Change state ${currentState.value} > $newState")
             currentState.value = newState
         } else {

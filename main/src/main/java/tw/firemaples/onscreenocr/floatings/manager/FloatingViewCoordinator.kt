@@ -146,9 +146,9 @@ class FloatingViewCoordinator @Inject constructor(
         }
     }
 
-    fun startScreenCircling() = stateIn(State.Idle::class) {
-        if (!Translator.getTranslator().checkEnvironment(scope)) {
-            return@stateIn
+    private fun startScreenCircling() = checkNextState(State.ScreenCircling::class) {
+        if (!Translator.getTranslator().checkResources(scope)) {
+            return@checkNextState
         }
 
         logger.debug("startScreenCircling()")
@@ -159,8 +159,12 @@ class FloatingViewCoordinator @Inject constructor(
     }
 
     private fun onAreaSelected(parentRect: Rect, selectedRect: Rect) =
-        stateIn(State.ScreenCircling::class, State.ScreenCircled::class) {
-            logger.debug("onAreaSelected(), parentRect: $parentRect, selectedRect: $selectedRect, size: ${selectedRect.width()}x${selectedRect.height()}")
+        checkNextState(State.ScreenCircled::class) {
+            logger.debug(
+                "onAreaSelected(), parentRect: $parentRect, " +
+                        "selectedRect: $selectedRect, " +
+                        "size: ${selectedRect.width()}x${selectedRect.height()}"
+            )
             if (currentState != State.ScreenCircled) {
                 stateNavigator.updateState(State.ScreenCircled)
             }
@@ -168,51 +172,57 @@ class FloatingViewCoordinator @Inject constructor(
             this@FloatingViewCoordinator.parentRect = parentRect
         }
 
-    fun cancelScreenCircling() = stateIn(State.ScreenCircling::class, State.ScreenCircled::class) {
+    private fun cancelScreenCircling() = checkNextState(State.Idle::class) {
         logger.debug("cancelScreenCircling()")
         stateNavigator.updateState(State.Idle)
         screenCirclingView.detachFromScreen()
     }
 
-    fun startScreenCapturing(selectedOCRLang: String) = stateIn(State.ScreenCircled::class) {
-        if (!Translator.getTranslator().checkEnvironment(scope)) {
-            return@stateIn
-        }
+    private fun startScreenCapturing(selectedOCRLang: String) =
+        checkNextState(State.ScreenCapturing::class) {
+            if (!Translator.getTranslator().checkResources(scope)) {
+                return@checkNextState
+            }
 
-        this@FloatingViewCoordinator.selectedOCRLang = selectedOCRLang
-        val parent = parentRect ?: return@stateIn
-        val selected = selectedRect ?: return@stateIn
-        logger.debug("startScreenCapturing(), parentRect: $parent, selectedRect: $selected")
-        stateNavigator.updateState(State.ScreenCapturing)
-        mainBar.detachFromScreen()
-        screenCirclingView.detachFromScreen()
+            this@FloatingViewCoordinator.selectedOCRLang = selectedOCRLang
+            val parent = parentRect ?: return@checkNextState
+            val selected = selectedRect ?: return@checkNextState
+            logger.debug("startScreenCapturing(), parentRect: $parent, selectedRect: $selected")
+            stateNavigator.updateState(State.ScreenCapturing)
+            mainBar.detachFromScreen()
+            screenCirclingView.detachFromScreen()
 
-        delay(100L)
+            delay(100L)
 
-        try {
-            FirebaseEvent.logStartCaptureScreen()
-            val croppedBitmap =
-                ScreenExtractor.extractBitmapFromScreen(parentRect = parent, cropRect = selected)
-            this@FloatingViewCoordinator.croppedBitmap = croppedBitmap
-            FirebaseEvent.logCaptureScreenFinished()
+            try {
+                FirebaseEvent.logStartCaptureScreen()
+                val croppedBitmap =
+                    ScreenExtractor.extractBitmapFromScreen(
+                        parentRect = parent,
+                        cropRect = selected
+                    )
+                this@FloatingViewCoordinator.croppedBitmap = croppedBitmap
+                FirebaseEvent.logCaptureScreenFinished()
 
-            mainBar.attachToScreen()
+                mainBar.attachToScreen()
 
-            startRecognition(croppedBitmap, parent, selected)
-        } catch (t: TimeoutCancellationException) {
-            logger.debug(t = t)
-            showError(context.getString(R.string.error_capture_screen_timeout))
-            FirebaseEvent.logCaptureScreenFailed(t)
-        } catch (t: Throwable) {
-            logger.debug(t = t)
-            showError(t.message ?: context.getString(R.string.error_unknown_error_capturing_screen))
-            FirebaseEvent.logCaptureScreenFailed(t)
-        }
+                startRecognition(croppedBitmap, parent, selected)
+            } catch (t: TimeoutCancellationException) {
+                logger.debug(t = t)
+                showError(context.getString(R.string.error_capture_screen_timeout))
+                FirebaseEvent.logCaptureScreenFailed(t)
+            } catch (t: Throwable) {
+                logger.debug(t = t)
+                showError(
+                    t.message ?: context.getString(R.string.error_unknown_error_capturing_screen)
+                )
+                FirebaseEvent.logCaptureScreenFailed(t)
+            }
 //        screenCirclingView.detachFromScreen() // To test circled area
-    }
+        }
 
     private fun startRecognition(croppedBitmap: Bitmap, parent: Rect, selected: Rect) =
-        stateIn(State.ScreenCapturing::class) {
+        checkNextState(State.TextRecognizing::class) {
             stateNavigator.updateState(State.TextRecognizing)
             try {
                 resultView.startRecognition()
@@ -254,8 +264,8 @@ class FloatingViewCoordinator @Inject constructor(
             }
         }
 
-    fun startTranslation(recognitionResult: RecognitionResult) =
-        stateIn(State.TextRecognizing::class, State.ResultDisplaying::class) {
+    private fun startTranslation(recognitionResult: RecognitionResult) =
+        checkNextState(State.TextTranslating::class) {
             try {
                 stateNavigator.updateState(State.TextTranslating)
 
@@ -340,37 +350,39 @@ class FloatingViewCoordinator @Inject constructor(
         }
 
     private fun showResult(result: Result) =
-        stateIn(State.TextTranslating::class) {
+        checkNextState(State.ResultDisplaying::class) {
             logger.debug("showResult(), $result")
             stateNavigator.updateState(State.ResultDisplaying)
 
             resultView.textTranslated(result)
         }
 
-    private fun showError(error: String) {
-        scope.launch {
-            stateNavigator.updateState(State.ErrorDisplaying(error))
-            logger.error(error)
-            context.showErrorDialog(error)
-            backToIdle()
-        }
+    private fun showError(error: String) = checkNextState(State.ErrorDisplaying::class) {
+        stateNavigator.updateState(State.ErrorDisplaying(error))
+        logger.error(error)
+        context.showErrorDialog(error)
+        backToIdle()
     }
 
-    private fun backToIdle() =
-        scope.launch {
-            if (currentState != State.Idle) stateNavigator.updateState(State.Idle)
-            croppedBitmap?.setReusable()
-            resultView.backToIdle()
-            showMainBar()
-        }
+    private fun backToIdle() = checkNextState(State.Idle::class) {
+        if (currentState != State.Idle) stateNavigator.updateState(State.Idle)
+        croppedBitmap?.setReusable()
+        resultView.backToIdle()
+        showMainBar()
+    }
 
-    private fun stateIn(
-        vararg states: KClass<out State>,
-        block: suspend CoroutineScope.() -> Unit
+    private fun checkNextState(
+        vararg nextStates: KClass<out State>,
+        block: suspend CoroutineScope.() -> Unit,
     ) {
-        if (states.contains(currentState::class)) {
+        val notAllowed = nextStates.filterNot { stateNavigator.allowedNextState(it) }
+
+        if (notAllowed.isEmpty()) {
             scope.launch { block.invoke(this) }
-        } else logger.error(t = IllegalStateException("The state should be in ${states.toList()}, current is $currentState"))
+        } else {
+            val error = "Transit from $notAllowed to $currentState is not allowed"
+            logger.error(t = IllegalStateException(error))
+        }
     }
 }
 

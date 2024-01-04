@@ -47,7 +47,11 @@ interface Translator {
     val defaultLanguage: String
         get() = Constants.DEFAULT_TRANSLATION_LANG
 
-    suspend fun checkEnvironment(coroutineScope: CoroutineScope): Boolean = true
+    /**
+     * Check the required resources is ready
+     * @return true if required resources are ready
+     */
+    suspend fun checkResources(coroutineScope: CoroutineScope): Boolean = true
 
     suspend fun isLangSupport(): Boolean =
         supportedLanguages().any { it.code.firstPart() == AppPref.selectedOCRLang.firstPart() }
