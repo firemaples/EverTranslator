@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.floatings.compose.mainbar
 
 import android.content.res.Configuration
+import android.graphics.Point
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -210,6 +211,7 @@ private fun MainBarContentPreview(
         override val action: SharedFlow<MainBarAction>
             get() = MutableSharedFlow()
 
+        override fun getInitialPosition(): Point = Point()
         override fun onMenuItemClicked(key: String) = Unit
         override fun onSelectClicked() = Unit
         override fun onTranslateClicked() = Unit

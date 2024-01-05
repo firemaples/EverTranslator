@@ -13,7 +13,6 @@ import tw.firemaples.onscreenocr.floatings.menu.MenuView
 import tw.firemaples.onscreenocr.floatings.translationSelectPanel.TranslationSelectPanel
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
-import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.utils.clickOnce
 import javax.inject.Inject
 
@@ -27,9 +26,7 @@ class MainBarFloatingView @Inject constructor(
 //        get() = R.layout.floating_main_bar
 
     override val initialPosition: Point
-        get() =
-            if (SettingManager.restoreMainBarPosition) AppPref.lastMainBarPosition
-            else Point(0, 0)
+        get() = viewModel.getInitialPosition()
 
     @Composable
     override fun RootContent() {

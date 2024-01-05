@@ -1,5 +1,6 @@
 package tw.firemaples.onscreenocr.floatings.compose.mainbar
 
+import android.graphics.Point
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +15,8 @@ import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.data.usecase.GetCurrentOCRDisplayLangCodeUseCase
 import tw.firemaples.onscreenocr.data.usecase.GetCurrentTranslationLangUseCase
 import tw.firemaples.onscreenocr.data.usecase.GetCurrentTranslatorTypeUseCase
+import tw.firemaples.onscreenocr.data.usecase.GetMainBarInitialPositionUseCase
+import tw.firemaples.onscreenocr.data.usecase.SaveLastMainBarPositionUseCase
 import tw.firemaples.onscreenocr.di.MainImmediateCoroutineScope
 import tw.firemaples.onscreenocr.floatings.manager.NavState
 import tw.firemaples.onscreenocr.floatings.manager.StateNavigator
@@ -24,6 +27,7 @@ import javax.inject.Inject
 interface MainBarViewModel {
     val state: StateFlow<MainBarState>
     val action: SharedFlow<MainBarAction>
+    fun getInitialPosition(): Point
     fun onMenuItemClicked(key: String)
     fun onSelectClicked()
     fun onTranslateClicked()
@@ -46,6 +50,7 @@ sealed interface MainBarAction {
     data object RescheduleFadeOut : MainBarAction
 }
 
+@Suppress("LongParameterList", "TooManyFunctions")
 class MainBarViewModelImpl @Inject constructor(
     @MainImmediateCoroutineScope
     private val scope: CoroutineScope,
@@ -53,6 +58,8 @@ class MainBarViewModelImpl @Inject constructor(
     private val getCurrentOCRDisplayLangCodeUseCase: GetCurrentOCRDisplayLangCodeUseCase,
     private val getCurrentTranslatorTypeUseCase: GetCurrentTranslatorTypeUseCase,
     private val getCurrentTranslationLangUseCase: GetCurrentTranslationLangUseCase,
+    private val saveLastMainBarPositionUseCase: SaveLastMainBarPositionUseCase,
+    private val getMainBarInitialPositionUseCase: GetMainBarInitialPositionUseCase,
 ) : MainBarViewModel {
     override val state = MutableStateFlow(MainBarState())
     override val action = MutableSharedFlow<MainBarAction>()
@@ -130,6 +137,9 @@ class MainBarViewModelImpl @Inject constructor(
         }
     }
 
+    override fun getInitialPosition(): Point =
+        getMainBarInitialPositionUseCase.invoke()
+
     override fun onMenuItemClicked(key: String) {
         scope.launch {
             action.emit(MainBarAction.RescheduleFadeOut)
@@ -167,7 +177,9 @@ class MainBarViewModelImpl @Inject constructor(
     }
 
     override fun saveLastPosition(x: Int, y: Int) {
-
+        scope.launch {
+            saveLastMainBarPositionUseCase.invoke(x = x, y = y)
+        }
     }
 
     override fun onLanguageBlockClicked() {
