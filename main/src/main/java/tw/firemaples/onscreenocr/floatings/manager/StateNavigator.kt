@@ -15,12 +15,12 @@ import kotlin.reflect.KClass
 
 interface StateNavigator {
     val navigationAction: SharedFlow<NavigationAction>
-    val currentState: StateFlow<State>
+    val currentNavState: StateFlow<NavState>
     suspend fun navigate(action: NavigationAction)
 
-    fun allowedNextState(nextState: KClass<out State>): Boolean
+    fun allowedNextState(nextNavState: KClass<out NavState>): Boolean
 
-    fun updateState(newState: State)
+    fun updateState(newNavState: NavState)
 }
 
 @Singleton
@@ -29,23 +29,23 @@ class StateNavigatorImpl @Inject constructor() : StateNavigator {
 
     override val navigationAction = MutableSharedFlow<NavigationAction>()
 
-    override val currentState = MutableStateFlow<State>(State.Idle)
+    override val currentNavState = MutableStateFlow<NavState>(NavState.Idle)
 
-    private val nextStates: Map<KClass<out State>, Set<KClass<out State>>> = mapOf(
-        State.Idle::class to setOf(State.ScreenCircling::class),
-        State.ScreenCircling::class to setOf(State.Idle::class, State.ScreenCircled::class),
-        State.ScreenCircled::class to setOf(State.Idle::class, State.ScreenCapturing::class),
-        State.ScreenCapturing::class to setOf(
-            State.Idle::class, State.TextRecognizing::class, State.ErrorDisplaying::class,
+    private val nextStates: Map<KClass<out NavState>, Set<KClass<out NavState>>> = mapOf(
+        NavState.Idle::class to setOf(NavState.ScreenCircling::class),
+        NavState.ScreenCircling::class to setOf(NavState.Idle::class, NavState.ScreenCircled::class),
+        NavState.ScreenCircled::class to setOf(NavState.Idle::class, NavState.ScreenCapturing::class),
+        NavState.ScreenCapturing::class to setOf(
+            NavState.Idle::class, NavState.TextRecognizing::class, NavState.ErrorDisplaying::class,
         ),
-        State.TextRecognizing::class to setOf(
-            State.Idle::class, State.TextTranslating::class, State.ErrorDisplaying::class,
+        NavState.TextRecognizing::class to setOf(
+            NavState.Idle::class, NavState.TextTranslating::class, NavState.ErrorDisplaying::class,
         ),
-        State.TextTranslating::class to setOf(
-            State.ResultDisplaying::class, State.ErrorDisplaying::class, State.Idle::class,
+        NavState.TextTranslating::class to setOf(
+            NavState.ResultDisplaying::class, NavState.ErrorDisplaying::class, NavState.Idle::class,
         ),
-        State.ResultDisplaying::class to setOf(State.Idle::class, State.TextTranslating::class),
-        State.ErrorDisplaying::class to setOf(State.Idle::class),
+        NavState.ResultDisplaying::class to setOf(NavState.Idle::class, NavState.TextTranslating::class),
+        NavState.ErrorDisplaying::class to setOf(NavState.Idle::class),
     )
 
     override suspend fun navigate(action: NavigationAction) {
@@ -54,17 +54,17 @@ class StateNavigatorImpl @Inject constructor() : StateNavigator {
         navigationAction.emit(action)
     }
 
-    override fun allowedNextState(nextState: KClass<out State>): Boolean =
-        nextStates[currentState.value::class]?.contains(nextState) == true
+    override fun allowedNextState(nextNavState: KClass<out NavState>): Boolean =
+        nextStates[currentNavState.value::class]?.contains(nextNavState) == true
 
-    override fun updateState(newState: State) {
-        val allowedNextStates = nextStates[currentState.value::class]
+    override fun updateState(newNavState: NavState) {
+        val allowedNextStates = nextStates[currentNavState.value::class]
 
-        if (allowedNextStates?.contains(newState::class) == true) {
-            logger.debug("Change state ${currentState.value} > $newState")
-            currentState.value = newState
+        if (allowedNextStates?.contains(newNavState::class) == true) {
+            logger.debug("Change state ${currentNavState.value} > $newNavState")
+            currentNavState.value = newNavState
         } else {
-            logger.error("Change state from ${currentState.value} to $newState is not allowed")
+            logger.error("Change state from ${currentNavState.value} to $newNavState is not allowed")
         }
     }
 }
@@ -104,17 +104,17 @@ sealed interface NavigationAction {
     ) : NavigationAction
 }
 
-sealed class State {
+sealed class NavState {
     override fun toString(): String {
         return this::class.simpleName ?: super.toString()
     }
 
-    object Idle : State()
-    object ScreenCircling : State()
-    object ScreenCircled : State()
-    object ScreenCapturing : State()
-    object TextRecognizing : State()
-    object TextTranslating : State()
-    object ResultDisplaying : State()
-    data class ErrorDisplaying(val error: String) : State()
+    object Idle : NavState()
+    object ScreenCircling : NavState()
+    object ScreenCircled : NavState()
+    object ScreenCapturing : NavState()
+    object TextRecognizing : NavState()
+    object TextTranslating : NavState()
+    object ResultDisplaying : NavState()
+    data class ErrorDisplaying(val error: String) : NavState()
 }

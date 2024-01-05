@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.floatings.base
+package tw.firemaples.onscreenocr.floatings.compose.base
 
 import android.content.Context
 import android.graphics.PixelFormat
@@ -11,6 +11,7 @@ import android.view.OrientationEventListener
 import android.view.WindowManager
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
@@ -129,8 +130,12 @@ abstract class ComposeFloatingView(protected val context: Context) {
 //    }
     protected val rootView by lazy {
         ComposeView(context).apply {
+
             setContent {
-                RootContent()
+                AppTheme {
+                    logger.debug("is dark theme: ${isSystemInDarkTheme()}")
+                    RootContent()
+                }
             }
 
             setViewTreeLifecycleOwner(lifecycleOwner)

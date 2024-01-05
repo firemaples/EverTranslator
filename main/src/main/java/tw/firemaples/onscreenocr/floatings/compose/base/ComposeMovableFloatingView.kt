@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.floatings.base
+package tw.firemaples.onscreenocr.floatings.compose.base
 
 import android.animation.ValueAnimator
 import android.content.Context
@@ -19,7 +19,7 @@ abstract class ComposeMovableFloatingView(context: Context) : ComposeFloatingVie
         private const val fadeOutAnimationDuration: Long = 800
     }
 
-    private val logger: Logger by lazy { Logger(this::class) }
+    protected val logger: Logger by lazy { Logger(this::class) }
 
     open val moveToEdgeAfterMoved: Boolean = false
     open val moveToEdgeMarginInDP: Float = 0f

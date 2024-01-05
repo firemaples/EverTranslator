@@ -9,12 +9,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.di.MainImmediateCoroutineScope
 import tw.firemaples.onscreenocr.floatings.ViewHolderService
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
+import tw.firemaples.onscreenocr.floatings.manager.NavState
 import tw.firemaples.onscreenocr.floatings.manager.NavigationAction
-import tw.firemaples.onscreenocr.floatings.manager.State
 import tw.firemaples.onscreenocr.floatings.manager.StateNavigator
-import tw.firemaples.onscreenocr.hilt.MainImmediateCoroutineScope
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.recognition.TextRecognizer
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
@@ -104,7 +104,7 @@ class MainBarViewModel @Inject constructor(
 
     init {
         logger.debug("register FloatingStateManager.onStateChanged")
-        stateNavigator.currentState
+        stateNavigator.currentNavState
             .onEach { onStateChanged(it) }
             .launchIn(viewScope)
     }
@@ -137,19 +137,19 @@ class MainBarViewModel @Inject constructor(
         }
     }
 
-    private suspend fun onStateChanged(state: State) {
+    private suspend fun onStateChanged(state: NavState) {
         logger.debug("onStateChanged(): $state")
         setupButtons(state)
         _rescheduleFadeOut.value = true
     }
 
     @Suppress("RedundantSuspendModifier")
-    private suspend fun setupButtons(state: State) {
+    private suspend fun setupButtons(state: NavState) {
         logger.debug("setupButtons(): $state")
-        _displaySelectButton.value = state == State.Idle
-        _displayTranslateButton.value = state == State.ScreenCircled
+        _displaySelectButton.value = state == NavState.Idle
+        _displayTranslateButton.value = state == NavState.ScreenCircled
         _displayCloseButton.value =
-            state == State.ScreenCircling || state == State.ScreenCircled
+            state == NavState.ScreenCircling || state == NavState.ScreenCircled
     }
 
     @Suppress("RedundantSuspendModifier")

@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.floatings.mainbar
+package tw.firemaples.onscreenocr.floatings.compose.mainbar
 
 import dagger.Binds
 import dagger.Module

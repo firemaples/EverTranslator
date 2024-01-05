@@ -14,12 +14,12 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.di.MainCoroutineScope
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
+import tw.firemaples.onscreenocr.floatings.compose.mainbar.MainBarFloatingView
 import tw.firemaples.onscreenocr.floatings.dialog.showErrorDialog
-import tw.firemaples.onscreenocr.floatings.mainbar.MainBarFloatingView
 import tw.firemaples.onscreenocr.floatings.result.ResultView
 import tw.firemaples.onscreenocr.floatings.screenCircling.ScreenCirclingView
-import tw.firemaples.onscreenocr.hilt.MainCoroutineScope
 import tw.firemaples.onscreenocr.log.FirebaseEvent
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.pref.AppPref
@@ -49,8 +49,8 @@ class FloatingViewCoordinator @Inject constructor(
 ) {
     private val logger: Logger by lazy { Logger(FloatingViewCoordinator::class) }
 
-    private val currentState: State
-        get() = stateNavigator.currentState.value
+    private val currentNavState: NavState
+        get() = stateNavigator.currentNavState.value
 
     private val screenCirclingView: ScreenCirclingView by lazy {
         ScreenCirclingView(context).apply {
@@ -146,40 +146,40 @@ class FloatingViewCoordinator @Inject constructor(
         }
     }
 
-    private fun startScreenCircling() = checkNextState(State.ScreenCircling::class) {
+    private fun startScreenCircling() = checkNextState(NavState.ScreenCircling::class) {
         if (!Translator.getTranslator().checkResources(scope)) {
             return@checkNextState
         }
 
         logger.debug("startScreenCircling()")
-        stateNavigator.updateState(State.ScreenCircling)
+        stateNavigator.updateState(NavState.ScreenCircling)
         FirebaseEvent.logStartAreaSelection()
         screenCirclingView.attachToScreen()
         arrangeMainBarToTop()
     }
 
     private fun onAreaSelected(parentRect: Rect, selectedRect: Rect) =
-        checkNextState(State.ScreenCircled::class) {
+        checkNextState(NavState.ScreenCircled::class) {
             logger.debug(
                 "onAreaSelected(), parentRect: $parentRect, " +
                         "selectedRect: $selectedRect, " +
                         "size: ${selectedRect.width()}x${selectedRect.height()}"
             )
-            if (currentState != State.ScreenCircled) {
-                stateNavigator.updateState(State.ScreenCircled)
+            if (currentNavState != NavState.ScreenCircled) {
+                stateNavigator.updateState(NavState.ScreenCircled)
             }
             this@FloatingViewCoordinator.selectedRect = selectedRect
             this@FloatingViewCoordinator.parentRect = parentRect
         }
 
-    private fun cancelScreenCircling() = checkNextState(State.Idle::class) {
+    private fun cancelScreenCircling() = checkNextState(NavState.Idle::class) {
         logger.debug("cancelScreenCircling()")
-        stateNavigator.updateState(State.Idle)
+        stateNavigator.updateState(NavState.Idle)
         screenCirclingView.detachFromScreen()
     }
 
     private fun startScreenCapturing(selectedOCRLang: String) =
-        checkNextState(State.ScreenCapturing::class) {
+        checkNextState(NavState.ScreenCapturing::class) {
             if (!Translator.getTranslator().checkResources(scope)) {
                 return@checkNextState
             }
@@ -188,7 +188,7 @@ class FloatingViewCoordinator @Inject constructor(
             val parent = parentRect ?: return@checkNextState
             val selected = selectedRect ?: return@checkNextState
             logger.debug("startScreenCapturing(), parentRect: $parent, selectedRect: $selected")
-            stateNavigator.updateState(State.ScreenCapturing)
+            stateNavigator.updateState(NavState.ScreenCapturing)
             mainBar.detachFromScreen()
             screenCirclingView.detachFromScreen()
 
@@ -222,8 +222,8 @@ class FloatingViewCoordinator @Inject constructor(
         }
 
     private fun startRecognition(croppedBitmap: Bitmap, parent: Rect, selected: Rect) =
-        checkNextState(State.TextRecognizing::class) {
-            stateNavigator.updateState(State.TextRecognizing)
+        checkNextState(NavState.TextRecognizing::class) {
+            stateNavigator.updateState(NavState.TextRecognizing)
             try {
                 resultView.startRecognition()
                 val recognizer = TextRecognizer.getRecognizer(selectedOCRProvider)
@@ -265,9 +265,9 @@ class FloatingViewCoordinator @Inject constructor(
         }
 
     private fun startTranslation(recognitionResult: RecognitionResult) =
-        checkNextState(State.TextTranslating::class) {
+        checkNextState(NavState.TextTranslating::class) {
             try {
-                stateNavigator.updateState(State.TextTranslating)
+                stateNavigator.updateState(NavState.TextTranslating)
 
                 val translator = Translator.getTranslator()
 
@@ -350,29 +350,29 @@ class FloatingViewCoordinator @Inject constructor(
         }
 
     private fun showResult(result: Result) =
-        checkNextState(State.ResultDisplaying::class) {
+        checkNextState(NavState.ResultDisplaying::class) {
             logger.debug("showResult(), $result")
-            stateNavigator.updateState(State.ResultDisplaying)
+            stateNavigator.updateState(NavState.ResultDisplaying)
 
             resultView.textTranslated(result)
         }
 
-    private fun showError(error: String) = checkNextState(State.ErrorDisplaying::class) {
-        stateNavigator.updateState(State.ErrorDisplaying(error))
+    private fun showError(error: String) = checkNextState(NavState.ErrorDisplaying::class) {
+        stateNavigator.updateState(NavState.ErrorDisplaying(error))
         logger.error(error)
         context.showErrorDialog(error)
         backToIdle()
     }
 
-    private fun backToIdle() = checkNextState(State.Idle::class) {
-        if (currentState != State.Idle) stateNavigator.updateState(State.Idle)
+    private fun backToIdle() = checkNextState(NavState.Idle::class) {
+        if (currentNavState != NavState.Idle) stateNavigator.updateState(NavState.Idle)
         croppedBitmap?.setReusable()
         resultView.backToIdle()
         showMainBar()
     }
 
     private fun checkNextState(
-        vararg nextStates: KClass<out State>,
+        vararg nextStates: KClass<out NavState>,
         block: suspend CoroutineScope.() -> Unit,
     ) {
         val notAllowed = nextStates.filterNot { stateNavigator.allowedNextState(it) }
@@ -380,7 +380,7 @@ class FloatingViewCoordinator @Inject constructor(
         if (notAllowed.isEmpty()) {
             scope.launch { block.invoke(this) }
         } else {
-            val error = "Transit from $notAllowed to $currentState is not allowed"
+            val error = "Transit from $notAllowed to $currentNavState is not allowed"
             logger.error(t = IllegalStateException(error))
         }
     }

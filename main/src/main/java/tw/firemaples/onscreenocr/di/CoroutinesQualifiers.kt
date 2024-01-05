@@ -1,4 +1,4 @@
-package tw.firemaples.onscreenocr.hilt
+package tw.firemaples.onscreenocr.di
 
 import javax.inject.Qualifier
 

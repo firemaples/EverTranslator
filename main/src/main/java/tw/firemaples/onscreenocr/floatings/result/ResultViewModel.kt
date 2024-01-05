@@ -13,7 +13,7 @@ import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
 import tw.firemaples.onscreenocr.floatings.manager.NavigationAction
 import tw.firemaples.onscreenocr.floatings.manager.Result
 import tw.firemaples.onscreenocr.floatings.manager.StateNavigator
-import tw.firemaples.onscreenocr.hilt.MainImmediateCoroutineScope
+import tw.firemaples.onscreenocr.di.MainImmediateCoroutineScope
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.repo.GeneralRepository

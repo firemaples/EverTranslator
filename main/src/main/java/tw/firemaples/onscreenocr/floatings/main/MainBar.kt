@@ -7,7 +7,7 @@ import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.databinding.FloatingMainBarBinding
 import tw.firemaples.onscreenocr.floatings.base.MovableFloatingView
 import tw.firemaples.onscreenocr.floatings.history.VersionHistoryView
-import tw.firemaples.onscreenocr.floatings.manager.State
+import tw.firemaples.onscreenocr.floatings.manager.NavState
 import tw.firemaples.onscreenocr.floatings.manager.StateNavigator
 import tw.firemaples.onscreenocr.floatings.menu.MenuView
 import tw.firemaples.onscreenocr.floatings.readme.ReadmeView
@@ -44,8 +44,8 @@ class MainBar @Inject constructor(
         get() = true
 
     override val fadeOutAfterMoved: Boolean
-        get() = !arrayOf(State.ScreenCircling, State.ScreenCircled)
-            .contains(stateNavigator.currentState.value)
+        get() = !arrayOf(NavState.ScreenCircling, NavState.ScreenCircled)
+            .contains(stateNavigator.currentNavState.value)
                 && !menuView.attached
                 && SettingManager.enableFadingOutWhileIdle
     override val fadeOutDelay: Long

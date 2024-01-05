@@ -1,12 +1,13 @@
-package tw.firemaples.onscreenocr.floatings.mainbar
+package tw.firemaples.onscreenocr.floatings.compose.mainbar
 
 import android.content.Context
 import android.graphics.Point
 import androidx.compose.runtime.Composable
 import dagger.hilt.android.qualifiers.ApplicationContext
 import tw.firemaples.onscreenocr.databinding.FloatingMainBarBinding
-import tw.firemaples.onscreenocr.floatings.base.ComposeMovableFloatingView
-import tw.firemaples.onscreenocr.floatings.manager.State
+import tw.firemaples.onscreenocr.floatings.compose.base.ComposeMovableFloatingView
+import tw.firemaples.onscreenocr.floatings.compose.base.collectOnLifecycleResumed
+import tw.firemaples.onscreenocr.floatings.manager.NavState
 import tw.firemaples.onscreenocr.floatings.manager.StateNavigator
 import tw.firemaples.onscreenocr.floatings.menu.MenuView
 import tw.firemaples.onscreenocr.floatings.translationSelectPanel.TranslationSelectPanel
@@ -32,6 +33,13 @@ class MainBarFloatingView @Inject constructor(
 
     @Composable
     override fun RootContent() {
+        viewModel.action.collectOnLifecycleResumed { state ->
+            when (state) {
+                MainBarAction.RescheduleFadeOut ->
+                    rescheduleFadeOut()
+            }
+        }
+
         MainBarContent(
             viewModel = viewModel,
             onDragStart = onDragStart,
@@ -48,8 +56,8 @@ class MainBarFloatingView @Inject constructor(
         get() = true
 
     override val fadeOutAfterMoved: Boolean
-        get() = !arrayOf(State.ScreenCircling, State.ScreenCircled)
-            .contains(stateNavigator.currentState.value)
+        get() = !arrayOf(NavState.ScreenCircling, NavState.ScreenCircled)
+            .contains(stateNavigator.currentNavState.value)
                 && !menuView.attached
                 && SettingManager.enableFadingOutWhileIdle
     override val fadeOutDelay: Long
