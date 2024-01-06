@@ -20,6 +20,7 @@ import tw.firemaples.onscreenocr.data.usecase.SaveLastMainBarPositionUseCase
 import tw.firemaples.onscreenocr.di.MainImmediateCoroutineScope
 import tw.firemaples.onscreenocr.floatings.compose.base.awaitForSubscriber
 import tw.firemaples.onscreenocr.floatings.manager.NavState
+import tw.firemaples.onscreenocr.floatings.manager.NavigationAction
 import tw.firemaples.onscreenocr.floatings.manager.StateNavigator
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
@@ -65,7 +66,7 @@ sealed interface MainBarAction {
 class MainBarViewModelImpl @Inject constructor(
     @MainImmediateCoroutineScope
     private val scope: CoroutineScope,
-    stateNavigator: StateNavigator,
+    private val stateNavigator: StateNavigator,
     private val getCurrentOCRDisplayLangCodeUseCase: GetCurrentOCRDisplayLangCodeUseCase,
     private val getCurrentTranslatorTypeUseCase: GetCurrentTranslatorTypeUseCase,
     private val getCurrentTranslationLangUseCase: GetCurrentTranslationLangUseCase,
@@ -160,18 +161,21 @@ class MainBarViewModelImpl @Inject constructor(
     override fun onSelectClicked() {
         scope.launch {
             action.emit(MainBarAction.RescheduleFadeOut)
+            stateNavigator.navigate(NavigationAction.NavigateToScreenCircling)
         }
     }
 
     override fun onTranslateClicked() {
         scope.launch {
             action.emit(MainBarAction.RescheduleFadeOut)
+            stateNavigator.navigate(NavigationAction.NavigateToScreenCapturing)
         }
     }
 
     override fun onCloseClicked() {
         scope.launch {
             action.emit(MainBarAction.RescheduleFadeOut)
+            stateNavigator.navigate(NavigationAction.CancelScreenCircling)
         }
     }
 

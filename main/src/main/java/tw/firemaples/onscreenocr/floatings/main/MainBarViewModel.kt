@@ -249,7 +249,7 @@ class MainBarViewModel @Inject constructor(
 
     fun onTranslateClicked() {
         viewScope.launch {
-            stateNavigator.navigate(NavigationAction.NavigateToScreenCapturing(selectedOCRLang))
+            stateNavigator.navigate(NavigationAction.NavigateToScreenCapturing)
         }
     }
 

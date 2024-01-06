@@ -88,7 +88,7 @@ class FloatingViewCoordinator @Inject constructor(
 
 
                     is NavigationAction.NavigateToScreenCapturing ->
-                        startScreenCapturing(it.selectedOCRLang)
+                        startScreenCapturing()
 
                     is NavigationAction.NavigateToTextRecognition ->
                         startRecognition(
@@ -178,13 +178,13 @@ class FloatingViewCoordinator @Inject constructor(
         screenCirclingView.detachFromScreen()
     }
 
-    private fun startScreenCapturing(selectedOCRLang: String) =
+    private fun startScreenCapturing() =
         checkNextState(NavState.ScreenCapturing::class) {
             if (!Translator.getTranslator().checkResources(scope)) {
                 return@checkNextState
             }
 
-            this@FloatingViewCoordinator.selectedOCRLang = selectedOCRLang
+            this@FloatingViewCoordinator.selectedOCRLang = AppPref.selectedOCRLang
             val parent = parentRect ?: return@checkNextState
             val selected = selectedRect ?: return@checkNextState
             logger.debug("startScreenCapturing(), parentRect: $parent, selectedRect: $selected")

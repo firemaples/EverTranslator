@@ -89,9 +89,7 @@ sealed interface NavigationAction {
 
     data object CancelScreenCircling : NavigationAction
 
-    data class NavigateToScreenCapturing(
-        val selectedOCRLang: String,
-    ) : NavigationAction
+    data object NavigateToScreenCapturing : NavigationAction
 
     data class NavigateToTextRecognition(
         val croppedBitmap: Bitmap,
