@@ -86,7 +86,6 @@ class FloatingViewCoordinator @Inject constructor(
                             selectedRect = it.selectedRect,
                         )
 
-
                     is NavigationAction.NavigateToScreenCapturing ->
                         startScreenCapturing()
 

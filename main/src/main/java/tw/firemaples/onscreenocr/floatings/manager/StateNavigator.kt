@@ -39,7 +39,7 @@ class StateNavigatorImpl @Inject constructor() : StateNavigator {
             NavState.Idle::class, NavState.ScreenCircled::class,
         ),
         NavState.ScreenCircled::class to setOf(
-            NavState.Idle::class, NavState.ScreenCapturing::class,
+            NavState.Idle::class, NavState.ScreenCapturing::class, NavState.ScreenCircled::class,
         ),
         NavState.ScreenCapturing::class to setOf(
             NavState.Idle::class, NavState.TextRecognizing::class, NavState.ErrorDisplaying::class,
