@@ -96,6 +96,10 @@ fun MainBarContent(
                 onDragCancel = onDragCancel,
                 onDrag = onDrag,
             )
+            MainBarMenu(
+                expanded = state.displayMainBarMenu,
+                onMenuOptionSelected = viewModel::onMenuOptionSelected,
+            )
         }
     }
 }
@@ -218,8 +222,9 @@ private fun MainBarContentPreview(
         override fun onCloseClicked() = Unit
         override fun onMenuButtonClicked() = Unit
         override fun onAttachedToScreen() = Unit
-        override fun saveLastPosition(x: Int, y: Int) = Unit
+        override fun onDragEnd(x: Int, y: Int) = Unit
         override fun onLanguageBlockClicked() = Unit
+        override fun onMenuOptionSelected(mainBarMenuOption: MainBarMenuOption?) = Unit
     }
 
     AppTheme {

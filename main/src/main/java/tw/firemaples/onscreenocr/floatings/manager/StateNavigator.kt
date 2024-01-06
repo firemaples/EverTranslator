@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
+import tw.firemaples.onscreenocr.floatings.compose.base.awaitForSubscriber
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.utils.Logger
 import javax.inject.Inject
@@ -32,9 +32,15 @@ class StateNavigatorImpl @Inject constructor() : StateNavigator {
     override val currentNavState = MutableStateFlow<NavState>(NavState.Idle)
 
     private val nextStates: Map<KClass<out NavState>, Set<KClass<out NavState>>> = mapOf(
-        NavState.Idle::class to setOf(NavState.ScreenCircling::class),
-        NavState.ScreenCircling::class to setOf(NavState.Idle::class, NavState.ScreenCircled::class),
-        NavState.ScreenCircled::class to setOf(NavState.Idle::class, NavState.ScreenCapturing::class),
+        NavState.Idle::class to setOf(
+            NavState.Idle::class, NavState.ScreenCircling::class,
+        ),
+        NavState.ScreenCircling::class to setOf(
+            NavState.Idle::class, NavState.ScreenCircled::class,
+        ),
+        NavState.ScreenCircled::class to setOf(
+            NavState.Idle::class, NavState.ScreenCapturing::class,
+        ),
         NavState.ScreenCapturing::class to setOf(
             NavState.Idle::class, NavState.TextRecognizing::class, NavState.ErrorDisplaying::class,
         ),
@@ -44,13 +50,15 @@ class StateNavigatorImpl @Inject constructor() : StateNavigator {
         NavState.TextTranslating::class to setOf(
             NavState.ResultDisplaying::class, NavState.ErrorDisplaying::class, NavState.Idle::class,
         ),
-        NavState.ResultDisplaying::class to setOf(NavState.Idle::class, NavState.TextTranslating::class),
+        NavState.ResultDisplaying::class to setOf(
+            NavState.Idle::class, NavState.TextTranslating::class,
+        ),
         NavState.ErrorDisplaying::class to setOf(NavState.Idle::class),
     )
 
     override suspend fun navigate(action: NavigationAction) {
         logger.debug("Receive NavigationAction: $action")
-        navigationAction.subscriptionCount.first { it > 0 }
+        navigationAction.awaitForSubscriber()
         navigationAction.emit(action)
     }
 

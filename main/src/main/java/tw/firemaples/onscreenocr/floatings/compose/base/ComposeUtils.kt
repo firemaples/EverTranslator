@@ -6,6 +6,8 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.first
 
 @Composable
 fun <T> Flow<T>.collectOnLifecycleResumed(state: (T) -> Unit) {
@@ -15,4 +17,8 @@ fun <T> Flow<T>.collectOnLifecycleResumed(state: (T) -> Unit) {
             this@collectOnLifecycleResumed.collect(state)
         }
     }
+}
+
+suspend fun <T> MutableSharedFlow<T>.awaitForSubscriber() {
+    subscriptionCount.first { it > 0 }
 }

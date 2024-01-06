@@ -18,8 +18,10 @@ import tw.firemaples.onscreenocr.data.usecase.GetCurrentTranslatorTypeUseCase
 import tw.firemaples.onscreenocr.data.usecase.GetMainBarInitialPositionUseCase
 import tw.firemaples.onscreenocr.data.usecase.SaveLastMainBarPositionUseCase
 import tw.firemaples.onscreenocr.di.MainImmediateCoroutineScope
+import tw.firemaples.onscreenocr.floatings.compose.base.awaitForSubscriber
 import tw.firemaples.onscreenocr.floatings.manager.NavState
 import tw.firemaples.onscreenocr.floatings.manager.StateNavigator
+import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.utils.Logger
 import javax.inject.Inject
@@ -34,8 +36,9 @@ interface MainBarViewModel {
     fun onCloseClicked()
     fun onMenuButtonClicked()
     fun onAttachedToScreen()
-    fun saveLastPosition(x: Int, y: Int)
+    fun onDragEnd(x: Int, y: Int)
     fun onLanguageBlockClicked()
+    fun onMenuOptionSelected(mainBarMenuOption: MainBarMenuOption?)
 }
 
 data class MainBarState(
@@ -44,11 +47,18 @@ data class MainBarState(
     val displaySelectButton: Boolean = false,
     val displayTranslateButton: Boolean = false,
     val displayCloseButton: Boolean = false,
+    val displayMainBarMenu: Boolean = false,
 )
 
 sealed interface MainBarAction {
     data object RescheduleFadeOut : MainBarAction
     data object OpenLanguageSelectionPanel : MainBarAction
+    data object OpenSettings : MainBarAction
+    data class OpenBrowser(val url: String) : MainBarAction
+    data object OpenVersionHistory : MainBarAction
+    data object OpenReadme : MainBarAction
+    data object HideMainBar : MainBarAction
+    data object ExitApp : MainBarAction
 }
 
 @Suppress("LongParameterList", "TooManyFunctions")
@@ -168,16 +178,22 @@ class MainBarViewModelImpl @Inject constructor(
     override fun onMenuButtonClicked() {
         scope.launch {
             action.emit(MainBarAction.RescheduleFadeOut)
+            state.update {
+                it.copy(
+                    displayMainBarMenu = true,
+                )
+            }
         }
     }
 
     override fun onAttachedToScreen() {
         scope.launch {
+            action.awaitForSubscriber()
             action.emit(MainBarAction.RescheduleFadeOut)
         }
     }
 
-    override fun saveLastPosition(x: Int, y: Int) {
+    override fun onDragEnd(x: Int, y: Int) {
         scope.launch {
             saveLastMainBarPositionUseCase.invoke(x = x, y = y)
         }
@@ -186,6 +202,41 @@ class MainBarViewModelImpl @Inject constructor(
     override fun onLanguageBlockClicked() {
         scope.launch {
             action.emit(MainBarAction.OpenLanguageSelectionPanel)
+        }
+    }
+
+    override fun onMenuOptionSelected(mainBarMenuOption: MainBarMenuOption?) {
+        scope.launch {
+            state.update {
+                it.copy(
+                    displayMainBarMenu = false,
+                )
+            }
+
+            when (mainBarMenuOption) {
+                MainBarMenuOption.SETTING ->
+                    action.emit(MainBarAction.OpenSettings)
+
+                MainBarMenuOption.PRIVACY_POLICY ->
+                    action.emit(MainBarAction.OpenBrowser(RemoteConfigManager.privacyPolicyUrl))
+
+                MainBarMenuOption.ABOUT ->
+                    action.emit(MainBarAction.OpenBrowser(RemoteConfigManager.aboutUrl))
+
+                MainBarMenuOption.VERSION_HISTORY ->
+                    action.emit(MainBarAction.OpenVersionHistory)
+
+                MainBarMenuOption.README ->
+                    action.emit(MainBarAction.OpenReadme)
+
+                MainBarMenuOption.HIDE ->
+                    action.emit(MainBarAction.HideMainBar)
+
+                MainBarMenuOption.EXIT ->
+                    action.emit(MainBarAction.ExitApp)
+
+                null -> {}
+            }
         }
     }
 }

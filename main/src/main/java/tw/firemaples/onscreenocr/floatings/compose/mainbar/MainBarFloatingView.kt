@@ -5,14 +5,19 @@ import android.graphics.Point
 import androidx.compose.runtime.Composable
 import dagger.hilt.android.qualifiers.ApplicationContext
 import tw.firemaples.onscreenocr.databinding.FloatingMainBarBinding
+import tw.firemaples.onscreenocr.floatings.ViewHolderService
 import tw.firemaples.onscreenocr.floatings.compose.base.ComposeMovableFloatingView
 import tw.firemaples.onscreenocr.floatings.compose.base.collectOnLifecycleResumed
+import tw.firemaples.onscreenocr.floatings.history.VersionHistoryView
 import tw.firemaples.onscreenocr.floatings.manager.NavState
 import tw.firemaples.onscreenocr.floatings.manager.StateNavigator
 import tw.firemaples.onscreenocr.floatings.menu.MenuView
+import tw.firemaples.onscreenocr.floatings.readme.ReadmeView
 import tw.firemaples.onscreenocr.floatings.translationSelectPanel.TranslationSelectPanel
 import tw.firemaples.onscreenocr.log.FirebaseEvent
+import tw.firemaples.onscreenocr.pages.setting.SettingActivity
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
+import tw.firemaples.onscreenocr.utils.Utils
 import tw.firemaples.onscreenocr.utils.clickOnce
 import javax.inject.Inject
 
@@ -30,8 +35,8 @@ class MainBarFloatingView @Inject constructor(
 
     @Composable
     override fun RootContent() {
-        viewModel.action.collectOnLifecycleResumed { state ->
-            when (state) {
+        viewModel.action.collectOnLifecycleResumed { action ->
+            when (action) {
                 MainBarAction.RescheduleFadeOut ->
                     rescheduleFadeOut()
 
@@ -40,13 +45,40 @@ class MainBarFloatingView @Inject constructor(
                     // TODO wait to be refactored
                     TranslationSelectPanel(context).attachToScreen()
                 }
+
+                is MainBarAction.OpenBrowser ->
+                    // TODO wait to be refactored
+                    Utils.openBrowser(action.url)
+
+                MainBarAction.OpenReadme ->
+                    // TODO wait to be refactored
+                    ReadmeView(context).attachToScreen()
+
+                MainBarAction.OpenSettings ->
+                    // TODO wait to be refactored
+                    SettingActivity.start(context)
+
+                MainBarAction.OpenVersionHistory ->
+                    // TODO wait to be refactored
+                    VersionHistoryView(context).attachToScreen()
+
+                MainBarAction.HideMainBar ->
+                    // TODO wait to be refactored
+                    ViewHolderService.hideViews(context)
+
+                MainBarAction.ExitApp ->
+                    // TODO wait to be refactored
+                    ViewHolderService.exit(context)
             }
         }
 
         MainBarContent(
             viewModel = viewModel,
             onDragStart = onDragStart,
-            onDragEnd = onDragEnd,
+            onDragEnd = {
+                onDragEnd.invoke()
+                viewModel.onDragEnd(params.x, params.y)
+            },
             onDragCancel = onDragCancel,
             onDrag = onDrag,
         )
@@ -171,13 +203,8 @@ class MainBarFloatingView @Inject constructor(
 //        }
     }
 
-    override fun onAttachedToScreen() {
-        super.onAttachedToScreen()
+    override fun attachToScreen() {
+        super.attachToScreen()
         viewModel.onAttachedToScreen()
-    }
-
-    override fun onDetachedFromScreen() {
-        super.onDetachedFromScreen()
-        viewModel.saveLastPosition(params.x, params.y)
     }
 }
