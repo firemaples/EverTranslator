@@ -22,6 +22,7 @@ import tw.firemaples.onscreenocr.floatings.compose.base.awaitForSubscriber
 import tw.firemaples.onscreenocr.floatings.manager.NavState
 import tw.firemaples.onscreenocr.floatings.manager.NavigationAction
 import tw.firemaples.onscreenocr.floatings.manager.StateNavigator
+import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.utils.Logger
@@ -31,6 +32,9 @@ interface MainBarViewModel {
     val state: StateFlow<MainBarState>
     val action: SharedFlow<MainBarAction>
     fun getInitialPosition(): Point
+    fun getFadeOutAfterMoved(): Boolean
+    fun getFadeOutDelay(): Long
+    fun getFadeOutDestinationAlpha(): Float
     fun onMenuItemClicked(key: String)
     fun onSelectClicked()
     fun onTranslateClicked()
@@ -53,6 +57,7 @@ data class MainBarState(
 
 sealed interface MainBarAction {
     data object RescheduleFadeOut : MainBarAction
+    data object MoveToEdgeIfEnabled : MainBarAction
     data object OpenLanguageSelectionPanel : MainBarAction
     data object OpenSettings : MainBarAction
     data class OpenBrowser(val url: String) : MainBarAction
@@ -94,7 +99,7 @@ class MainBarViewModelImpl @Inject constructor(
                 navState == NavState.ScreenCircling || navState == NavState.ScreenCircled,
             )
         }
-        action.emit(MainBarAction.RescheduleFadeOut)
+        action.emit(MainBarAction.MoveToEdgeIfEnabled)
     }
 
     private fun subscribeLanguageStateChanges() {
@@ -111,7 +116,7 @@ class MainBarViewModelImpl @Inject constructor(
         }.launchIn(scope)
     }
 
-    private fun updateLanguageStates(
+    private suspend fun updateLanguageStates(
         ocrLang: String,
         translationProviderType: TranslationProviderType,
         translationLang: String,
@@ -147,10 +152,25 @@ class MainBarViewModelImpl @Inject constructor(
                 translatorIcon = icon,
             )
         }
+        action.emit(MainBarAction.MoveToEdgeIfEnabled)
     }
 
     override fun getInitialPosition(): Point =
         getMainBarInitialPositionUseCase.invoke()
+
+    override fun getFadeOutAfterMoved(): Boolean {
+        val navState = stateNavigator.currentNavState.value
+
+        return navState != NavState.ScreenCircling && navState != NavState.ScreenCircled
+                && !state.value.displayMainBarMenu
+                && SettingManager.enableFadingOutWhileIdle //TODO move logic
+    }
+
+    override fun getFadeOutDelay(): Long =
+        SettingManager.timeoutToFadeOut //TODO move logic
+
+    override fun getFadeOutDestinationAlpha(): Float =
+        SettingManager.opaquePercentageToFadeOut //TODO move logic
 
     override fun onMenuItemClicked(key: String) {
         scope.launch {

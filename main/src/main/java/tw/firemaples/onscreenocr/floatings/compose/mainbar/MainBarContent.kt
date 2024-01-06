@@ -216,6 +216,9 @@ private fun MainBarContentPreview(
             get() = MutableSharedFlow()
 
         override fun getInitialPosition(): Point = Point()
+        override fun getFadeOutAfterMoved(): Boolean = false
+        override fun getFadeOutDelay(): Long = 0L
+        override fun getFadeOutDestinationAlpha(): Float = 0f
         override fun onMenuItemClicked(key: String) = Unit
         override fun onSelectClicked() = Unit
         override fun onTranslateClicked() = Unit
