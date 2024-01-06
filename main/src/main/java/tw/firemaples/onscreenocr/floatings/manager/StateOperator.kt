@@ -88,7 +88,8 @@ class StateOperatorImpl @Inject constructor(
                         )
                     }
 
-                    NavigationAction.NavigateToIdle -> backToIdle()
+                    is NavigationAction.NavigateToIdle ->
+                        backToIdle(showMainBar = action.showMainBar)
 
                     is NavigationAction.NavigateToTextRecognition -> TODO()
                     is NavigationAction.NavigateToTranslated -> TODO()
@@ -380,10 +381,12 @@ class StateOperatorImpl @Inject constructor(
         action.emit(StateOperatorAction.ShowErrorDialog(error))
     }
 
-    private fun backToIdle() = scope.launch {
+    private fun backToIdle(showMainBar: Boolean = true) = scope.launch {
         if (currentNavState != NavState.Idle)
             stateNavigator.updateState(NavState.Idle)
-        action.emit(StateOperatorAction.ShowMainBar)
+
+        if (showMainBar)
+            action.emit(StateOperatorAction.ShowMainBar)
 
         currentNavState.getBitmap()?.setReusable()
     }

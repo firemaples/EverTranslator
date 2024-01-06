@@ -11,8 +11,13 @@ import android.view.OrientationEventListener
 import android.view.WindowManager
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleRegistry
@@ -85,8 +90,14 @@ abstract class ComposeFloatingView(protected val context: Context) {
     private val homeButtonWatcher: HomeButtonWatcher by lazy {
         HomeButtonWatcher(
             context = context,
-            onHomeButtonPressed = { onHomeButtonPressed() },
-            onHomeButtonLongPressed = { onHomeButtonLongPressed() },
+            onHomeButtonPressed = {
+                logger.debug("onHomeButtonPressed()")
+                onHomeButtonPressed()
+            },
+            onHomeButtonLongPressed = {
+                logger.debug("onHomeButtonLongPressed()")
+                onHomeButtonLongPressed()
+            },
         )
     }
 
@@ -130,11 +141,35 @@ abstract class ComposeFloatingView(protected val context: Context) {
 //    }
     protected val rootView by lazy {
         ComposeView(context).apply {
-
+            setOnKeyListener { v, keyCode, event -> //TODO check or remove
+                logger.debug("setOnKeyListener, keyCode: $keyCode, event: $event")
+                false
+            }
             setContent {
                 AppTheme {
-                    logger.debug("is dark theme: ${isSystemInDarkTheme()}")
-                    RootContent()
+                    Box(
+                        modifier = Modifier
+                            .onKeyEvent { event -> //TODO check or remove
+                                logger.debug("onKeyEvent: $event")
+                                false
+                            }
+                            .onPreviewKeyEvent { event -> //TODO check or remove
+                                logger.debug("onPreviewKeyEvent: $event")
+                                false
+                            }
+                    ) {
+                        LaunchedEffect(Unit) {
+                            onAttachedToScreen()
+                        }
+
+                        DisposableEffect(Unit) {
+                            onDispose {
+                                onDetachedFromScreen()
+                            }
+                        }
+
+                        RootContent()
+                    }
                 }
             }
 

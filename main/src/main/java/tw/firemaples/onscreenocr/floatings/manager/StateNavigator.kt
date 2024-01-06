@@ -78,7 +78,7 @@ class StateNavigatorImpl @Inject constructor() : StateNavigator {
 }
 
 sealed interface NavigationAction {
-    data object NavigateToIdle : NavigationAction
+    data class NavigateToIdle(val showMainBar: Boolean) : NavigationAction
 
     data object NavigateToScreenCircling : NavigationAction
 

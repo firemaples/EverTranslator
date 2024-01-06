@@ -89,8 +89,8 @@ class MainBarFloatingView @Inject constructor(
     override val fadeOutDestinationAlpha: Float
         get() = viewModel.getFadeOutDestinationAlpha()
 
-    override fun attachToScreen() {
-        super.attachToScreen()
+    override fun onAttachedToScreen() {
+        super.onAttachedToScreen()
         viewModel.onAttachedToScreen()
     }
 }

@@ -90,7 +90,7 @@ class FloatingViewCoordinator @Inject constructor(
         resultView.onUserDismiss = {
             scope.launch {
                 resultView.backToIdle()
-                stateNavigator.navigate(NavigationAction.NavigateToIdle)
+                stateNavigator.navigate(NavigationAction.NavigateToIdle(showMainBar = true))
             }
         }
     }
@@ -118,9 +118,7 @@ class FloatingViewCoordinator @Inject constructor(
 
     fun detachAllViews() {
         scope.launch {
-            stateNavigator.navigate(NavigationAction.NavigateToIdle)
-        }
-        scope.launch {
+            stateNavigator.navigate(NavigationAction.NavigateToIdle(showMainBar = false))
             hideMainBar()
             FloatingView.detachAllFloatingViews()
         }
