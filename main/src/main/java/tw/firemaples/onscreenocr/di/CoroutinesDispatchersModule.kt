@@ -32,12 +32,21 @@ object CoroutinesDispatchersModule {
     @Singleton
     @MainImmediateCoroutineScope
     @Provides
-    fun provideMainImmediateCoroutineScope(@MainImmediateDispatcher mainDispatcher: CoroutineDispatcher): CoroutineScope =
-        CoroutineScope(SupervisorJob() + mainDispatcher)
+    fun provideMainImmediateCoroutineScope(
+        @MainImmediateDispatcher dispatcher: CoroutineDispatcher,
+    ): CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
 
     @Singleton
     @MainCoroutineScope
     @Provides
-    fun provideMainCoroutineScope(@MainDispatcher mainDispatcher: CoroutineDispatcher): CoroutineScope =
-        CoroutineScope(SupervisorJob() + mainDispatcher)
+    fun provideMainCoroutineScope(
+        @MainDispatcher dispatcher: CoroutineDispatcher,
+    ): CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
+
+    @Singleton
+    @DefaultCoroutineScope
+    @Provides
+    fun provideDefaultCoroutineScope(
+        @DefaultDispatcher dispatcher: CoroutineDispatcher,
+    ): CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
 }

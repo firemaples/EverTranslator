@@ -25,3 +25,7 @@ annotation class MainImmediateCoroutineScope
 @Retention(AnnotationRetention.RUNTIME)
 @Qualifier
 annotation class MainCoroutineScope
+
+@Retention(AnnotationRetention.RUNTIME)
+@Qualifier
+annotation class DefaultCoroutineScope

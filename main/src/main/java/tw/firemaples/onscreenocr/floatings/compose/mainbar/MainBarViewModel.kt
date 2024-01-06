@@ -7,12 +7,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.data.usecase.GetCurrentOCRDisplayLangCodeUseCase
+import tw.firemaples.onscreenocr.data.usecase.GetCurrentOCRLangUseCase
 import tw.firemaples.onscreenocr.data.usecase.GetCurrentTranslationLangUseCase
 import tw.firemaples.onscreenocr.data.usecase.GetCurrentTranslatorTypeUseCase
 import tw.firemaples.onscreenocr.data.usecase.GetMainBarInitialPositionUseCase
@@ -72,6 +74,7 @@ class MainBarViewModelImpl @Inject constructor(
     @MainImmediateCoroutineScope
     private val scope: CoroutineScope,
     private val stateNavigator: StateNavigator,
+    private val getCurrentOCRLangUseCase: GetCurrentOCRLangUseCase,
     private val getCurrentOCRDisplayLangCodeUseCase: GetCurrentOCRDisplayLangCodeUseCase,
     private val getCurrentTranslatorTypeUseCase: GetCurrentTranslatorTypeUseCase,
     private val getCurrentTranslationLangUseCase: GetCurrentTranslationLangUseCase,
@@ -94,9 +97,9 @@ class MainBarViewModelImpl @Inject constructor(
         state.update {
             it.copy(
                 displaySelectButton = navState == NavState.Idle,
-                displayTranslateButton = navState == NavState.ScreenCircled,
+                displayTranslateButton = navState is NavState.ScreenCircled,
                 displayCloseButton =
-                navState == NavState.ScreenCircling || navState == NavState.ScreenCircled,
+                navState == NavState.ScreenCircling || navState is NavState.ScreenCircled,
             )
         }
         action.emit(MainBarAction.MoveToEdgeIfEnabled)
@@ -161,7 +164,7 @@ class MainBarViewModelImpl @Inject constructor(
     override fun getFadeOutAfterMoved(): Boolean {
         val navState = stateNavigator.currentNavState.value
 
-        return navState != NavState.ScreenCircling && navState != NavState.ScreenCircled
+        return navState != NavState.ScreenCircling && navState !is NavState.ScreenCircled
                 && !state.value.displayMainBarMenu
                 && SettingManager.enableFadingOutWhileIdle //TODO move logic
     }
@@ -188,7 +191,13 @@ class MainBarViewModelImpl @Inject constructor(
     override fun onTranslateClicked() {
         scope.launch {
             action.emit(MainBarAction.RescheduleFadeOut)
-            stateNavigator.navigate(NavigationAction.NavigateToScreenCapturing)
+            val (ocrProvider, ocrLang) = getCurrentOCRLangUseCase.invoke().first()
+            stateNavigator.navigate(
+                NavigationAction.NavigateToScreenCapturing(
+                    ocrLang = ocrLang,
+                    ocrProvider = ocrProvider,
+                )
+            )
         }
     }
 
