@@ -34,6 +34,12 @@ class MainBarFloatingView @Inject constructor(
             when (state) {
                 MainBarAction.RescheduleFadeOut ->
                     rescheduleFadeOut()
+
+                MainBarAction.OpenLanguageSelectionPanel -> {
+                    rescheduleFadeOut()
+                    // TODO wait to be refactored
+                    TranslationSelectPanel(context).attachToScreen()
+                }
             }
         }
 

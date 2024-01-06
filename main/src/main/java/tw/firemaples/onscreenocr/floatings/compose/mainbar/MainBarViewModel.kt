@@ -48,6 +48,7 @@ data class MainBarState(
 
 sealed interface MainBarAction {
     data object RescheduleFadeOut : MainBarAction
+    data object OpenLanguageSelectionPanel : MainBarAction
 }
 
 @Suppress("LongParameterList", "TooManyFunctions")
@@ -184,7 +185,7 @@ class MainBarViewModelImpl @Inject constructor(
 
     override fun onLanguageBlockClicked() {
         scope.launch {
-            action.emit(MainBarAction.RescheduleFadeOut)
+            action.emit(MainBarAction.OpenLanguageSelectionPanel)
         }
     }
 }
