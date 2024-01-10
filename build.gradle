@@ -4,6 +4,7 @@ buildscript {
     ext.nav_version = "2.6.0" // require SDK 34 from 2.7.0
     repositories {
         google()
+        gradlePluginPortal()
         mavenCentral()
         maven {
             url "https://jitpack.io"
@@ -24,6 +25,9 @@ buildscript {
 
         // Refactor
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+
+        // Detekt
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.3"
     }
 }
 

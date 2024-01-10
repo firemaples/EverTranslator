@@ -7,6 +7,7 @@ plugins {
     id 'com.google.firebase.crashlytics'
     id 'com.google.firebase.firebase-perf'
     id 'com.google.dagger.hilt.android'
+    id "io.gitlab.arturbosch.detekt"
 }
 
 def buildParams = getGradle().getStartParameter().toString().toLowerCase()
@@ -110,6 +111,8 @@ kapt {
 }
 
 dependencies {
+    detektPlugins "io.nlopez.compose.rules:detekt:0.3.9"
+
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
     implementation 'androidx.core:core-ktx:1.10.1'
