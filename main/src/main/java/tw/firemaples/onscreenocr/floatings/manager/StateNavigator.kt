@@ -100,7 +100,16 @@ sealed interface NavigationAction {
         val selected: Rect,
     ) : NavigationAction
 
+    //TODO remove
+    @Deprecated("Replaced by ReStartTranslation")
     data class NavigateToStartTranslation(
+        val recognitionResult: RecognitionResult,
+    ) : NavigationAction
+
+    data class ReStartTranslation(
+        val croppedBitmap: Bitmap,
+        val parent: Rect,
+        val selected: Rect,
         val recognitionResult: RecognitionResult,
     ) : NavigationAction
 
@@ -122,17 +131,32 @@ sealed class NavState {
     object ScreenCircling : NavState()
     data class ScreenCircled(val parentRect: Rect, val selectedRect: Rect) : NavState()
     object ScreenCapturing : NavState()
-    data class TextRecognizing(val croppedBitmap: Bitmap) : NavState(), BitmapIncluded {
+    data class TextRecognizing(
+        val parentRect: Rect,
+        val selectedRect: Rect,
+        val croppedBitmap: Bitmap,
+    ) : NavState(), BitmapIncluded {
         override val bitmap: Bitmap
             get() = croppedBitmap
     }
 
-    data class TextTranslating(val croppedBitmap: Bitmap) : NavState(), BitmapIncluded {
+    data class TextTranslating(
+        val parentRect: Rect,
+        val selectedRect: Rect,
+        val croppedBitmap: Bitmap,
+        val recognitionResult: RecognitionResult,
+    ) : NavState(), BitmapIncluded {
         override val bitmap: Bitmap
             get() = croppedBitmap
     }
 
-    data class TextTranslated(val croppedBitmap: Bitmap) : NavState(), BitmapIncluded {
+    data class TextTranslated(
+        val parentRect: Rect,
+        val selectedRect: Rect,
+        val croppedBitmap: Bitmap,
+        val recognitionResult: RecognitionResult,
+        val resultInfo: ResultInfo,
+    ) : NavState(), BitmapIncluded {
         override val bitmap: Bitmap
             get() = croppedBitmap
     }

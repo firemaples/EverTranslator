@@ -80,10 +80,20 @@ class StateOperatorImpl @Inject constructor(
                         )
 
                     is NavigationAction.NavigateToStartTranslation -> {
-                        val croppedBitmap = currentNavState.getBitmap()
-                            ?: throw IllegalStateException("Navigate to StartTranslation failed, bitmap is null: $currentNavState")
+                        //TODO remove
+//                        val croppedBitmap = currentNavState.getBitmap()
+//                            ?: throw IllegalStateException("Navigate to StartTranslation failed, bitmap is null: $currentNavState")
+//                        startTranslation(
+//                            croppedBitmap = croppedBitmap,
+//                            recognitionResult = action.recognitionResult,
+//                        )
+                    }
+
+                    is NavigationAction.ReStartTranslation -> {
                         startTranslation(
-                            croppedBitmap = croppedBitmap,
+                            croppedBitmap = action.croppedBitmap,
+                            parentRect = action.parent,
+                            selectedRect = action.selected,
                             recognitionResult = action.recognitionResult,
                         )
                     }
@@ -202,7 +212,13 @@ class StateOperatorImpl @Inject constructor(
         parentRect: Rect,
         selectedRect: Rect,
     ) = scope.launch {
-        stateNavigator.updateState(NavState.TextRecognizing(croppedBitmap))
+        stateNavigator.updateState(
+            NavState.TextRecognizing(
+                parentRect = parentRect,
+                selectedRect = selectedRect,
+                croppedBitmap = croppedBitmap,
+            )
+        )
 
         try {
             action.emit(StateOperatorAction.ResultViewStartRecognition)
@@ -242,6 +258,8 @@ class StateOperatorImpl @Inject constructor(
             )
             startTranslation(
                 croppedBitmap = croppedBitmap,
+                parentRect = parentRect,
+                selectedRect = selectedRect,
                 recognitionResult = result,
             )
         } catch (e: Exception) {
@@ -262,10 +280,19 @@ class StateOperatorImpl @Inject constructor(
 
     private fun startTranslation(
         croppedBitmap: Bitmap,
-        recognitionResult: RecognitionResult
+        parentRect: Rect,
+        selectedRect: Rect,
+        recognitionResult: RecognitionResult,
     ) = scope.launch {
         try {
-            stateNavigator.updateState(NavState.TextTranslating(croppedBitmap))
+            stateNavigator.updateState(
+                NavState.TextTranslating(
+                    parentRect = parentRect,
+                    selectedRect = selectedRect,
+                    croppedBitmap = croppedBitmap,
+                    recognitionResult = recognitionResult,
+                )
+            )
 
             val translator = Translator.getTranslator()
 
@@ -315,14 +342,19 @@ class StateOperatorImpl @Inject constructor(
                 FirebaseEvent.logTranslationSourceLangNotSupport(
                     translator, recognitionResult.langCode,
                 )
+                val result = Result.SourceLangNotSupport(
+                    ocrText = recognitionResult.result,
+                    boundingBoxes = recognitionResult.boundingBoxes,
+                    providerType = translationResult.type,
+                )
+                //TODO
+//                stateNavigator.updateState(
+//                    NavState.TextTranslated(
+//
+//                    )
+//                )
                 action.emit(
-                    StateOperatorAction.ResultViewTextTranslated(
-                        Result.SourceLangNotSupport(
-                            ocrText = recognitionResult.result,
-                            boundingBoxes = recognitionResult.boundingBoxes,
-                            providerType = translationResult.type,
-                        )
-                    )
+                    StateOperatorAction.ResultViewTextTranslated(result)
                 )
             }
 
@@ -402,6 +434,8 @@ sealed interface StateOperatorAction {
     data object ShowScreenCirclingView : StateOperatorAction
     data object HideScreenCirclingView : StateOperatorAction
     data object ResultViewStartRecognition : StateOperatorAction //TODO subscribe state in view
+
+    @Deprecated("subscribe state in view")
     data class ResultViewSetRecognized(
         val result: RecognitionResult,
         val parentRect: Rect,
@@ -409,13 +443,16 @@ sealed interface StateOperatorAction {
         val croppedBitmap: Bitmap,
     ) : StateOperatorAction //TODO subscribe state in view
 
+    @Deprecated("subscribe state in view")
     data class ResultViewStartTranslation(
         val translationProviderType: TranslationProviderType,
     ) : StateOperatorAction //TODO subscribe state in view
 
+    @Deprecated("subscribe state in view")
     data class ResultViewTextTranslated(val result: Result) :
         StateOperatorAction //TODO subscribe state in view
 
+    @Deprecated("subscribe state in view")
     data object ResultViewBackToIdle : StateOperatorAction //TODO subscribe state in view
 
     data class ShowErrorDialog(val error: String) : StateOperatorAction
@@ -442,4 +479,22 @@ sealed class Result(
         override val ocrText: String,
         override val boundingBoxes: List<Rect>,
     ) : Result(ocrText, boundingBoxes)
+}
+
+sealed interface ResultInfo {
+    data class Translated(
+        val translatedText: String,
+        val providerType: TranslationProviderType,
+    ) : ResultInfo
+
+    data class Error(
+        val providerType: TranslationProviderType,
+        val resultError: ResultError,
+    ) : ResultInfo
+
+    data object OCROnly : ResultInfo
+}
+
+enum class ResultError {
+    SourceLangNotSupport,
 }

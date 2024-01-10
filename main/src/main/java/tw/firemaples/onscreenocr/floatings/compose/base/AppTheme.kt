@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.sp
 
 lateinit var AppColorScheme: ColorScheme
 
@@ -20,4 +21,8 @@ fun AppTheme(
         colorScheme = AppColorScheme,
         content = content,
     )
+}
+
+object FontSize {
+    val Small = 14.sp
 }
