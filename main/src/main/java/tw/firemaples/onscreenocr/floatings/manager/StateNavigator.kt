@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import tw.firemaples.onscreenocr.floatings.compose.base.awaitForSubscriber
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.recognition.TextRecognitionProviderType
+import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.utils.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -145,6 +146,7 @@ sealed class NavState {
         val selectedRect: Rect,
         val croppedBitmap: Bitmap,
         val recognitionResult: RecognitionResult,
+        val translationProviderType: TranslationProviderType,
     ) : NavState(), BitmapIncluded {
         override val bitmap: Bitmap
             get() = croppedBitmap

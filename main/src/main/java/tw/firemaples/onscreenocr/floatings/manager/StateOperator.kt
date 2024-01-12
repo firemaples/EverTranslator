@@ -285,16 +285,17 @@ class StateOperatorImpl @Inject constructor(
         recognitionResult: RecognitionResult,
     ) = scope.launch {
         try {
+            val translator = Translator.getTranslator()
+
             stateNavigator.updateState(
                 NavState.TextTranslating(
                     parentRect = parentRect,
                     selectedRect = selectedRect,
                     croppedBitmap = croppedBitmap,
                     recognitionResult = recognitionResult,
+                    translationProviderType = translator.type,
                 )
             )
-
-            val translator = Translator.getTranslator()
 
             action.emit(
                 StateOperatorAction.ResultViewStartTranslation(
@@ -314,9 +315,12 @@ class StateOperatorImpl @Inject constructor(
             )
 
             onTranslated(
+                croppedBitmap = croppedBitmap,
+                parentRect = parentRect,
+                selectedRect = selectedRect,
+                recognitionResult = recognitionResult,
                 translator = translator,
                 translationResult = translationResult,
-                recognitionResult = recognitionResult,
             )
         } catch (e: Exception) {
             logger.warn(t = e)
@@ -327,9 +331,12 @@ class StateOperatorImpl @Inject constructor(
     }
 
     private suspend fun onTranslated(
+        croppedBitmap: Bitmap,
+        parentRect: Rect,
+        selectedRect: Rect,
+        recognitionResult: RecognitionResult,
         translator: Translator,
         translationResult: TranslationResult,
-        recognitionResult: RecognitionResult,
     ) {
         when (translationResult) {
             TranslationResult.OuterTranslatorLaunched -> {
@@ -347,15 +354,10 @@ class StateOperatorImpl @Inject constructor(
                     boundingBoxes = recognitionResult.boundingBoxes,
                     providerType = translationResult.type,
                 )
-                //TODO
-//                stateNavigator.updateState(
-//                    NavState.TextTranslated(
-//
-//                    )
-//                )
                 action.emit(
                     StateOperatorAction.ResultViewTextTranslated(result)
                 )
+                showError(context.getString(R.string.msg_translator_provider_does_not_support_the_ocr_lang))
             }
 
             TranslationResult.OCROnlyResult -> {
@@ -366,6 +368,15 @@ class StateOperatorImpl @Inject constructor(
                             ocrText = recognitionResult.result,
                             boundingBoxes = recognitionResult.boundingBoxes,
                         )
+                    )
+                )
+                stateNavigator.updateState(
+                    NavState.TextTranslated(
+                        parentRect = parentRect,
+                        selectedRect = selectedRect,
+                        croppedBitmap = croppedBitmap,
+                        recognitionResult = recognitionResult,
+                        resultInfo = ResultInfo.OCROnly,
                     )
                 )
             }
@@ -380,6 +391,18 @@ class StateOperatorImpl @Inject constructor(
                             translatedText = translationResult.result,
                             providerType = translationResult.type,
                         )
+                    )
+                )
+                stateNavigator.updateState(
+                    NavState.TextTranslated(
+                        parentRect = parentRect,
+                        selectedRect = selectedRect,
+                        croppedBitmap = croppedBitmap,
+                        recognitionResult = recognitionResult,
+                        resultInfo = ResultInfo.Translated(
+                            translatedText = translationResult.result,
+                            providerType = translationResult.type,
+                        ),
                     )
                 )
             }

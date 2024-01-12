@@ -1,5 +1,6 @@
 package tw.firemaples.onscreenocr.floatings.compose.resultview
 
+import android.content.res.Configuration
 import android.graphics.Rect
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,17 +13,25 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,29 +48,85 @@ import tw.firemaples.onscreenocr.floatings.compose.base.AppColorScheme
 import tw.firemaples.onscreenocr.floatings.compose.base.AppTheme
 import tw.firemaples.onscreenocr.floatings.compose.base.FontSize
 import tw.firemaples.onscreenocr.floatings.compose.base.pxToDp
+import tw.firemaples.onscreenocr.utils.UIUtils
+import tw.firemaples.onscreenocr.utils.dpToPx
 
 @Composable
 fun ResultViewContent(
-    resultViewModel: ResultViewModel,
+    viewModel: ResultViewModel,
+    requestRootLocationOnScreen: () -> Rect,
 ) {
-    val state by resultViewModel.state.collectAsState()
+    val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(Unit) {
+        val rootLocation = requestRootLocationOnScreen.invoke()
+        viewModel.onRootViewPositioned(
+            xOffset = rootLocation.left,
+            yOffset = rootLocation.top,
+        )
+    }
 
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.dialogOutside))
-            .clickable(onClick = resultViewModel::onDialogOutsideClicked),
+            .clickable(onClick = viewModel::onDialogOutsideClicked),
     ) {
-        state.highlightArea?.let {
+        state.highlightArea.forEach {
             TextHighlightBox(
                 highlightArea = it,
             )
         }
+
+        val xOffset = remember { mutableStateOf(0) }
+        val yOffset = remember { mutableStateOf(0) }
+
         ResultPanel(
+            modifier = Modifier
+                .calculateOffset(
+                    requestRootLocationOnScreen = requestRootLocationOnScreen,
+                    highlightUnion = state.highlightUnion,
+                    xOffset = xOffset,
+                    yOffset = yOffset,
+                )
+                .offset(
+                    xOffset.value.pxToDp(),
+                    yOffset.value.pxToDp(),
+                ),
             ocrState = state.ocrState,
             translationState = state.translationState,
         )
     }
+}
+
+private fun Modifier.calculateOffset(
+    requestRootLocationOnScreen: () -> Rect,
+    highlightUnion: Rect,
+    xOffset: MutableState<Int>,
+    yOffset: MutableState<Int>,
+): Modifier = onGloballyPositioned { coordinates ->
+    val parentRect = requestRootLocationOnScreen.invoke()
+    val anchorRect = Rect(highlightUnion).apply {
+        top += parentRect.top
+        left += parentRect.left
+        bottom += parentRect.top
+        right += parentRect.left
+    }
+
+    val bounds = coordinates.boundsInRoot()
+    val left = parentRect.left + bounds.left
+    val top = parentRect.top + bounds.top
+    val right = parentRect.left + bounds.right
+    val bottom = parentRect.top + bounds.bottom
+    val windowRect = Rect(left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
+
+    val (leftMargin, topMargin) = UIUtils.countViewPosition(
+        anchorRect, parentRect,
+        windowRect.width(), windowRect.height(), 2.dpToPx(),
+    )
+
+    xOffset.value = leftMargin
+    yOffset.value = topMargin
 }
 
 @Composable
@@ -86,13 +151,18 @@ private fun TextHighlightBox(highlightArea: Rect) {
 
 @Composable
 private fun ResultPanel(
+    modifier: Modifier,
     ocrState: OCRState,
     translationState: TranslationState,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .widthIn(max = 300.dp)
-            .background(AppColorScheme.background)
+            .background(
+                color = AppColorScheme.background,
+                shape = RoundedCornerShape(8.dp),
+            )
+            .clickable { }
             .padding(horizontal = 6.dp, vertical = 4.dp),
     ) {
         OCRToolBar(
@@ -110,8 +180,8 @@ private fun ResultPanel(
                 translatedText = translationState.translatedText,
             )
             TranslationProviderBar(
-                translationProviderText = translationState.translationProviderText,
-                translationProviderIcon = translationState.translationProviderIcon,
+                translationProviderText = translationState.providerText,
+                translationProviderIcon = translationState.providerIcon,
             )
         }
     }
@@ -126,6 +196,7 @@ private fun OCRToolBar(textSearchEnabled: Boolean) {
             text = stringResource(id = R.string.text_ocr_text),
             fontSize = FontSize.Small,
             fontWeight = FontWeight.Bold,
+            color = AppColorScheme.onBackground,
         )
 
 //            Image(painter = painterResource(id = R.drawable.ic_play), contentDescription = "")
@@ -184,13 +255,16 @@ private fun OCRTextArea(
     ocrText: String?,
 ) {
     if (showProcessing) {
-        CircularProgressIndicator()
+        ProgressIndicator()
     }
 
     if (ocrText != null) {
         //TODO implement text search selector
         //TODO implement text overflow
-        Text(text = ocrText)
+        Text(
+            text = ocrText,
+            color = AppColorScheme.onBackground,
+        )
     }
 }
 
@@ -203,6 +277,7 @@ private fun TranslationToolBar() {
             text = stringResource(id = R.string.text_translated_text),
             fontSize = FontSize.Small,
             fontWeight = FontWeight.Bold,
+            color = AppColorScheme.onBackground,
         )
 
         Spacer(modifier = Modifier.size(4.dp))
@@ -228,12 +303,15 @@ private fun TranslationTextArea(
 ) {
 
     if (showProcessing) {
-        CircularProgressIndicator()
+        ProgressIndicator()
     }
 
     if (translatedText != null) {
         //TODO implement text overflow
-        Text(text = translatedText)
+        Text(
+            text = translatedText,
+            color = AppColorScheme.onBackground,
+        )
     }
 }
 
@@ -265,11 +343,19 @@ private fun ColumnScope.TranslationProviderBar(
     }
 }
 
+@Composable
+private fun ProgressIndicator() {
+    CircularProgressIndicator(
+        modifier = Modifier.size(30.dp),
+    )
+}
+
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ResultViewContentPreview() {
     val state = ResultViewState(
-        highlightArea = Rect(10, 20, 80, 90),
+        highlightArea = listOf(Rect(10, 20, 80, 90)),
         ocrState = OCRState(
             showProcessing = true,
             ocrText = "Test OCR text",
@@ -279,8 +365,8 @@ private fun ResultViewContentPreview() {
             showTranslationArea = true,
             showProcessing = true,
             translatedText = "Test result text",
-            translationProviderText = "Test Translation Provider",
-            translationProviderIcon = R.drawable.img_translated_by_google,
+            providerText = "Test Translation Provider",
+            providerIcon = R.drawable.img_translated_by_google,
         ),
     )
 
@@ -290,12 +376,14 @@ private fun ResultViewContentPreview() {
         override val action: SharedFlow<ResultViewAction>
             get() = MutableSharedFlow()
 
+        override fun onRootViewPositioned(xOffset: Int, yOffset: Int) = Unit
         override fun onDialogOutsideClicked() = Unit
     }
 
     AppTheme {
         ResultViewContent(
-            resultViewModel = viewModel,
+            viewModel = viewModel,
+            requestRootLocationOnScreen = { Rect() }
         )
     }
 }

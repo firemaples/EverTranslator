@@ -12,6 +12,7 @@ import tw.firemaples.onscreenocr.floatings.manager.Result
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.utils.Logger
+import tw.firemaples.onscreenocr.utils.getViewRect
 import tw.firemaples.onscreenocr.utils.setReusable
 import javax.inject.Inject
 
@@ -54,14 +55,17 @@ class ResultViewFloatingView @Inject constructor(
     override fun RootContent() {
         viewModel.action.collectOnLifecycleResumed { action ->
             when (action) {
-                ResultViewAction.Close ->{
+                ResultViewAction.Close -> {
                     detachFromScreen()
                 }
 
             }
         }
 
-        ResultViewContent(viewModel)
+        ResultViewContent(
+            viewModel = viewModel,
+            requestRootLocationOnScreen = rootView::getViewRect,
+        )
     }
 
     init {
