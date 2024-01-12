@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.floatings.compose.resultview
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Rect
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -14,12 +15,15 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.di.MainImmediateCoroutineScope
+import tw.firemaples.onscreenocr.floatings.manager.BitmapIncluded
 import tw.firemaples.onscreenocr.floatings.manager.NavState
 import tw.firemaples.onscreenocr.floatings.manager.NavigationAction
 import tw.firemaples.onscreenocr.floatings.manager.ResultInfo
 import tw.firemaples.onscreenocr.floatings.manager.StateNavigator
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
+import tw.firemaples.onscreenocr.utils.Logger
+import tw.firemaples.onscreenocr.utils.Utils
 import javax.inject.Inject
 
 interface ResultViewModel {
@@ -27,31 +31,46 @@ interface ResultViewModel {
     val action: SharedFlow<ResultViewAction>
     fun onRootViewPositioned(xOffset: Int, yOffset: Int)
     fun onDialogOutsideClicked()
+    fun onTextSearchClicked()
+    fun onOCRTextEditClicked()
+    fun onOCRTextEdited(text: String)
+    fun onCopyClicked(textType: TextType)
+    fun onAdjustFontSizeClicked()
+    fun onGoogleTranslateClicked(textType: TextType)
+    fun onShareOCRTextClicked()
 }
 
 data class ResultViewState(
     val highlightArea: List<Rect> = listOf(),
     val highlightUnion: Rect = Rect(),
+    val textSearchEnabled: Boolean = false,
     val ocrState: OCRState = OCRState(),
     val translationState: TranslationState = TranslationState(),
 )
 
 data class OCRState(
     val showProcessing: Boolean = false,
-    val ocrText: String? = null,
-    val textSearchEnabled: Boolean = false,
+    val ocrText: String = "",
 )
 
 data class TranslationState(
     val showTranslationArea: Boolean = false,
     val showProcessing: Boolean = false,
-    val translatedText: String? = null,
+    val translatedText: String = "",
     val providerText: String? = null,
     val providerIcon: Int? = null,
 )
 
 sealed interface ResultViewAction {
+    data class ShowOCRTextEditor(val text: String, val croppedBitmap: Bitmap) : ResultViewAction
+    data object ShowFontSizeAdjuster : ResultViewAction
+    data class LaunchGoogleTranslator(val text: String) : ResultViewAction
+    data class ShareText(val text: String) : ResultViewAction
     data object Close : ResultViewAction
+}
+
+enum class TextType {
+    OCRText, TranslationResult
 }
 
 class ResultViewModelImpl @Inject constructor(
@@ -61,11 +80,17 @@ class ResultViewModelImpl @Inject constructor(
     private val scope: CoroutineScope,
     private val stateNavigator: StateNavigator,
 ) : ResultViewModel {
+    private val logger by lazy { Logger(this::class) }
+
     override val state = MutableStateFlow(ResultViewState())
     override val action = MutableSharedFlow<ResultViewAction>()
 
     private var rootViewXOffset: Int = 0
     private var rootViewYOffset: Int = 0
+    private var parentRect: Rect? = null
+    private var selectedRect: Rect? = null
+    private var croppedBitmap: Bitmap? = null
+    private var lastRecognitionResult: RecognitionResult? = null
 
     init {
         stateNavigator.currentNavState
@@ -76,6 +101,12 @@ class ResultViewModelImpl @Inject constructor(
     }
 
     private fun updateViewStateWithNavState(navState: NavState) = scope.launch {
+        if (navState is BitmapIncluded) {
+            this@ResultViewModelImpl.parentRect = navState.parentRect
+            this@ResultViewModelImpl.selectedRect = navState.selectedRect
+            this@ResultViewModelImpl.croppedBitmap = navState.bitmap
+        }
+
         when (navState) {
             is NavState.TextRecognizing ->
                 state.update {
@@ -89,6 +120,8 @@ class ResultViewModelImpl @Inject constructor(
 
             is NavState.TextTranslating ->
                 state.update {
+                    this@ResultViewModelImpl.lastRecognitionResult = navState.recognitionResult
+
                     val needTranslate = !navState.translationProviderType.nonTranslation
                     val (textAreas, unionArea) = calculateTextAreas(
                         navState.recognitionResult,
@@ -152,6 +185,11 @@ class ResultViewModelImpl @Inject constructor(
                 }
             }
 
+            NavState.Idle -> {
+                setToDefault()
+                action.emit(ResultViewAction.Close)
+            }
+
             else -> {
                 setToDefault()
             }
@@ -190,8 +228,92 @@ class ResultViewModelImpl @Inject constructor(
 
     override fun onDialogOutsideClicked() {
         scope.launch {
-            action.emit(ResultViewAction.Close)
-            stateNavigator.navigate(NavigationAction.NavigateToIdle(showMainBar = true))
+            stateNavigator.navigate(NavigationAction.NavigateToIdle())
         }
+    }
+
+    override fun onTextSearchClicked() {
+        scope.launch {
+            state.update {
+                it.copy(
+                    textSearchEnabled = it.textSearchEnabled.not(),
+                )
+            }
+        }
+    }
+
+    override fun onOCRTextEditClicked() {
+        scope.launch {
+            val croppedBitmap = croppedBitmap ?: return@launch
+            val text = state.value.ocrState.ocrText
+            action.emit(
+                ResultViewAction.ShowOCRTextEditor(
+                    text = text,
+                    croppedBitmap = croppedBitmap,
+                )
+            )
+        }
+    }
+
+    override fun onOCRTextEdited(text: String) {
+        scope.launch {
+            val parentRect = parentRect ?: return@launch
+            val selectedRect = selectedRect ?: return@launch
+            val croppedBitmap = croppedBitmap ?: return@launch
+            val recognitionResult = lastRecognitionResult ?: return@launch
+            stateNavigator.navigate(
+                NavigationAction.ReStartTranslation(
+                    croppedBitmap = croppedBitmap,
+                    parentRect = parentRect,
+                    selectedRect = selectedRect,
+                    recognitionResult = recognitionResult.copy(result = text),
+                )
+            )
+        }
+    }
+
+    override fun onCopyClicked(textType: TextType) {
+        scope.launch {
+            val label = when (textType) {
+                TextType.OCRText -> LABEL_RECOGNIZED_TEXT
+                TextType.TranslationResult -> LABEL_TRANSLATED_TEXT
+            }
+
+            Utils.copyToClipboard(
+                label = label,
+                text = textType.getTargetText()
+            )
+        }
+    }
+
+    override fun onAdjustFontSizeClicked() {
+        scope.launch {
+            //TODO subscribe to the font size changes
+            action.emit(ResultViewAction.ShowFontSizeAdjuster)
+        }
+    }
+
+    override fun onGoogleTranslateClicked(textType: TextType) {
+        scope.launch {
+            action.emit(ResultViewAction.LaunchGoogleTranslator(textType.getTargetText()))
+            stateNavigator.navigate(NavigationAction.NavigateToIdle())
+        }
+    }
+
+    override fun onShareOCRTextClicked() {
+        scope.launch {
+            action.emit(ResultViewAction.ShareText(state.value.ocrState.ocrText))
+            stateNavigator.navigate(NavigationAction.NavigateToIdle())
+        }
+    }
+
+    private fun TextType.getTargetText(): String = when (this) {
+        TextType.OCRText -> state.value.ocrState.ocrText
+        TextType.TranslationResult -> state.value.translationState.translatedText
+    }
+
+    companion object {
+        private const val LABEL_RECOGNIZED_TEXT = "Recognized text"
+        private const val LABEL_TRANSLATED_TEXT = "Translated text"
     }
 }

@@ -92,8 +92,8 @@ class StateOperatorImpl @Inject constructor(
                     is NavigationAction.ReStartTranslation -> {
                         startTranslation(
                             croppedBitmap = action.croppedBitmap,
-                            parentRect = action.parent,
-                            selectedRect = action.selected,
+                            parentRect = action.parentRect,
+                            selectedRect = action.selectedRect,
                             recognitionResult = action.recognitionResult,
                         )
                     }

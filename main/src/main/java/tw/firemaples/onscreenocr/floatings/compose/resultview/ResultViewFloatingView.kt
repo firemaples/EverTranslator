@@ -9,9 +9,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import tw.firemaples.onscreenocr.floatings.compose.base.ComposeFloatingView
 import tw.firemaples.onscreenocr.floatings.compose.base.collectOnLifecycleResumed
 import tw.firemaples.onscreenocr.floatings.manager.Result
+import tw.firemaples.onscreenocr.floatings.recognizedTextEditor.RecognizedTextEditor
+import tw.firemaples.onscreenocr.floatings.result.FontSizeAdjuster
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
+import tw.firemaples.onscreenocr.translator.utils.GoogleTranslateUtils
 import tw.firemaples.onscreenocr.utils.Logger
+import tw.firemaples.onscreenocr.utils.Utils
 import tw.firemaples.onscreenocr.utils.getViewRect
 import tw.firemaples.onscreenocr.utils.setReusable
 import javax.inject.Inject
@@ -55,10 +59,27 @@ class ResultViewFloatingView @Inject constructor(
     override fun RootContent() {
         viewModel.action.collectOnLifecycleResumed { action ->
             when (action) {
+                is ResultViewAction.LaunchGoogleTranslator -> {
+                    GoogleTranslateUtils.launchTranslator(action.text)
+                }
+
+                is ResultViewAction.ShareText -> {
+                    Utils.shareText(action.text)
+                }
+
+                ResultViewAction.ShowFontSizeAdjuster ->
+                    FontSizeAdjuster(context).attachToScreen()
+
+                is ResultViewAction.ShowOCRTextEditor ->
+                    showRecognizedTextEditor(
+                        text = action.text,
+                        croppedBitmap = action.croppedBitmap,
+                        onTextEdited = viewModel::onOCRTextEdited,
+                    )
+
                 ResultViewAction.Close -> {
                     detachFromScreen()
                 }
-
             }
         }
 
@@ -174,18 +195,22 @@ class ResultViewFloatingView @Inject constructor(
 //        }
 //    }
 
-//    private fun showRecognizedTextEditor(recognizedText: String) {
-//        RecognizedTextEditor(
-//            context = context,
-//            review = croppedBitmap,
-//            text = recognizedText,
-//            onSubmit = {
-//                if (it.isNotBlank() && it.trim() != recognizedText) {
-//                    viewModel.onOCRTextEdited(it.trim())
-//                }
-//            },
-//        ).attachToScreen()
-//    }
+    private fun showRecognizedTextEditor(
+        text: String,
+        croppedBitmap: Bitmap,
+        onTextEdited: (String) -> Unit,
+    ) {
+        RecognizedTextEditor(
+            context = context,
+            review = croppedBitmap,
+            text = text,
+            onSubmit = {
+                if (it.isNotBlank() && it.trim() != text) {
+                    onTextEdited.invoke(it.trim())
+                }
+            },
+        ).attachToScreen()
+    }
 
     override fun onAttachedToScreen() {
         super.onAttachedToScreen()

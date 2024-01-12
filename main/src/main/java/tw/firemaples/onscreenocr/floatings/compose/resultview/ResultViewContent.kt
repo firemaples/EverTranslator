@@ -93,6 +93,8 @@ fun ResultViewContent(
                     xOffset.value.pxToDp(),
                     yOffset.value.pxToDp(),
                 ),
+            viewModel = viewModel,
+            textSearchEnabled = state.textSearchEnabled,
             ocrState = state.ocrState,
             translationState = state.translationState,
         )
@@ -152,6 +154,8 @@ private fun TextHighlightBox(highlightArea: Rect) {
 @Composable
 private fun ResultPanel(
     modifier: Modifier,
+    viewModel: ResultViewModel,
+    textSearchEnabled: Boolean,
     ocrState: OCRState,
     translationState: TranslationState,
 ) {
@@ -166,7 +170,13 @@ private fun ResultPanel(
             .padding(horizontal = 6.dp, vertical = 4.dp),
     ) {
         OCRToolBar(
-            textSearchEnabled = ocrState.textSearchEnabled,
+            textSearchEnabled = textSearchEnabled,
+            onSearchClicked = viewModel::onTextSearchClicked,
+            onEditClicked = viewModel::onOCRTextEditClicked,
+            onCopyClicked = { viewModel.onCopyClicked(TextType.OCRText) },
+            onFontSizeClicked = viewModel::onAdjustFontSizeClicked,
+            onGoogleTranslateClicked = { viewModel.onGoogleTranslateClicked(TextType.OCRText) },
+            onExportClicked = viewModel::onShareOCRTextClicked,
         )
         OCRTextArea(
             showProcessing = ocrState.showProcessing,
@@ -174,7 +184,10 @@ private fun ResultPanel(
         )
 
         if (translationState.showTranslationArea) {
-            TranslationToolBar()
+            TranslationToolBar(
+                onCopyClicked = { viewModel.onCopyClicked(TextType.TranslationResult) },
+                onGoogleTranslateClicked = { viewModel.onGoogleTranslateClicked(TextType.TranslationResult) }
+            )
             TranslationTextArea(
                 showProcessing = translationState.showProcessing,
                 translatedText = translationState.translatedText,
@@ -188,7 +201,15 @@ private fun ResultPanel(
 }
 
 @Composable
-private fun OCRToolBar(textSearchEnabled: Boolean) {
+private fun OCRToolBar(
+    textSearchEnabled: Boolean,
+    onSearchClicked: () -> Unit,
+    onEditClicked: () -> Unit,
+    onCopyClicked: () -> Unit,
+    onFontSizeClicked: () -> Unit,
+    onGoogleTranslateClicked: () -> Unit,
+    onExportClicked: () -> Unit,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -207,6 +228,7 @@ private fun OCRToolBar(textSearchEnabled: Boolean) {
             colorResource(id = R.color.md_blue_800)
         else AppColorScheme.onBackground
         Image(
+            modifier = Modifier.clickable(onClick = onSearchClicked),
             painter = painterResource(id = R.drawable.ic_text_search),
             contentDescription = "",
             colorFilter = ColorFilter.tint(textSearchTintColor),
@@ -215,6 +237,7 @@ private fun OCRToolBar(textSearchEnabled: Boolean) {
         Spacer(modifier = Modifier.size(4.dp))
 
         Image(
+            modifier = Modifier.clickable(onClick = onEditClicked),
             painter = painterResource(id = R.drawable.ic_square_edit_outline),
             contentDescription = "",
         )
@@ -222,6 +245,7 @@ private fun OCRToolBar(textSearchEnabled: Boolean) {
         Spacer(modifier = Modifier.size(4.dp))
 
         Image(
+            modifier = Modifier.clickable(onClick = onCopyClicked),
             painter = painterResource(id = R.drawable.ic_copy),
             contentDescription = "",
         )
@@ -229,6 +253,7 @@ private fun OCRToolBar(textSearchEnabled: Boolean) {
         Spacer(modifier = Modifier.size(4.dp))
 
         Image(
+            modifier = Modifier.clickable(onClick = onFontSizeClicked),
             painter = painterResource(id = R.drawable.ic_font_size),
             contentDescription = "",
         )
@@ -236,6 +261,7 @@ private fun OCRToolBar(textSearchEnabled: Boolean) {
         Spacer(modifier = Modifier.size(4.dp))
 
         Image(
+            modifier = Modifier.clickable(onClick = onGoogleTranslateClicked),
             painter = painterResource(id = R.drawable.ic_google_translate),
             contentDescription = "",
         )
@@ -243,6 +269,7 @@ private fun OCRToolBar(textSearchEnabled: Boolean) {
         Spacer(modifier = Modifier.size(4.dp))
 
         Image(
+            modifier = Modifier.clickable(onClick = onExportClicked),
             painter = painterResource(id = R.drawable.ic_export),
             contentDescription = "",
         )
@@ -252,13 +279,11 @@ private fun OCRToolBar(textSearchEnabled: Boolean) {
 @Composable
 private fun OCRTextArea(
     showProcessing: Boolean,
-    ocrText: String?,
+    ocrText: String,
 ) {
     if (showProcessing) {
         ProgressIndicator()
-    }
-
-    if (ocrText != null) {
+    } else {
         //TODO implement text search selector
         //TODO implement text overflow
         Text(
@@ -266,10 +291,14 @@ private fun OCRTextArea(
             color = AppColorScheme.onBackground,
         )
     }
+
 }
 
 @Composable
-private fun TranslationToolBar() {
+private fun TranslationToolBar(
+    onCopyClicked: () -> Unit,
+    onGoogleTranslateClicked: () -> Unit,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -283,6 +312,7 @@ private fun TranslationToolBar() {
         Spacer(modifier = Modifier.size(4.dp))
 
         Image(
+            modifier = Modifier.clickable(onClick = onCopyClicked),
             painter = painterResource(id = R.drawable.ic_copy),
             contentDescription = "",
         )
@@ -290,6 +320,7 @@ private fun TranslationToolBar() {
         Spacer(modifier = Modifier.size(4.dp))
 
         Image(
+            modifier = Modifier.clickable(onClick = onGoogleTranslateClicked),
             painter = painterResource(id = R.drawable.ic_google_translate),
             contentDescription = "",
         )
@@ -299,20 +330,19 @@ private fun TranslationToolBar() {
 @Composable
 private fun TranslationTextArea(
     showProcessing: Boolean,
-    translatedText: String?,
+    translatedText: String,
 ) {
 
     if (showProcessing) {
         ProgressIndicator()
-    }
-
-    if (translatedText != null) {
+    } else {
         //TODO implement text overflow
         Text(
             text = translatedText,
             color = AppColorScheme.onBackground,
         )
     }
+
 }
 
 @Composable
@@ -354,12 +384,14 @@ private fun ProgressIndicator() {
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ResultViewContentPreview() {
+    val areaRect = Rect(10, 20, 80, 90)
     val state = ResultViewState(
-        highlightArea = listOf(Rect(10, 20, 80, 90)),
+        highlightArea = listOf(areaRect),
+        highlightUnion = areaRect,
+        textSearchEnabled = true,
         ocrState = OCRState(
             showProcessing = true,
             ocrText = "Test OCR text",
-            textSearchEnabled = true,
         ),
         translationState = TranslationState(
             showTranslationArea = true,
@@ -378,6 +410,13 @@ private fun ResultViewContentPreview() {
 
         override fun onRootViewPositioned(xOffset: Int, yOffset: Int) = Unit
         override fun onDialogOutsideClicked() = Unit
+        override fun onTextSearchClicked() = Unit
+        override fun onOCRTextEditClicked() = Unit
+        override fun onOCRTextEdited(text: String) = Unit
+        override fun onCopyClicked(textType: TextType) = Unit
+        override fun onAdjustFontSizeClicked() = Unit
+        override fun onGoogleTranslateClicked(textType: TextType) = Unit
+        override fun onShareOCRTextClicked() = Unit
     }
 
     AppTheme {

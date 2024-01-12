@@ -79,7 +79,7 @@ class StateNavigatorImpl @Inject constructor() : StateNavigator {
 }
 
 sealed interface NavigationAction {
-    data class NavigateToIdle(val showMainBar: Boolean) : NavigationAction
+    data class NavigateToIdle(val showMainBar: Boolean = true) : NavigationAction
 
     data object NavigateToScreenCircling : NavigationAction
 
@@ -109,8 +109,8 @@ sealed interface NavigationAction {
 
     data class ReStartTranslation(
         val croppedBitmap: Bitmap,
-        val parent: Rect,
-        val selected: Rect,
+        val parentRect: Rect,
+        val selectedRect: Rect,
         val recognitionResult: RecognitionResult,
     ) : NavigationAction
 
@@ -133,8 +133,8 @@ sealed class NavState {
     data class ScreenCircled(val parentRect: Rect, val selectedRect: Rect) : NavState()
     object ScreenCapturing : NavState()
     data class TextRecognizing(
-        val parentRect: Rect,
-        val selectedRect: Rect,
+        override val parentRect: Rect,
+        override val selectedRect: Rect,
         val croppedBitmap: Bitmap,
     ) : NavState(), BitmapIncluded {
         override val bitmap: Bitmap
@@ -142,8 +142,8 @@ sealed class NavState {
     }
 
     data class TextTranslating(
-        val parentRect: Rect,
-        val selectedRect: Rect,
+        override val parentRect: Rect,
+        override val selectedRect: Rect,
         val croppedBitmap: Bitmap,
         val recognitionResult: RecognitionResult,
         val translationProviderType: TranslationProviderType,
@@ -153,8 +153,8 @@ sealed class NavState {
     }
 
     data class TextTranslated(
-        val parentRect: Rect,
-        val selectedRect: Rect,
+        override val parentRect: Rect,
+        override val selectedRect: Rect,
         val croppedBitmap: Bitmap,
         val recognitionResult: RecognitionResult,
         val resultInfo: ResultInfo,
@@ -166,5 +166,7 @@ sealed class NavState {
 }
 
 interface BitmapIncluded {
+    val parentRect: Rect
+    val selectedRect: Rect
     val bitmap: Bitmap
 }
