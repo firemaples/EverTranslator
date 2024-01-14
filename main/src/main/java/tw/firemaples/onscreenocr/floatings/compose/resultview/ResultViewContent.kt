@@ -38,6 +38,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,8 +53,10 @@ import tw.firemaples.onscreenocr.floatings.compose.base.AppColorScheme
 import tw.firemaples.onscreenocr.floatings.compose.base.AppTheme
 import tw.firemaples.onscreenocr.floatings.compose.base.FontSize
 import tw.firemaples.onscreenocr.floatings.compose.base.pxToDp
+import tw.firemaples.onscreenocr.floatings.compose.wigets.WordSelectionText
 import tw.firemaples.onscreenocr.utils.UIUtils
 import tw.firemaples.onscreenocr.utils.dpToPx
+import java.util.Locale
 
 @Composable
 fun ResultViewContent(
@@ -187,6 +191,8 @@ private fun ResultPanel(
             fontSize = fontSize,
             showProcessing = ocrState.showProcessing,
             ocrText = ocrState.ocrText,
+            textSearchEnabled = textSearchEnabled,
+            onTextSelected = viewModel::onTextSearchWordSelected,
         )
 
         if (translationState.showTranslationArea) {
@@ -288,19 +294,39 @@ private fun OCRTextArea(
     showProcessing: Boolean,
     ocrText: String,
     fontSize: Float,
+    textSearchEnabled: Boolean,
+    onTextSelected: (String) -> Unit,
 ) {
     if (showProcessing) {
         ProgressIndicator()
     } else {
-        //TODO implement text search selector
-        Text(
-            modifier = Modifier
-                .sizeIn(maxHeight = 150.dp)
-                .verticalScroll(rememberScrollState()),
-            text = ocrText,
-            color = AppColorScheme.onBackground,
-            fontSize = fontSize.sp,
-        )
+        if (textSearchEnabled) {
+            WordSelectionText(
+                modifier = Modifier
+                    .sizeIn(maxHeight = 150.dp)
+                    .verticalScroll(rememberScrollState()),
+                text = ocrText,
+                locale = Locale.US,
+                textStyle = TextStyle(
+                    color = AppColorScheme.onBackground,
+                    fontSize = fontSize.sp,
+                ),
+                selectedSpanStyle = SpanStyle(
+                    color = AppColorScheme.onSecondary,
+                    background = AppColorScheme.secondary,
+                ),
+                onTextSelected = onTextSelected,
+            )
+        } else {
+            Text(
+                modifier = Modifier
+                    .sizeIn(maxHeight = 150.dp)
+                    .verticalScroll(rememberScrollState()),
+                text = ocrText,
+                color = AppColorScheme.onBackground,
+                fontSize = fontSize.sp,
+            )
+        }
     }
 
 }
@@ -426,6 +452,7 @@ private fun ResultViewContentPreview() {
         override fun onRootViewPositioned(xOffset: Int, yOffset: Int) = Unit
         override fun onDialogOutsideClicked() = Unit
         override fun onTextSearchClicked() = Unit
+        override fun onTextSearchWordSelected(word: String) = Unit
         override fun onOCRTextEditClicked() = Unit
         override fun onOCRTextEdited(text: String) = Unit
         override fun onCopyClicked(textType: TextType) = Unit

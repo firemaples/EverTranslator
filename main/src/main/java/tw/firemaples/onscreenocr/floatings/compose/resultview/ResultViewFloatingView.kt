@@ -11,6 +11,7 @@ import tw.firemaples.onscreenocr.floatings.compose.base.collectOnLifecycleResume
 import tw.firemaples.onscreenocr.floatings.manager.Result
 import tw.firemaples.onscreenocr.floatings.recognizedTextEditor.RecognizedTextEditor
 import tw.firemaples.onscreenocr.floatings.result.FontSizeAdjuster
+import tw.firemaples.onscreenocr.floatings.textInfoSearch.TextInfoSearchView
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.translator.utils.GoogleTranslateUtils
@@ -76,6 +77,15 @@ class ResultViewFloatingView @Inject constructor(
                         croppedBitmap = action.croppedBitmap,
                         onTextEdited = viewModel::onOCRTextEdited,
                     )
+
+                is ResultViewAction.ShowTextInfoSearchView -> {
+                    TextInfoSearchView(
+                        context = context,
+                        text = action.text,
+                        sourceLang = action.sourceLang,
+                        targetLang = action.targetLang,
+                    ).attachToScreen()
+                }
 
                 ResultViewAction.Close -> {
                     detachFromScreen()

@@ -9,11 +9,13 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.data.usecase.GetCurrentTranslationLangUseCase
 import tw.firemaples.onscreenocr.data.usecase.GetResultViewFontSizeUseCase
 import tw.firemaples.onscreenocr.data.usecase.GetShowTextSelectorOnResultViewUseCase
 import tw.firemaples.onscreenocr.data.usecase.SetShowTextSelectorOnResultViewUseCase
@@ -36,6 +38,7 @@ interface ResultViewModel {
     fun onRootViewPositioned(xOffset: Int, yOffset: Int)
     fun onDialogOutsideClicked()
     fun onTextSearchClicked()
+    fun onTextSearchWordSelected(word: String)
     fun onOCRTextEditClicked()
     fun onOCRTextEdited(text: String)
     fun onCopyClicked(textType: TextType)
@@ -71,6 +74,12 @@ sealed interface ResultViewAction {
     data object ShowFontSizeAdjuster : ResultViewAction
     data class LaunchGoogleTranslator(val text: String) : ResultViewAction
     data class ShareText(val text: String) : ResultViewAction
+    data class ShowTextInfoSearchView(
+        val text: String,
+        val sourceLang: String,
+        val targetLang: String,
+    ) : ResultViewAction
+
     data object Close : ResultViewAction
 }
 
@@ -87,6 +96,7 @@ class ResultViewModelImpl @Inject constructor(
     getShowTextSelectorOnResultViewUseCase: GetShowTextSelectorOnResultViewUseCase,
     private val setShowTextSelectorOnResultViewUseCase: SetShowTextSelectorOnResultViewUseCase,
     getResultViewFontSizeUseCase: GetResultViewFontSizeUseCase,
+    private val getCurrentTranslationLangUseCase: GetCurrentTranslationLangUseCase,
 ) : ResultViewModel {
     private val logger by lazy { Logger(this::class) }
 
@@ -271,6 +281,20 @@ class ResultViewModelImpl @Inject constructor(
         }
     }
 
+    override fun onTextSearchWordSelected(word: String) {
+        scope.launch {
+            val sourceLang = lastRecognitionResult?.langCode ?: return@launch
+            val targetLang = getCurrentTranslationLangUseCase.invoke().first()
+            action.emit(
+                ResultViewAction.ShowTextInfoSearchView(
+                    text = word,
+                    sourceLang = sourceLang,
+                    targetLang = targetLang,
+                )
+            )
+        }
+    }
+
     override fun onOCRTextEditClicked() {
         scope.launch {
             val croppedBitmap = croppedBitmap ?: return@launch
@@ -317,7 +341,6 @@ class ResultViewModelImpl @Inject constructor(
 
     override fun onAdjustFontSizeClicked() {
         scope.launch {
-            //TODO subscribe to the font size changes
             action.emit(ResultViewAction.ShowFontSizeAdjuster)
         }
     }
