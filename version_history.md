@@ -1,10 +1,14 @@
 ---
 layout: post
 title:  "Version History"
-date:   2023-11-02 23:00 +0900
+date:   2024-01-14 19:19 +0900
 ---
 
 [中文版本](./version_history_zh_tw.html)
+
+## v3.1.25
+- Fix a screen circling bug while adjusting the scope on devices with a notch.
+- Update Arabic translation.
 
 ## v3.1.23
 - Support read text from right-to-left in Japanese(RTL) and Chinese(RTL)
