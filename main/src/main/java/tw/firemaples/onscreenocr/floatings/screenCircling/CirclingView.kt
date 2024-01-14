@@ -95,13 +95,12 @@ class CirclingView @JvmOverloads constructor(
 
         override fun onAreaResizing(leftDiff: Int, rightDiff: Int, topDiff: Int, bottomDiff: Int) {
             val box = selectedBox ?: return
-            val parent = this@CirclingView.getViewRect()
 
             with(box) {
-                left = (resizeBase.left + leftDiff).coerceAtLeast(parent.left)
-                right = max(left + 1, resizeBase.right + rightDiff).coerceAtMost(parent.right)
-                top = (resizeBase.top + topDiff).coerceAtLeast(parent.top)
-                bottom = max(top + 1, resizeBase.bottom + bottomDiff).coerceAtMost(parent.bottom)
+                left = (resizeBase.left + leftDiff).coerceAtLeast(0)
+                right = max(left + 1, resizeBase.right + rightDiff).coerceAtMost(measuredWidth)
+                top = (resizeBase.top + topDiff).coerceAtLeast(0)
+                bottom = max(top + 1, resizeBase.bottom + bottomDiff).coerceAtMost(measuredHeight)
 
                 fixBoxSize()
             }
