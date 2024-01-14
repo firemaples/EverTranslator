@@ -16,8 +16,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -95,6 +98,7 @@ fun ResultViewContent(
                 ),
             viewModel = viewModel,
             textSearchEnabled = state.textSearchEnabled,
+            fontSize = state.fontSize,
             ocrState = state.ocrState,
             translationState = state.translationState,
         )
@@ -156,6 +160,7 @@ private fun ResultPanel(
     modifier: Modifier,
     viewModel: ResultViewModel,
     textSearchEnabled: Boolean,
+    fontSize: Float,
     ocrState: OCRState,
     translationState: TranslationState,
 ) {
@@ -179,6 +184,7 @@ private fun ResultPanel(
             onExportClicked = viewModel::onShareOCRTextClicked,
         )
         OCRTextArea(
+            fontSize = fontSize,
             showProcessing = ocrState.showProcessing,
             ocrText = ocrState.ocrText,
         )
@@ -189,6 +195,7 @@ private fun ResultPanel(
                 onGoogleTranslateClicked = { viewModel.onGoogleTranslateClicked(TextType.TranslationResult) }
             )
             TranslationTextArea(
+                fontSize = fontSize,
                 showProcessing = translationState.showProcessing,
                 translatedText = translationState.translatedText,
             )
@@ -280,15 +287,19 @@ private fun OCRToolBar(
 private fun OCRTextArea(
     showProcessing: Boolean,
     ocrText: String,
+    fontSize: Float,
 ) {
     if (showProcessing) {
         ProgressIndicator()
     } else {
         //TODO implement text search selector
-        //TODO implement text overflow
         Text(
+            modifier = Modifier
+                .sizeIn(maxHeight = 150.dp)
+                .verticalScroll(rememberScrollState()),
             text = ocrText,
             color = AppColorScheme.onBackground,
+            fontSize = fontSize.sp,
         )
     }
 
@@ -331,15 +342,19 @@ private fun TranslationToolBar(
 private fun TranslationTextArea(
     showProcessing: Boolean,
     translatedText: String,
+    fontSize: Float,
 ) {
 
     if (showProcessing) {
         ProgressIndicator()
     } else {
-        //TODO implement text overflow
         Text(
+            modifier = Modifier
+                .sizeIn(maxHeight = 150.dp)
+                .verticalScroll(rememberScrollState()),
             text = translatedText,
             color = AppColorScheme.onBackground,
+            fontSize = fontSize.sp,
         )
     }
 

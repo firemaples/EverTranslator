@@ -14,6 +14,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.data.usecase.GetResultViewFontSizeUseCase
+import tw.firemaples.onscreenocr.data.usecase.GetShowTextSelectorOnResultViewUseCase
+import tw.firemaples.onscreenocr.data.usecase.SetShowTextSelectorOnResultViewUseCase
 import tw.firemaples.onscreenocr.di.MainImmediateCoroutineScope
 import tw.firemaples.onscreenocr.floatings.manager.BitmapIncluded
 import tw.firemaples.onscreenocr.floatings.manager.NavState
@@ -22,6 +25,7 @@ import tw.firemaples.onscreenocr.floatings.manager.ResultInfo
 import tw.firemaples.onscreenocr.floatings.manager.StateNavigator
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
+import tw.firemaples.onscreenocr.utils.Constants
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.Utils
 import javax.inject.Inject
@@ -41,9 +45,10 @@ interface ResultViewModel {
 }
 
 data class ResultViewState(
+    val textSearchEnabled: Boolean = false,
+    val fontSize: Float = Constants.DEFAULT_RESULT_WINDOW_FONT_SIZE,
     val highlightArea: List<Rect> = listOf(),
     val highlightUnion: Rect = Rect(),
-    val textSearchEnabled: Boolean = false,
     val ocrState: OCRState = OCRState(),
     val translationState: TranslationState = TranslationState(),
 )
@@ -79,6 +84,9 @@ class ResultViewModelImpl @Inject constructor(
     @MainImmediateCoroutineScope
     private val scope: CoroutineScope,
     private val stateNavigator: StateNavigator,
+    getShowTextSelectorOnResultViewUseCase: GetShowTextSelectorOnResultViewUseCase,
+    private val setShowTextSelectorOnResultViewUseCase: SetShowTextSelectorOnResultViewUseCase,
+    getResultViewFontSizeUseCase: GetResultViewFontSizeUseCase,
 ) : ResultViewModel {
     private val logger by lazy { Logger(this::class) }
 
@@ -96,8 +104,25 @@ class ResultViewModelImpl @Inject constructor(
         stateNavigator.currentNavState
             .onEach { navState ->
                 updateViewStateWithNavState(navState)
-            }
-            .launchIn(scope)
+            }.launchIn(scope)
+
+        getShowTextSelectorOnResultViewUseCase.invoke()
+            .onEach { show ->
+                state.update {
+                    it.copy(
+                        textSearchEnabled = show,
+                    )
+                }
+            }.launchIn(scope)
+
+        getResultViewFontSizeUseCase.invoke()
+            .onEach { fontSize ->
+                state.update {
+                    it.copy(
+                        fontSize = fontSize,
+                    )
+                }
+            }.launchIn(scope)
     }
 
     private fun updateViewStateWithNavState(navState: NavState) = scope.launch {
@@ -146,7 +171,7 @@ class ResultViewModelImpl @Inject constructor(
             is NavState.TextTranslated -> {
                 when (val resultInfo = navState.resultInfo) {
                     is ResultInfo.Error ->
-                        setToDefault()
+                        clearData()
 
                     ResultInfo.OCROnly ->
                         state.update {
@@ -186,18 +211,25 @@ class ResultViewModelImpl @Inject constructor(
             }
 
             NavState.Idle -> {
-                setToDefault()
+                clearData()
                 action.emit(ResultViewAction.Close)
             }
 
             else -> {
-                setToDefault()
+                clearData()
             }
         }
     }
 
-    private fun setToDefault() {
-        state.value = ResultViewState()
+    private fun clearData() {
+        state.update {
+            it.copy(
+                highlightArea = listOf(),
+                highlightUnion = Rect(),
+                ocrState = OCRState(),
+                translationState = TranslationState(),
+            )
+        }
     }
 
     private fun calculateTextAreas(
@@ -234,11 +266,8 @@ class ResultViewModelImpl @Inject constructor(
 
     override fun onTextSearchClicked() {
         scope.launch {
-            state.update {
-                it.copy(
-                    textSearchEnabled = it.textSearchEnabled.not(),
-                )
-            }
+            val show = state.value.textSearchEnabled.not()
+            setShowTextSelectorOnResultViewUseCase.invoke(show)
         }
     }
 
