@@ -178,22 +178,24 @@ private fun ResultPanel(
             .clickable { }
             .padding(horizontal = 6.dp, vertical = 4.dp),
     ) {
-        OCRToolBar(
-            textSearchEnabled = textSearchEnabled,
-            onSearchClicked = viewModel::onTextSearchClicked,
-            onEditClicked = viewModel::onOCRTextEditClicked,
-            onCopyClicked = { viewModel.onCopyClicked(TextType.OCRText) },
-            onFontSizeClicked = viewModel::onAdjustFontSizeClicked,
-            onGoogleTranslateClicked = { viewModel.onGoogleTranslateClicked(TextType.OCRText) },
-            onExportClicked = viewModel::onShareOCRTextClicked,
-        )
-        OCRTextArea(
-            fontSize = fontSize,
-            showProcessing = ocrState.showProcessing,
-            ocrText = ocrState.ocrText,
-            textSearchEnabled = textSearchEnabled,
-            onTextSelected = viewModel::onTextSearchWordSelected,
-        )
+        if (ocrState.showRecognitionArea) {
+            OCRToolBar(
+                textSearchEnabled = textSearchEnabled,
+                onSearchClicked = viewModel::onTextSearchClicked,
+                onEditClicked = viewModel::onOCRTextEditClicked,
+                onCopyClicked = { viewModel.onCopyClicked(TextType.OCRText) },
+                onFontSizeClicked = viewModel::onAdjustFontSizeClicked,
+                onGoogleTranslateClicked = { viewModel.onGoogleTranslateClicked(TextType.OCRText) },
+                onExportClicked = viewModel::onShareOCRTextClicked,
+            )
+            OCRTextArea(
+                fontSize = fontSize,
+                showProcessing = ocrState.showProcessing,
+                ocrText = ocrState.ocrText,
+                textSearchEnabled = textSearchEnabled,
+                onTextSelected = viewModel::onTextSearchWordSelected,
+            )
+        }
 
         if (translationState.showTranslationArea) {
             TranslationToolBar(
