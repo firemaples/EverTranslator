@@ -183,7 +183,10 @@ private fun TextHighlightBox(highlightArea: Rect) {
                     .height()
                     .pxToDp(),
             )
-            .background(colorResource(id = R.color.resultView_recognizedBoundingBoxes))
+            .background(
+                color = colorResource(id = R.color.resultView_recognizedBoundingBoxes),
+                shape = RoundedCornerShape(2.dp),
+            )
     )
 }
 
