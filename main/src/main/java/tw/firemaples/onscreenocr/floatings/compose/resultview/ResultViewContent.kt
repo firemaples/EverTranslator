@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -34,7 +33,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -53,10 +51,9 @@ import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.floatings.compose.base.AppColorScheme
 import tw.firemaples.onscreenocr.floatings.compose.base.AppTheme
 import tw.firemaples.onscreenocr.floatings.compose.base.FontSize
+import tw.firemaples.onscreenocr.floatings.compose.base.dpToPx
 import tw.firemaples.onscreenocr.floatings.compose.base.pxToDp
 import tw.firemaples.onscreenocr.floatings.compose.wigets.WordSelectionText
-import tw.firemaples.onscreenocr.utils.UIUtils
-import tw.firemaples.onscreenocr.utils.dpToPx
 import java.util.Locale
 
 @Composable
@@ -91,11 +88,13 @@ fun ResultViewContent(
 
         ResultPanel(
             modifier = Modifier
+                .padding(16.dp)
                 .calculateOffset(
-                    requestRootLocationOnScreen = requestRootLocationOnScreen,
                     highlightUnion = state.highlightUnion,
                     xOffset = xOffset,
                     yOffset = yOffset,
+                    padding = 16.dp.dpToPx(),
+                    verticalSpacing = 4.dp.dpToPx(),
                 )
                 .offset(
                     xOffset.value.pxToDp(),
@@ -112,33 +111,55 @@ fun ResultViewContent(
 }
 
 private fun Modifier.calculateOffset(
-    requestRootLocationOnScreen: () -> Rect,
     highlightUnion: Rect,
     xOffset: MutableState<Int>,
     yOffset: MutableState<Int>,
+    padding: Float,
+    verticalSpacing: Float,
 ): Modifier = onGloballyPositioned { coordinates ->
-    val parentRect = requestRootLocationOnScreen.invoke()
-    val anchorRect = Rect(highlightUnion).apply {
-        top += parentRect.top
-        left += parentRect.left
-        bottom += parentRect.top
-        right += parentRect.left
+    val parent = coordinates.parentLayoutCoordinates?.size ?: return@onGloballyPositioned
+    val current = coordinates.size
+
+    val leftAnchor = maxOf(highlightUnion.left, padding.toInt())
+    val rightAnchor = minOf(highlightUnion.right, parent.width - padding.toInt())
+
+    when {
+        leftAnchor + current.width + padding < parent.width -> {
+            // Align left
+            xOffset.value = highlightUnion.left - padding.toInt()
+        }
+
+        rightAnchor - current.width - padding >= 0 -> {
+            // Align right
+            xOffset.value = rightAnchor - current.width - padding.toInt()
+        }
+
+        else -> {
+            // No horizontal alignment
+            xOffset.value = 0
+        }
     }
 
-    val bounds = coordinates.boundsInRoot()
-    val left = parentRect.left + bounds.left
-    val top = parentRect.top + bounds.top
-    val right = parentRect.left + bounds.right
-    val bottom = parentRect.top + bounds.bottom
-    val windowRect = Rect(left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
+    val topAnchor = highlightUnion.bottom + verticalSpacing
+    val bottomAnchor = highlightUnion.top - verticalSpacing
 
-    val (leftMargin, topMargin) = UIUtils.countViewPosition(
-        anchorRect, parentRect,
-        windowRect.width(), windowRect.height(), 2.dpToPx(),
-    )
+    when {
+        topAnchor + current.height + padding < parent.height -> {
+            // Display at bottom
+            yOffset.value = (topAnchor - padding).toInt()
+        }
 
-    xOffset.value = leftMargin
-    yOffset.value = topMargin
+        bottomAnchor - current.height - padding >= 0 -> {
+            // Display at top
+            yOffset.value = (bottomAnchor - current.height - padding).toInt()
+        }
+
+        else -> {
+            // Display middle vertically
+            val middleAnchor = (parent.height - current.height) / 2
+            yOffset.value = (middleAnchor - padding).toInt()
+        }
+    }
 }
 
 @Composable
@@ -172,7 +193,6 @@ private fun ResultPanel(
 ) {
     Column(
         modifier = modifier
-            .widthIn(max = 300.dp)
             .background(
                 color = AppColorScheme.background,
                 shape = RoundedCornerShape(8.dp),

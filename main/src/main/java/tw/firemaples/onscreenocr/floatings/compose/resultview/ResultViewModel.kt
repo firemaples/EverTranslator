@@ -147,15 +147,9 @@ class ResultViewModelImpl @Inject constructor(
         when (navState) {
             is NavState.TextRecognizing ->
                 state.update {
-                    val (textAreas, unionArea) = calculateTextAreas(
-                        listOf(navState.selectedRect),
-                        navState.parentRect,
-                        navState.selectedRect,
-                    )
-
                     it.copy(
-                        highlightArea = textAreas,
-                        highlightUnion = unionArea,
+                        highlightArea = listOf(navState.selectedRect),
+                        highlightUnion = navState.selectedRect,
                         ocrState = it.ocrState.copy(
                             showProcessing = true,
                         )
