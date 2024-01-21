@@ -61,38 +61,17 @@ class FloatingViewCoordinator @Inject constructor(
                     StateOperatorAction.HideScreenCirclingView ->
                         screenCirclingView.detachFromScreen()
 
-                    StateOperatorAction.ResultViewStartRecognition ->
-                        resultView.startRecognition()
+                    StateOperatorAction.ShowResultView ->
+                        resultView.attachToScreen()
 
-                    is StateOperatorAction.ResultViewSetRecognized ->
-                        resultView.textRecognized(
-                            result = action.result,
-                            parent = action.parentRect,
-                            selected = action.selectedRect,
-                            croppedBitmap = action.croppedBitmap,
-                        )
-
-                    is StateOperatorAction.ResultViewStartTranslation ->
-                        resultView.startTranslation(action.translationProviderType)
-
-                    is StateOperatorAction.ResultViewTextTranslated ->
-                        resultView.textTranslated(action.result)
-
-                    StateOperatorAction.ResultViewBackToIdle ->
-                        resultView.backToIdle()
+                    StateOperatorAction.HideResultView ->
+                        resultView.detachFromScreen()
 
                     is StateOperatorAction.ShowErrorDialog ->
                         context.showErrorDialog(action.error)
                 }
             }
             .launchIn(scope)
-
-        resultView.onUserDismiss = {
-            scope.launch {
-                resultView.backToIdle()
-                stateNavigator.navigate(NavigationAction.NavigateToIdle(showMainBar = true))
-            }
-        }
     }
 
     fun showMainBar() {

@@ -453,6 +453,7 @@ private fun ResultViewContentPreview() {
 
         override fun onRootViewPositioned(xOffset: Int, yOffset: Int) = Unit
         override fun onDialogOutsideClicked() = Unit
+        override fun onHomeButtonPressed() = Unit
         override fun onTextSearchClicked() = Unit
         override fun onTextSearchWordSelected(word: String) = Unit
         override fun onOCRTextEditClicked() = Unit

@@ -221,7 +221,8 @@ class StateOperatorImpl @Inject constructor(
         )
 
         try {
-            action.emit(StateOperatorAction.ResultViewStartRecognition)
+            action.emit(StateOperatorAction.ShowResultView)
+
             val recognizer = TextRecognizer.getRecognizer(ocrProvider)
             val language = TextRecognizer.getLanguage(ocrLang, ocrProvider)!!
 
@@ -248,14 +249,6 @@ class StateOperatorImpl @Inject constructor(
 
             FirebaseEvent.logOCRFinished(recognizer.name)
 
-            action.emit(
-                StateOperatorAction.ResultViewSetRecognized(
-                    result = result,
-                    parentRect = parentRect,
-                    selectedRect = selectedRect,
-                    croppedBitmap = croppedBitmap,
-                )
-            )
             startTranslation(
                 croppedBitmap = croppedBitmap,
                 parentRect = parentRect,
@@ -297,12 +290,6 @@ class StateOperatorImpl @Inject constructor(
                 )
             )
 
-            action.emit(
-                StateOperatorAction.ResultViewStartTranslation(
-                    translationProviderType = translator.type,
-                )
-            )
-
             FirebaseEvent.logStartTranslationText(
                 text = recognitionResult.result,
                 fromLang = recognitionResult.langCode,
@@ -325,7 +312,6 @@ class StateOperatorImpl @Inject constructor(
         } catch (e: Exception) {
             logger.warn(t = e)
             FirebaseEvent.logException(e)
-            action.emit(StateOperatorAction.ResultViewBackToIdle)
             showError(e.message ?: "Unknown error found while translating")
         }
     }
@@ -341,7 +327,6 @@ class StateOperatorImpl @Inject constructor(
         when (translationResult) {
             TranslationResult.OuterTranslatorLaunched -> {
                 FirebaseEvent.logTranslationTextFinished(translator)
-                action.emit(StateOperatorAction.ResultViewBackToIdle)
                 backToIdle()
             }
 
@@ -349,27 +334,13 @@ class StateOperatorImpl @Inject constructor(
                 FirebaseEvent.logTranslationSourceLangNotSupport(
                     translator, recognitionResult.langCode,
                 )
-                val result = Result.SourceLangNotSupport(
-                    ocrText = recognitionResult.result,
-                    boundingBoxes = recognitionResult.boundingBoxes,
-                    providerType = translationResult.type,
-                )
-                action.emit(
-                    StateOperatorAction.ResultViewTextTranslated(result)
-                )
+
                 showError(context.getString(R.string.msg_translator_provider_does_not_support_the_ocr_lang))
             }
 
             TranslationResult.OCROnlyResult -> {
                 FirebaseEvent.logTranslationTextFinished(translator)
-                action.emit(
-                    StateOperatorAction.ResultViewTextTranslated(
-                        Result.OCROnly(
-                            ocrText = recognitionResult.result,
-                            boundingBoxes = recognitionResult.boundingBoxes,
-                        )
-                    )
-                )
+
                 stateNavigator.updateState(
                     NavState.TextTranslated(
                         parentRect = parentRect,
@@ -383,16 +354,7 @@ class StateOperatorImpl @Inject constructor(
 
             is TranslationResult.TranslatedResult -> {
                 FirebaseEvent.logTranslationTextFinished(translator)
-                action.emit(
-                    StateOperatorAction.ResultViewTextTranslated(
-                        Result.Translated(
-                            ocrText = recognitionResult.result,
-                            boundingBoxes = recognitionResult.boundingBoxes,
-                            translatedText = translationResult.result,
-                            providerType = translationResult.type,
-                        )
-                    )
-                )
+
                 stateNavigator.updateState(
                     NavState.TextTranslated(
                         parentRect = parentRect,
@@ -414,8 +376,6 @@ class StateOperatorImpl @Inject constructor(
                 if (error is MicrosoftAzureTranslator.Error) {
                     FirebaseEvent.logMicrosoftTranslationError(error)
                 }
-
-                action.emit(StateOperatorAction.ResultViewBackToIdle)
 
                 if (error is IOException) {
                     showError(context.getString(R.string.error_can_not_connect_to_translation_server))
@@ -440,6 +400,8 @@ class StateOperatorImpl @Inject constructor(
         if (currentNavState != NavState.Idle)
             stateNavigator.updateState(NavState.Idle)
 
+        action.emit(StateOperatorAction.HideResultView)
+
         if (showMainBar)
             action.emit(StateOperatorAction.ShowMainBar)
 
@@ -456,28 +418,8 @@ sealed interface StateOperatorAction {
     data object ShowMainBar : StateOperatorAction
     data object ShowScreenCirclingView : StateOperatorAction
     data object HideScreenCirclingView : StateOperatorAction
-    data object ResultViewStartRecognition : StateOperatorAction //TODO subscribe state in view
-
-    @Deprecated("subscribe state in view")
-    data class ResultViewSetRecognized(
-        val result: RecognitionResult,
-        val parentRect: Rect,
-        val selectedRect: Rect,
-        val croppedBitmap: Bitmap,
-    ) : StateOperatorAction //TODO subscribe state in view
-
-    @Deprecated("subscribe state in view")
-    data class ResultViewStartTranslation(
-        val translationProviderType: TranslationProviderType,
-    ) : StateOperatorAction //TODO subscribe state in view
-
-    @Deprecated("subscribe state in view")
-    data class ResultViewTextTranslated(val result: Result) :
-        StateOperatorAction //TODO subscribe state in view
-
-    @Deprecated("subscribe state in view")
-    data object ResultViewBackToIdle : StateOperatorAction //TODO subscribe state in view
-
+    data object ShowResultView : StateOperatorAction
+    data object HideResultView : StateOperatorAction
     data class ShowErrorDialog(val error: String) : StateOperatorAction
 }
 

@@ -38,6 +38,7 @@ interface ResultViewModel {
     val action: SharedFlow<ResultViewAction>
     fun onRootViewPositioned(xOffset: Int, yOffset: Int)
     fun onDialogOutsideClicked()
+    fun onHomeButtonPressed()
     fun onTextSearchClicked()
     fun onTextSearchWordSelected(word: String)
     fun onOCRTextEditClicked()
@@ -81,8 +82,6 @@ sealed interface ResultViewAction {
         val sourceLang: String,
         val targetLang: String,
     ) : ResultViewAction
-
-    data object Close : ResultViewAction
 }
 
 enum class TextType {
@@ -230,7 +229,6 @@ class ResultViewModelImpl @Inject constructor(
 
             NavState.Idle -> {
                 clearData()
-                action.emit(ResultViewAction.Close)
             }
 
             else -> {
@@ -277,6 +275,12 @@ class ResultViewModelImpl @Inject constructor(
     }
 
     override fun onDialogOutsideClicked() {
+        scope.launch {
+            stateNavigator.navigate(NavigationAction.NavigateToIdle())
+        }
+    }
+
+    override fun onHomeButtonPressed() {
         scope.launch {
             stateNavigator.navigate(NavigationAction.NavigateToIdle())
         }
