@@ -74,6 +74,7 @@
     <string name="msg_ocr_only_mode_hint">Translation language selection is not available for OCR only mode</string>
     <string name="text_request_permission">Request permission</string>
     <string name="text_open_in_browser">Open in Browser</string>
+    <string name="text_all_text" translatable="false">[All]</string>
 
     <string name="msg_evertranslator_needs_display_over_other_apps_permission_to_show_a_floating_window_for_easily_using">EverTranslator needs the [Display over other apps] permission to show a floating window on the screen.</string>
     <string name="msg_evertranslator_needs_capture_screen_to_find_the_text_from_the_screen_for_you">EverTranslator needs the [Capture Screen] permission to find the text from the screen for you.</string>

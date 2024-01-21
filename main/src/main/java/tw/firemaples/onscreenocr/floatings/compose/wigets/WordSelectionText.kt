@@ -7,12 +7,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.utils.WordBoundary
 import java.util.Locale
 
@@ -27,7 +29,8 @@ fun WordSelectionText(
 ) {
     var selectedStart by remember { mutableStateOf(-1) }
     val annotatedString = buildText(
-        text = text,
+        fullText = text,
+        textAll = stringResource(id = R.string.text_all_text),
         locale = locale,
         selectedStart = selectedStart,
         selectedSpanStyle = selectedSpanStyle,
@@ -40,24 +43,23 @@ fun WordSelectionText(
             val clicked = annotatedString.getStringAnnotations(offset, offset)
                 .firstOrNull()
             if (clicked != null) {
-                if (selectedStart == clicked.start) {
-                    selectedStart = -1
-                } else {
-                    selectedStart = clicked.start
-                    onTextSelected.invoke(clicked.item)
-                }
+                selectedStart = clicked.start
+                onTextSelected.invoke(clicked.tag)
             }
         },
     )
 }
 
 private fun buildText(
-    text: String,
+    fullText: String,
+    textAll: String,
     locale: Locale,
     selectedStart: Int,
     selectedSpanStyle: SpanStyle
 ) = buildAnnotatedString {
-    if (text.isEmpty()) return@buildAnnotatedString
+    if (fullText.isEmpty()) return@buildAnnotatedString
+
+    val text = "$textAll $fullText"
 
     val boundaries = WordBoundary.breakWords(text = text, locale = locale)
     if (boundaries.isEmpty()) {
@@ -83,13 +85,31 @@ private fun buildText(
             append(text.substring(textStart until nextBoundary.start))
             textStart = nextBoundary.start
         } else if (textStart == nextBoundary.start) {
-            val style = if (textStart == selectedStart) selectedStyle else unselectedStyle
-            val word = text.substring(nextBoundary.start until nextBoundary.end)
-            withStyle(style = style) {
-                pushStringAnnotation(tag = word, annotation = word)
-                append(word)
+            val style = if (textStart == selectedStart)
+                selectedStyle else unselectedStyle
+
+            if (nextBoundary.start < textAll.length) {
+                while (true) {
+                    val next = boundaries.getOrNull(index + 1)
+                    if (next == null || next.start >= textAll.length) {
+                        break
+                    }
+                    index++
+                }
+
+                withStyle(style = style) {
+                    pushStringAnnotation(tag = fullText, annotation = textAll)
+                    append(textAll)
+                }
+                textStart = textAll.length
+            } else {
+                val word = text.substring(nextBoundary.start until nextBoundary.end)
+                withStyle(style = style) {
+                    pushStringAnnotation(tag = word, annotation = word)
+                    append(word)
+                }
+                textStart = nextBoundary.end
             }
-            textStart = nextBoundary.end
             index++
         }
     }
