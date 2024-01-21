@@ -200,6 +200,7 @@ private fun ResultPanel(
         }
 
         if (translationState.showTranslationArea) {
+            Spacer(modifier = Modifier.size(2.dp))
             TranslationToolBar(
                 onCopyClicked = { viewModel.onCopyClicked(TextType.TranslationResult) },
                 onGoogleTranslateClicked = { viewModel.onGoogleTranslateClicked(TextType.TranslationResult) }
