@@ -3,6 +3,7 @@ package tw.firemaples.onscreenocr.floatings.compose.resultview
 import android.content.res.Configuration
 import android.graphics.Rect
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,6 +42,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -83,23 +85,25 @@ fun ResultViewContent(
             )
         }
 
-        val xOffset = remember { mutableStateOf(state.highlightUnion.left) }
-        val yOffset = remember { mutableStateOf(state.highlightUnion.top) }
+        val targetOffset = remember {
+            mutableStateOf(IntOffset(state.highlightUnion.left, state.highlightUnion.top))
+        }
+
+        val animOffset by animateIntOffsetAsState(
+            targetValue = targetOffset.value,
+            label = "result panel position",
+        )
 
         ResultPanel(
             modifier = Modifier
                 .padding(16.dp)
                 .calculateOffset(
                     highlightUnion = state.highlightUnion,
-                    xOffset = xOffset,
-                    yOffset = yOffset,
+                    offset = targetOffset,
                     padding = 16.dp.dpToPx(),
                     verticalSpacing = 4.dp.dpToPx(),
                 )
-                .offset(
-                    xOffset.value.pxToDp(),
-                    yOffset.value.pxToDp(),
-                )
+                .offset { animOffset }
                 .animateContentSize(),
             viewModel = viewModel,
             textSearchEnabled = state.textSearchEnabled,
@@ -112,8 +116,7 @@ fun ResultViewContent(
 
 private fun Modifier.calculateOffset(
     highlightUnion: Rect,
-    xOffset: MutableState<Int>,
-    yOffset: MutableState<Int>,
+    offset: MutableState<IntOffset>,
     padding: Float,
     verticalSpacing: Float,
 ): Modifier = onGloballyPositioned { coordinates ->
@@ -123,43 +126,45 @@ private fun Modifier.calculateOffset(
     val leftAnchor = maxOf(highlightUnion.left, padding.toInt())
     val rightAnchor = minOf(highlightUnion.right, parent.width - padding.toInt())
 
-    when {
+    val x = when {
         leftAnchor + current.width + padding < parent.width -> {
             // Align left
-            xOffset.value = highlightUnion.left - padding.toInt()
+            highlightUnion.left - padding.toInt()
         }
 
         rightAnchor - current.width - padding >= 0 -> {
             // Align right
-            xOffset.value = rightAnchor - current.width - padding.toInt()
+            rightAnchor - current.width - padding.toInt()
         }
 
         else -> {
             // No horizontal alignment
-            xOffset.value = 0
+            0
         }
     }
 
     val topAnchor = highlightUnion.bottom + verticalSpacing
     val bottomAnchor = highlightUnion.top - verticalSpacing
 
-    when {
+    val y = when {
         topAnchor + current.height + padding < parent.height -> {
             // Display at bottom
-            yOffset.value = (topAnchor - padding).toInt()
+            (topAnchor - padding).toInt()
         }
 
         bottomAnchor - current.height - padding >= 0 -> {
             // Display at top
-            yOffset.value = (bottomAnchor - current.height - padding).toInt()
+            (bottomAnchor - current.height - padding).toInt()
         }
 
         else -> {
             // Display middle vertically
             val middleAnchor = (parent.height - current.height) / 2
-            yOffset.value = (middleAnchor - padding).toInt()
+            (middleAnchor - padding).toInt()
         }
     }
+
+    offset.value = IntOffset(x, y)
 }
 
 @Composable
