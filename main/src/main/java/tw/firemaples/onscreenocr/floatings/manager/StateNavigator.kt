@@ -69,11 +69,15 @@ class StateNavigatorImpl @Inject constructor() : StateNavigator {
     override fun updateState(newNavState: NavState) {
         val allowedNextStates = nextStates[currentNavState.value::class]
 
+        val transitionName =
+            "${currentNavState.value::class.simpleName} > ${newNavState::class.simpleName}"
+        val transitionInfo = "${currentNavState.value} > ${newNavState::class}"
+
         if (allowedNextStates?.contains(newNavState::class) == true) {
-            logger.debug("Change state ${currentNavState.value} > $newNavState")
+            logger.debug("Change state $transitionName, info: $transitionInfo")
             currentNavState.value = newNavState
         } else {
-            logger.error("Change state from ${currentNavState.value} to $newNavState is not allowed")
+            logger.error("Change state from $transitionName is not allowed, info: $transitionInfo")
         }
     }
 }
