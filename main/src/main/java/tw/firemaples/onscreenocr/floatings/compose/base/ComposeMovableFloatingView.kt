@@ -80,7 +80,7 @@ abstract class ComposeMovableFloatingView(context: Context) : ComposeFloatingVie
 
     //region Moving to edge
     fun moveToEdgeIfEnabled() {
-        rootView.post { if (moveToEdgeAfterMoved) moveToEdge() }
+        rootView.postDelayed({ if (moveToEdgeAfterMoved) moveToEdge() }, 100L)
     }
 
     private fun moveToEdge() {

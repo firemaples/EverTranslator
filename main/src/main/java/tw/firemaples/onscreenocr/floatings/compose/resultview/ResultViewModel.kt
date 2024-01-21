@@ -147,8 +147,15 @@ class ResultViewModelImpl @Inject constructor(
         when (navState) {
             is NavState.TextRecognizing ->
                 state.update {
+                    val (textAreas, unionArea) = calculateTextAreas(
+                        listOf(navState.selectedRect),
+                        navState.parentRect,
+                        navState.selectedRect,
+                    )
+
                     it.copy(
-                        highlightArea = listOf(navState.selectedRect),
+                        highlightArea = textAreas,
+                        highlightUnion = unionArea,
                         ocrState = it.ocrState.copy(
                             showProcessing = true,
                         )
@@ -161,7 +168,7 @@ class ResultViewModelImpl @Inject constructor(
 
                     val needTranslate = !navState.translationProviderType.nonTranslation
                     val (textAreas, unionArea) = calculateTextAreas(
-                        navState.recognitionResult,
+                        navState.recognitionResult.boundingBoxes,
                         navState.parentRect,
                         navState.selectedRect,
                     )
@@ -249,13 +256,13 @@ class ResultViewModelImpl @Inject constructor(
     }
 
     private fun calculateTextAreas(
-        result: RecognitionResult,
+        boundingBoxes: List<Rect>,
         parent: Rect,
         selected: Rect,
     ): Pair<List<Rect>, Rect> {
         val topOffset = parent.top + selected.top - rootViewYOffset
         val leftOffset = parent.left + selected.left - rootViewXOffset
-        val textAreas = result.boundingBoxes.map {
+        val textAreas = boundingBoxes.map {
             Rect(
                 it.left + leftOffset,
                 it.top + topOffset,
