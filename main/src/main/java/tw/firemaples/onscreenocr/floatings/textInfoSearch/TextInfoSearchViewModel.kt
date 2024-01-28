@@ -1,5 +1,6 @@
 package tw.firemaples.onscreenocr.floatings.textInfoSearch
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
@@ -7,6 +8,7 @@ import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.utils.Constants
+import tw.firemaples.onscreenocr.utils.toGoogleTranslateLang
 import java.net.URLEncoder
 
 class TextInfoSearchViewModel(
@@ -100,7 +102,12 @@ class TextInfoSearchViewModel(
         class GoogleTranslate(text: String, sourceLang: String, val targetLang: String) :
             Page(text, sourceLang, PageType.GoogleTranslate) {
             override val url: String
-                get() = "https://translate.google.com/?sl=$sourceLang&tl=$targetLang&text=$encodedText&op=translate"
+                get() = Uri.parse("https://translate.google.com/?op=translate")
+                    .buildUpon()
+                    .appendQueryParameter("sl", sourceLang.toGoogleTranslateLang())
+                    .appendQueryParameter("tl", targetLang.toGoogleTranslateLang())
+                    .appendQueryParameter("text", text)
+                    .toString()
         }
 
         class Wikipedia(text: String, sourceLang: String) :
