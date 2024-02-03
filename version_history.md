@@ -6,6 +6,13 @@ date:   2024-01-14 19:19 +0900
 
 [中文版本](./version_history_zh_tw.html)
 
+## v4.0.0
+- System refactored
+  - Recreated main bar
+  - Recreated result window
+- Fix word chuck on the result window
+- Request post-notification permission to restore the "show/hide the main bar from notification" feature
+
 ## v3.1.25
 - Fix a screen circling bug while adjusting the scope on devices with a notch.
 - Update Arabic translation.
