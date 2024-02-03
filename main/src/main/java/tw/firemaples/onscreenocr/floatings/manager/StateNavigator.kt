@@ -10,6 +10,8 @@ import tw.firemaples.onscreenocr.floatings.compose.base.awaitForSubscriber
 import tw.firemaples.onscreenocr.recognition.RecognitionResult
 import tw.firemaples.onscreenocr.recognition.TextRecognitionProviderType
 import tw.firemaples.onscreenocr.translator.TranslationProviderType
+import tw.firemaples.onscreenocr.translator.TranslationResult
+import tw.firemaples.onscreenocr.translator.Translator
 import tw.firemaples.onscreenocr.utils.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -100,14 +102,17 @@ sealed interface NavigationAction {
     ) : NavigationAction
 
     data class NavigateToTextRecognition(
+        val ocrLang: String,
+        val ocrProvider: TextRecognitionProviderType,
         val croppedBitmap: Bitmap,
-        val parent: Rect,
-        val selected: Rect,
+        val parentRect: Rect,
+        val selectedRect: Rect,
     ) : NavigationAction
 
-    //TODO remove
-    @Deprecated("Replaced by ReStartTranslation")
     data class NavigateToStartTranslation(
+        val croppedBitmap: Bitmap,
+        val parentRect: Rect,
+        val selectedRect: Rect,
         val recognitionResult: RecognitionResult,
     ) : NavigationAction
 
@@ -119,7 +124,12 @@ sealed interface NavigationAction {
     ) : NavigationAction
 
     data class NavigateToTranslated(
-        val result: Result,
+        val croppedBitmap: Bitmap,
+        val parentRect: Rect,
+        val selectedRect: Rect,
+        val recognitionResult: RecognitionResult,
+        val translator: Translator,
+        val translationResult: TranslationResult,
     ) : NavigationAction
 
     data class ShowError(

@@ -79,16 +79,6 @@ class StateOperatorImpl @Inject constructor(
                             ocrProvider = action.ocrProvider,
                         )
 
-                    is NavigationAction.NavigateToStartTranslation -> {
-                        //TODO remove
-//                        val croppedBitmap = currentNavState.getBitmap()
-//                            ?: throw IllegalStateException("Navigate to StartTranslation failed, bitmap is null: $currentNavState")
-//                        startTranslation(
-//                            croppedBitmap = croppedBitmap,
-//                            recognitionResult = action.recognitionResult,
-//                        )
-                    }
-
                     is NavigationAction.ReStartTranslation -> {
                         startTranslation(
                             croppedBitmap = action.croppedBitmap,
@@ -101,9 +91,35 @@ class StateOperatorImpl @Inject constructor(
                     is NavigationAction.NavigateToIdle ->
                         backToIdle(showMainBar = action.showMainBar)
 
-                    is NavigationAction.NavigateToTextRecognition -> TODO()
-                    is NavigationAction.NavigateToTranslated -> TODO()
-                    is NavigationAction.ShowError -> TODO()
+                    is NavigationAction.NavigateToTextRecognition ->
+                        startRecognition(
+                            ocrLang = action.ocrLang,
+                            ocrProvider = action.ocrProvider,
+                            croppedBitmap = action.croppedBitmap,
+                            parentRect = action.parentRect,
+                            selectedRect = action.selectedRect,
+                        )
+
+                    is NavigationAction.NavigateToStartTranslation ->
+                        startTranslation(
+                            croppedBitmap = action.croppedBitmap,
+                            parentRect = action.parentRect,
+                            selectedRect = action.selectedRect,
+                            recognitionResult = action.recognitionResult,
+                        )
+
+                    is NavigationAction.NavigateToTranslated ->
+                        onTranslated(
+                            croppedBitmap = action.croppedBitmap,
+                            parentRect = action.parentRect,
+                            selectedRect = action.selectedRect,
+                            recognitionResult = action.recognitionResult,
+                            translator = action.translator,
+                            translationResult = action.translationResult,
+                        )
+
+                    is NavigationAction.ShowError ->
+                        showError(action.error)
                 }
             }.launchIn(scope)
     }
@@ -183,12 +199,14 @@ class StateOperatorImpl @Inject constructor(
 
             action.emit(StateOperatorAction.ShowMainBar)
 
-            startRecognition(
-                ocrLang = ocrLang,
-                ocrProvider = ocrProvider,
-                croppedBitmap = croppedBitmap,
-                parentRect = parentRect,
-                selectedRect = selectedRect,
+            stateNavigator.navigate(
+                NavigationAction.NavigateToTextRecognition(
+                    ocrLang = ocrLang,
+                    ocrProvider = ocrProvider,
+                    croppedBitmap = croppedBitmap,
+                    parentRect = parentRect,
+                    selectedRect = selectedRect,
+                )
             )
         } catch (t: TimeoutCancellationException) {
             logger.debug(t = t)
@@ -249,11 +267,13 @@ class StateOperatorImpl @Inject constructor(
 
             FirebaseEvent.logOCRFinished(recognizer.name)
 
-            startTranslation(
-                croppedBitmap = croppedBitmap,
-                parentRect = parentRect,
-                selectedRect = selectedRect,
-                recognitionResult = result,
+            stateNavigator.navigate(
+                NavigationAction.NavigateToStartTranslation(
+                    croppedBitmap = croppedBitmap,
+                    parentRect = parentRect,
+                    selectedRect = selectedRect,
+                    recognitionResult = result,
+                )
             )
         } catch (e: Exception) {
             val error =
@@ -301,13 +321,15 @@ class StateOperatorImpl @Inject constructor(
                 sourceLangCode = recognitionResult.langCode,
             )
 
-            onTranslated(
-                croppedBitmap = croppedBitmap,
-                parentRect = parentRect,
-                selectedRect = selectedRect,
-                recognitionResult = recognitionResult,
-                translator = translator,
-                translationResult = translationResult,
+            stateNavigator.navigate(
+                NavigationAction.NavigateToTranslated(
+                    croppedBitmap = croppedBitmap,
+                    parentRect = parentRect,
+                    selectedRect = selectedRect,
+                    recognitionResult = recognitionResult,
+                    translator = translator,
+                    translationResult = translationResult,
+                )
             )
         } catch (e: Exception) {
             logger.warn(t = e)
@@ -316,7 +338,7 @@ class StateOperatorImpl @Inject constructor(
         }
     }
 
-    private suspend fun onTranslated(
+    private fun onTranslated(
         croppedBitmap: Bitmap,
         parentRect: Rect,
         selectedRect: Rect,
