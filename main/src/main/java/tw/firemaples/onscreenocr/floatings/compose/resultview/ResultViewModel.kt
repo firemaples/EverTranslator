@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.data.usecase.GetCurrentTranslationLangUseCase
-import tw.firemaples.onscreenocr.data.usecase.GetHidingOCRAreaAfterTranslated
+import tw.firemaples.onscreenocr.data.usecase.GetHidingOCRAreaAfterTranslatedUseCase
 import tw.firemaples.onscreenocr.data.usecase.GetResultViewFontSizeUseCase
 import tw.firemaples.onscreenocr.data.usecase.GetShowTextSelectorOnResultViewUseCase
 import tw.firemaples.onscreenocr.data.usecase.SetShowTextSelectorOnResultViewUseCase
@@ -98,7 +98,7 @@ class ResultViewModelImpl @Inject constructor(
     private val setShowTextSelectorOnResultViewUseCase: SetShowTextSelectorOnResultViewUseCase,
     getResultViewFontSizeUseCase: GetResultViewFontSizeUseCase,
     private val getCurrentTranslationLangUseCase: GetCurrentTranslationLangUseCase,
-    private val getHidingOCRAreaAfterTranslated: GetHidingOCRAreaAfterTranslated,
+    private val getHidingOCRAreaAfterTranslatedUseCase: GetHidingOCRAreaAfterTranslatedUseCase,
 ) : ResultViewModel {
     private val logger by lazy { Logger(this::class) }
 
@@ -208,7 +208,7 @@ class ResultViewModelImpl @Inject constructor(
                             val providerName = context.getString(providerType.nameRes)
                             "${context.getString(R.string.text_translated_by)} $providerName"
                         } else null
-                        val showRecognitionArea = getHidingOCRAreaAfterTranslated.invoke().not()
+                        val showRecognitionArea = getHidingOCRAreaAfterTranslatedUseCase.invoke().not()
 
                         state.update {
                             it.copy(
