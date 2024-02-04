@@ -151,6 +151,7 @@ private fun MainBarButton(
             .padding(4.dp),
         painter = painterResource(id = icon),
         contentDescription = "",
+        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
     )
 }
 
