@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,7 +26,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,8 +38,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import tw.firemaples.onscreenocr.R
-import tw.firemaples.onscreenocr.floatings.compose.base.AppColorScheme
-import tw.firemaples.onscreenocr.floatings.compose.base.AppTheme
+import tw.firemaples.onscreenocr.theme.AppTheme
 
 @Composable
 fun MainBarContent(
@@ -54,7 +53,7 @@ fun MainBarContent(
     Box(
         modifier = Modifier
             .background(
-                color = AppColorScheme.background,
+                color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(8.dp),
             ),
     ) {
@@ -115,7 +114,7 @@ private fun LanguageBlock(
             .height(32.dp)
             .border(
                 width = 2.dp,
-                color = AppColorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onSurface,
                 shape = RoundedCornerShape(4.dp),
             )
             .clickable(onClick = onClick)
@@ -126,13 +125,13 @@ private fun LanguageBlock(
             text = langText,
             fontSize = 12.sp,
             fontWeight = FontWeight.Bold,
-            color = AppColorScheme.onBackground,
+            color = MaterialTheme.colorScheme.onSurface,
         )
         if (translatorIcon != null) {
             Image(
                 painter = painterResource(id = translatorIcon),
                 contentDescription = "",
-                colorFilter = ColorFilter.tint(AppColorScheme.onBackground),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
             )
         }
     }
@@ -148,7 +147,7 @@ private fun MainBarButton(
         modifier = Modifier
             .size(32.dp)
             .clickable(onClick = onClick)
-            .background(colorResource(id = R.color.md_blue_800), shape = RoundedCornerShape(4.dp))
+            .background(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(4.dp))
             .padding(4.dp),
         painter = painterResource(id = icon),
         contentDescription = "",
@@ -177,7 +176,7 @@ private fun MenuButton(
             .clickable(onClick = onClick)
             .padding(2.dp),
         painter = painterResource(id = R.drawable.ic_menu_move),
-        colorFilter = ColorFilter.tint(AppColorScheme.onBackground),
+        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
         contentDescription = "",
     )
 }
