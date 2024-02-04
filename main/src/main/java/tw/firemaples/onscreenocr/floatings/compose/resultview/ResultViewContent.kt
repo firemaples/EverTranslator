@@ -23,6 +23,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -50,12 +51,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import tw.firemaples.onscreenocr.R
-import tw.firemaples.onscreenocr.floatings.compose.base.AppColorScheme
-import tw.firemaples.onscreenocr.floatings.compose.base.AppTheme
-import tw.firemaples.onscreenocr.floatings.compose.base.FontSize
 import tw.firemaples.onscreenocr.floatings.compose.base.dpToPx
 import tw.firemaples.onscreenocr.floatings.compose.base.pxToDp
 import tw.firemaples.onscreenocr.floatings.compose.wigets.WordSelectionText
+import tw.firemaples.onscreenocr.theme.AppTheme
+import tw.firemaples.onscreenocr.theme.FontSize
 import java.util.Locale
 
 @Composable
@@ -202,7 +202,7 @@ private fun ResultPanel(
     Column(
         modifier = modifier
             .background(
-                color = AppColorScheme.background,
+                color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(8.dp),
             )
             .clickable { }
@@ -263,7 +263,7 @@ private fun OCRToolBar(
             text = stringResource(id = R.string.text_ocr_text),
             fontSize = FontSize.Small,
             fontWeight = FontWeight.Bold,
-            color = AppColorScheme.onBackground,
+            color = MaterialTheme.colorScheme.onSurface,
         )
 
 //            Image(painter = painterResource(id = R.drawable.ic_play), contentDescription = "")
@@ -271,8 +271,8 @@ private fun OCRToolBar(
         Spacer(modifier = Modifier.size(4.dp))
 
         val textSearchTintColor = if (textSearchEnabled)
-            colorResource(id = R.color.md_blue_800)
-        else AppColorScheme.onBackground
+            MaterialTheme.colorScheme.primary
+        else MaterialTheme.colorScheme.onSurface
         Image(
             modifier = Modifier.clickable(onClick = onSearchClicked),
             painter = painterResource(id = R.drawable.ic_text_search),
@@ -341,12 +341,12 @@ private fun OCRTextArea(
                 text = ocrText,
                 locale = Locale.US,
                 textStyle = TextStyle(
-                    color = AppColorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontSize = fontSize.sp,
                 ),
                 selectedSpanStyle = SpanStyle(
-                    color = AppColorScheme.onSecondary,
-                    background = AppColorScheme.secondary,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    background = MaterialTheme.colorScheme.secondary,
                 ),
                 onTextSelected = onTextSelected,
             )
@@ -356,7 +356,7 @@ private fun OCRTextArea(
                     .sizeIn(maxHeight = 150.dp)
                     .verticalScroll(rememberScrollState()),
                 text = ocrText,
-                color = AppColorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontSize = fontSize.sp,
             )
         }
@@ -376,7 +376,7 @@ private fun TranslationToolBar(
             text = stringResource(id = R.string.text_translated_text),
             fontSize = FontSize.Small,
             fontWeight = FontWeight.Bold,
-            color = AppColorScheme.onBackground,
+            color = MaterialTheme.colorScheme.onSurface,
         )
 
         Spacer(modifier = Modifier.size(4.dp))
@@ -412,7 +412,7 @@ private fun TranslationTextArea(
                 .sizeIn(maxHeight = 150.dp)
                 .verticalScroll(rememberScrollState()),
             text = translatedText,
-            color = AppColorScheme.onBackground,
+            color = MaterialTheme.colorScheme.onSurface,
             fontSize = fontSize.sp,
         )
     }
@@ -432,7 +432,7 @@ private fun ColumnScope.TranslationProviderBar(
         Text(
             modifier = Modifier.align(Alignment.End),
             text = translationProviderText,
-            color = AppColorScheme.secondary,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 12.sp,
             maxLines = 1,
         )
