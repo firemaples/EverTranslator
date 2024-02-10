@@ -114,4 +114,7 @@
     <string name="pref_summary_on_keep_media_projection_resources">維持相關資源直到重啟程式</string>
     <string name="pref_summary_off_keep_media_projection_resources">每次使用後釋放相關資源</string>
     <string name="pref_screenshot">螢幕截圖</string>
+    <string name="pref_limit_result_view_max_width">限制最大寬度</string>
+    <string name="pref_summary_on_limit_result_view_max_width">限制最大寬度至 300dp</string>
+    <string name="pref_summary_off_limit_result_view_max_width">不限制寬度</string>
 </resources>

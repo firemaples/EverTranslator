@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
 import tw.firemaples.onscreenocr.data.usecase.GetCurrentTranslationLangUseCase
 import tw.firemaples.onscreenocr.data.usecase.GetHidingOCRAreaAfterTranslatedUseCase
+import tw.firemaples.onscreenocr.data.usecase.GetLimitResultViewMaxWidthUseCase
 import tw.firemaples.onscreenocr.data.usecase.GetResultViewFontSizeUseCase
 import tw.firemaples.onscreenocr.data.usecase.GetShowTextSelectorOnResultViewUseCase
 import tw.firemaples.onscreenocr.data.usecase.SetShowTextSelectorOnResultViewUseCase
@@ -50,6 +51,7 @@ interface ResultViewModel {
 }
 
 data class ResultViewState(
+    val limitMaxWidth: Boolean = true,
     val textSearchEnabled: Boolean = false,
     val fontSize: Float = Constants.DEFAULT_RESULT_WINDOW_FONT_SIZE,
     val highlightArea: List<Rect> = listOf(),
@@ -97,6 +99,7 @@ class ResultViewModelImpl @Inject constructor(
     getShowTextSelectorOnResultViewUseCase: GetShowTextSelectorOnResultViewUseCase,
     private val setShowTextSelectorOnResultViewUseCase: SetShowTextSelectorOnResultViewUseCase,
     getResultViewFontSizeUseCase: GetResultViewFontSizeUseCase,
+    private val getLimitResultViewMaxWidthUseCase: GetLimitResultViewMaxWidthUseCase,
     private val getCurrentTranslationLangUseCase: GetCurrentTranslationLangUseCase,
     private val getHidingOCRAreaAfterTranslatedUseCase: GetHidingOCRAreaAfterTranslatedUseCase,
 ) : ResultViewModel {
@@ -142,6 +145,12 @@ class ResultViewModelImpl @Inject constructor(
             this@ResultViewModelImpl.parentRect = navState.parentRect
             this@ResultViewModelImpl.selectedRect = navState.selectedRect
             this@ResultViewModelImpl.croppedBitmap = navState.bitmap
+        }
+
+        state.update {
+            it.copy(
+                limitMaxWidth = getLimitResultViewMaxWidthUseCase.invoke(),
+            )
         }
 
         when (navState) {
@@ -208,7 +217,8 @@ class ResultViewModelImpl @Inject constructor(
                             val providerName = context.getString(providerType.nameRes)
                             "${context.getString(R.string.text_translated_by)} $providerName"
                         } else null
-                        val showRecognitionArea = getHidingOCRAreaAfterTranslatedUseCase.invoke().not()
+                        val showRecognitionArea =
+                            getHidingOCRAreaAfterTranslatedUseCase.invoke().not()
 
                         state.update {
                             it.copy(

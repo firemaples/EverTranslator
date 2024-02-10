@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -97,6 +98,11 @@ fun ResultViewContent(
         ResultPanel(
             modifier = Modifier
                 .padding(16.dp)
+                .run {
+                    if (state.limitMaxWidth)
+                        widthIn(max = 300.dp)
+                    else this
+                }
                 .calculateOffset(
                     highlightUnion = state.highlightUnion,
                     offset = targetOffset,
@@ -462,10 +468,11 @@ private fun ResultViewContentPreview() {
     val state = ResultViewState(
         highlightArea = listOf(areaRect),
         highlightUnion = areaRect,
+        limitMaxWidth = true,
         textSearchEnabled = true,
         ocrState = OCRState(
-            showProcessing = true,
-            ocrText = "Test OCR text",
+            showProcessing = false,
+            ocrText = "Test OCR text Test OCR text Test OCR text Test OCR text Test OCR text Test OCR text Test OCR text Test OCR text Test OCR text Test OCR text Test OCR text Test OCR text Test OCR text Test OCR text Test OCR text Test OCR text Test OCR text Test OCR text Test OCR text ",
         ),
         translationState = TranslationState(
             showTranslationArea = true,

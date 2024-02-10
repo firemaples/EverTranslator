@@ -51,6 +51,9 @@
     <string name="pref_summary_on_keep_media_projection_resources">Keep the resources until restart</string>
     <string name="pref_summary_off_keep_media_projection_resources">Release the resources after used</string>
     <string name="pref_title_keep_media_projection_resources">Keep MediaProjection resources</string>
+    <string name="pref_limit_result_view_max_width">Limit the max width</string>
+    <string name="pref_summary_on_limit_result_view_max_width">Limit the max width to 300dp</string>
+    <string name="pref_summary_off_limit_result_view_max_width">Dynamic width based on the content</string>
 
     <string name="menu_setting">Setting</string>
     <string name="menu_privacy_policy">Privacy Policy</string>
