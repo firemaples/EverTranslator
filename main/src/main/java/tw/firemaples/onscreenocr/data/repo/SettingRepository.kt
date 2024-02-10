@@ -9,4 +9,7 @@ class SettingRepository @Inject constructor() {
 
     fun hideOCRAreaAfterTranslated(): Boolean =
         SettingManager.hideRecognizedResultAfterTranslated
+
+    fun limitResultViewMaxWidth(): Boolean =
+        SettingManager.limitResultViewMaxWidth
 }
