@@ -29,12 +29,12 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
-import tw.firemaples.onscreenocr.theme.AppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelChildren
+import tw.firemaples.onscreenocr.theme.AppTheme
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.PermissionUtil
 import tw.firemaples.onscreenocr.utils.UIUtils
@@ -214,6 +214,7 @@ abstract class ComposeFloatingView(protected val context: Context) {
         windowManager.addView(rootView, params)
 
         with(lifecycleOwner) {
+            handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
             handleLifecycleEvent(Lifecycle.Event.ON_START)
             handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
         }
@@ -240,12 +241,13 @@ abstract class ComposeFloatingView(protected val context: Context) {
 
         viewScope.coroutineContext.cancelChildren()
 
-        windowManager.removeView(rootView)
-
         with(lifecycleOwner) {
             handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
             handleLifecycleEvent(Lifecycle.Event.ON_STOP)
+            handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         }
+
+        windowManager.removeView(rootView)
 
         attachedFloatingViews.remove(this)
 
@@ -309,7 +311,6 @@ abstract class ComposeFloatingView(protected val context: Context) {
     protected val lifecycleOwner: FloatingViewLifecycleOwner =
         FloatingViewLifecycleOwner().apply {
             performRestore(null)
-            handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
         }
 
 //    private val tasks = mutableListOf<WeakReference<Closeable>>()
