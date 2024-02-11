@@ -52,8 +52,6 @@ class FloatingViewCoordinator @Inject constructor(
             .onEach { action ->
                 when (action) {
                     StateOperatorAction.TopMainBar -> arrangeMainBarToTop()
-                    StateOperatorAction.HideMainBar -> hideMainBar()
-                    StateOperatorAction.ShowMainBar -> showMainBar()
 
                     StateOperatorAction.ShowScreenCirclingView ->
                         screenCirclingView.attachToScreen()
@@ -97,7 +95,7 @@ class FloatingViewCoordinator @Inject constructor(
 
     fun detachAllViews() {
         scope.launch {
-            stateNavigator.navigate(NavigationAction.NavigateToIdle(showMainBar = false))
+            stateNavigator.navigate(NavigationAction.NavigateToIdle)
             hideMainBar()
             FloatingView.detachAllFloatingViews()
         }

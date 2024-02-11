@@ -214,7 +214,6 @@ abstract class ComposeFloatingView(protected val context: Context) {
         windowManager.addView(rootView, params)
 
         with(lifecycleOwner) {
-            handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
             handleLifecycleEvent(Lifecycle.Event.ON_START)
             handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
         }
@@ -244,7 +243,6 @@ abstract class ComposeFloatingView(protected val context: Context) {
         with(lifecycleOwner) {
             handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
             handleLifecycleEvent(Lifecycle.Event.ON_STOP)
-            handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         }
 
         windowManager.removeView(rootView)
@@ -311,6 +309,7 @@ abstract class ComposeFloatingView(protected val context: Context) {
     protected val lifecycleOwner: FloatingViewLifecycleOwner =
         FloatingViewLifecycleOwner().apply {
             performRestore(null)
+            handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
         }
 
 //    private val tasks = mutableListOf<WeakReference<Closeable>>()

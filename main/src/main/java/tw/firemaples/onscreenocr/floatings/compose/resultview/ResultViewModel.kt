@@ -287,13 +287,13 @@ class ResultViewModelImpl @Inject constructor(
 
     override fun onDialogOutsideClicked() {
         scope.launch {
-            stateNavigator.navigate(NavigationAction.NavigateToIdle())
+            stateNavigator.navigate(NavigationAction.NavigateToIdle)
         }
     }
 
     override fun onHomeButtonPressed() {
         scope.launch {
-            stateNavigator.navigate(NavigationAction.NavigateToIdle())
+            stateNavigator.navigate(NavigationAction.NavigateToIdle)
         }
     }
 
@@ -371,14 +371,14 @@ class ResultViewModelImpl @Inject constructor(
     override fun onGoogleTranslateClicked(textType: TextType) {
         scope.launch {
             action.emit(ResultViewAction.LaunchGoogleTranslator(textType.getTargetText()))
-            stateNavigator.navigate(NavigationAction.NavigateToIdle())
+            stateNavigator.navigate(NavigationAction.NavigateToIdle)
         }
     }
 
     override fun onShareOCRTextClicked() {
         scope.launch {
             action.emit(ResultViewAction.ShareText(state.value.ocrState.ocrText))
-            stateNavigator.navigate(NavigationAction.NavigateToIdle())
+            stateNavigator.navigate(NavigationAction.NavigateToIdle)
         }
     }
 

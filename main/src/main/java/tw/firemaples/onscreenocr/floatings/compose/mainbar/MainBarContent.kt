@@ -22,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.PointerInputChange
@@ -52,6 +53,7 @@ fun MainBarContent(
 
     Box(
         modifier = Modifier
+            .alpha(if (state.drawMainBar) 1f else 0f)
             .background(
                 color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(8.dp),
