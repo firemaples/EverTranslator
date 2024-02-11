@@ -49,6 +49,7 @@ interface MainBarViewModel {
 }
 
 data class MainBarState(
+    val drawMainBar: Boolean = true,
     val langText: String = "",
     val translatorIcon: Int? = null,
     val displaySelectButton: Boolean = false,
@@ -95,7 +96,16 @@ class MainBarViewModelImpl @Inject constructor(
 
     private suspend fun onNavigationStateChanges(navState: NavState) {
         state.update {
+            val drawMainBar = when (navState) {
+                NavState.Idle,
+                NavState.ScreenCircling,
+                is NavState.ScreenCircled -> true
+
+                else -> false
+            }
+
             it.copy(
+                drawMainBar = drawMainBar,
                 displaySelectButton = navState == NavState.Idle,
                 displayTranslateButton = navState is NavState.ScreenCircled,
                 displayCloseButton =

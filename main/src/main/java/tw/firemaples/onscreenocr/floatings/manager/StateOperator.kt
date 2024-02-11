@@ -38,7 +38,7 @@ interface StateOperator {
     val action: SharedFlow<StateOperatorAction>
 
     companion object {
-        const val SCREENSHOT_DELAY = 100L
+        const val SCREENSHOT_DELAY = 200L
     }
 }
 
@@ -89,7 +89,7 @@ class StateOperatorImpl @Inject constructor(
                     }
 
                     is NavigationAction.NavigateToIdle ->
-                        backToIdle(showMainBar = action.showMainBar)
+                        backToIdle()
 
                     is NavigationAction.NavigateToTextRecognition ->
                         startRecognition(
@@ -182,7 +182,6 @@ class StateOperatorImpl @Inject constructor(
         stateNavigator.updateState(NavState.ScreenCapturing)
 
         action.emit(StateOperatorAction.HideScreenCirclingView)
-        action.emit(StateOperatorAction.HideMainBar)
 
         delay(SCREENSHOT_DELAY)
 
@@ -197,8 +196,6 @@ class StateOperatorImpl @Inject constructor(
             }
             FirebaseEvent.logCaptureScreenFinished()
 
-            action.emit(StateOperatorAction.ShowMainBar)
-
             stateNavigator.navigate(
                 NavigationAction.NavigateToTextRecognition(
                     ocrLang = ocrLang,
@@ -210,15 +207,15 @@ class StateOperatorImpl @Inject constructor(
             )
         } catch (t: TimeoutCancellationException) {
             logger.debug(t = t)
-            showError(context.getString(R.string.error_capture_screen_timeout))
             FirebaseEvent.logCaptureScreenFailed(t)
+            showError(context.getString(R.string.error_capture_screen_timeout))
             bitmap?.setReusable()
         } catch (t: Throwable) {
             logger.debug(t = t)
+            FirebaseEvent.logCaptureScreenFailed(t)
             val errorMsg =
                 t.message ?: context.getString(R.string.error_unknown_error_capturing_screen)
             showError(errorMsg)
-            FirebaseEvent.logCaptureScreenFailed(t)
             bitmap?.setReusable()
         }
     }
@@ -418,14 +415,11 @@ class StateOperatorImpl @Inject constructor(
         action.emit(StateOperatorAction.ShowErrorDialog(error))
     }
 
-    private fun backToIdle(showMainBar: Boolean = true) = scope.launch {
+    private fun backToIdle() = scope.launch {
         if (currentNavState != NavState.Idle)
             stateNavigator.updateState(NavState.Idle)
 
         action.emit(StateOperatorAction.HideResultView)
-
-        if (showMainBar)
-            action.emit(StateOperatorAction.ShowMainBar)
 
         currentNavState.getBitmap()?.setReusable()
     }
@@ -436,8 +430,6 @@ class StateOperatorImpl @Inject constructor(
 
 sealed interface StateOperatorAction {
     data object TopMainBar : StateOperatorAction
-    data object HideMainBar : StateOperatorAction
-    data object ShowMainBar : StateOperatorAction
     data object ShowScreenCirclingView : StateOperatorAction
     data object HideScreenCirclingView : StateOperatorAction
     data object ShowResultView : StateOperatorAction
