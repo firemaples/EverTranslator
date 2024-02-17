@@ -42,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -269,6 +270,9 @@ private fun OCRToolBar(
             text = stringResource(id = R.string.text_ocr_text),
             fontSize = FontSize.Small,
             fontWeight = FontWeight.Bold,
+            style = TextStyle(textDirection = TextDirection.Content),
+
+
             color = MaterialTheme.colorScheme.onSurface,
         )
 
@@ -347,6 +351,8 @@ private fun OCRTextArea(
                 text = ocrText,
                 locale = Locale.US,
                 textStyle = TextStyle(
+                    textDirection = TextDirection.Content,
+
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = fontSize.sp,
                 ),
@@ -361,6 +367,7 @@ private fun OCRTextArea(
                 modifier = Modifier
                     .sizeIn(maxHeight = 150.dp)
                     .verticalScroll(rememberScrollState()),
+                style = TextStyle(textDirection = TextDirection.Content),
                 text = ocrText,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontSize = fontSize.sp,
@@ -417,6 +424,8 @@ private fun TranslationTextArea(
             modifier = Modifier
                 .sizeIn(maxHeight = 150.dp)
                 .verticalScroll(rememberScrollState()),
+            style = TextStyle( textDirection = TextDirection.Content,
+                ),
             text = translatedText,
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = fontSize.sp,
@@ -438,6 +447,7 @@ private fun ColumnScope.TranslationProviderBar(
         Text(
             modifier = Modifier.align(Alignment.End),
             text = translationProviderText,
+            style = TextStyle(textDirection = TextDirection.Content),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 12.sp,
             maxLines = 1,
