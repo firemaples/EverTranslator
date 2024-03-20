@@ -12,4 +12,7 @@ class SettingRepository @Inject constructor() {
 
     fun limitResultViewMaxWidth(): Boolean =
         SettingManager.limitResultViewMaxWidth
+
+    fun rememberLastSelectionArea(): Boolean =
+        SettingManager.saveLastSelectionArea
 }

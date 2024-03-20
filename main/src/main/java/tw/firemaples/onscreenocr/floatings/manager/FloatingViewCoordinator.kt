@@ -11,8 +11,8 @@ import tw.firemaples.onscreenocr.di.MainImmediateCoroutineScope
 import tw.firemaples.onscreenocr.floatings.base.FloatingView
 import tw.firemaples.onscreenocr.floatings.compose.mainbar.MainBarFloatingView
 import tw.firemaples.onscreenocr.floatings.compose.resultview.ResultViewFloatingView
+import tw.firemaples.onscreenocr.floatings.compose.screencircling.ScreenCirclingFloatingView
 import tw.firemaples.onscreenocr.floatings.dialog.showErrorDialog
-import tw.firemaples.onscreenocr.floatings.screenCircling.ScreenCirclingView
 import tw.firemaples.onscreenocr.utils.Logger
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,24 +24,25 @@ class FloatingViewCoordinator @Inject constructor(
     private val stateNavigator: StateNavigator,
     stateOperator: StateOperator,
     private val mainBar: MainBarFloatingView,
+    private val screenCirclingFloatingView: ScreenCirclingFloatingView,
     private val resultView: ResultViewFloatingView,
 ) {
     private val logger: Logger by lazy { Logger(FloatingViewCoordinator::class) }
 
-    private val screenCirclingView: ScreenCirclingView by lazy {
-        ScreenCirclingView(context).apply {
-            onAreaSelected = { parent, selected ->
-                scope.launch {
-                    stateNavigator.navigate(
-                        NavigationAction.NavigateToScreenCircled(
-                            parentRect = parent,
-                            selectedRect = selected,
-                        )
-                    )
-                }
-            }
-        }
-    }
+//    private val screenCirclingView: ScreenCirclingView by lazy {
+//        ScreenCirclingView(context).apply {
+//            onAreaSelected = { parent, selected ->
+//                scope.launch {
+//                    stateNavigator.navigate(
+//                        NavigationAction.NavigateToScreenCircled(
+//                            parentRect = parent,
+//                            selectedRect = selected,
+//                        )
+//                    )
+//                }
+//            }
+//        }
+//    }
 
     val showingStateChangedFlow = MutableStateFlow(false)
     val isMainBarAttached: Boolean
@@ -54,10 +55,10 @@ class FloatingViewCoordinator @Inject constructor(
                     StateOperatorAction.TopMainBar -> arrangeMainBarToTop()
 
                     StateOperatorAction.ShowScreenCirclingView ->
-                        screenCirclingView.attachToScreen()
+                        screenCirclingFloatingView.attachToScreen()
 
                     StateOperatorAction.HideScreenCirclingView ->
-                        screenCirclingView.detachFromScreen()
+                        screenCirclingFloatingView.detachFromScreen()
 
                     StateOperatorAction.ShowResultView ->
                         resultView.attachToScreen()

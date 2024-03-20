@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.data.repo
 
 import android.graphics.Point
+import android.graphics.Rect
 import androidx.lifecycle.asFlow
 import com.chibatching.kotpref.livedata.asLiveData
 import tw.firemaples.onscreenocr.pref.AppPref
@@ -26,5 +27,11 @@ class PreferenceRepository @Inject constructor() {
 
     fun setResultViewFontSize(fontSize: Float) {
         AppPref.resultWindowFontSize = fontSize
+    }
+
+    fun getLastSelectedArea() = AppPref.lastSelectionArea
+
+    fun setLastSelectedArea(rect: Rect) {
+        AppPref.lastSelectionArea = rect
     }
 }
