@@ -1,6 +1,7 @@
 package tw.firemaples.onscreenocr.floatings.compose.wigets
 
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,7 +24,7 @@ fun WordSelectionText(
     modifier: Modifier = Modifier,
     text: String,
     locale: Locale,
-    textStyle: TextStyle = TextStyle.Default,
+    textStyle: TextStyle = LocalTextStyle.current,
     selectedSpanStyle: SpanStyle = SpanStyle(),
     onTextSelected: (String) -> Unit
 ) {

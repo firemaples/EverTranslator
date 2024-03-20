@@ -23,6 +23,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,7 +41,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -346,7 +346,7 @@ private fun OCRTextArea(
                     .verticalScroll(rememberScrollState()),
                 text = ocrText,
                 locale = Locale.US,
-                textStyle = TextStyle(
+                textStyle = LocalTextStyle.current.copy(
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = fontSize.sp,
                 ),
@@ -409,7 +409,6 @@ private fun TranslationTextArea(
     translatedText: String,
     fontSize: Float,
 ) {
-
     if (showProcessing) {
         ProgressIndicator()
     } else {
