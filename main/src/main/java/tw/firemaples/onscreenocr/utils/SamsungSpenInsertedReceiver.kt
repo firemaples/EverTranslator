@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import androidx.core.content.ContextCompat
 import tw.firemaples.onscreenocr.CoreApplication
 import tw.firemaples.onscreenocr.floatings.ViewHolderService
 
@@ -28,9 +29,11 @@ class SamsungSpenInsertedReceiver : BroadcastReceiver() {
                 receiver = SamsungSpenInsertedReceiver()
             }
 
-            context.registerReceiver(
+            ContextCompat.registerReceiver(
+                context,
                 receiver,
-                IntentFilter(ACTION_SAMSUNG_SPEN_INSERT)
+                IntentFilter(ACTION_SAMSUNG_SPEN_INSERT),
+                ContextCompat.RECEIVER_EXPORTED,
             )
             isRegistered = true
 

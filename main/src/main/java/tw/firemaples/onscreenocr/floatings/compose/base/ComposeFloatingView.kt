@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Looper
 import android.view.Gravity
 import android.view.OrientationEventListener
+import android.view.View
 import android.view.WindowManager
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
@@ -140,7 +141,8 @@ abstract class ComposeFloatingView(protected val context: Context) {
 //            )
 //        }
 //    }
-    protected val rootView by lazy {
+    protected lateinit var rootView: View
+    private fun createView(): View =
         ComposeView(context).apply {
             setOnKeyListener { v, keyCode, event -> //TODO check or remove
                 logger.debug("setOnKeyListener, keyCode: $keyCode, event: $event")
@@ -179,7 +181,6 @@ abstract class ComposeFloatingView(protected val context: Context) {
 
             setViewTreeViewModelStoreOwner(viewModelStoreOwner)
         }
-    }
 
     private var lastScreenWidth: Int = -1
     open val enableDeviceDirectionTracker: Boolean = false
@@ -211,6 +212,7 @@ abstract class ComposeFloatingView(protected val context: Context) {
             return
         }
 
+        rootView = createView()
         windowManager.addView(rootView, params)
 
         with(lifecycleOwner) {

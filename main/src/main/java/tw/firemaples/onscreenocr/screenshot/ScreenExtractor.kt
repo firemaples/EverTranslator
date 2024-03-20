@@ -60,6 +60,23 @@ object ScreenExtractor {
     private val screenDensityDpi: Int
         get() = UIUtils.displayMetrics.densityDpi
 
+    private val mediaProjectionCallback = object : MediaProjection.Callback() {
+        override fun onStop() {
+            super.onStop()
+            logger.debug("MPCallback, onStop()")
+        }
+
+        override fun onCapturedContentResize(width: Int, height: Int) {
+            super.onCapturedContentResize(width, height)
+            logger.debug("MPCallback, onCapturedContentResize(): ${width}x$height")
+        }
+
+        override fun onCapturedContentVisibilityChanged(isVisible: Boolean) {
+            super.onCapturedContentVisibilityChanged(isVisible)
+            logger.debug("MPCallback, onCapturedContentVisibilityChanged(): $isVisible")
+        }
+    }
+
     fun onMediaProjectionGranted(intent: Intent, keepMediaProjection: Boolean) {
         releaseAllResources()
         mediaProjectionIntent = intent.clone() as Intent
@@ -116,6 +133,9 @@ object ScreenExtractor {
                     logger.debug("Create MediaProjection")
                     projection =
                         mpManager.getMediaProjection(Activity.RESULT_OK, mpIntent.clone() as Intent)
+                            .apply {
+                                registerCallback(mediaProjectionCallback, handler)
+                            }
                 }
 
                 val projection = projection
