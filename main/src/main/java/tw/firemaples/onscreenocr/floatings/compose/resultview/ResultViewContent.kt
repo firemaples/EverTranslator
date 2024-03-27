@@ -5,6 +5,7 @@ import android.graphics.Rect
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -51,6 +52,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.floatings.compose.base.clickableWithoutRipple
 import tw.firemaples.onscreenocr.floatings.compose.base.dpToPx
 import tw.firemaples.onscreenocr.floatings.compose.base.pxToDp
 import tw.firemaples.onscreenocr.floatings.compose.wigets.WordSelectionText
@@ -64,6 +66,7 @@ fun ResultViewContent(
     requestRootLocationOnScreen: () -> Rect,
 ) {
     val state by viewModel.state.collectAsState()
+    val emptyInteractionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(Unit) {
         val rootLocation = requestRootLocationOnScreen.invoke()
@@ -77,7 +80,10 @@ fun ResultViewContent(
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.dialogOutside))
-            .clickable(onClick = viewModel::onDialogOutsideClicked),
+            .clickableWithoutRipple(
+                interactionSource = emptyInteractionSource,
+                onClick = viewModel::onDialogOutsideClicked,
+            ),
     ) {
         state.highlightArea.forEach {
             TextHighlightBox(
