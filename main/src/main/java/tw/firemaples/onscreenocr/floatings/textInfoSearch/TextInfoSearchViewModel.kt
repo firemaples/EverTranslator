@@ -1,5 +1,6 @@
 package tw.firemaples.onscreenocr.floatings.textInfoSearch
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
@@ -7,18 +8,20 @@ import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.floatings.base.FloatingViewModel
 import tw.firemaples.onscreenocr.pref.AppPref
 import tw.firemaples.onscreenocr.utils.Constants
+import tw.firemaples.onscreenocr.utils.toGoogleTranslateLang
 import java.net.URLEncoder
 
 class TextInfoSearchViewModel(
     viewScope: CoroutineScope,
     private val text: String,
-    private val sourceLang: String
+    private val sourceLang: String,
+    private val targetLang: String,
 ) : FloatingViewModel(viewScope) {
     private val _loadUrl = MutableLiveData<Page>()
     val loadUrl: LiveData<Page> = _loadUrl
 
     private var lastPageType: PageType
-        get() = PageType.values().firstOrNull { it.id == AppPref.lastTextInfoSearchPage }
+        get() = PageType.entries.firstOrNull { it.id == AppPref.lastTextInfoSearchPage }
             ?: Constants.DEFAULT_TEXT_INFO_SEARCH_PAGE
         set(value) {
             AppPref.lastTextInfoSearchPage = value.id
@@ -27,7 +30,7 @@ class TextInfoSearchViewModel(
     fun onLoad() {
         viewScope.launch {
             val page: Page = when (lastPageType) {
-                PageType.GoogleTranslate -> Page.GoogleTranslate(text, sourceLang)
+                PageType.GoogleTranslate -> Page.GoogleTranslate(text, sourceLang, targetLang)
                 PageType.GoogleSearch -> Page.GoogleSearch(text, sourceLang)
                 PageType.GoogleDefinition -> Page.GoogleDefinition(text, sourceLang)
                 PageType.GoogleImageSearch -> Page.GoogleImageSearch(text, sourceLang)
@@ -45,7 +48,7 @@ class TextInfoSearchViewModel(
 
     fun onGoogleTranslateClicked() {
         viewScope.launch {
-            loadPage(Page.GoogleTranslate(text, sourceLang))
+            loadPage(Page.GoogleTranslate(text, sourceLang, targetLang))
         }
     }
 
@@ -88,18 +91,23 @@ class TextInfoSearchViewModel(
 
     sealed class Page(val text: String, val sourceLang: String, val pageType: PageType) {
         companion object {
-            fun default(text: String, sourceLang: String): Page {
-                return GoogleTranslate(text, sourceLang)
+            fun default(text: String, sourceLang: String, targetLang: String): Page {
+                return GoogleTranslate(text, sourceLang, targetLang)
             }
         }
 
         abstract val url: String
         val encodedText: String get() = URLEncoder.encode(text, "utf-8")
 
-        class GoogleTranslate(text: String, sourceLang: String) :
+        class GoogleTranslate(text: String, sourceLang: String, val targetLang: String) :
             Page(text, sourceLang, PageType.GoogleTranslate) {
             override val url: String
-                get() = "https://translate.google.com/?sl=$sourceLang&text=$encodedText&op=translate"
+                get() = Uri.parse("https://translate.google.com/?op=translate")
+                    .buildUpon()
+                    .appendQueryParameter("sl", sourceLang.toGoogleTranslateLang())
+                    .appendQueryParameter("tl", targetLang.toGoogleTranslateLang())
+                    .appendQueryParameter("text", text)
+                    .toString()
         }
 
         class Wikipedia(text: String, sourceLang: String) :

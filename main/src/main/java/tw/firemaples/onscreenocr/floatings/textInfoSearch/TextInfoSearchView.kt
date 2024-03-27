@@ -38,7 +38,7 @@ class TextInfoSearchView(
         get() = true
 
     private val viewModel: TextInfoSearchViewModel by lazy {
-        TextInfoSearchViewModel(viewScope, text, sourceLang)
+        TextInfoSearchViewModel(viewScope, text, sourceLang, targetLang)
     }
 
     private val binding: FloatingTextInfoSearchBinding =

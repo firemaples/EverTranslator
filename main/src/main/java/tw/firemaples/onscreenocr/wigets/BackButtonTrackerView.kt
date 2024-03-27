@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.widget.FrameLayout
+import tw.firemaples.onscreenocr.utils.Logger
 
 open class BackButtonTrackerView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null,
@@ -11,6 +12,8 @@ open class BackButtonTrackerView @JvmOverloads constructor(
     var onDetachedFromWindow: (() -> Unit)? = null,
     var onBackButtonPressed: (() -> Boolean)? = null,
 ) : FrameLayout(context, attrs) {
+
+    private val logger by lazy { Logger(this::class) }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -23,6 +26,7 @@ open class BackButtonTrackerView @JvmOverloads constructor(
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        logger.debug("dispatchKeyEvent(), $event")
         if (event.keyCode == KeyEvent.KEYCODE_BACK && keyDispatcherState != null) {
             if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) {
                 keyDispatcherState.startTracking(event, this)

@@ -1,5 +1,6 @@
 package tw.firemaples.onscreenocr.pages.launch
 
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -16,6 +17,14 @@ class LaunchActivity : AppCompatActivity() {
             Intent(context, LaunchActivity::class.java).apply {
                 flags += Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             }
+
+        fun getLaunchPendingIntent(context: Context): PendingIntent =
+            PendingIntent.getActivity(
+                context,
+                1,
+                getLaunchIntent(context = context),
+                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+            )
     }
 
     private lateinit var binding: ActivityLaunchBinding

@@ -33,6 +33,7 @@ object SettingManager {
     private const val PREF_AUTO_COPY_OCR_RESULT = "pref_auto_copy_ocr_result"
     private const val PREF_HIDE_RECOGNIZED_RESULT_AFTER_TRANSLATED =
         "pref_hide_recognized_result_after_translated"
+    private const val PREF_LIMIT_RESULT_VIEW_MAX_WIDTH = "pref_limit_result_view_max_width"
 
     private const val PREF_SAVE_LAST_SELECTION_AREA = "pref_save_last_selection_area"
     private const val PREF_EXIT_APP_WHILE_SPEN_INSERTED = "pref_exit_app_while_spen_inserted"
@@ -107,6 +108,9 @@ object SettingManager {
 
     val hideRecognizedResultAfterTranslated: Boolean
         get() = preferences.getBoolean(PREF_HIDE_RECOGNIZED_RESULT_AFTER_TRANSLATED, false)
+
+    val limitResultViewMaxWidth: Boolean
+        get() = preferences.getBoolean(PREF_LIMIT_RESULT_VIEW_MAX_WIDTH, true)
 
     val saveLastSelectionArea: Boolean
         get() = preferences.getBoolean(PREF_SAVE_LAST_SELECTION_AREA, true)

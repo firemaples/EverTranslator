@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import androidx.core.content.ContextCompat
 import tw.firemaples.onscreenocr.utils.Logger
 
 /**
@@ -30,7 +31,12 @@ class HomeButtonWatcher(
     fun startWatch() {
         if (watching) return
 
-        context.registerReceiver(receiver, filter)
+        ContextCompat.registerReceiver(
+            context,
+            receiver,
+            filter,
+            ContextCompat.RECEIVER_NOT_EXPORTED,
+        )
         watching = true
     }
 
