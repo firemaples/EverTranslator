@@ -1,7 +1,10 @@
 package tw.firemaples.onscreenocr.floatings.compose.base
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.Dp
@@ -30,3 +33,14 @@ fun Dp.dpToPx() = with(LocalDensity.current) { this@dpToPx.toPx() }
 
 @Composable
 fun Int.pxToDp() = with(LocalDensity.current) { this@pxToDp.toDp() }
+
+fun Modifier.clickableWithoutRipple(
+    interactionSource: MutableInteractionSource,
+    onClick: () -> Unit
+) = then(
+    Modifier.clickable(
+        interactionSource = interactionSource,
+        indication = null,
+        onClick = { onClick() }
+    )
+)
