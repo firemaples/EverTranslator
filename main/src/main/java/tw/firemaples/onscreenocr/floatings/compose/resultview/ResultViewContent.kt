@@ -2,6 +2,8 @@ package tw.firemaples.onscreenocr.floatings.compose.resultview
 
 import android.content.res.Configuration
 import android.graphics.Rect
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -95,10 +97,10 @@ fun ResultViewContent(
             mutableStateOf(IntOffset(state.highlightUnion.left, state.highlightUnion.top))
         }
 
-//        val animOffset by animateIntOffsetAsState(
-//            targetValue = targetOffset.value,
-//            label = "result panel position",
-//        )
+        val animOffset by animateIntOffsetAsState(
+            targetValue = targetOffset.value,
+            label = "result panel position",
+        )
 
         ResultPanel(
             modifier = Modifier
@@ -114,9 +116,8 @@ fun ResultViewContent(
                     padding = 16.dp.dpToPx(),
                     verticalSpacing = 4.dp.dpToPx(),
                 )
-                .offset { targetOffset.value },
-//                .offset { animOffset }
-//                .animateContentSize(),
+                .offset { animOffset }
+                .animateContentSize(),
             viewModel = viewModel,
             textSearchEnabled = state.textSearchEnabled,
             fontSize = state.fontSize,
