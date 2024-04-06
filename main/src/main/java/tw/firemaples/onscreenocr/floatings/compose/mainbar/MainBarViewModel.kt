@@ -256,6 +256,8 @@ class MainBarViewModelImpl @Inject constructor(
                 )
             }
 
+            action.emit(MainBarAction.RescheduleFadeOut)
+
             when (mainBarMenuOption) {
                 MainBarMenuOption.SETTING ->
                     action.emit(MainBarAction.OpenSettings)
