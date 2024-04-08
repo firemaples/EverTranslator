@@ -37,7 +37,6 @@ interface MainBarViewModel {
     fun getFadeOutAfterMoved(): Boolean
     fun getFadeOutDelay(): Long
     fun getFadeOutDestinationAlpha(): Float
-    fun onMenuItemClicked(key: String)
     fun onSelectClicked()
     fun onTranslateClicked()
     fun onCloseClicked()
@@ -45,7 +44,7 @@ interface MainBarViewModel {
     fun onAttachedToScreen()
     fun onDragEnd(x: Int, y: Int)
     fun onLanguageBlockClicked()
-    fun onMenuOptionSelected(mainBarMenuOption: MainBarMenuOption?)
+    fun onMenuItemClicked(key: String?)
 }
 
 data class MainBarState(
@@ -68,6 +67,8 @@ sealed interface MainBarAction {
     data object OpenReadme : MainBarAction
     data object HideMainBar : MainBarAction
     data object ExitApp : MainBarAction
+    data object ShowMenu : MainBarAction
+    data object HideMenu : MainBarAction
 }
 
 @Suppress("LongParameterList", "TooManyFunctions")
@@ -185,12 +186,6 @@ class MainBarViewModelImpl @Inject constructor(
     override fun getFadeOutDestinationAlpha(): Float =
         SettingManager.opaquePercentageToFadeOut //TODO move logic
 
-    override fun onMenuItemClicked(key: String) {
-        scope.launch {
-            action.emit(MainBarAction.RescheduleFadeOut)
-        }
-    }
-
     override fun onSelectClicked() {
         scope.launch {
             action.emit(MainBarAction.RescheduleFadeOut)
@@ -221,6 +216,7 @@ class MainBarViewModelImpl @Inject constructor(
     override fun onMenuButtonClicked() {
         scope.launch {
             action.emit(MainBarAction.RescheduleFadeOut)
+            action.emit(MainBarAction.ShowMenu)
             state.update {
                 it.copy(
                     displayMainBarMenu = true,
@@ -248,7 +244,7 @@ class MainBarViewModelImpl @Inject constructor(
         }
     }
 
-    override fun onMenuOptionSelected(mainBarMenuOption: MainBarMenuOption?) {
+    override fun onMenuItemClicked(key: String?) {
         scope.launch {
             state.update {
                 it.copy(
@@ -256,31 +252,30 @@ class MainBarViewModelImpl @Inject constructor(
                 )
             }
 
+            action.emit(MainBarAction.HideMenu)
             action.emit(MainBarAction.RescheduleFadeOut)
 
-            when (mainBarMenuOption) {
-                MainBarMenuOption.SETTING ->
+            when (key) {
+                MainBarMenuConst.MENU_SETTING ->
                     action.emit(MainBarAction.OpenSettings)
 
-                MainBarMenuOption.PRIVACY_POLICY ->
+                MainBarMenuConst.MENU_PRIVACY_POLICY ->
                     action.emit(MainBarAction.OpenBrowser(RemoteConfigManager.privacyPolicyUrl))
 
-                MainBarMenuOption.ABOUT ->
+                MainBarMenuConst.MENU_ABOUT ->
                     action.emit(MainBarAction.OpenBrowser(RemoteConfigManager.aboutUrl))
 
-                MainBarMenuOption.VERSION_HISTORY ->
+                MainBarMenuConst.MENU_VERSION_HISTORY ->
                     action.emit(MainBarAction.OpenVersionHistory)
 
-                MainBarMenuOption.README ->
+                MainBarMenuConst.MENU_README ->
                     action.emit(MainBarAction.OpenReadme)
 
-                MainBarMenuOption.HIDE ->
+                MainBarMenuConst.MENU_HIDE ->
                     action.emit(MainBarAction.HideMainBar)
 
-                MainBarMenuOption.EXIT ->
+                MainBarMenuConst.MENU_EXIT ->
                     action.emit(MainBarAction.ExitApp)
-
-                null -> {}
             }
         }
     }

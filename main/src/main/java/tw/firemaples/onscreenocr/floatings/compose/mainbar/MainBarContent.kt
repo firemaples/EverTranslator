@@ -97,10 +97,6 @@ fun MainBarContent(
                 onDragCancel = onDragCancel,
                 onDrag = onDrag,
             )
-            MainBarMenu(
-                expanded = state.displayMainBarMenu,
-                onMenuOptionSelected = viewModel::onMenuOptionSelected,
-            )
         }
     }
 }
@@ -221,7 +217,7 @@ private fun MainBarContentPreview(
         override fun getFadeOutAfterMoved(): Boolean = false
         override fun getFadeOutDelay(): Long = 0L
         override fun getFadeOutDestinationAlpha(): Float = 0f
-        override fun onMenuItemClicked(key: String) = Unit
+        override fun onMenuItemClicked(key: String?) = Unit
         override fun onSelectClicked() = Unit
         override fun onTranslateClicked() = Unit
         override fun onCloseClicked() = Unit
@@ -229,15 +225,16 @@ private fun MainBarContentPreview(
         override fun onAttachedToScreen() = Unit
         override fun onDragEnd(x: Int, y: Int) = Unit
         override fun onLanguageBlockClicked() = Unit
-        override fun onMenuOptionSelected(mainBarMenuOption: MainBarMenuOption?) = Unit
     }
 
     AppTheme {
-        MainBarContent(viewModel = viewModel,
+        MainBarContent(
+            viewModel = viewModel,
             onDragStart = { offset -> },
             onDragEnd = {},
             onDragCancel = {},
-            onDrag = { change, dragAmount -> })
+            onDrag = { change, dragAmount -> },
+        )
     }
 
 }
