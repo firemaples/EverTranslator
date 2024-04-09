@@ -9,7 +9,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -31,7 +30,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,7 +37,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -54,6 +51,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import tw.firemaples.onscreenocr.R
+import tw.firemaples.onscreenocr.floatings.compose.base.calculateOffset
 import tw.firemaples.onscreenocr.floatings.compose.base.clickableWithoutRipple
 import tw.firemaples.onscreenocr.floatings.compose.base.dpToPx
 import tw.firemaples.onscreenocr.floatings.compose.base.pxToDp
@@ -78,7 +76,7 @@ fun ResultViewContent(
         )
     }
 
-    BoxWithConstraints(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.dialogOutside))
@@ -102,18 +100,20 @@ fun ResultViewContent(
             label = "result panel position",
         )
 
+        val panelPadding = 16.dp
+
         ResultPanel(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(panelPadding)
                 .run {
                     if (state.limitMaxWidth)
                         widthIn(max = 300.dp)
                     else this
                 }
                 .calculateOffset(
-                    highlightUnion = state.highlightUnion,
+                    anchor = state.highlightUnion,
                     offset = targetOffset,
-                    padding = 16.dp.dpToPx(),
+                    viewPadding = panelPadding.dpToPx(),
                     verticalSpacing = 4.dp.dpToPx(),
                 )
                 .offset { animOffset }
@@ -125,59 +125,6 @@ fun ResultViewContent(
             translationState = state.translationState,
         )
     }
-}
-
-private fun Modifier.calculateOffset(
-    highlightUnion: Rect,
-    offset: MutableState<IntOffset>,
-    padding: Float,
-    verticalSpacing: Float,
-): Modifier = onGloballyPositioned { coordinates ->
-    val parent = coordinates.parentLayoutCoordinates?.size ?: return@onGloballyPositioned
-    val current = coordinates.size
-
-    val leftAnchor = maxOf(highlightUnion.left, padding.toInt())
-    val rightAnchor = minOf(highlightUnion.right, parent.width - padding.toInt())
-
-    val x = when {
-        leftAnchor + current.width + padding < parent.width -> {
-            // Align left
-            highlightUnion.left - padding.toInt()
-        }
-
-        rightAnchor - current.width - padding >= 0 -> {
-            // Align right
-            rightAnchor - current.width - padding.toInt()
-        }
-
-        else -> {
-            // No horizontal alignment
-            0
-        }
-    }
-
-    val topAnchor = highlightUnion.bottom + verticalSpacing
-    val bottomAnchor = highlightUnion.top - verticalSpacing
-
-    val y = when {
-        topAnchor + current.height + padding < parent.height -> {
-            // Display at bottom
-            (topAnchor - padding).toInt()
-        }
-
-        bottomAnchor - current.height - padding >= 0 -> {
-            // Display at top
-            (bottomAnchor - current.height - padding).toInt()
-        }
-
-        else -> {
-            // Display middle vertically
-            val middleAnchor = (parent.height - current.height) / 2
-            (middleAnchor - padding).toInt()
-        }
-    }
-
-    offset.value = IntOffset(x, y)
 }
 
 @Composable
