@@ -1,6 +1,10 @@
 package tw.firemaples.onscreenocr.floatings
 
-import android.app.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
@@ -9,19 +13,22 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
-import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
+import tw.firemaples.onscreenocr.floatings.manager.FloatingViewCoordinator
 import tw.firemaples.onscreenocr.pages.launch.LaunchActivity
 import tw.firemaples.onscreenocr.pages.setting.SettingManager
 import tw.firemaples.onscreenocr.remoteconfig.RemoteConfigManager
 import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
 import tw.firemaples.onscreenocr.utils.Logger
 import tw.firemaples.onscreenocr.utils.SamsungSpenInsertedReceiver
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ViewHolderService : Service() {
     companion object {
         private const val NOTIFICATION_CHANNEL_ID = "floating_view_notification_channel_v1"
@@ -59,10 +66,13 @@ class ViewHolderService : Service() {
 
     private var floatingStateListenerJob: Job? = null
 
+    @Inject
+    lateinit var floatingViewCoordinator: FloatingViewCoordinator
+
     override fun onCreate() {
         super.onCreate()
         floatingStateListenerJob = CoroutineScope(Dispatchers.Main).launch {
-            FloatingStateManager.showingStateChangedFlow.collect { startForeground() }
+            floatingViewCoordinator.showingStateChangedFlow.collect { startForeground() }
         }
         if (SettingManager.exitAppWhileSPenInserted) {
             SamsungSpenInsertedReceiver.start()
@@ -101,14 +111,14 @@ class ViewHolderService : Service() {
 
     private fun showViews() {
         if (ScreenExtractor.isGranted) {
-            FloatingStateManager.showMainBar()
+            floatingViewCoordinator.showMainBar()
         } else {
             startActivity(LaunchActivity.getLaunchIntent(this))
         }
     }
 
     private fun hideViews() {
-        FloatingStateManager.detachAllViews()
+        floatingViewCoordinator.detachAllViews()
     }
 
     private fun exit() {
@@ -127,13 +137,13 @@ class ViewHolderService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startForeground(
                 ONGOING_NOTIFICATION_ID,
-                createNotification(!FloatingStateManager.isMainBarAttached),
+                createNotification(!floatingViewCoordinator.isMainBarAttached),
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION,
             )
         } else {
             startForeground(
                 ONGOING_NOTIFICATION_ID,
-                createNotification(!FloatingStateManager.isMainBarAttached),
+                createNotification(!floatingViewCoordinator.isMainBarAttached),
             )
         }
     }

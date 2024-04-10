@@ -6,14 +6,24 @@ import android.os.IBinder
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
-import kotlinx.coroutines.*
-import tw.firemaples.onscreenocr.floatings.manager.FloatingStateManager
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import tw.firemaples.onscreenocr.floatings.manager.FloatingViewCoordinator
 import tw.firemaples.onscreenocr.pages.launch.LaunchActivity
 import tw.firemaples.onscreenocr.screenshot.ScreenExtractor
+import javax.inject.Inject
 
+@AndroidEntryPoint
 @RequiresApi(Build.VERSION_CODES.N)
 class QuickTileService : TileService() {
     private val logger: Logger by lazy { Logger(QuickTileService::class) }
+
+    @Inject
+    lateinit var floatingViewCoordinator: FloatingViewCoordinator
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private var listeningJob: Job? = null
@@ -40,13 +50,17 @@ class QuickTileService : TileService() {
         super.onClick()
         logger.debug("onClick()")
 
-        if (FloatingStateManager.isMainBarAttached) {
-            FloatingStateManager.detachAllViews()
+        if (floatingViewCoordinator.isMainBarAttached) {
+            floatingViewCoordinator.detachAllViews()
         } else {
             if (ScreenExtractor.isGranted) {
-                FloatingStateManager.showMainBar()
+                floatingViewCoordinator.showMainBar()
             } else {
-                startActivityAndCollapse(LaunchActivity.getLaunchIntent(this))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    startActivityAndCollapse(LaunchActivity.getLaunchPendingIntent(this))
+                } else {
+                    startActivityAndCollapse(LaunchActivity.getLaunchIntent(this))
+                }
             }
         }
     }
@@ -56,7 +70,7 @@ class QuickTileService : TileService() {
         logger.debug("onStartListening()")
 
         listeningJob = scope.launch {
-            FloatingStateManager.showingStateChangedFlow.collect {
+            floatingViewCoordinator.showingStateChangedFlow.collect {
                 updateTileState(it)
             }
         }

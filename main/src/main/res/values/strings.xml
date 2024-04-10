@@ -50,6 +50,10 @@
     <string name="pref_screenshot">Screenshot</string>
     <string name="pref_summary_on_keep_media_projection_resources">Keep the resources until restart</string>
     <string name="pref_summary_off_keep_media_projection_resources">Release the resources after used</string>
+    <string name="pref_title_keep_media_projection_resources">Keep MediaProjection resources</string>
+    <string name="pref_limit_result_view_max_width">Limit the max width</string>
+    <string name="pref_summary_on_limit_result_view_max_width">Limit the max width to 300dp</string>
+    <string name="pref_summary_off_limit_result_view_max_width">Dynamic width based on the content</string>
 
     <string name="menu_setting">Setting</string>
     <string name="menu_privacy_policy">Privacy Policy</string>
@@ -74,6 +78,7 @@
     <string name="msg_ocr_only_mode_hint">Translation language selection is not available for OCR only mode</string>
     <string name="text_request_permission">Request permission</string>
     <string name="text_open_in_browser">Open in Browser</string>
+    <string name="text_all_text" translatable="false">[All]</string>
 
     <string name="msg_evertranslator_needs_display_over_other_apps_permission_to_show_a_floating_window_for_easily_using">EverTranslator needs the [Display over other apps] permission to show a floating window on the screen.</string>
     <string name="msg_evertranslator_needs_capture_screen_to_find_the_text_from_the_screen_for_you">EverTranslator needs the [Capture Screen] permission to find the text from the screen for you.</string>
@@ -85,6 +90,8 @@
     <string name="msg_image_reader_format_unmatched">Found temporary error, please try it again. (Image reader format)</string>
     <string name="msg_translator_provider_does_not_support_the_ocr_lang">This translation provider does not support the selected recognition language.</string>
     <string name="msg_please_restart_the_app_to_take_effect">Please restart the app to take effect</string>
+    <string name="msg_grant_posting_notification_permission_rationale">Grant posting notification permission to restore/hide the app easier</string>
+    <string name="btn_request_again">Request Again</string>
 
     <string name="title_version_history">Version History</string>
     <string name="title_error">Error</string>
@@ -116,5 +123,4 @@
         <item>Space</item>
         <item>None</item>
     </string-array>
-    <string name="pref_title_keep_media_projection_resources">Keep MediaProjection resources</string>
 </resources>

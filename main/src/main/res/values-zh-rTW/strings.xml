@@ -66,6 +66,8 @@
     <string name="msg_image_reader_format_unmatched">發現暫時性錯誤，請再試一次(1) (Image reader format)</string>
     <string name="msg_translator_provider_does_not_support_the_ocr_lang">此翻譯引擎不支援選擇的辨識語言</string>
 
+    <string name="msg_grant_posting_notification_permission_rationale">授予通知權限以快速顯示/隱藏浮動視窗</string>
+    <string name="btn_request_again">重新請求</string>
     <string name="title_version_history">版本資訊</string>
     <string name="title_error">錯誤</string>
     <string name="title_guide">使用說明</string>
@@ -112,4 +114,7 @@
     <string name="pref_summary_on_keep_media_projection_resources">維持相關資源直到重啟程式</string>
     <string name="pref_summary_off_keep_media_projection_resources">每次使用後釋放相關資源</string>
     <string name="pref_screenshot">螢幕截圖</string>
+    <string name="pref_limit_result_view_max_width">限制最大寬度</string>
+    <string name="pref_summary_on_limit_result_view_max_width">限制最大寬度至 300dp</string>
+    <string name="pref_summary_off_limit_result_view_max_width">不限制寬度</string>
 </resources>

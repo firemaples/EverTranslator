@@ -6,6 +6,8 @@ plugins {
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
     id 'com.google.firebase.firebase-perf'
+    id 'com.google.dagger.hilt.android'
+    id "io.gitlab.arturbosch.detekt"
 }
 
 def buildParams = getGradle().getStartParameter().toString().toLowerCase()
@@ -20,15 +22,15 @@ task ensureFiles {
 }
 
 android {
-    compileSdk 33
-    buildToolsVersion = "33.0.1"
+    compileSdk 34
+    buildToolsVersion = "34.0.0"
 
     defaultConfig {
         applicationId "tw.firemaples.onscreenocr"
         minSdkVersion 21
-        targetSdkVersion 33
-        versionCode 117
-        versionName "3.1.25"
+        targetSdkVersion 34
+        versionCode 124
+        versionName "4.0.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -91,7 +93,11 @@ android {
         jvmTarget = '17'
     }
     buildFeatures {
-        viewBinding true
+        viewBinding true //TODO remove after full migrating to compose
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.4"
     }
     packagingOptions {
         jniLibs {
@@ -100,7 +106,13 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes true
+}
+
 dependencies {
+    detektPlugins "io.nlopez.compose.rules:detekt:0.3.9"
+
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
     implementation 'androidx.core:core-ktx:1.10.1'
@@ -110,6 +122,7 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.6.2'
     implementation "androidx.preference:preference-ktx:1.2.1"
     implementation 'androidx.webkit:webkit:1.7.0'
     //noinspection GradleDynamicVersion
@@ -137,6 +150,23 @@ dependencies {
 
     // required to avoid crash on Android 12 API 31
     implementation 'androidx.work:work-runtime-ktx:2.8.1'
+
+    // Compose
+    def composeBom = platform('androidx.compose:compose-bom:2024.02.02')
+    implementation composeBom
+    androidTestImplementation composeBom
+    // Material Design 3
+    implementation 'androidx.compose.material3:material3'
+    // Android Studio Preview support
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+    // UI Tests
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:2.48"
+    kapt "com.google.dagger:hilt-compiler:2.48"
 
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:32.6.0')
