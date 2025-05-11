@@ -3,7 +3,7 @@
 buildscript {
     ext.nav_version = "2.6.0" // require SDK 34 from 2.7.0
     ext.hilt_version = "2.56.2"
-    ext.coroutines_version = "1.7.3"
+    ext.coroutines_version = "1.10.2"
     ext.lifecycle_version = "2.6.2"
     ext.text_recognition_version = "16.0.1"
     ext.kotpref_version = "2.13.2"
