@@ -107,7 +107,7 @@ android {
 }
 
 dependencies {
-    detektPlugins "io.nlopez.compose.rules:detekt:0.3.9"
+    detektPlugins "io.nlopez.compose.rules:detekt:0.4.22"
 
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
