@@ -7,7 +7,7 @@ buildscript {
     ext.lifecycle_version = "2.6.2"
     ext.text_recognition_version = "16.0.1"
     ext.kotpref_version = "2.13.2"
-    ext.retrofit2_version = "2.11.0"
+    ext.retrofit2_version = "2.12.0"
 
     repositories {
         google()
