@@ -2,6 +2,7 @@ package tw.firemaples.onscreenocr.translator.mymemory
 
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -15,6 +16,7 @@ interface MyMemoryAPIService {
     ): Response<TranslateResponse>
 }
 
+@JsonClass(generateAdapter = true)
 @Keep
 data class TranslateResponse(
     @Json(name = "responseData")
@@ -36,6 +38,7 @@ data class TranslateResponse(
     fun isSuccess(): Boolean = responseStatus.toString().toDoubleOrNull() == 200.0
 }
 
+@JsonClass(generateAdapter = true)
 @Keep
 data class ResponseData(
     @Json(name = "translatedText")

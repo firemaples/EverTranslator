@@ -2,6 +2,14 @@
 
 buildscript {
     ext.nav_version = "2.6.0" // require SDK 34 from 2.7.0
+    ext.hilt_version = "2.56.2"
+    ext.coroutines_version = "1.10.2"
+    ext.lifecycle_version = "2.6.2"
+    ext.text_recognition_version = "16.0.1"
+    ext.kotpref_version = "2.13.2"
+    ext.retrofit2_version = "3.0.0"
+    ext.moshi_version = "1.15.2"
+
     repositories {
         google()
         gradlePluginPortal()
@@ -18,22 +26,22 @@ buildscript {
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-        classpath 'com.google.gms:google-services:4.4.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.20"
+        classpath 'com.google.gms:google-services:4.4.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.21"
         classpath 'com.google.firebase:perf-plugin:1.4.2'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.9'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:3.0.3'
 
         // Refactor
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
 
         // Detekt
-        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.3"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.8"
     }
 }
 
 plugins {
-    id 'com.google.dagger.hilt.android' version '2.48' apply false
-    id 'com.google.devtools.ksp' version '2.1.20-1.0.32' apply false
+    id 'com.google.dagger.hilt.android' version '2.56.2' apply false
+    id 'com.google.devtools.ksp' version '2.1.21-2.0.1' apply false
 }
 
 allprojects {
