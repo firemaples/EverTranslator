@@ -16,14 +16,14 @@ object WordBoundary {
                 // Skip punctuations and blanks
             } else {
                 if (boundaries.size >= 2 && boundaries.last().word.isDash()) {
-                    val sb = StringBuilder(boundaries.removeLast().word)
-                    val lastWord = boundaries.removeLast()
+                    val sb = StringBuilder(boundaries.removeAt(boundaries.lastIndex).word)
+                    val lastWord = boundaries.removeAt(boundaries.lastIndex)
                     sb.insert(0, lastWord.word)
                     sb.append(word)
                     boundaries.add(Boundary(sb.toString(), lastWord.start, end))
                 } else {
                     if (boundaries.isNotEmpty() && boundaries.last().word.isDash()) {
-                        boundaries.removeLast()
+                        boundaries.removeAt(boundaries.lastIndex)
                     }
                     if (word.isDash() && previousWord?.isBlank() == true) {
                         // Skip dash following blank pattern. " -"
