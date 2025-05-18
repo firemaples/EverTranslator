@@ -8,6 +8,7 @@ buildscript {
     ext.text_recognition_version = "16.0.1"
     ext.kotpref_version = "2.13.2"
     ext.retrofit2_version = "3.0.0"
+    ext.moshi_version = "1.15.2"
 
     repositories {
         google()

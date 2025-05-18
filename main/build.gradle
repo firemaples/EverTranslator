@@ -210,6 +210,9 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit2_version"
     implementation "com.squareup.okhttp3:logging-interceptor:4.12.0"
+    // Moshi
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
 
     // Tesseract
     implementation 'cz.adaptech.tesseract4android:tesseract4android:4.8.0'

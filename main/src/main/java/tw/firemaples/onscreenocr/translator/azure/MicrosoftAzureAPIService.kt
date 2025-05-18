@@ -2,6 +2,7 @@ package tw.firemaples.onscreenocr.translator.azure
 
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header
@@ -30,6 +31,7 @@ interface MicrosoftAzureAPIService {
     ): Response<String>
 }
 
+@JsonClass(generateAdapter = true)
 @Keep
 data class TranslateRequest(
     @Json(name = "Text")
@@ -40,6 +42,7 @@ data class TranslateRequest(
     }
 }
 
+@JsonClass(generateAdapter = true)
 @Keep
 data class TranslateResponse(
     @Json(name = "detectedLanguage")
@@ -48,6 +51,7 @@ data class TranslateResponse(
     val translations: List<Translation>,
 )
 
+@JsonClass(generateAdapter = true)
 @Keep
 data class DetectedLanguage(
     @Json(name = "language")
@@ -56,6 +60,7 @@ data class DetectedLanguage(
     val score: Float,
 )
 
+@JsonClass(generateAdapter = true)
 @Keep
 data class Translation(
     @Json(name = "text")
