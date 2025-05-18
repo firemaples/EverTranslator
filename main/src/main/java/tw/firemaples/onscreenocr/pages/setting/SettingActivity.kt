@@ -3,9 +3,11 @@ package tw.firemaples.onscreenocr.pages.setting
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import tw.firemaples.onscreenocr.databinding.ActivitySettingBinding
 import tw.firemaples.onscreenocr.utils.AdManager
+import tw.firemaples.onscreenocr.utils.fitCutoutInsets
 
 class SettingActivity : AppCompatActivity() {
     companion object {
@@ -20,9 +22,12 @@ class SettingActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = ActivitySettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.root.fitCutoutInsets()
 
         AdManager.loadBanner(binding.admobAd)
 
