@@ -6,9 +6,6 @@ import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.TranslateRemoteModel
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import tw.firemaples.onscreenocr.R
@@ -20,6 +17,9 @@ import tw.firemaples.onscreenocr.translator.TranslationProviderType
 import tw.firemaples.onscreenocr.translator.TranslationResult
 import tw.firemaples.onscreenocr.translator.Translator
 import tw.firemaples.onscreenocr.utils.firstPart
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 object GoogleMLKitTranslator : Translator {
     private const val DOWNLOAD_SITE = "GoogleMLKit"
@@ -52,7 +52,7 @@ object GoogleMLKitTranslator : Translator {
         }
     }
 
-    override suspend fun checkEnvironment(coroutineScope: CoroutineScope): Boolean =
+    override suspend fun checkResources(coroutineScope: CoroutineScope): Boolean =
         checkTranslationResources(coroutineScope)
 
     override suspend fun translate(text: String, sourceLangCode: String): TranslationResult {

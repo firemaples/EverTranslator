@@ -107,6 +107,19 @@ object Utils {
 
 fun String.firstPart(): String = split(":")[0].split("-")[0]
 
+private val googleTranslateLang = mapOf(
+    "zh-TW" to setOf("zh-tw", "zh-hant", "zh"),
+    "zh-CN" to setOf("zh-cn", "zh-hans"),
+)
+
+fun String.toGoogleTranslateLang(): String {
+    val target = this
+    googleTranslateLang.entries.forEach { (lang, set) ->
+        if (set.contains(target.lowercase())) return lang
+    }
+    return target.firstPart()
+}
+
 fun Context.getThemedLayoutInflater(theme: Int = R.style.Theme_EverTranslator): LayoutInflater =
     LayoutInflater.from(this)
         .cloneInContext(ContextThemeWrapper(this, theme))

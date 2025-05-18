@@ -49,3 +49,4 @@ google-services.json
 !main/src/dev/google-services.json
 config_ad.xml
 !main/src/main/res/values/config_ad.xml
+.kotlin/

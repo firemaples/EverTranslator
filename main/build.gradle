@@ -1,11 +1,14 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-kapt'
+    id 'com.google.devtools.ksp'
     id 'androidx.navigation.safeargs.kotlin'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
     id 'com.google.firebase.firebase-perf'
+    id 'com.google.dagger.hilt.android'
+    id "io.gitlab.arturbosch.detekt"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.1.21"
 }
 
 def buildParams = getGradle().getStartParameter().toString().toLowerCase()
@@ -20,15 +23,14 @@ task ensureFiles {
 }
 
 android {
-    compileSdk 33
-    buildToolsVersion = "33.0.1"
+    compileSdk 35
 
     defaultConfig {
         applicationId "tw.firemaples.onscreenocr"
         minSdkVersion 21
-        targetSdkVersion 33
-        versionCode 117
-        versionName "3.1.25"
+        targetSdkVersion 35
+        versionCode 128
+        versionName "4.0.10"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -91,7 +93,11 @@ android {
         jvmTarget = '17'
     }
     buildFeatures {
-        viewBinding true
+        viewBinding true //TODO remove after full migrating to compose
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
     packagingOptions {
         jniLibs {
@@ -101,26 +107,29 @@ android {
 }
 
 dependencies {
+    detektPlugins "io.nlopez.compose.rules:detekt:0.4.22"
+
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
-    implementation 'androidx.core:core-ktx:1.10.1'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.core:core-ktx:1.16.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"
     implementation "androidx.preference:preference-ktx:1.2.1"
-    implementation 'androidx.webkit:webkit:1.7.0'
+    implementation 'androidx.webkit:webkit:1.13.0'
     //noinspection GradleDynamicVersion
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     // For using coroutines in tests
     // For runBlockingTest, CoroutineDispatcher etc.
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3'
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
     // For InstantTaskExecutorRule
     testImplementation "androidx.arch.core:core-testing:2.2.0"
 
@@ -136,10 +145,27 @@ dependencies {
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 
     // required to avoid crash on Android 12 API 31
-    implementation 'androidx.work:work-runtime-ktx:2.8.1'
+    implementation 'androidx.work:work-runtime-ktx:2.10.1'
+
+    // Compose
+    def composeBom = platform('androidx.compose:compose-bom:2025.05.00')
+    implementation composeBom
+    androidTestImplementation composeBom
+    // Material Design 3
+    implementation 'androidx.compose.material3:material3'
+    // Android Studio Preview support
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+    // UI Tests
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    ksp "com.google.dagger:hilt-compiler:$hilt_version"
 
     // Firebase
-    implementation platform('com.google.firebase:firebase-bom:32.6.0')
+    implementation platform('com.google.firebase:firebase-bom:33.13.0')
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
     //  implementation 'com.google.firebase:firebase-core'
@@ -148,49 +174,52 @@ dependencies {
 
     // Google MLKit - Text recognition v2
     // To recognize Latin script
-    implementation 'com.google.mlkit:text-recognition:16.0.0'
+    implementation "com.google.mlkit:text-recognition:$text_recognition_version"
     // To recognize Chinese script
-    implementation 'com.google.mlkit:text-recognition-chinese:16.0.0'
+    implementation "com.google.mlkit:text-recognition-chinese:$text_recognition_version"
     // To recognize Devanagari script
-    implementation 'com.google.mlkit:text-recognition-devanagari:16.0.0'
+    implementation "com.google.mlkit:text-recognition-devanagari:$text_recognition_version"
     // To recognize Japanese script
-    implementation 'com.google.mlkit:text-recognition-japanese:16.0.0'
+    implementation "com.google.mlkit:text-recognition-japanese:$text_recognition_version"
     // To recognize Korean script
-    implementation 'com.google.mlkit:text-recognition-korean:16.0.0'
+    implementation "com.google.mlkit:text-recognition-korean:$text_recognition_version"
 
     // Google MLKit - Text translate
-    implementation 'com.google.mlkit:translate:17.0.2'
+    implementation 'com.google.mlkit:translate:17.0.3'
 
     // Google MLKit - Identify Languages
-    implementation 'com.google.mlkit:language-id:17.0.4'
+    implementation 'com.google.mlkit:language-id:17.0.6'
 
     // Kotpref
     // core
-    implementation 'com.chibatching.kotpref:kotpref:2.13.2'
+    implementation "com.chibatching.kotpref:kotpref:$kotpref_version"
     // optional, auto initialization module
-    implementation 'com.chibatching.kotpref:initializer:2.13.2'
+    implementation "com.chibatching.kotpref:initializer:$kotpref_version"
     // optional, support saving enum value and ordinal
-    implementation 'com.chibatching.kotpref:enum-support:2.13.2'
+    implementation "com.chibatching.kotpref:enum-support:$kotpref_version"
     // optional, support saving json string through Gson
-    implementation 'com.chibatching.kotpref:gson-support:2.13.2'
-    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation "com.chibatching.kotpref:gson-support:$kotpref_version"
+    implementation 'com.google.code.gson:gson:2.13.1'
     // optional, support LiveData observable preference
-    implementation 'com.chibatching.kotpref:livedata-support:2.13.2'
+    implementation "com.chibatching.kotpref:livedata-support:$kotpref_version"
 //    implementation 'androidx.lifecycle:lifecycle-livedata:2.2.0'
 //    // experimental, preference screen build dsl
 //    implementation 'com.chibatching.kotpref:preference-screen-dsl:2.13.1'
 
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit2_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.12.0"
+    // Moshi
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
 
     // Tesseract
-    implementation 'cz.adaptech.tesseract4android:tesseract4android:4.5.0'
+    implementation 'cz.adaptech.tesseract4android:tesseract4android:4.8.0'
 //    implementation 'cz.adaptech:tesseract4android:4.1.0'
 
     // koral--/android-gif-drawable
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.28'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.29'
 
 //    // Ad network mediation - Mopub
 //    implementation('com.mopub:mopub-sdk:+@aar') {
@@ -210,9 +239,9 @@ dependencies {
 //    implementation 'com.mopub.mediation:adcolony:4.5.0.1'
 
     // Admob
-    implementation 'com.google.android.gms:play-services-ads:22.5.0'
+    implementation 'com.google.android.gms:play-services-ads:23.6.0'
     // Facebook Ad network
-    implementation 'com.google.ads.mediation:facebook:6.16.0.0'
+    implementation 'com.google.ads.mediation:facebook:6.19.0.0'
     // Adcolony Ad network
     implementation 'com.google.ads.mediation:adcolony:4.8.0.2'
     // To fix build failed with issue
@@ -221,5 +250,5 @@ dependencies {
     implementation 'com.facebook.infer.annotation:infer-annotation:0.18.0'
 
     // TouchImageView
-    implementation 'com.github.MikeOrtiz:TouchImageView:3.6'
+    implementation 'com.github.MikeOrtiz:TouchImageView:3.7.1'
 }

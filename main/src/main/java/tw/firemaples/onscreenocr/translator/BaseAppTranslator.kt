@@ -16,7 +16,7 @@ abstract class BaseAppTranslator : Translator {
             context.getString(type.nameRes)
         )
 
-    override suspend fun checkEnvironment(
+    override suspend fun checkResources(
         coroutineScope: CoroutineScope
     ): Boolean = translatorUtils.checkIsInstalled()
 

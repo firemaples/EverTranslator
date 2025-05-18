@@ -83,7 +83,7 @@ object BitmapCache {
             return false
         }
 
-        val targetConfig = config ?: this.config
+        val targetConfig = config ?: this.config ?: return false
         val byteCount = width * height * targetConfig.getBytesPerPixel()
         return byteCount <= this.allocationByteCount
     }
