@@ -8,7 +8,7 @@ plugins {
     id 'com.google.firebase.firebase-perf'
     id 'com.google.dagger.hilt.android'
     id "io.gitlab.arturbosch.detekt"
-    id("org.jetbrains.kotlin.plugin.compose") version "2.1.20"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.1.21"
 }
 
 def buildParams = getGradle().getStartParameter().toString().toLowerCase()
