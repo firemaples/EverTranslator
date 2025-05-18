@@ -74,8 +74,3 @@
 -if interface * { @retrofit2.http.* public *** *(...); }
 -keep,allowoptimization,allowshrinking,allowobfuscation class <3>
 ##### Proguard2 End
-
-##### Proguard R8
--dontwarn android.media.LoudnessCodecController$OnLoudnessCodecUpdateListener
--dontwarn android.media.LoudnessCodecController
-#####
