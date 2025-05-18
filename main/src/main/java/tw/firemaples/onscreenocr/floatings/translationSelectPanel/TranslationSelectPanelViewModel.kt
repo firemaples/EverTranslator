@@ -216,7 +216,7 @@ class TranslationSelectPanelViewModel(viewScope: CoroutineScope) :
 
     fun onTranslationProviderClicked() {
         viewScope.launch {
-            _displayTranslationProviders.value = translationRepo.getAllProviders().first()
+            _displayTranslationProviders.value = translationRepo.getAllProviders().first()!!
         }
     }
 
